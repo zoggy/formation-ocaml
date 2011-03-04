@@ -1,0 +1,90 @@
+body {
+  font-family:"Trebuchet MS", Arial, Verdana;
+  font-size: 1.0em;
+  color: #333333;
+  background-image: url("fond.png");
+  background-color: #337bc7;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  background-attachment: fixed;
+}
+
+div.contents {
+  background-color: #FFFFFF;
+  width: 750px;
+  text-align: justify;
+  border-width: 0 5px 0 5px;
+  border-style: solid ;
+  border-color: #382267; /*#DDDDDD;*/
+  padding: 3px 2em 3px 2em;
+  /*background-image: url("draft.png");*/
+  background-position: 50px 50px;
+  background-repeat: repeat;
+}
+
+pre {
+  line-height: 0.7 ;
+  border-width : 0 0 0 2px;
+  border-style : solid ;
+  border-color: #888888 ;
+  padding-left : 6px;
+  padding-top: 3px;
+}
+
+div.warning {
+  border-width: 2px ;
+  border-color: #FF0000 #BB0000 #BB0000 #FF0000;
+  padding-left: 2px ;
+  padding-right: 2px;
+  border-style: solid ;
+}
+
+div.center { text-align: center ; }
+div.codeblock { display: none; }
+
+div.todo {
+  color: red;
+  background-color: yellow ;
+  font-weight: bold ;
+  border-style: solid ;
+  border-width: 2px;
+  border-color: orange ;
+  padding: 4px;
+  font-size: 110%;
+}
+
+div.exercice {
+  border-style: solid ;
+  border-width: 0 0 0 3px;
+  border-color: #33DD00 ;
+  padding-left: 1em;
+  background-color: #F5F5F5;
+}
+div.theorem em {
+  font-style: normal ;
+}
+
+div.sh {
+  font-family: courier ;
+  font-weight: bold ;
+  margin-top: 6px;
+  margin-bottom: 2px ;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  /*color: #4a83ce ;*/
+  /*font-size: 11pt;*/
+  /*font-size : smaller ;*/
+  padding: 2px ;
+  padding-left: 0.5em;
+  border-width: 0 0 0 2px;
+  border-style: solid ;
+  border-color: #aaaaaa ;
+  background-color: Black;
+  color: #aaaaaa ;
+}
+
+@media print {
+div.codeblock { display: block; }
+}
+
+img { border-width: 0 }

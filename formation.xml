@@ -1,0 +1,3445 @@
+\section*{Préambule}
+Cette formation est une introduction au langage Objective Caml, aussi appelé
+OCaml. Une partie du plan de cette formation est basée sur le plan du livre
+"Développement d'applications avec Objective Caml" d'Emmanuel Chailloux,
+Pascal Manoury et Bruno Pagano (cf. section \ref{goingfurther}).
+Certains paragraphes sont
+repris verbatim de cet ouvrage, avec l'accord des auteurs, et apparaissent
+\cmp{ainsi}.
+
+OCaml est un langage très riche offrant de nombreuses possibilités. De plus,
+les différents outils de développement fournis en standard sont très puissants
+et flexibles. Enfin, la bibliothèque standard recouvre beaucoup de domaines
+(interface système, structures de données, parallélisme, interface graphique, \dots).
+
+Nous nous contenterons de présenter les bases permettant de commencer
+à programmer en OCaml, de façon à nous concenter sur l'essentiel sans
+nous perdre dans les détails. Par exemple, toutes les options de compilation
+ne sont pas explicitées et l'on se reportera au manuel de référence pour
+une utilisation plus poussée. Toutes les bibliothèques ne seront pas
+non plus utilisées dans cette formation.
+
+L'objectif de cette formation est
+d'acquérir les bases syntaxiques et sémantiques du langage ainsi que la
+connaissance des bibliothèques et outils de développement disponibles pour
+approfondir ensuite selon ses besoins.
+
+\chapter{Introduction}
+
+\cmp{Objective Caml est un langage récent qui se place dans l'histoire des langages de programmation comme un lointain descendant de LISP ayant su tirer les enseignements de ses cousins en incorporant les principales caractéristiques des autres langages. Il est développé à l'INRIA et s'appuie sur une longue expérience de conception de langages de la famille ML. Objective Caml est généraliste pour l'expression d'algorithmes symboliques ou numériques. Il est orienté objet et possède un système de modules paramétrés. Il permet le développement d'applications concurrentes ou distribuées. Il possède une excellente sûreté à l'exécution grâce à son typage statique, son mécanisme d'exceptions et son récupérateur automatique de mémoire. Il est performant tout en étant portable. Enfin, il dispose d'un riche environnement de développement.}
+
+OCaml est développé et maintenu principalement par des chercheurs et ingénieurs
+de l'INRIA (équipe-projet Gallium, SED de Rocquencourt, Pierre Weis de l'équipe-projet
+Estime) ainsi que par des chercheurs extérieurs comme
+Jacques Garrigue (Université de Nagoya, au Japon) et Alain Frisch (société Lexifi).
+
+\section{Description du langage}
+Nous listons ici les traits principaux d'Objective Caml. Tous ces aspects ne sont pas abordés
+dans cette formation. Ceux qui le sont figurent en gras.
+
+\begin{itemize}
+\item \cmp{OCaml est un {\bf langage fonctionnel}~:
+il manipule les fonctions comme étant des valeurs du langage. Celles-ci peuvent être utilisées en tant que paramètres d'autres fonctions ou être retournées comme résultat d'un appel de fonction.}
+
+\item \cmp{OCaml est {\bf typé statiquement}~:
+la vérification de la compatibilité entre les types des paramètres formels et des paramètres d'appel est effectuée au moment de la compilation du programme. Dès lors, il n'est pas nécessaire de faire ces vérifications durant l'exécution du programme ce qui accroît son efficacité. En outre, la vérification de type permet d'éliminer la plupart des erreurs introduites par maladresse ou étourderie et contribue à la sûreté de l'exécution.}
+
+\item \cmp{OCaml est {\bf polymorphe paramétrique}~:
+une fonction qui n'explore pas la totalité de la structure d'un de ses arguments accepte que celui-ci ait un type non entièrement déterminé. Ce paramètre est alors dit polymorphe. Cette particularité permet de développer un code générique utilisable pour des structures de données différentes tant que la représentation exacte de cette structure n'a pas besoin d'être connue par le code en question. L'algorithme de typage est à même de faire cette distinction.}
+
+\item \cmp{OCaml possède {\bf une inférence de types}~:
+le programmeur n'a besoin de donner aucune information de type à l'intérieur de son programme. Le langage se charge seul de déduire du code le type le plus général des expressions et des déclarations qui y figurent. Cette inférence est effectuée conjointement à la vérification, lors de la compilation du programme.}
+
+\item \cmp{OCaml est muni d'un {\bf mécanisme d'exceptions}~:
+il est possible de rompre l'exécution normale d'un programme à un endroit et de la reprendre à un autre endroit du programme prévu à cet effet. Ce mécanisme permet de gérer les situations exceptionnelles, mais il peut aussi être adopté comme style de programmation.}
+
+\item \cmp{OCaml possède des {\bf traits impératifs}~:
+les entrées-sorties, les modifications physiques de valeurs et les structures de contrôle itératives sont possibles sans avoir recours aux traits de la programmation fonctionnelle. Le mélange des deux styles est bien entendu accepté et offre une grande souplesse de développement ainsi que la possibilité de définir des structures de données nouvelles.}
+
+\item \cmp{OCaml exécute des processus légers (threads)~:
+les principaux outils de création, de synchronisation pour la gestion de la mémoire partagée et de communication entre différents processus légers sont prédéfinis.}
+
+\item \cmp{OCaml communique sur le réseau Internet~:
+les bases nécessaires à l'ouverture de canaux de communication entre différentes machines sont prédéfinies et permettent la réalisation d'applications suivant l'architecture client-serveur.}
+
+\item \cmp{OCaml dispose de {\bf nombreuses bibliothèques}~:
+structures de données classiques, entrées-sorties, interfaçage avec les ressources du système, analyses lexicale et syntaxique, calcul sur les grands nombres, valeurs persistantes, etc.}
+
+\item \cmp{OCaml dispose d'un {\bf environnement de programmation}~:
+incluant une boucle d'interaction, une trace de l'exécution, un calcul des dépendances et une analyse de performance.}
+
+\item \cmp{OCaml interagit avec le langage C~:
+via l'appel de fonctions C à partir d'un programme OCaml et réciproquement, permettant ainsi l'accès aux nombreuses bibliothèques C.}
+
+\item \cmp{OCaml dispose de {\bf trois modes d'exécution}~:
+interactif par le biais d'une boucle d'interaction, compilation vers du code-octet interprété par une machine virtuelle, compilation vers du code machine. Le programmeur peut donc choisir entre souplesse de développement, portabilité du code objet sur différentes architectures ou performance sur une architecture donnée.}
+
+\item OCaml dispose d'un {\em garbage collector} ("GC"), aussi appelé "glaneur de cellules" ou
+"ramasse-miettes", c'est-à-dire qu'il n'y a aucune allocation explicite de mémoire,
+le GC s'occupant d'allouer automatiquement l'espace mémoire nécessaire au stockage des
+structures de données manipulées et de le libérer automatiquement lorsque ces données
+ne sont plus accessibles.
+
+
+\end{itemize}
+
+
+\section{Evaluation, compilation, exécution}
+
+Il existe plusieurs façons d'exécuter un programme OCaml~:
+\subsection{Utilisation de l'interprète (toplevel)}
+Il est possible d'interpréter le code d'un programme, de façon interactive ou non,
+grâce au {\em toplevel}.
+Le {\em toplevel} OCaml permet de saisir et exécuter interactivement du code OCaml,
+de la même façon que dans un interprète de commandes UNIX ({\em shell}).
+L'inférence et la vérification des types sont faites et le code exécuté immédiatement.
+Ce mode permet de tester facilement de petits bouts de programme, sans avoir à compiler puis
+exécuter toute une application.\\
+
+Le toplevel est lancé par la commande \com{ocaml}. L'utilisateur peut alors saisir des
+{\em phrases} OCaml terminées par "{\tt ;;}" qui sont évaluées immédiatement. Le toplevel
+affiche les types et valeurs des expressions évaluées avant de réafficher le prompt~:
+\vspace{0.2cm}\\
+
+<$ocaml code="\"Hello world!\" (* code saisi par l'utilisateur *);; 42.0;; " eval="top"$>
+
+Il est possible de charger des modules additionnels compilés
+(cf. chapitre \ref{modules}) soit en donnant ces modules sur la ligne de commande~:\\
+\shell{ocaml mon\_module.cmo mon\_module2.cmo}
+soit en utilisant des directives de chargement {\tt \#load} à l'invite du toplevel~:
+\vspace{0.2cm}\\
+
+<$ocaml code="#load \"mon_module.cmo\";;
+#load \"mon_module2.cmo\";;" eval="top"$>
+Le contenu des modules chargés est alors accessible depuis le code saisi dans le toplevel.
+
+Il est également possible de lancer le toplevel sur un fichier de code OCaml, ce dernier
+sera évalué comme si son contenu était saisi à l'invite du toplevel~:\\
+\shell{ocaml mon\_module.ml}
+
+Pour faciliter la saisie de code dans le toplevel, on pourra utiliser l'outil
+\com{ledit}\footnote{ledit~: \myurl{http://pauillac.inria.fr/~ddr/ledit/}}
+qui offre des fonctionnalités d'édition de ligne de commande (historique, utilisation des flèches
+du clavier, \dots) de la façon suivante~:\\
+\shell{ledit ocaml}
+
+Il existe également un toplevel graphique,
+\com{topcameleon}\footnote{Topcameleon~: \myurl{http://home.gna.org/cameleon/topcameleon.fr.html}},
+permettant de sauvegarder
+et recharger le code saisi ainsi que d'afficher la structure des valeurs calculées.
+
+Pour la suite de la formation, nous utiliserons un éditeur et ferons exécuter notre code
+par la commande\\
+\shell{ocaml notre\_fichier.ml}
+
+Pour en savoir plus sur le toplevel, consulter le manuel~:\\
+\urldoctoplevel\\
+\urldoctopleveldaocaml
+
+\subsection{Compilation vers du code-octet}
+\label{ocamlc}
+Il existe deux compilateurs OCaml différents, l'un compilant vers du code-octet ({\em byte-code}),
+l'autre vers du code natif.
+
+Le code-octet peut être exécuté par une machine virtuelle OCaml sur d'autres architectures
+que celle pour laquelle il a été compilé. C'est le même principe que le code-octet pour machine
+virtuelle Java. Des performances moindres sont la contrepartie de cette portabilité. Par ailleurs,
+dans le cas d'utilisation de bibliothèques C, ces bibliothèques doivent être présentes sur
+la machine d'exécution.
+
+Les principales extensions des fichiers utilisées par les compilateurs OCaml et leurs
+significations sont indiquées dans le tableau de la figure \ref{extensions}.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{|l|l|}\hline
+{\tt .ml} & Source d'implémentation (cf. chapitre \ref{modules}, équivalent des {\tt .c} en C) \\ \hline
+{\tt .mli} & Source d'interface (cf. chapitre \ref{modules}, sorte d'équivalent des {\tt .h} en C) \\ \hline
+{\tt .cmo} & Implémentation compilée en code-octet \\ \hline
+{\tt .cmi} & Interface compilée \\ \hline
+{\tt .cmx} et {\tt .o} & Implémentation compilée en code natif \\ \hline
+{\tt .cma} & Bibliothèque (regroupement de plusieurs implémentations compilées) en code-octet \\ \hline
+{\tt .cmxa} et {\tt .a} & Bibliothèque en code natif \\ \hline
+\end{tabular}
+\end{center}
+\caption{Principales extensions des noms de fichiers utilisées par les compilateur OCaml.}
+\label{extensions}
+\end{figure}
+
+Le compilateur code-octet est \com{ocamlc}, invoqué par des commandes de la forme suivante~:\\
+\shell{ocamlc [options] fichiers}
+
+Les options les plus courantes sont les suivantes~:
+\begin{itemize}
+\item {\tt\bf -c}~: indique au compilateur de simplement compiler les fichiers sources en paramètres,
+sans faire l'édition de liens pour créer un exécutable. Ainsi, la commande\\
+\shell{ocamlc -c foo.ml}
+produira un fichier {\tt .cmo}, le code-octet correspondant au code de {\tt foo.ml}. Le fichier
+{\tt .cmo} pour un fichier {\tt .ml} est donc l'équivalent des fichiers objets {\tt .o} pour les fichiers
+de code C {\tt .c}. Contrairement au langage C pour lequel les fichiers d'interface {\tt .h}
+ne sont pas compilés, il est nécessaire en OCaml de compiler le code des interfaces~:\\
+\shell{ocamlc -c foo.mli}
+compilera donc l'interface {\tt foo.mli} dans un fichier {\tt foo.cmi}. Dans le cas où un fichier
+{\tt .mli} existe pour un fichier {\tt .ml}, il est nécessaire de compiler d'abord l'interface
+pour créer le {\tt .cmi}. La compilation du {\tt .ml} en {\tt .cmo} vérifiera que l'implémentation
+({\tt .ml}) correspond bien à l'interface. S'il n'existe pas de fichier d'interface
+{\tt .mli} pour un fichier d'implémentation
+{\tt .ml}, la compilation du {\tt .ml} créera le {\tt .cmo} ainsi que l'interface compilée {\tt .cmi}.
+L'interface ainsi créée exposera tous les éléments de l'implémentation.
+
+\item{\tt\bf -o}~: indique le nom du fichier à créer, notamment lors de la création d'exécutables.
+Ainsi, la commande suivante crée l'exécutable {\tt program} à partir des trois fichiers de code-octet
+en paramètres~:\\
+\shell{ocamlc -o program foo.cmo bar.cmo gee.cmo}
+Les fichiers {\tt .cmo} doivent être indiqués par ordre de dépendance, avec en premier
+les modules ne dépendant d'aucun autre.
+
+\item{\tt\bf -I}~: indique un répertoire supplémentaire dans lequel chercher les fichiers
+nécessaires à la compilation (interfaces et implémentations des modules et bibliothèques utilisés).
+C'est l'équivalent de la même option pour la compilation de fichiers C.
+Ces indications sont également appelées {\em includes}. Par défaut, les répertoires
+utilisés sont le répertoire courant et le répertoire standard
+des bibliothèques d'OCaml, indiqué par la commande\\
+\shell{ocamlc -where}
+Les répertoires indiqués par {\tt\bf -I} sont ajoutés en tête de la liste des répertoires à examiner,
+mais dans l'ordre dans lequel ils sont indiqués. Ainsi, la commande\\
+\shell{ocamlc -I rep1 -I rep2 ...}
+indiquera au compilateur de chercher les fichiers {\tt .cmo}, {\tt .cmi} et {\tt .cma} dans les
+répertoires {\tt rep1}, {\tt rep2}, {\tt .} et le répertoire standard des bibliothèques OCaml,
+dans cet ordre.
+La recherche de tels fichiers n'est pas faite récursivement dans les répertoires inclus. Ainsi,
+si le répertoire standard des bibliotèques OCaml est {\tt/opt/ocaml/lib/ocaml} et que l'on souhaite
+utiliser la bibliothèque {\tt Labltk}, on devra spécifier ce répertoire à inclure~:\\
+\shell{ocamlc -I /opt/ocaml/lib/ocaml/labltk ...}
+Une notation abrégée existe pour ajouter un répertoire se trouvant sous le répertoire standard;
+ainsi l'option {\tt\bf -I} ci-dessous a le même effet que celle de la commande précédente~:\\
+\shell{ocamlc -I +labltk ...}
+Cette notation permet de s'abstraire du répertoire d'installation des bibliothèques standard.
+\end{itemize}
+Beaucoup d'autres options de compilation existent. Nous ne présentons ici que les options
+de base permettant de compiler des programmes simples.
+On se réfèrera donc au manuel pour connaître toutes les options et possibilités du
+compilateur~:\\
+\urldococamlc
+
+\subsection{Compilation vers du code natif}
+\label{ocamlopt}
+La compilation vers du code natif permet d'obtenir de bien meilleures performances
+pour l'exécutable produit. Cependant, l'exécutable obtenu ne peut pas être exécuté sur
+d'autres architectures que celle sur laquelle il a été compilé.
+
+Le compilateur vers du code natif est \com{ocamlopt}. Il s'utilise de la même façon que
+le compilateur \com{ocamlc} (cf. section \ref{ocamlc}),
+mais utilise des extensions différentes pour les fichiers utilisés et produits
+(cf. figure \ref{extensions}).
+
+La documentation relative au compilateur vers du code natif se trouve ici~:\\
+\urldococamlopt
+
+\section{Le site web}
+Le site \myurl{http://caml.inria.fr/} est le site officiel d'Objective Caml et on y trouve,
+en plus des distributions, tout le matériel nécessaire pour débuter en OCaml~: documentations,
+références de livres, tutoriels, liens, \dots.
+
+\section{Accès aux documentations}
+\label{documentations}
+Les documentations de base pour développer en OCaml sont les suivantes~:
+\begin{itemize}
+\item Le manuel de référence~:\\
+\urlrefmanual
+\item Les pages {\tt man}~: chaque outil (\com{ocamlc}, \com{ocamlopt}, \com{ocamldoc}, \dots)
+et chaque module de la bibliothèque standard possède sa propre page de manuel. Ainsi,
+on accédera à la page {\tt man} du module {\tt List} par la commande\\
+\shell{man List}
+\item La documentation de référence des bibliothèques OCaml installées sous AFS a été générée
+de façon uniforme et permet un accès rapide et regroupé à plusieurs bibliothèques en plus
+de la bibliothèque standard~: \\
+\urlafsdoc
+\item Pour les utilisateurs de Firefox, la Caml Side Bar\\
+(\urlcamlsidebar)\\
+offre un accès rapide aux documentations, au manuel et à la liste des contributions, ainsi que
+des possibilités de recherche dans ces documentations et sur le site \urlcamlsite.
+
+\end{itemize}
+
+\chapter{Programmation fonctionnelle}
+\label{progfonctionnelle}
+La syntaxe d'OCaml et le paradigme de programmation fonctionnelle
+permettent de mieux voir un programme comme une fonction retournant
+une valeur calculée à partir de paramètres. Cela
+se rapproche des définitions mathématiques des fonctions,
+par opposition aux descriptions opérationnelles que l'on trouve
+dans les langages impératifs.
+
+Illustrons cela avec l'exemple de la fonction factorielle.
+Une définition mathématique possible est la suivante~:
+%BEGIN LATEX
+\[fact: \mathbb{N}\rightarrow\mathbb{N}; \quad fact(0) = 1 ;\quad fact(n) = n * fact(n-1)\]
+%END LATEX
+%HEVEA \[fact: \mathbb{N+}\rightarrow\mathbb{N+}; \quad fact(0) = 1 ;\quad fact(n) = n * fact(n-1)\]
+
+En OCaml, cette fonction sera définie comme ci-dessous~;
+on notera la ressemblance de syntaxe entre les deux définitions.
+\vspace{0.2cm}\\
+
+<$ocaml code="
+let rec fact = function
+  0 -> 1
+| n -> n * fact (n-1);;"
+eval="true"$>
+
+En C, cette fonction pourrait s'écrire~:
+\vspace{0.2cm}\\
+
+<$c code="unsigned int fact (unsigned int n) {
+  unsigned int i = 1, res = 1;
+
+  while (i <= n)
+   res = res * i++;
+  return res;
+}"$>
+
+\section{Noyau fonctionnel}
+
+Le noyau fonctionnel du langage permet d'appliquer des fonctions à des valeurs.
+Les valeurs sont typées et peuvent être de types de base (entier, flottant, \dots.,
+cf. section \ref{basetypes}), de types plus élaborés construits à partir d'autres
+types, ou bien de type fonction. En effet, en OCaml, les fonctions sont des
+valeurs {\em de premier ordre}, c'est-à-dire que le langage permet de les manipuler
+comme d'autres valeurs "simples" comme les entiers. En particulier, on peut définir
+des fonctions et les passer en paramètres d'autres fonctions.
+
+\subsection{Valeurs, fonctions et types de base}
+\subsubsection{Types de base}
+\label{basetypes}
+Les types ci-dessous sont prédéfinis en OCaml. On donne pour chacun la syntaxe
+et des exemples de manipulation.
+
+\mypar{Les entiers (type {\tt int})}
+\vspace{0.2cm}
+
+<$ocaml code="
+1 (* l'entier 1 *);;
+1 + 0xde (* l'addition avec l'opérateur '+', 0xde est la notation hexadécimale*) ;;
+3 - 0o11 (* la soustraction, 0o11 est la notation octale *) ;;
+4 * 0b10101 (* la multiplication, 0b10101 est la notation binaire *) ;;
+10 / 3 (* la division entière *) ;;
+(/) 10 3 (* idem, en utilisant l'opérateur en position préfixe *) ;;
+15000003 mod 4 (* le modulo, reste de la division entière *) ;;
+15_000_003 mod 4 (* même opération, avec un entier plus lisible *) ;;
+max_int (* le plus grand entier disponible *) ;;
+min_int - 1 (* attention, pas de contrôle sur le dépassement des limites *) ;;
+" eval="top"$>
+{\tt max\_int} et {\tt min\_int} dépendent de l'architecture de la machine.
+Sur une machine 32 bits, les entiers natifs sont codés sur 31 bits, sur 63
+bits sur une machine 64 bits. Cela est dû à la façon dont sont encodées les
+valeurs.
+
+Il existe beaucoup d'autres opérations sur les entiers, incluant également
+la manipulation au niveau bits~:
+\pervasivesurl{6_Integerarithmetic}
+
+On remarquera que l'interprète a automatiquement déterminé le type des expressions
+saisies (ici, {\bf int}). C'est ce que l'on appelle l'{\em inférence de type}~:
+le typeur a déduit d'après le code les types des expressions évaluées. Nous verrons
+d'autres exemples d'inférence de type au fut et à mesure de la formation.
+
+\mypar{Les flottants (type {\tt float})}
+\vspace{0.2cm}
+
+<$ocaml code="
+1.0 (* le réel 1.0 *);;
+1.0e+5 (* notation avec exposant *) ;;
+1.2 +. 1. (* l'addition avec l'opérateur '+.' *) ;;
+3.3 -. 2.15 (* la soustraction *) ;;
+4. *. 3. (* la multiplication *) ;;
+10. /. 3. (* la division *) ;;
+(/.) 10. 3. (* idem, en utilisant l'opérateur en position préfixe *) ;;
+mod_float 15000003. 4.5 (* le modulo *) ;;
+mod_float 15_000_003. 4.5 (* même opération, avec un flottant plus lisible *) ;;
+1.999999999 +. 100000000. (* la précision est celle de la norme IEEE 754 *);;
+ceil 3.5 (* arrondi à l'entier supérieur *) ;;
+floor 3.5 (* arrondi à l'entier inférieur *) ;;
+truncate 3.5 (* ne conserve que la partie entière *) ;;
+1. /. 0. (* la division par zéro donne l'infini, ce qui
+            n'est pas un nombre, 'not a number' ou 'NaN' *);;
+" eval="top"$>
+
+D'autres opérations sont disponibles sur les flottants; on consultera le manuel
+pour les découvrir~: \pervasivesurl{6_Floatingpointarithmetic}.
+
+Les opérateurs {\tt +} et {\tt +.} ne sont pas génériques et s'appliquent respectivement
+sur des entiers et des flottants (idem pour les autres opérateurs exposés plus haut)~:
+\vspace{0.2cm}\\
+
+<$ocaml code="
+1 + 2.0 ;;
+1 +. 2.0 ;;
+" eval="errors"$>
+
+\mypar{Les booléens (type {\tt bool})}
+\vspace{0.2cm}
+
+<$ocaml code="
+true (* la valeur 'vrai' *) ;;
+false (* la valeur 'faux' *) ;;
+true && false (* ET paresseux sequentiel, evalue de gauche a droite *) ;;
+true || false (* OU paresseux sequentiel, evalue de gauche a droite *) ;;
+not true (* NON logique *) ;;
+" eval="top"$>
+
+\mypar{Les caractères (type {\tt char})}
+\vspace{0.2cm}
+
+<$ocaml code="
+'a' (* le caractere 'a' *) ;;
+int_of_char 'a' (* son code ASCII *) ;;
+char_of_int 123 (* le caractere de code ASCII 123 *) ;;
+" eval="top"$>
+D'autres fonctions sont disponibles dans le module \refmodule{Char}.\\
+
+\mypar{Les chaînes de caractères (type {\tt string})}
+\vspace{0.2cm}
+
+<$ocaml code="
+\"hello world!\";;
+\"hello \" ^ \"world!\" (* concatenation *);;
+String.length \"hello world!\" (* longueur de chaine *);;
+\"hello world!\".[4] (* acces à un caractere, indice commencant a zero *) ;;
+" eval="top"$>
+Beaucoup d'autres fonctions sont disponibles dans le module \refmodule{String}.
+
+\startwarning
+Il n'existe pas de conversion automatique d'un type vers un autre comme dans
+beaucoup d'autres langages interprétés. Ainsi~:
+\vspace{0.2cm}
+
+<$ocaml code="
+string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
+3 + \"25\";;
+" eval="errors"$>
+\stopwarning
+
+\mypar{Le type {\tt unit}}\\
+\cmp{Le type unit décrit un ensemble ne possédant qu'une seule valeur, notée \code{()}.}
+\vspace{0.2cm}
+
+<$ocaml code="() ;;" eval="top"$>
+\cmp{Cette valeur sera plus particulièrement utilisée dans les programmes impératifs
+(cf. section \ref{progimperative}) pour les fonctions qui effectuent des effets
+de bord. Les fonctions dont le résultat est la valeur {\tt ()} simulent la notion
+de procédure qui n'existe pas en OCaml comme le fait le type void dans le langage C.}
+
+\mypar{Les n-uplets}\\
+Les n-uplets permettent de grouper plusieurs valeurs, potentiellement de types différents.
+Un n-uplet à 2 éléments est aussi appelé paire. Voici quelques exemples de constructions
+de n-uplets~:
+<$ocaml code="
+(1, 2) (* paire d'entiers *) ;;
+(1, \"2\") (* paire composee d'un entier et d'une chaine *) ;;
+fst (1, 2) (* acces a la premiere composante de la paire *) ;;
+snd (1, 2) (* acces a la seconde composante *);;
+(1, 2, 3) (* n-uplet de 3 elements *) ;;
+(1.0, \"hello\", \"world\", '!') (* n-uplet de 4 elements de 3 types differents *) ;;
+" eval="top"$>
+On notera que les types des n-uplets inférés sont notés par une '*', comme dans
+{\tt int * string * string * char}.
+\startwarning
+Les fonctions {\tt fst} et {\tt snd} ne s'appliquent qu'à des paires et non
+à des n-uplets de taille supérieure, comme l'indique le type de ces fonctions~:
+<$ocaml code="fst;;
+snd;;
+fst (1, 2, 3);;
+" eval="errors"$>
+La notation {\tt 'a * 'b -> 'a} indique qu'il s'agit d'un type fonctionnel (aussi appelé
+type "flèche"), décrivant une fonction prenant en argument une paire d'éléments de types quelconques
+({\tt 'a * 'b}) et renvoyant une valeur de même type que le premier élément de la paire
+({\tt 'a}).
+\stopwarning
+
+\mypar{Les listes (type {\tt 'a list})}\\
+Le type {\tt list} est prédéfini et permet de construire des listes d'éléments de même type.
+C'est un type paramétré, {\tt 'a} indique le paramètre de type, qui est peut être instancié
+selon le type des éléments de la liste~:
+<$ocaml code="
+[] (* une liste vide, donc sans contrainte sur le type des elements *) ;;
+[ 1 ] (* une liste d'entiers a un element *) ;;
+[ 1 ; 2 ; 3 ] (* une liste de 3 entiers *) ;;
+[ \"hello\" ; \"world\" ; \"!\" ] (* une liste de chaines *) ;;
+[ 1 ; \"2\" ; 3 ] (* liste invalide car les elements n'ont pas le meme type *) ;;
+" eval="errors"$>
+Voyons quelques exemples de manipulation de listes~:
+<$ocaml code="
+1 :: 2 :: 3 :: [] (* ajout d'element en tete de liste par l'operateur 'cons' :: *) ;;
+[ 1 ; 2 ] @ [ 3 ; 4 ; 5] (* concatenation de deux listes (de meme type) *) ;;
+List.length [ \"hello\" ; \"world\" ; \"!\" ] (* acces a la longeur *) ;;
+List.hd [ 1 ; 2 ; 3 ] (* recuperation de l'element de tete de liste *) ;;
+List.tl [ 1 ; 2 ; 3 ] (* recuperation de la queue de la liste (i.e. sans la tete) *) ;;
+String.concat \"-\" [ \"hello\" ; \"world\" ; \"!\" ] (* concatenation d'une liste de chaines *) ;;
+" eval="top"$>
+Beaucoup d'autres fonctions sont disponibles dans le module \refmodule{List}.
+
+\subsection{Comparaisons}
+OCaml offre des fonctions de comparaisons polymorphes, c'est-à-dire opérant sur n'importe
+quels types de données, à la seule condition que les valeurs comparées soient du même type.
+Elles sont donc de type {\tt 'a -> 'a -> bool}, indiquant clairement que le type
+des deux arguments doit être le même.
+
+Voyons ces fonctions~:
+<$ocaml code="
+1 = 2 (* egalite structurelle sur des entiers *) ;;
+\"hello\" = \"world\" (* ... ou sur des chaines *) ;;
+(1, 2, 3) = (1, 2, 4) (* ... ou des n-uplets *) ;;
+[ 1 ; 2 ; 3 ] <> [ 1 ; 2 ; 4 ] (* différence structurelle, ici sur des listes *) ;;
+not ([ 1 ; 2 ; 3 ] = [ 1 ; 2 ; 4 ])
+  (* idem que ci-dessus, en utilisant la negation de l'egalite *) ;;
+1 < 2 (* inferiorite (structurelle) stricte *) ;;
+1 <= 2 (* inferieur ou egal *) ;;
+\"hello\" > \"world\" (* superieur *) ;;
+[ 1 ; 2 ; 3 ] >= [ 1 ; 2 ] (* superieur ou egal *) ;;
+1 == 2 (* egalite physique *) ;;
+1 != 2 (* difference physique *) ;;
+" eval="top"$>
+\cmp{L'égalité structurelle teste l'égalité de deux valeurs en explorant leur structure,
+alors que l'égalité physique teste si les deux valeurs occupent la même zone mémoire.
+Ces deux égalités retournent le même résultat pour les valeurs simples : booléens,
+caractères, entiers et constructeurs constants}.
+
+La comparaison structurelle repose sur l'ordre des entiers pour les entiers, les chaînes
+et les caractères (en utilisant les codes ascii), l'ordre naturel sur les flottants.
+
+\subsection{Structure de contrôle conditionnelle}
+\label{conditionnelle}
+La syntaxe de la conditionnelle peut prendre deux formes~:
+\begin{itemize}
+\item \code{if {\em <expression de type bool>} then {\em <expression>}}
+\item \code{if {\em <expression de type bool>} then {\em <expression1>} else {\em <expression2>}}
+\end{itemize}
+La première forme, sans écriture de la branche \code{else}, est en fait évaluée comme
+\centercode{if {\em <expression de type bool>} then {\em <expression>} else ()}
+
+Le typage correct de l'expression toute entière impose que les expressions des
+branches \code{then} et \code{else} soient du même type. En effet, si ce n'était pas
+le cas, l'expression entière aurait un type différent selon que l'expression de
+condition est vraie ou fausse. L'expression toute entière est donc du même type
+que celui des branches.
+
+Pour cette raison, l'expression du \code{then} de la première forme doit être de
+type \code{unit}, car l'expression de la branche \code{else} implicite
+est \code{()}, qui est de type \code{unit}.
+
+Voyons quelques exemples~:
+<$ocaml code="
+if true then 1 lsl 5 + 10 else 1
+  (* lsl est le décalage logique de bits vers la gauche *) ;;
+(if 12 * 4 < 40 then 15 else 2) + (if 3 > 4 then 10 else 4 * 10)
+  (* une expression conditionnelle est aussi une expression dont le calcul
+     retourne une valeur. *);;
+if true then 1;;
+" eval="errors"$>
+La dernière expression est un exemple d'expression mal typée, car les types
+des branches \code{then} et \code{else} diffèrent, ce que signale l'interprète~:
+l'expression \code{1} est de type entier alors qu'on attend ici une expression
+de type \code{unit} (comme la branche \code{else}).
+
+\subsection{Déclarations de valeurs}
+Les déclarations de valeurs sont des associations entre un nom (un {\em identifiant})
+et une valeur. L'obtention de la valeur nécessite le calcul de l'expression
+de la définition de l'identifiant. On dit que la valeur est liée (en anglais {\em bound})
+au nom dans l'environnement.
+Les identifiants sont de la forme suivante~: {\tt [a-z\_][0-9A-Za-z\_']*}, c'est-à-dire
+qu'ils peuvent contenir les caractères 'a' à 'z', 'A' à 'Z', '0' à '9', \code{\_} et \code{'} mais
+doivent commencer par une lettre minuscule ou le caractère \code{\_}.
+
+Il existe deux types de déclarations~: globales et locales.
+
+\subsubsection{Déclarations globales}
+La syntaxe est la suivante~:
+\centercode{let {\em <identifiant>} = {\em <expression>};;}
+
+La valeur résultant du calcul de l'\code{expression} est ensuite associée à
+l'\code{identifiant}. Cet identifiant est alors connu et peut être utilisé dans
+toutes les expressions qui suivent dans le programme. Il est alors remplacé dans
+ces expressions par sa valeur associée~:
+<$ocaml code="
+let x = 1 ;;
+let y = 41 ;;
+let z = x + y ;;
+" eval="top"$>
+
+Il est impossible d'utiliser un identifiant inconnu~:
+<$ocaml code="foo + 1" eval="errors"$>
+Le message indique que la valeur \code{foo} n'est pas liée dans l'environnement.
+
+On remarquera qu'il est syntaxiquement impossible de déclarer un nom sans valeur. Cela
+est fait exprès pour éviter des problèmes de variables non initialisées comme en C~:
+<$c code="void foo () { int toto ; ... }"$>
+Dans la fonction C ci-dessus, on peut déjà utiliser la variable {\tt toto} sans savoir
+à quoi elle fait référence, ce qui peut provoquer des erreurs d'exécution aléatoires.
+
+\subsubsection{Déclarations locales}
+Il est possible de déclarer localement des valeurs. Le nom de la valeur n'est alors
+visible que dans une seule expression. La syntaxe est la suivante~:
+\centercode{let {\em <identifiant>} = {\em <expression$_1$>} in {\em <expression$_2$>}}
+
+La valeur de l'\code{expression$_1$} est calculée et liée à
+l'\code{identifiant}. Ce dernier n'est visible que dans l'\code{expression$_2$}. Exemple~:
+
+<$ocaml code="
+let foo = (* declaration globale foo *)
+    let bar =
+      let glop = 1 in (* declaration locale de glop *)
+      glop + 2
+    in (* declaration locale de bar, glop n'est plus visible *)
+      let gee = bar + 1 in (* declaration locale de gee, utilisant bar *)
+        gee + bar + 2 (* utilisation de gee et bar locales *);;
+let buz = bar + foo (* bar n'est plus visible ici *) ;;
+" eval="errors"$>
+L'indentation ci-dessus permet de bien voir l'imbrication des expressions. Cependant,
+elle prend davantage de place en largeur. On trouvera souvent cette seconde indentation,
+n'ajoutant pas de décalage supplémentaire après un \code{in}~:
+<$ocaml code="
+let foo =
+    let bar =
+      let glop = 1 in
+      glop + 2
+    in
+    let gee = bar + 1 in
+    gee + bar + 2;;
+" eval="top"$>
+Des conseils sur l'indentation sont donnés à l'adresse \urlindentconseils.
+
+\subsubsection{Déclaration simultanées}
+Il est possible de déclarer simultanément plusieurs valeurs globales~:
+\centercode{let {\em <ident$_1$>} = {\em <expression$_1$>} \\
+and {\em <ident$_2$>} = {\em <expression$_2$>} \\
+... \\
+and {\em <ident$_N$>} = {\em <expression$_N$>};;}
+
+ou locales~:
+\centercode{let {\em <ident$_1$>} = {\em <expression$_1$>} \\
+and {\em <ident$_2$>} = {\em <expression$_2$>} \\
+...\\
+and {\em <ident$_N$>} = {\em <expression$_N$>} in \\
+{\em <expression>}}
+
+Les valeurs ne deviennent cependant visibles qu'après toutes les déclarations
+simultanées~:
+<$ocaml code="
+let x_int = 1
+and x_float = 1.0;;
+let y_int = 2
+and y_float = float_of_int y_int;;
+" eval="errors"$>
+
+Une autre façon de définir plusieurs valeurs en même temps est d'utiliser la
+notation des n-uplets~:
+<$ocaml code="
+let (a, b, c) = (1, 2, 3);;
+let (a, b) = (1, 2, 3);;
+let (a, b, c) = (1, 2);;
+" eval="errors"$>
+Contrairement à d'autres langages, le compilateur veille à ne pas avoir de variable
+non initialisée comme cela serait le cas pour \code{c} dans \code{let (a, b, c) = (1, 2)}.
+Les valeurs de l'expression de définition ne sont pas non plus "recyclées" comme
+dans le langage R (ce qui aurait donné la valeur \code{1} à \code{c} dans notre exemple).
+
+Enfin, dans \code{let (a, b) = (1, 2, 3)}, le compilateur nous indique clairement
+que la construction n'est pas correcte puisque nous avons un n-uplet de taille 3
+à droite alors que nous le {\em filtrons} par un n-uplet de taille 2. Nous verrons
+le filtrage en détail dans la section \ref{filtrage}.
+
+\subsection{Expressions fonctionnelles, fonctions}
+\cmp{Une expression fonctionnelle est constituée d'un paramètre et d'un corps.
+Le paramètre formel est un nom de variable et le corps une expression.
+On dit que le paramètre est abstrait. C'est pour cela qu'une expression
+fonctionnelle est aussi appelée abstraction.}
+
+\subsubsection{Définition de fonctions}
+On définit une fonction par la syntaxe suivante~:
+\centercode{function {\em <identifiant>} -> {\em <expression>}}
+
+Une fonction ne prend qu'un seul paramètre. Cependant, elle peut renvoyer à son
+tour une valeur fonctionnelle, ce qui permet de simuler des fonctions à plusieurs
+paramètres~:
+\centercode{function {\em <identifiant1>} -> function <identifiant2> -> {\em <expression>}}
+
+Voyons quelques exemples de définition de fonctions~:
+<$ocaml code="
+function x -> x * x (* la fonction carre sur les entiers *) ;;
+function x -> function y -> x +. y (* l'addition sur les flottants *) ;;
+fun x y -> x +. y (* raccourci syntaxique pour l'expression ci-dessus *)
+" eval="top"$>
+On remarquera le type de ces expressions, inféré automatiquement par l'interprète.
+Les types des valeurs fonctionnelles sont noté avec \code{->}. Ainsi,
+\code{int -> int} indique une valeur fonctionnelle prenant en paramètre
+une valeur de type \code{int} et retournant une valeur de type \code{int}.\\
+Le type \code{float -> float -> float} est équivalent à
+\code{float -> (float -> float)} (associativité à droite de \code{->}), ce qui signifie
+que la valeur prend en paramètre un \code{float} et retourne une valeur fonctionnelle
+de type \code{float -> float} qui elle aussi prend un \code{float} mais retourne
+une valeur de type \code{float}.
+
+\subsubsection{Application de fonctions}
+L'application d'une fonction à une valeur s'écrit en juxtaposant une valeur
+fonctionnelle et un paramètre~:
+<$ocaml code="(function x -> x + 1) 41 ;;
+((function x -> function y -> x +. y) 1.0) 41.0 ;;
+(function x -> function y -> x +. y) 1.0 41.0 (* suppression des parentheses inutiles *) ;;
+" eval="top"$>
+Dans la dernière expression ci-dessus, nous supprimons les parenthèses inutiles car
+l'application est associative à gauche, c'est à dire que le premier paramètre
+\code{1.0} est appliqué à \code{function x -> ...}, ce qui revient donc à calculer la
+l'expression \code{(function y -> 1.0 +. y)} (le paramètre \code{x} est remplacé
+par la valeur \code{1.0} à laquelle est appliquée la fonction); la valeur obtenue est encore
+une fonction qui est alors appliquée à \code{41.0} pour finalement calculer
+\code{1.0 +. 41.0}.
+
+Il est donc possible d'appliquer un seul paramètre à la même valeur fonctionnelle~:
+<$ocaml code="(function x -> function y -> x +. y) 1.0;;" eval="top"$>
+Le résultat est une expression fonctionnelle. Cet aspect est parfois appelé
+{\em application partielle} quand on considère la fonction comme ayant deux paramètres
+\code{x} et \code{y}.
+
+L'expression \code{function (x, y) -> ...} n'est pas équivalente
+à \code{function x -> function y -> ...}. En effet, dans la première on définit une fonction
+prenant en paramètre un couple, tandis que la seconde définit une fonction retournant une
+fonction, ce qui revient à une fonction à deux paramètres.
+
+Le mode d'évaluation de l'application en OCaml est le passage par valeur, c'est-à-dire
+que l'expression en paramètre d'une fonction est d'abord évaluée et ensuite cette
+valeur est passée à la fonction pour évaluer cette dernière. Cela est différent du
+passage par nom. Ainsi, dans l'expression
+<$ocaml code="(function x -> x+1) (24 + 17)" eval="top"$>
+l'expression \code{24 + 17} est d'abord évaluée et la valeur \code{41} est passée à
+la fonction pour en évaluer le corps.
+
+La valeur de retour d'une fonction est la valeur de l'expression du corps de la fonction.
+
+Les fonctions définies et appliquées "au vol" sont appelées fonctions anonymes, car
+elles ne sont pas liées à un identifiant. Bien souvent, on nommera les fonctions pour
+les appliquer plus tard, en effectuant des déclarations globales ou locales~:
+<$ocaml code="
+let square = function x -> x * x (* fonction carre sur les entiers *) ;;
+let add = fun x y -> x + y (* en utilisant le raccourci de syntaxe *) ;;
+let sub = function x -> function y -> x - y ;;
+let sub x y = x - y (* idem en utilisant un autre raccourci de syntaxe *) ;;
+" eval="top"$>
+
+Enfin, le compilateur effectue des vérifications de type lors de l'application de fonction,
+comme nous l'avons vu précédemment sur les opérateurs arithmétiques.
+Voyons quelques exemples corrects et incorrects~:
+<$ocaml code="
+square 24 ;;
+square 24.0 (* erreur: le parametre doit etre un entier *) ;;
+(square 1) 2 (* erreur (square 1) n'est pas une fonction et ne peut etre appliquee *) ;;
+let add1 = add 1 (* application \"partielle\" de add pour obtenir une fonction d'increment *) ;;
+add1 41 ;;
+" eval="errors"$>
+
+\subsubsection{Fermetures}
+Considérons l'exemple suivant~:
+<$ocaml code="
+let increment = 2;;
+let add_increment x = x + increment ;;
+add_increment 1 ;;
+let increment = 20 ;;
+add_increment 1 ;;
+" eval="top"$>
+Nous constatons que la valeur retournée par \code{add\_increment 1} ne varie pas,
+même après avoir redéfini la variable \code{increment}.
+
+Ce comportement, qui est celui souhaité, est obtenu grâce aux fermetures. Une fermeture
+(en anglais {\em closure}) est composée d'une fonction et de son environnement,
+c'est-à-dire les valeurs liées à des
+identifiants au moment de la définition de fonction.
+
+En OCaml, la définition d'une expression fonctionnelle entraîne la création
+d'une fermeture pour garantir ce comportement, et c'est cette fermeture qui est
+retournée. Lors de l'application d'une fonction, la valeur du paramètre
+est associée au paramètre et le corps de la fonction est évalué dans l'environnement
+conservé dans la fermeture enrichi par la valeur liée au paramètre.
+
+\subsubsection{Opérateurs infixes}
+
+Nous avons vu comment définir des fonctions {\em préfixes}, c'est-à-dire qu'elles sont
+positionnées avant les expressions sur lesquelles elles sont appliquées, comme dans
+\code{add 30 12}.
+
+Il est parfois plus lisible d'avoir des fonctions s'appliquant à deux paramètres et dont
+l'application s'écrira plus naturellement avec le nom de la fonction
+entre ses paramètres. C'est le cas des opérateurs
+arithmétiques vus précédemment~: il est plus habituel d'écrire \code{1 + 2} que
+\code{+ 1 2}.
+
+Il est possible en OCaml de définir de tels opérateurs, en utilisant les parenthèses
+autour de l'identifiant et en utilisant pour ce dernier certains caractères réservés~:
+<$ocaml code="
+let (++) (x, y) n = (x + n, y + n);;
+(2, 0) ++ 2 (* utilisation en position infixe *) ;;
+(++) (2, 0) 2 (* utilisation en position préfixe *) ;;
+" eval="top"$>
+Les caractères réservés à ce genre de définition sont indiqués ici~:
+\myurl{http://caml.inria.fr/pub/docs/manual-ocaml/lex.html}.
+
+\subsubsection{Ordre supérieur}
+\cmp{Une valeur fonctionnelle (une fermeture) peut être retournée comme résultat.
+Elle peut également être prise comme argument d'une fonction. Les fonctions prenant
+en argument ou retournant des valeurs fonctionnelles sont dites d'ordre supérieur.}
+Par exemple~:
+<$ocaml code="let h = function f -> function y -> (f y) + y ;;"
+eval="top"$>
+
+La bibliothèques standard est pleine de fonctions d'ordre supérieur, souvent polymorphes.
+Ainsi, la fonction \code{List.map} prend en paramètres une fonction et une liste et applique
+la fonction à chaque élément de la liste pour construire une nouvelle liste~:
+<$ocaml code="List.map ;;
+List.map square [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
+" eval="top"$>
+
+\subsection{Récursion}
+L'ajout à l'environnement d'une variable globale ou locale est fait à la fin de la déclaration.
+Il est donc impossible d'utiliser la variable dans sa définition, puisqu'elle n'est pas
+encore dans l'environnement~:
+<$ocaml code="let compte x = if x <= 0 then x else compte (x-1) + 1;;"  eval="errors"$>
+Pour pouvoir déclarer des valeurs {\em récursives} (qui font appel à elles-mêmes), il
+faut explicitement les indiquer comme telles, en utilisant le mot-clé \code{rec}~:
+<$ocaml code="let rec compte x = if x <= 0 then x else compte (x-1) + 1;;
+compte 10;;
+" eval="top"$>
+Il est également possible de définir des valeurs mutuellement récursives globales ~:
+<$ocaml code="
+let rec triple x = if x <= 0 then 0 else triple_aux (x - 2) + 1
+and triple_aux x = triple (x+1) + 2;;
+triple 20;;
+" eval="top"$>
+ou locales~:
+<$ocaml code="
+let rec triple2 x = if x <= 0 then 0 else triple2_aux (x - 2) + 1
+and triple2_aux x = triple2 (x+1) + 2 in
+triple2 20;;
+triple2 30;;
+" eval="errors"$>
+
+\subsection{Polymorphisme et contrainte de type}
+
+\subsubsection{Polymorphisme}
+\cmp{Les fonctions dont l'un des paramètres ou la valeur de retour
+est d'un type qu'il n'est pas nécessaire de préciser sont dites
+polymorphes. Le synthétiseur de types contenu dans le compilateur d'OCaml
+trouve le type le plus général pour chaque expression. Dans ce cas, OCaml
+utilise des variables, ici 'a et 'b, pour désigner ces types généraux.
+Ces variables sont instanciées par le type de l'argument lors de
+l'application de la fonction.}
+
+\cmp{Avec les fonctions polymorphes d'OCaml nous cumulons les avantages
+de pouvoir écrire un code générique utilisable pour des valeurs de
+tout type, tout en conservant la sûreté d'exécution du typage statique.
+En outre, la vérification des types est effectuée à la compilation, donc
+la généricité du code ne nuit pas à l'efficacité du programme.
+}
+
+Quelques exemples~:
+<$ocaml code="
+fst ;;
+fst (1, 'a');;
+fst (\"hello\", 1.2);;
+List.map ;;
+square ;;
+List.map square [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
+string_of_int ;;
+List.map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
+" eval="top"$>
+
+\subsubsection{Contrainte de type}
+Il est possible de forcer le type des valeurs, ce qui est utile dans plusieurs cas~:
+\begin{itemize}
+\item pour améliorer la lisibilité du programme, en indiquant explicitement les
+types des paramètres d'une fonction par exemple,
+\item pour n'autoriser l'utilisation d'une valeur que dans un certain contexte,
+\item pour indiquer quel type devra prendre une valeur modifiable
+ (cf. chapitre \ref{progimperative}); en effet, lors de leur création certaines valeurs
+ ne permettent pas de déterminer leur type (par exemple la liste vide \code{[]}),
+ ce qui pose problème lorsqu'il s'agit de données modifiables~: le compilateur doit
+ pouvoir vérifier qu'on n'affecte pas une valeur du mauvais type à une donnée modifiable,
+\item pour comprendre un problème de type signalé par le compilateur~: en indiquant
+explicitement les types attendus, le typeur peut signaler au plus tôt les conflits de
+type.
+\end{itemize}
+
+Les contraintes de types d'une variable sont notées ainsi~:
+\centercode{( {\em <identifiant>} : {\em <type>} )}
+
+Exemple~:
+<$ocaml code="
+let (mon_map : ('a -> int) -> 'a list -> int list) = List.map;;
+mon_map square [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
+mon_map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
+mon_map int_of_string [ \"1\" ; \"2\" ; \"3\" ; \"4\" ; \"5\" ; \"6\" ];;
+" eval="errors"$>
+
+\subsection{Exercices}
+On pourra s'aider de la documentation du module \refmodule{List}.
+\begin{exercice}
+{\bf Redéfinition de {\tt List.map}.}
+Réécrire la fonction {\tt List.map}, prenant en paramètres une fonction $f$ et une liste
+d'éléments et retournant une nouvelle liste, résultat de l'application de $f$ à chaque élément.
+La fonction conserve l'ordre des éléments. On utilisera la récursion et les fonctions
+{\tt List.length}, {\tt List.tl}, {\tt List.hd} et le constructeur {\tt ::}.
+<$ocaml code="
+let rec map f l =
+  if List.length l <= 0 then
+    []
+  else
+    (f (List.hd l)) :: (map f (List.tl l));;
+map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6];;
+" eval="top"  hide="true"$>
+\end{exercice}
+
+\begin{exercice}
+Ecrire une fonction prenant une liste d'entiers et retournant le plus petit ou
+\code{max\_int} si la liste est vide.
+<$ocaml code="let min_elt = List.fold_left min max_int;;
+min_elt [ 10 ; 4 ; 45; 69 ; 2 ; 13 ];;
+min_elt [];;" eval="top" hide="true" $>
+\end{exercice}
+
+\begin{exercice}
+Ecrire une fonction prenant une liste d'entiers et retournant la moyenne sous
+forme d'un flottant, ou \code{0.} si la liste est vide.
+<$ocaml code="let avg list =
+  if List.length list > 0 then
+    let sum = List.fold_left (+) 0 list in
+    (float sum) /. (float (List.length list))
+  else
+    0.0;;
+avg [ 10 ; 4 ; 45; 69 ; 2 ; 13 ];;
+avg [];;" eval="top" hide="true" $>
+\end{exercice}
+
+\section{Déclaration de types et filtrage de motifs}
+\label{decltypes}
+
+\subsection{Filtrage de motif (pattern matching)}
+\label{filtrage}
+Le filtrage permet~:
+\begin{itemize}
+\item d'effectuer des traitements adaptés selon la structure et le contenu d'une valeur,
+\item d'accéder à une partie d'une valeur en la déconstruisant.
+\end{itemize}
+Les motifs s'expriment dans une syntaxe presque identique à celle des expressions,
+bien qu'il ne soit pas question d'évaluation mais de test sur la structure et
+le contenu des valeurs filtrées.
+Le terme anglais pour le filtrage est {\em pattern matching}.
+
+La syntaxe est la suivante~:
+\centercode{match {\em <expression$_0$>} with\\ | {\em <pattern$_1$>} -> {\em <expression$_1$>} \\ | {\em <pattern$_2$>} -> {\em <expression$_2$>} \\ | ... }
+
+L'évaluation de cette expression se déroule ainsi~:
+L'\code{expression$_0$} est évaluée. Sa valeur est ensuite comparée au premier motif
+\code{pattern$_1$}. Si la valeur est filtrée (elle correspond aux contraintes de ce motif), alors
+l'\code{expression$_1$} est évaluée en une valeur qui est la valeur de toute la construction
+\code{match ... with}. Si ce n'est pas le cas, la valeur de \code{expression$_0$} est comparée
+au motif \code{pattern$_2$}, et ainsi de suite jusqu'à ce qu'un motif corresponde à la valeur.
+
+Si aucun motif ne correspond à la valeur à filtrer, une exception (cf. section \ref{exceptions})
+\code{Match\_failure} est levée. Pour se prémunir contre cette erreur de programmation qui correspond
+à un cas non prévu par le programmeur, deux solutions~:
+\begin{itemize}
+\item utiliser un motif "attrape-tout" exprimé par \code{\_},
+\item s'assurer que les motifs permettent d'attraper tous les cas; ce travail
+est facilité par le compilateur OCaml qui signale les constructions \code{match ... with}
+non-exhaustives et donne un exemple de valeur non filtrée.
+\end{itemize}
+
+Les motifs permettent à la fois
+\begin{itemize}
+\item d'exprimer des contraintes sur la valeur filtrée,
+\item de lier de nouveaux identifiants à des parties de la valeur filtrée.
+\end{itemize}
+
+Voyons maintenant quelques exemples.
+
+<$ocaml code="match 1 + 1 with
+  0 -> print_endline \"bizarre\"
+| 1 -> print_endline \"etrange\"
+| 2 -> print_endline \"ouf!\"
+;;" eval="top"$>
+Dans l'exemple ci-dessus, l'expression \code{1 + 1} est évaluée et ensuite comparée
+jusqu'à trouver un motif lui correspondant, ici \code{2}, ce qui provoque l'évaluation
+de l'expression \code{print\_endline "ouf!"}. Le compilateur émet un avertissement
+indiquant que la construction de filtrage n'est pas exhaustive, en exhibant un cas
+non filtré, la valeur \code{3}.
+
+<$ocaml code="match List.map string_of_int [ 1 ; 2 ; 3 ] with
+  []
+| _ :: [] -> assert false
+| [s1 ; s2] -> assert false
+| s1 :: s2 :: s3 :: _ ->
+    List.iter print_endline [ s1 ; s2 ; s3 ]
+| l ->
+    List.iter print_endline l
+;;" eval="top"$>
+Dans cet exemple, nous filtrons une valeur de type \code{string list}. Les premier
+(\code{[]}) et deuxième (\code{\_::[]}) motifs filtrent respectivement
+la liste vide et n'importe quelle liste à un élément, et
+partagent le même traitement associé (\code{assert}\footnote{la fonction assert prend
+en paramètre une expression de type \code{bool} et lève une exception
+\code{Assertion\_failed} si l'expression est évaluée à \code{false}.} \code{false}).
+Le troisième motif \code{[s1;s2]} filtre les listes à deux éléments, en liant le
+premier élément à l'identifiant \code{s1} et le second à l'élément \code{s2}. Dans
+notre exemple, la liste filtrée aura toujours trois éléments donc nous ne passerons
+jamais dans cette branche.\\
+Le motif \code{s1 :: s2 :: s3 :: \_} filtre toutes les listes d'au moins trois éléments.
+Il utilise l'opérateur de construction de liste \code{::} (appelé {\em cons}), avec à
+gauche un élément et à droite une liste. Dans ce motif, les trois premiers éléments
+de la liste sont associés aux identifiants \code{s1}, \code{s2} et \code{s3}. Les
+identifiants créés dans un motif ne sont visibles que dans l'expression associée à ce
+motif.\\
+Enfin, OCaml nous indique que le dernier motif \code{l}, qui permet de filtrer n'importe
+quelle liste en l'associant à l'identifiant \code{l}, est inutile car les motifs
+précédents permettent de filtrer tous les cas possibles.
+
+Une erreur fréquente lorsqu'on commence à utiliser la structure de filtrage
+est d'utiliser un identifiant pour imposer une contrainte d'égalité avec un
+identifiant prédéfini~:
+<$ocaml code="let x = 3;;
+match [ 0 ] with
+  [x] -> true
+| _ -> false
+;;" eval="top"$>
+Ce n'est pas l'effet attendu. Le \code{x} du motif \code{[x]} crée une nouvelle
+liaison dans l'environnement entre un nouvel identifiant \code{x} et la valeur \code{0}.
+Il n'est fait aucune comparaison avec l'identifiant \code{x} précédemment défini.
+La bonne façon de faire sera d'utiliser une clause \code{when}, permettant d'ajouter
+une expression de type \code{bool} à un motif. Dans ce cas, l'expression associée
+au motif (à droite de \code{->}) ne sera exécutée que si l'expression est évaluée à vraie.
+Si ce n'est pas le cas, l'effet sera le même que si le motif ne correspondait pas
+à la valeur filtrée, et l'évaluation de la structure de filtrage passera au motif suivant~:
+<$ocaml code="match [ 0 ] with
+| [y] when y = x -> true
+| _ -> false
+;;" eval="top"$>
+A noter que l'on n'écrira pas~:
+<$ocaml code="match [ 0 ] with
+| [x] when x = x -> true
+| _ -> false
+;;" eval="true"$>
+car les deux \code{x} de \code{x = x} font référence tous deux à l'identifiant créé
+dans le motif \code{[x]}. Les clauses \code{when} sont également appelées
+{\em gardes}.
+
+\startwarning
+Il n'est pas possible de lier plusieurs fois la même variable dans un motif, y compris
+pour exprimer une contrainte d'égalité entre deux parties de l'expression filtrée~:
+<$ocaml code="match (1,2) with
+  (x,x) -> true
+| _ -> false
+;;" eval="errors"$>
+\stopwarning
+
+Le mot clé \code{as} permet de créer un nouvel identifiant pour tout ou partie d'un motif~:
+<$ocaml code="match [ [ 1 ; 2 ] ; [ 3 ; 4 ] ] with
+  [ [ 1 ; 2 ] as liste1 ; liste2 ] as tout ->
+   List.iter print_int liste1;
+   print_newline();
+   List.iter (fun l -> List.iter print_int l) tout;
+   print_newline();
+| _ -> assert false
+;;" eval="top"$>
+
+Nous verrons d'autres exemples de filtrage dans la suite du document, car cette construction
+est très utilisée.
+
+\subsubsection{Exercice}
+\begin{exercice}
+\label{palindromlist}
+Définir une fonction prenant en paramètre une liste d'éléments quelconques et
+retournant vrai si la liste est un palindrome, faux sinon.
+<$ocaml code="let palindrome_list l =
+  let len = List.length l in
+  let rec iter n = function
+    [], [] -> true
+  | h1::q1, h2::q2 ->
+    (n > len / 2) || ( (h1 = h2) && iter (n + 1) (q1, q2) )
+  | _ -> assert false (* les listes en parametre ont la meme longueur *)
+  in
+  iter 0 (l, List.rev l)
+;;" eval="top" hide="true" $>
+Quelques tests:
+<$ocaml code="palindrome_list [1 ; 2 ; 3 ; 2 ; 1 ];;
+palindrome_list ['1' ; '2' ; '3' ; '3' ; '2' ; '1' ];;
+palindrome_list ['r' ; 'a' ; 'd' ; 'a'; 'r'];;
+palindrome_list ['r' ; 'a' ; 'v' ; 'e'; 'r'];;
+palindrome_list [1.0 ; 2.0 ; 3.0 ; 4.0 ; 2.0 ; 1.0];;
+palindrome_list [];;
+" eval="top"$>
+
+\end{exercice}
+
+
+\subsection{Déclaration de valeurs par filtrage d'un motif}
+Il est possible d'utiliser le {\em pattern-matching} pour déclarer plusieurs
+variables en même temps, en filtrant le résultat d'une expression~:
+<$ocaml code="
+let (x, y, z) = (1, \"2\", 3.0);;
+let [s1 ; s2 ; s3] = [ \"un\" ; \"deux\" ; \"trois\"];;
+let [x1 ; x2] = [ 1 ; 2 ; 3 ] ;;" eval="errors"$>
+
+
+\subsection{Déclaration de types}
+OCaml permet de définir ses propres types de données, en plus de ceux de base.
+La syntaxe est la suivante~:
+\centercode{type {\em<identifiant>} = {\em<définition>}}
+
+Les types mutuellement récursifs seront définis de la façon suivante~:
+\centercode{type {\em<identifiant$_1$>} = {\em<définition$_1$>}\\
+and {\em<identifiant$_2$>} = {\em<définition$_2$>}\\
+...\\
+and {\em<identifiant$_N$>} = {\em<définition$_N$>}}
+
+On remarquera qu'il n'y a pas de mot-clé \code{rec} pour les définitions de type,
+chaque type pouvant être récursif sans syntaxe particulière.
+
+Les identifiants de types ont la même syntaxe que les identifiants de valeurs, mais
+sont dans un espace de noms différent, ce qui signifie que l'on peut définir une
+valeur \code{foo} et un type \code{foo} sans problème.
+
+Les paramètres des types paramétrés doivent être indiqués avant l'identifiant~:
+\centercode{type 'a {\em<identifiant>} = {\em<définition utilisant le paramètre de type 'a>}\\
+type ('a, 'b) {\em<identifiant>} = {\em<définition utilisant 'a et 'b>}}
+
+Ainsi, on peut définir le type des listes de paires d'éléments d'un type en paramètre~:
+<$ocaml code="type 'a pairs = ('a * 'a) list;;
+let int_pair_list = [ (1, 2) ; (5, 4) ] ;;
+let (int_pairs : int pairs) = [ (1, 2) ; (3, -3) ; (6, 8)];;
+let (bool_pairs : bool pairs) = [ (true, true) ; (false, false) ; (true, false)];;"
+eval="top"$>
+Ce type étant défini uniquement à partir de types existants, nous devons indiquer explicitement
+le type que nous voulons voir apparaître, sinon le compilateur infère le type à partir des types
+de base, comme pour \code{int\_pair\_list} ci-dessus. Cependant, nous pouvons utiliser
+indifféremment des valeurs de type \code{'a pairs} ou du type \code{('a * 'a) list}, le compilateur
+réalisant l'unification de ces types pour vérifier qu'ils sont bien compatibles~:
+<$ocaml code="(=);;
+int_pair_list;;
+int_pairs;;
+int_pair_list = int_pairs;;" eval="top"$>
+Si les types ne sont pas compatibles, le compilateur signale une erreur~:
+<$ocaml code="let (float_pairs : float pairs) = [ (1., 2.) ; (3., 4.)];;
+int_pairs = float_pairs;;" eval="errors"$>
+
+\subsection{Enregistrements}
+\label{records}
+\subsubsection{Définition d'un type}
+\cmp{Les enregistrements sont des n-uplets dont chaque champ est nommé à la manière des {\tt record} de Pascal ou des {\tt struct} de C. Un enregistrement correspond toujours à la déclaration d'un nouveau type. Un type enregistrement est défini par la déclaration de son nom, du nom de chacun de ses champs et de leur type.}
+
+La syntaxe est la suivante~:
+\centercode{type {\em [<variables de type>]} {\em<identifiant>} = \{\\
+\:\:{\em<nom\_de\_champ$_1$>} : {\em<type$_1$>} ;\\
+\:\:...\\
+\:\:{\em<nom\_de\_champ$_n$>} : {\em<type$_n$>} ;\\
+\}}
+
+Un type enregistrement ne peut avoir deux noms de champs identiques.
+
+\subsubsection{Création de valeurs}
+Par mesure de sûreté, le compilateur impose que chaque champ soit initialisé, lors de la création
+d'une valeur de type enregistrement. Cela évite des problèmes de champs non initialisés comme
+on peut en rencontrer en langage C.
+
+On peut créer une valeur d'un type enregistrement de deux façons~:
+\begin{itemize}
+\item soit à partir de rien, avec la syntaxe suivante~:
+\centercode{\{ champ$_1$ = {\em<expression$_1$>} ; ... ; champ$_n$ = {\em<expression$_n$>} \}}
+\item soit à partir d'une autre valeur du même type, en modifiant certains champs~:
+\centercode{\{ {\em<identifiant>} with champ$_i$ = {\em<expression$_i$>} ; ... ; champ$_j$ = {\em<expression$_j$>} \} }
+\end{itemize}
+L'ordre dans lequel le contenu des champs est défini est sans importance. Cependant, on aura à c\oe ur
+de définir les champs toujours dans le même ordre afin de faciliter la lecture et la maintenance
+du programme. Par ailleurs, l'ordre d'évaluation lors de l'affectation des champs n'étant
+pas spécifié, on ne se reposera pas dessus si celles-ci ont des effets de bord (lors de
+l'utilisation de traits impératifs du langage).
+
+\subsubsection{Accès aux champs}
+L'accès à un champ d'une valeur de type enregistrement se fait en utilisant le point '\code{.}'
+entre l'identifiant de la valeur et le nom du champ. Ainsi, \code{foo.bar.gee} représente
+l'accès à la valeur du champ \code{gee} de la valeur du champ \code{bar} de la valeur \code{foo}.
+
+\subsubsection{Filtrage}
+Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type enregistrement,
+en mettant des contraintes sur tout ou partie des champs du type~:
+\centercode{match {\em<expression>} with\\
+\{ champ$_i$ = {\em<motif$_i$>} ; ... ; champ$_y$ = {\em<motif$_y$>} \} -> ...}
+
+\subsubsection{Exemple}
+Voici un exemple de définition et d'utilisation d'un type enregistrement \code{coord}
+avec deux champs \code{x} et \code{y}, tous deux de type \code{float}~:
+<$ocaml code="type coord = { x : float ; y : float};;
+let origin = { x = 0. ; y = 0. };;
+let add p1 p2 = { x = p1.x +. p2.x ; y = p1.y +. p2.y };;
+let unite = { x = 1. ; y = 1. };;
+let unite_x = { unite with y = 0. };;
+let p1 = add (add origin unite) unite;;
+p1 = unite;;
+match add p1 unite with
+  { x = mon_x } as foo when foo.y > 1. -> string_of_float mon_x
+| { x = x ; y = y } -> string_of_float (x +. y);;" eval="errors"$>
+
+
+\subsection{Types somme}
+\subsubsection{Définition d'un type}
+\cmp{À la différence des n-uplets ou des enregistrements, qui correspondent à un produit cartésien, la déclaration d'un type somme correspond à une union d'ensembles. On regroupe dans un même type des types différents (par exemple des entiers et des chaînes de caractères). Les différents membres de la somme sont discriminés par des constructeurs qui permettent d'une part, comme leur nom l'indique, de construire les valeurs de ce type et d'autre part d'accéder aux composantes de ces valeurs grâce au filtrage de motif. Appliquer un constructeur à un argument, c'est indiquer que la valeur retournée appartient à ce nouveau type.}
+
+\cmp{On déclare un type somme en donnant le nom de ses constructeurs et le type de leur éventuel argument.}
+
+La syntaxe est la suivante~:
+\centercode{type {\em [<variables de type>]} {\em<identifiant>} =\\
+\:\:| {\em<Constructeur$_1$>}\\
+\:\:...\\
+\:\:| {\em<Constructeur$_i$>} of {\em<type$_i$>}\\
+\:\:...\\
+\:\:| {\em<Constructeur$_n$>} of {\em<type$_{n_1}$>} * ... * {\em<type$_{n_m}$>}
+}
+
+Les noms des constructeurs doivent commencer par une majuscule.
+
+Chaque constructeur d'un type somme peut avoir 0, 1 ou plusieurs paramètres, dont le type est indiqué
+dans la définition du type somme.
+
+Un type somme ne peut avoir deux constructeurs de même nom.
+
+Voici un exemple de définition d'un type somme~:
+<$ocaml code="type direction =
+  Nord
+| Sud
+| Est
+| Ouest
+| Compose of direction * direction;;" eval="top"$>
+
+\subsubsection{Création de valeurs}
+Une valeur d'un type somme est créée à l'aide d'un constructeur de ce type et des paramètres
+adaptés selon le constructeur, par la syntaxe suivante~:
+\begin{itemize}
+\item pour un constructeur sans paramètre~: \code{\em<Constructeur>},
+\item pour un constructeur avec un paramètre~: \code{\em<Constructeur> <expression>},
+\item pour un constructeur avec $n$ paramètres~:
+ \centercode{{\em<Constructeur>} ({\em<expression$_1$>},...,{\em<expression$_n$>})},
+\end{itemize}
+Avec notre exemple de type \code{direction}, cela donne par exemple~:
+<$ocaml code="let nne = Compose (Nord, Compose (Nord, Est));;" eval="top"$>
+
+\subsubsection{Filtrage}
+Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type somme,
+en procédant par cas sur les constructeurs du type~:
+\centercode{match {\em<expression de type somme>} with\\
+| {\em<Constructeur$_1$>} -> {\em<expression$_1$>}\\
+| {\em<Constructeur$_i$>} {\em<motif$_i$>} -> {\em<expression$_i$>}\\
+| {\em<Constructeur$_j$>} ({\em<motif$_{j_1}$>}, ..., {\em<motif$_{j_n}$>}) -> {\em<expression$_j$>}\\
+...}
+
+Par exemple:
+<$ocaml code="let rec string_of_direction = function
+  Nord -> \"nord\"
+| Sud -> \"sud\"
+| Est -> \"est\"
+| Ouest -> \"ouest\"
+| Compose (d1, d2) -> (string_of_direction d1)^\"-\"^(string_of_direction d2);;
+string_of_direction nne;;" eval="top"$>
+
+\subsubsection{Exercice}
+\begin{exercice}
+\label{exoexpr}
+Définir un type somme \code{expr} pour représenter les expressions contenant les
+4 opérations habituelles sur les entiers ainsi que les valeurs entières. On aura
+donc 5 constructeurs.
+<$ocaml code="type expr =
+  Val of int
+| Add of expr * expr
+| Sub of expr * expr
+| Mul of expr * expr
+| Div of expr * expr;;" eval="true" hide="true" $>
+Ensuite, définir une fonction prenant une valeur de ce type et calculant la
+valeur entière en réalisant l'opération décrite.
+<$ocaml code="let rec eval = function
+  Val n -> n
+| Add (e1, e2) -> (eval e1) + (eval e2)
+| Sub (e1, e2) -> (eval e1) - (eval e2)
+| Mul (e1, e2) -> (eval e1) * (eval e2)
+| Div (e1, e2) -> (eval e1) / (eval e2)
+;;
+eval (Add (Val 2, Mul (Val 4, Sub (Val 12, Val 2))));;"
+ eval="top" hide="true" $>
+\end{exercice}
+
+\subsection{Portée des déclarations}
+
+Les déclarations de type ont la même portée que les déclarations globales de variables et peuvent
+comme elles être masquées par de nouvelles déclarations avec des noms similaires.
+Cependant, les valeurs définies avec un type \code{t} ne changent pas de type en cas
+de définition d'un nouveau type \code{t} (et heureusement!). Par contre, ces homonymies peuvent
+rendre les messages d'erreur du compilateur un peu déroutants~:
+<$ocaml code="type t = Foo | Bar;;
+let x = Foo;;
+type t = Gee | Buz;;
+let y = Gee;;
+x = y;;" eval="errors"$>
+Le même phénomène de masquage est possible sur les noms des champs des types enregistrements~:
+<$ocaml code="type rec1 = { champ : int; champ2: int };;
+let x = { champ = 0 ; champ2 = 1;};;
+type rec2 = { champ : int ; champ3 : int};;
+let y = { x with champ = 3 };;" eval="errors"$>
+et sur les noms des constructeurs de types sommes~:
+<$ocaml code="type t = Foo | Bar;;
+let x = Foo;;
+type t2 = Foo;;
+match x with
+  Foo -> 0
+| Bar -> 1;;
+match x with
+| Foo -> 0;;" eval="errors"$>
+En conséquence, il est souvent utile de choisir des noms "à préfixe" pour les champs et
+les constructeurs, par exemple~:
+<$ocaml code="type user = { user_name : string; user_login: string};;
+type host = { host_name : string; host_ipv4: int * int * int * int};;" eval="true" $>
+Même si cela est plus verbeux, cela facilite la lecture et la maintenance des programmes.
+
+\subsection{Types fonctionnels}
+Les types fonctionnels sont les types représentant des fonctions, comme nous en avons
+déjà vu précédemment. Il est possible de créer ses propres types fonctionnels ou encore
+d'utiliser des types fonctionnels pour les champs d'enregistrements ou les paramètres
+de constructeurs.
+
+Ainsi, on peut définir le type d'un afficheur de messages~:
+<$ocaml code="type printer = string -> unit;;" eval="top"$>
+Tout comme il est possible d'avoir des champs fonctionnels dans un type enregistrement~:
+<$ocaml code="type output_context = {
+  output_error : string -> unit ;
+  output_message : string -> unit ;
+}" eval="true"$>
+ou bien, en utilisant notre type \code{printer}~:
+<$ocaml code="type output_context = {
+  output_error : printer ;
+  output_message : printer ;
+}" eval="true"$>
+
+On peut également avoir des paramètres fonctionnels pour des constructeurs~:
+<$ocaml code="type action =
+  Init of (unit -> output_context)
+| Compute of (unit -> unit)
+| Terminate of (unit -> unit);;" eval="true"$>
+Ces valeurs fonctionnelles peuvent être nommées dans des motifs de filtrage pour être appliquées~:
+<$ocaml code="let action = Compute (fun () -> print_endline \"coucou\");;
+match action with
+  Compute f -> f () (* application de la fonction f a () *)
+| Init f -> ignore(f())
+| Terminate f -> f();;" eval="top"$>
+
+\subsection{Exercice}
+\begin{exercice}
+On souhaite rendre les expressions de l'exercice \ref{exoexpr} génériques. Pour cela, ajouter
+un paramètre de type au type \code{expr} pour ne plus limiter les valeurs des
+expressions à des entiers.
+<$ocaml code="type 'a expr =
+  Val of 'a
+| Add of 'a expr * 'a expr
+| Sub of 'a expr * 'a expr
+| Mul of 'a expr * 'a expr
+| Div of 'a expr * 'a expr;;" eval="true" hide="true" $>
+Ensuite, on veut pouvoir paramétrer la fonction \code{eval} pour spécifier le traitement
+à effectuer pour chaque opérateur de notre type expression. Définir un type enregistrement
+\code{operators} permettant de donner la fonction associée à chaque opérateur d'expression.
+Ce type est paramétré par le type des valeurs calculées.
+<$ocaml code="type 'a operators = {
+  op_add : 'a -> 'a -> 'a ;
+  op_sub : 'a -> 'a -> 'a ;
+  op_mul : 'a -> 'a -> 'a ;
+  op_div : 'a -> 'a -> 'a ;
+};;" eval="true" hide="true" $>
+Enfin, définir une nouvelle fonction \code{eval} prenant en paramètre supplémentaire
+les fonctions à utiliser pour effectuer les calculs lors de l'évaluation (une valeur
+de type \code{operators}).
+<$ocaml code="let rec eval ops = function
+  Val v -> v
+| Add (e1, e2) -> ops.op_add (eval ops e1) (eval ops e2)
+| Sub (e1, e2) -> ops.op_sub (eval ops e1) (eval ops e2)
+| Mul (e1, e2) -> ops.op_mul (eval ops e1) (eval ops e2)
+| Div (e1, e2) -> ops.op_div (eval ops e1) (eval ops e2)
+;;" eval="top" hide="true" $>
+Définir une valeur du type \code{operators} et s'en servir pour évaluer une expression
+contenant des flottants.
+<$ocaml code="let float_ops = {
+  op_add = (+.) ;
+  op_sub = (-.) ;
+  op_mul = ( *. ) ;
+  op_div = (/.) ;
+};;
+eval float_ops (Add (Val 2., Mul (Val 4., Sub (Val 12., Val 2.))));;"
+eval="top" hide="true" $>
+\end{exercice}
+
+\section{Typage, domaine de définition et exceptions}
+\cmp{Le type inféré d'une fonction correspond à un sur-ensemble de son domaine de définition. Ce n'est pas parce qu'une fonction prend un paramètre de type int qu'elle saura calculer une valeur pour tous les entiers passés en argument. On traite en général ce problème en utilisant le mécanisme d'exceptions d'OCaml. Le déclenchement d'une exception provoque une rupture du calcul qui peut être interceptée et traitée par le programme. Pour cela l'exécution du programme doit avoir posé un récupérateur d'exception avant le calcul de l'expression qui provoque le déclenchement de cette exception.}
+
+\subsection{Fonctions partielles et exceptions}
+\label{exceptions}
+\cmp{Le domaine de définition d'une fonction correspond à l'ensemble des valeurs sur lesquelles la fonction effectue son calcul.}
+
+Que faire quand est passée à une fonction une valeur qu'elle ne sait pas traiter ?
+Retourner une valeur arbitraire n'est pas la bonne solution. Les exceptions sont faites pour
+gérer ces situations. Par exemple, la fonction \code{List.hd} récupérant le premier élément d'une liste
+lèvera une exception \code{Invalid\_argument} si une liste vide lui est passée.
+
+Une fonction peut être partielle parce qu'elle ne traite pas tous les formes possibles d'un
+paramètre~:
+<$ocaml code="type dummy = One | Two | Three;;
+let succ = function
+  One -> Two
+| Two -> Three
+;;" eval="top"$>
+Le compilateur signale que la fonction est partielle, en indiquant que la structure de filtrage
+ne traite pas le cas \code{Three}. En effet, l'application de cette fonction à la valeur \code{Three}
+déclenchera une exception prédéfinie pour ce genre de cas~:
+<$ocaml code="succ Three;;" eval="errors"$>
+Ce genre d'exception n'est pas très facile à traiter car elle est utilisée pour n'importe quel
+{\em pattern-matching} non exhaustif. On préférera donc définir et utiliser
+ses propres exceptions afin d'être en mesure de traiter efficacement et précisément chaque erreur.
+
+Les exceptions prédéfinies et utilisées par les modules de la bibliothèque standard d'OCaml
+sont indiquées ici~:
+\myurl{http://caml.inria.fr/pub/docs/manual-ocaml/manual033.html#htoc253}
+
+\subsection{Définition d'une exception}
+Une nouvelle exception est définie avec la syntaxe
+\centercode{exception {\em<Identifiant>}}
+
+L'identifiant doit commencer par une majuscule, comme pour les constructeurs de type somme.
+On peut également définir une exception portant une valeur d'un type indiqué à la définition~:
+\centercode{exception {\em<Identifiant>} of {\em<type>}}
+
+ce qui permet de passer de l'information sur les causes, l'endroit et les conditions menant à
+ce comportement exceptionnel.
+<$ocaml code="exception Mon_erreur of string"
+eval="top"$>
+Les exceptions peuvent être vues comme des valeurs d'un type somme
+\code{exn} qui serait enrichi à chaque création d'exception~:
+<$ocaml code="Mon_erreur \"message\"" eval="top"$>
+
+Remarque: Le type d'une exception ne peut être polymorphe.
+
+\subsection{Déclenchement d'une exception}
+Une exception est déclenchée (ou levée) grâce à la fonction \code{raise} prédéfinie~:
+<$ocaml code="raise (Mon_erreur \"Ceci n'est pas un message d'erreur\");;" eval="top"$>
+
+Nous pouvons redéfinir notre fonction \code{succ} pour lever une exception appropriée~:
+<$ocaml code="let succ = function
+  One -> Two
+| Two -> Three
+| Three -> raise (Mon_erreur \"Je ne sais pas compter plus loin\")
+;;" eval="top"$>
+
+La levée d'une exception interrompt l'évaluation normale de l'expression qui la contient.
+Cela peut avoir de l'importance lorsque l'ordre d'évaluation n'est pas spécifié, comme
+dans l'exemple suivant~:
+<$ocaml code="let f x =
+  (* l'affichage, trait imperatif par excellence,
+     n'est la que pour montrer l'ordre d'execution *)
+  print_endline (Printf.sprintf \"Appel de f avec x = %d\" x);
+  if x < 0 then
+    raise (Mon_erreur \"c'est negatif !\")
+  else
+    x + 1;;
+(f (-1)) + (f 1);;" eval="top"$>
+On constate ici que l'ordre d'évaluation des arguments passés à une fonction (ici
+l'opérateur infixe \code{(+)}) est de droite à gauche. Cela signifie que nous avons
+tout de même effectué une partie du calcul avant de lever l'exception. De telles
+situations peuvent rendre plus difficile la correction d'un programme. On s'appliquera
+parfois, pour se prémunir contre de telles situations, à forcer l'ordre d'évaluation
+des paramètres avant de les passer à la fonction~:
+<$ocaml code="let p1 = f (-1) in
+let p2 = f 1 in
+p1 + p2;;" eval="top"$>
+On se trouve ici au bord de la programmation impérative.
+
+\subsection{Récupération d'une exception}
+La construction suivante permet de récupérer (on dit aussi "attraper") une
+exception levée dans l'\code{<expression>}~:
+\centercode{try {\em<expression>}\\
+with\\
+\:\:{\em<motif$_1$>} -> {\em<expression$_1$>}\\
+| ...\\
+| {\em<motif$_n$>} -> {\em<expression$_n$>}\\
+}
+
+Dans la partie \code{with}, on donne des motifs de filtrage d'exception, qui fonctionnent
+de la même façon que les motifs de filtrage de valeurs. Concrètement, on pourra écrire
+comme suite de notre exemple~:
+<$ocaml code="try ignore(succ Three)
+  with
+    Mon_erreur s -> print_endline (\"Erreur: \"^s)
+  | Failure s ->  print_endline (\"Failure: \"^s);;" eval="top"$>
+Contrairement au filtrage sur des valeurs, le compilateur ne peut ici indiquer si
+les motifs du bloc \code{with} sont exhaustifs. Cela nécessiterait de connaître
+toutes les exceptions potentiellement levées à chaque point du code, ce qui demanderait
+une analyse de flots de données, notamment à cause des possibilités de passage de
+fonction en paramètre. En effet, une telle fonction pourrait lever une exception,
+mais, dans bien des situations, le paramètre effectif ne sera connu qu'à l'exécution.
+
+Par ailleurs, on ne souhaite pas forcément rattraper toutes les exceptions possibles
+à chaque point d'un programme, mais plutôt rattraper seulement certaines,
+que l'on peut traiter, en laissant volontairement remonter celles correspondant
+à des cas plus inattendus dans lequels on ne peut rien faire d'autre qu'interrompre
+le traitement en cours.
+
+Il est possible de rattraper toutes les exceptions, avec le motif universel '\code{\_}', ou
+bien de lier l'exception rattrapée à un identifiant, comme ci-dessous~:
+<$ocaml code="try List.hd []
+with
+  e ->
+    (* traitement effectue pour n'importe quelle exception *)
+    print_endline \"An exception was caught!\";
+    let msg =
+      match e with
+        Failure s | Sys_error s -> s
+      | _ -> Printexc.to_string e
+    in
+    print_endline (\"Some info about the exception: \"^msg);
+    (* relancons l'exception *)
+    raise e;;" eval="top"$>
+
+\subsection{Exercice}
+\begin{exercice}
+Ecrire une fonction \code{try\_finalize} spécifiée de la façon suivante~:
+\code{try\_finalize f x g y} applique la fonction \code{f} à la valeur \code{x}.
+\begin{itemize}
+\item si une exception est levée, alors on évalue \code{g y} et on relève ensuite l'exception,
+\item si aucune exception n'est levée, on évalue aussi \code{g y} et on retourne la valeur
+retournée par \code{f x}.
+\item si une exception est levée par \code{g y}, cette exception est levée par
+la fonction \code{try\_finalize}.
+\end{itemize}
+<$ocaml code="let try_finalize f x g y =
+  let v = try f x with exn -> ignore(g y); raise exn in
+  ignore(g y);
+  v;;
+try_finalize (fun x -> x * 2) 21 print_endline \"application de g a y\";;
+try_finalize (fun x -> 1 / x) 0 print_endline \"application de g a y\";;
+" eval="top" hide="true" $>
+\end{exercice}
+
+%\section{Polymorphisme et valeurs de retour des fonctions}
+%\todo{A enlever pour ne pas trop alourdir la formation ?}
+
+\section{Récursivité terminale}
+La programmation fonctionnelle conduit souvent à écrire des fonctions récursives.
+Il existe deux types de récursivités~: terminale et non-terminale. Illustrons cette
+différence sur un exemple, la fonction de map sur les listes.
+
+Voici une première version, récursive non-terminale~:
+<$ocaml code="let rec map_nt f = function
+  [] -> []
+| h::q -> (f h) :: (map_nt f q);;
+map_nt ((+) 1) [ 1 ; 2 ; 3 ; 4 ];;" eval="top"$>
+La fonction \code{map\_nt} effectue bien le calcul demandé, mais présente un
+risque de débordement de pile dans le cas de grandes listes~:
+<$ocaml code="let big_list =
+  let rec build n acc =
+    if n < 2_000_000 then build (n+1) (n::acc) else acc
+  in
+  build 0 [];;
+map_nt ((+) 1) big_list;;" eval="errors"$>
+Que se passe-t-il ? Notre fonction \code{map\_nt} fonctionne par cas sur la structure
+de la liste en paramètre~:
+\begin{itemize}
+\item soit la liste est vide, la fonction retourne donc la liste vide,
+\item soit la liste n'est pas vide, dans ce cas la fonction crée une nouvelle
+liste composée de l'application de \code{f} à la tête de la liste, et de l'application
+récursive de \code{map\_nt} à la queue de la liste. Cette opération de création de
+ la nouvelle liste nécessite le calcul de la nouvelle tête de liste et de la nouvelle
+ queue de liste. Ensuite seulement la nouvelle liste est créée et retournée.
+ De ce fait, les appels récursifs s'empilent jusqu'au débordement de la pile d'appel.
+ Cette fonction est dire récursive non-terminale car il reste du calcul à effectuer
+ avec la valeur retournée par l'appel récursif.
+\end{itemize}
+Voyons maintenant une autre définition, cette fois récursive terminale~:
+<$ocaml code="let map f l =
+  let rec iter acc = function
+    [] -> List.rev acc
+  | h::q -> iter ((f h) :: acc) q
+  in
+  iter [] l;;
+map string_of_int big_list;;" eval="top"$>
+Notre fonction \code{map} n'est plus récursive mais se contente
+de définir et d'appeler une autre fonction \code{iter} qui, elle, est
+récursive terminale. Cette fonction \code{iter} prend en paramètre un
+accumulateur, ce qui permet, lors de l'appel récursif, d'avoir déjà
+effectué la création de la nouvelle liste composée de la nouvelle tête
+(\code{f h}) et du reste de la nouvelle liste déjà calculé (\code{acc}).
+
+Cette façon de procéder donne une liste en ordre inverse, d'où l'appel
+à \code{List.rev} pour retourner l'accumulateur (la nouvelle liste) lors
+qu'on tombe sur le cas de la liste vide (fin de la liste à traiter).
+
+La fonction \code{iter} est bien récursive terminale car l'appel récursif
+à elle-même est bien le dernier calcul effectué dans le cas où la liste
+n'est pas vide.
+
+Cependant, c'est l'appel récursif et non la fonction qui est ou non
+terminal.
+Dans l'exemple suivant
+<$ocaml code="let rec foo x =
+  if x < 1 then f (x + 1) else 1 + f (x - 1);;" eval="top"$>
+la fonction \code{foo} est récursive et s'appelle à deux endroits.
+Le premier appel récursif (\code{f (x + 1)}) est bien terminal. Par
+contre, le second (\code{f (x - 1)}) ne l'est pas, car la valeur de
+retour de cet appel sera additionnée à 1. On ne peut donc pas parler
+de fonction récursive terminale mais d'un appel terminal et d'un
+appel non terminal.
+
+Les appels récursifs terminaux sont compilés de façon efficace
+(avec des sauts plutôt qu'en utilisant la pile) par
+le compilateur~: au lieu de faire augmenter la taille de la pile,
+l'appel récursif est placé au même endroit que l'appel original, ce qui
+donne un gain de temps pour retourner la valeur finale (pas de besoin
+de dépiler des milliers d'appels récursifs) et un gain de place (la pile
+n'augmente pas de taille). Nous avons donc pu appliquer notre fonction
+sur \code{big\_list}.
+
+\startwarning
+L'utilisation de constructions \code{try ... with} pour la gestion des exceptions
+peut faire d'une fonction récursive terminale une fonction récursive non-terminale.
+Supposons que nous voulions modifier notre fonction \code{map} pour, en cas
+d'exception \code{Failure} lors de l'application de \code{f} à un élement de la liste,
+conserver la valeur initiale de l'élément. Nous pouvons tenter la définition
+suivante~:
+<$ocaml code="let safe_map f l =
+  let rec iter acc = function
+    [] -> List.rev acc
+  | h::q ->
+    try iter ((f h) :: acc) q
+    with Failure _ -> iter (h :: acc) q
+  in
+  iter [] l
+;;
+safe_map ((+) 1) big_list;;" eval="top"$>
+La présence du bloc \code{try ... with} en vue de rattraper l'exception \code{Failure}
+ne permet plus au compilateur d'optimiser les appels récursifs sur la pile. En effet,
+l'appel récursif n'est plus forcément le dernier calcul effectué, car s'il lève
+une exception, il faudra la filtrer, dans ce contexte et non dans celui
+l'appel récursif.
+On écrira donc plutôt~:
+<$ocaml code="let safe_map f l =
+  let rec iter acc = function
+    [] -> List.rev acc
+  | h::q ->
+    let v = try f h with Failure _ -> h in
+    iter (v :: acc) q
+  in
+  iter [] l
+;;
+safe_map ((+) 1) big_list;;" eval="top"$>
+Dans ce cas, l'appel récursif redevient le dernier calcul, le rattrapage d'exception
+étant limité au calcul de \code{f h}.
+\stopwarning
+
+Un appel peut être terminal même s'il ne s'agit pas d'un appel récursif.
+Le compilateur pourra faire des optimisations dans ce cas aussi.
+
+L'option {\tt -annot} des compilateurs OCaml génère, à la compilation
+d'un fichier d'implémentation {\tt foo.ml}, un fichier {\tt foo.annot}
+contenant diverses informations, notamment les types inférés pour chaque
+expression et, depuis la version 3.11.0, une indication de terminalité
+pour chaque appel de fonction~: {\tt tail} indiquera que l'appel est
+terminal, tandis que {\tt stack} indiquera que l'appel se fera sur la pile.
+
+\section{Intermède~: la recherche autour du typage}
+
+\chapter{Programmation impérative}
+\label{progimperative}
+\cmp{À la différence de la programmation fonctionnelle où on calcule une valeur
+par l'application d'une fonction à ses arguments sans se soucier du déroulement
+des opérations, la programmation impérative est plus proche de la représentation
+machine car elle introduit un état mémoire que le déroulement des actions
+d'un programme va modifier. On appelle instructions ces actions des programmes
+et un programme impératif est une suite, ou une séquence, d'instructions.
+L'état mémoire est susceptible d'être modifié à l'exécution de chaque
+instruction. On considère les opérations d'entrées-sorties comme des modifications
+de la mémoire, de la mémoire vidéo ou de fichiers.}
+
+\cmp{Ce style de programmation est directement inspiré de la programmation assembleur.
+On le retrouve dans les premiers langages évolués généralistes (Fortran, C, Pascal,
+etc. ). En OCaml, les éléments suivants du langage correspondent à ce modèle~:}
+\begin{itemize}
+\item \cmp{les structures de données physiquement modifiables, comme les vecteurs ou les enregistrements à champs modifiables,}
+\item \cmp{les opérations d'entrées-sorties,}
+\item \cmp{les structures de contrôle de l'exécution comme les boucles}, voire les exceptions
+qui peuvent être considérées de style impératif.
+\end{itemize}
+
+\cmp{Certains algorithmes s'écrivent plus facilement dans ce style de programmation. On peut
+citer comme exemple le produit de deux matrices. Même s'il est effectivement possible de le
+traduire dans une version purement fonctionnelle, où des listes remplacent les vecteurs,
+cela n'est ni naturel, ni efficace par rapport à une écriture impérative.}
+
+\cmp{L'intérêt d'intégrer ce modèle dans un langage fonctionnel est de pouvoir écrire
+certains algorithmes dans ce style de programmation quand ceux-ci s'y prêtent. Les deux
+principaux désavantages par rapport au style purement fonctionnel sont~:}
+
+\begin{itemize}
+\item \cmp{de compliquer le système de types du langage et de rejeter certains programmes
+qui sans cela seraient considérés comme corrects,}
+\item \cmp{de devoir tenir compte de la représentation mémoire et de l'ordre des calculs.}
+\end{itemize}
+
+\cmp{Néanmoins, avec quelques règles de prudence dans l'écriture des programmes, le choix
+entre plusieurs styles de programmation offre de plus grandes possibilités d'écriture
+d'algorithmes, ce qui est l'objectif principal des langages de programmation. En
+outre, un programme écrit dans un style proche de l'algorithme utilisé sera plus simple
+donc aura plus de chances d'être correct (ou, tout du moins, plus rapidement mis au point).}
+
+\cmp{Pour ces raisons, le langage OCaml possède des types de données dont les valeurs sont
+physiquement modifiables, des structures de contrôle de l'exécution des programmes et une
+bibliothèque d'entrées-sorties dans un style impératif.}
+
+\section{Structures de données physiquement modifiables}
+La programmation impérative nécessite des structures de données modifiables. OCaml en
+est pourvu et nous les détaillons ci-dessous.
+
+\subsection{Vecteurs}
+Les vecteurs sont des tableaux à une dimension, de taille fixe, et contenant des éléments
+qui sont tous du même type. Ils sont le pendant impératif des listes. Le type OCaml
+pour les représenter est le type paramétré \code{'a array}, le paramètre de type
+\code{'a} permettant d'avoir des vecteurs de différents types, de la même manière
+que le type \code{'a list}.
+
+\subsubsection{Construction de valeurs}
+La construction d'un vecteur se fait en listant, séparées par des '\code{;}',
+les valeurs du vecteur entre \code{[|} et \code{|]}~:
+<$ocaml code="let tab = [| 1 ; 2 ; 3 ; 4 |];;" eval="top"$>
+Il est également possible d'utiliser des fonctions du module \refmodule{Array} pour
+créer des vecteurs~:
+<$ocaml code="let tab = Array.create 10 0;;
+let tab = Array.init 10 (fun i -> i * 2);;" eval="top"$>
+Les indices d'un vecteur de longueur $n$ vont de $0$ à $n-1$.
+
+\subsubsection{Accès}
+On peut accéder de deux façons équivalentes à un élément d'un vecteur~:
+\begin{itemize}
+\item soit en utilisant la fonction \code{Array.get : 'a array -> int -> 'a}~:
+<$ocaml code="Array.get tab 0;;
+Array.get tab 3;;" eval="top"$>
+\item soit en utilisant la syntaxe \code{vecteur.(indice)}~:
+<$ocaml code="tab.(0);;
+tab.(3);;" eval="top"$>
+\end{itemize}
+L'accès à un élément d'un vecteur de longueur $n$ en utilisant un indice en
+dehors de la plage $0..n-1$ déclenche la levée d'une exception \code{Invalid\_argument}~:
+<$ocaml code="tab.(42);;" eval="errors"$>
+
+On peut bien sûr également utiliser le filtrage sur les vecteurs~:
+<$ocaml code="match Array.sub tab 0 2 with
+  [| _ ; x |] when x > 2 -> false
+| [| 0 ; 2 |] -> true
+| _ -> false;;" eval="top"$>
+\subsubsection{Modification}
+Il existe deux manières équivalentes de modifier un élément d'un vecteur~:
+\begin{itemize}
+\item soit en utilisant la fonction \code{Array.set : 'a array -> int -> 'a -> unit}~:
+<$ocaml code="tab.(0);;
+Array.set tab 0 42;;
+tab.(0);;" eval="top"$>
+\item soit en utilisant la syntaxe \code{vecteur.(indice) <- valeur}~:
+<$ocaml code ="tab.(1);;
+tab.(1) <- 42;;
+tab.(1);;" eval="top"$>
+\end{itemize}
+Comme pour l'accès, et en général toutes les fonctions agissant sur les vecteurs,
+une exception \code{Invalid\_argument} est levée lors de l'utilisation d'un indice
+invalide (en dehors des bornes).
+\subsubsection{Autres opérations}
+D'autres opérations sur les vecteurs sont disponibles via des fonctions prédéfinies
+du module \refmodule{Array}~:
+<$ocaml code="Array.length tab (* longueur *) ;;
+Array.sub tab 3 4 (* extraction d'un sous-vecteur de longueur 4 a partir de l'indice 3 *);;
+Array.to_list tab (* creation d'une liste a partir des elements du vecteur *);;
+Array.map string_of_int tab (* map sur les elements du vecteur *) ;;"
+eval="top"$>
+On consultera la documentation du module \refmodule{Array}.
+
+\subsection{Chaînes de caractères}
+Les chaînes de caractères sont les valeurs de type \code{string}, comme nous en avons
+déjà croisées plus haut. En OCaml, les chaînes sont mutables, à la façon des
+vecteurs. Cependant, les chaînes ont leur type propre et ne sont pas des vecteurs
+de caractères (le type \code{string} n'est pas unifiable au type \code{char array}).
+
+\subsubsection{Création de valeurs}
+On crée une chaîne de caractères en la mettant entre guillemets \code{"}~:
+<$ocaml code="\"hello world !\";;" eval="top"$>
+Le caractère \code{\textbackslash} est utilisé pour indiquer des caractères spéciaux~:
+\begin{itemize}
+\item \code{\textbackslash{}"} permet d'insérer le caractère " au lieu de signaler la
+fin de la chaîne,
+\item \code{\textbackslash{}n} indique une fin de ligne,
+\item \code{\textbackslash{}r} indique un retour charriot,
+\item \code{\textbackslash{}t} indique une tabulation.
+\end{itemize}
+<$ocaml code="print_endline \"\\\"Entre guillemets\\\"\\nune nouvelle ligne\";;" eval="top"$>
+
+Il est également possible d'utiliser des fonctions créant des chaînes~:
+<$ocaml code="let chaine = String.make 10 'a';;
+string_of_int 42;;
+string_of_float 84.;;
+Printexc.to_string Not_found (* une chaine à partir d'une exception *);;" eval="top"$>
+
+\subsubsection{Accès}
+Comme pour les valeurs, on peut accéder à l'un des caractères d'une chaîne
+de deux manières~:
+\begin{itemize}
+\item soit en utilisant la fonction \code{String.get : string -> int -> char}~:
+<$ocaml code="String.get chaine 0;;" eval="top"$>
+\item soit en utilisant la syntaxe \code{chaine.[indice]}~:
+<$ocaml code="chaine.[0];;" eval="top"$>
+\end{itemize}
+Les indices pour une chaîne de longueur $n$ vont de $0$ à $n-1$. En dehors de ces bornes,
+un accès déclenche là encore une exception \code{Invalid\_argument}~:
+<$ocaml code="chaine.[10];;" eval="errors"$>
+
+\subsubsection{Modifications}
+Il existe deux manières équivalentes de modifier un caractère d'une chaîne~:
+\begin{itemize}
+\item soit en utilisant la fonction \code{String.set : string -> int -> char -> unit}~:
+<$ocaml code="chaine.[0];;
+String.set chaine 0 'b';;
+chaine.[0];;" eval="top"$>
+\item soit en utilisant la syntaxe \code{chaine.[indice] <- valeur} avec \code{valeur}
+de type \code{char} (caractère)~:
+<$ocaml code ="chaine.[1];;
+chaine.[1] <- 'c';;
+chaine.[1];;" eval="top"$>
+\end{itemize}
+
+\subsubsection{Autres opérations}
+D'autres opérations sur les chaînes sont offertes par les fonctions du module
+\refmodule{String}. Par exemple~:
+<$ocaml code="String.length chaine (* longeur d'une chaine *);;
+String.sub \"hello world\" 3 4 (* extraction de sous-chaine, comme pour Array.sub *);;
+let animaux = [ \"chat\"; \"chien\"; \"perroquet\"; \"lama\"; \"renard\" ];;
+String.concat \", \" animaux (* concatenation d'une liste de chaines en utilisant un separateur *);;"
+eval="top"$>
+Pour d'autres fonctions, on consultera la documentation du module \refmodule{String}.
+
+\subsection{Champs modifiables des enregistrements}
+Nous avons vu précédemment (cf. section \ref{records}) comment définir des types enregistrements.
+Il est possible de spécifier un ou plusieurs champs comme étant modifiables, à l'aide du
+mot-clé \code{mutable}~:
+<$ocaml code="type mon_record = {
+  champ1 : int ;
+  mutable champ2 : int ;
+  };;" eval="top"$>
+La création et le filtrage de valeurs de ce type ne changent pas, mais il est maintenant possible
+de modifier le champ \code{champ2} de ces valeurs~:
+<$ocaml code="let r = { champ1 = 0 ; champ2 = 1 };;
+r.champ2 <- 2;;
+r;;" eval="top"$>
+Par contre, tenter de modifier le champ \code{champ1} provoque une erreur~:
+<$ocaml code="r.champ1 <- 3;;" eval="errors"$>
+
+\subsection{Références}
+\cmp{OCaml fournit un type polymorphe \code{'a ref} qui peut être vu comme le type des pointeurs sur
+une valeur quelconque~; en OCaml, on parlera plutôt de référence sur une valeur. Une valeur
+référencée peut être modifiée. Le type \code{ref} est définit comme un enregistrement à un
+champ modifiable~:}\\
+\code{type 'a ref = \{mutable contents:'a\}}
+
+\cmp{Ce type est muni de raccourcis syntaxiques prédéfinis. On construit une référence
+sur une valeur par la fonction \code{ref}. La valeur référencée peut être atteinte par la
+fonction préfixe \code{(!)}.
+La fonction modifiant le contenu d'une référence est la fonction infixe \code{(:=)}.}
+
+<$ocaml code="let x = ref 3 (* creation et initialisation *);;
+x ;;
+!x (* dereferencement *);;
+x := 4 ;;
+!x ;;
+x := !x+1 (* affectation *);;
+!x ;;" eval="top"$>
+Remarque~: Là encore, pour plus de sûrété, il n'est pas syntaxiquement possible de
+créer une référence sans l'initialiser à une valeur, contrairement au langage C.
+
+%\subsection{Polymorphisme et valeurs modifiables}
+%\todo{Ne pas mettre cette partie pour alléger}
+
+\section{Entrées-sorties}
+\cmp{Les fonctions d'entrées-sorties calculent une valeur (souvent de type \code{unit}),
+mais durant ce calcul elles effectuent une modification de l'état des périphériques
+d'entrées-sorties~: modification du buffer du clavier, affichage à l'écran, écriture
+dans un fichier ou modification du pointeur de lecture. Les deux types suivants sont
+prédéfinis~: \code{in\_channel} et \code{out\_channel} pour respectivement les canaux
+d'entrées et de sorties. Quand une fin de fichier est rencontrée l'exception
+\code{End\_of\_file} est déclenchée. Enfin, les trois constantes suivantes correspondent
+aux canaux standard d'entrée, de sortie et d'erreur à la manière d'Unix~:
+\code{stdin}, \code{stdout} et \code{stderr}.}
+
+\subsection{Canaux}
+Pour obtenir d'autres canaux que ceux prédéfinis (\code{stdin}, \code{stdout} et \code{stderr}),
+on utilise~:
+\begin{itemize}
+\item la fonction \code{open\_in~: string -> in\_channel} qui ouvre un fichier existant en
+lecture,
+\item la fonction \code{open\_out~: string -> out\_channel} qui ouvre un fichier en écriture,
+écrasant le fichier s'il existe déjà ou le créant s'il n'existe pas.
+\end{itemize}
+Les problèmes rencontrés par ces fonctions sont signalés par une levée d'exception
+\code{Sys\_error} avec un message explicite, par exemple lorsqu'un fichier à ouvrir en lecture
+n'existe pas, quand les droits ne sont pas suffisants, etc.
+
+<$ocaml code="let ic = open_in \"/etc/passwd\";;
+let oc = open_out \"/tmp/foo\";;
+let ic = open_in \"/bar\";;" eval="top"$>
+Pour fermer un fichier en lecture ou en écriture, on utilisera respectivement
+les fonctions \code{close\_in} et \code{close\_out}.
+
+On notera que, grâce au typage, on ne pourra utiliser un canal d'entrée
+(\code{in\_channel}) pour y écrire des données, ni un canal de sortie
+(\code{out\_channel}) pour lire des données.
+
+\subsection{Lecture}
+Voici quelques fonctions de lecture sur un canal de type \code{in\_channel}.
+D'autres fonctions sont disponibles dans la bibliothèque de base~: \refdocinputfuns
+
+<$ocaml code="let first_line = input_line ic (* lecture d'une ligne *);;
+let second_line = input_line ic (* lecture d'une ligne *);;
+seek_in ic 0 (* retour au debut du fichier *);;
+let line = input_line ic (* re-lecture de la premiere ligne, suite au deplacement *);;
+let buffer_size = 40 ;;
+let buffer = String.make buffer_size 'x';;
+let nb_read = input ic buffer 0 buffer_size
+ (* lecture de maximum buffer_size caracteres dans ic, a stocker dans buffer a partir
+     de l'indice 0 *);;
+String.sub buffer 0 nb_read;;
+close_in ic;;
+" eval="top"$>
+
+\subsection{Ecriture}
+Voici quelques fonctions d'écriture sur un canal de type \code{out\_channel}.
+D'autres fonctions sont disponibles dans la bibliothèque de base~: \refdocoutputfuns
+
+Il est important de savoir que ces canaux sont munis de tampons (buffers). Cela
+signifie que l'écriture dans un canal correspondant à un fichier n'écrira pas
+forcément immédiatement dans ce fichier, mais attendra qu'une quantité de données
+suffisante soit dans le tampon pour procéder à l'écriture réelle, cela afin de
+conserver des performances suffisantes lors de multiples petites écritures, sans avoir
+à s'en préoccuper. La fermeture d'un canal provoque la vidange du tampon, de même
+que la fonction \code{flush}.
+
+<$ocaml code="output_string oc second_line (* ecriture d'une chaine sur le canal *);;
+flush oc (* forcer l'ecriture du contenu du tampon dans le fichier *);;
+output oc buffer 0 nb_read (* ecriture d'un certain nombre de caracteres depuis une chaine *);;
+close_out oc;;
+" eval="top"$>
+\section{Structures de contrôle}
+Nous présentons ci-dessous la séquence d'instructions et les boucles, structures de contrôles
+de base pour la programmation impérative. La structure conditionnelle a déjà été présentée
+dans le cadre de la programmation fonctionnelle (cf. section \ref{conditionnelle}).
+
+\subsection{Séquence}
+La séquence d'instructions est représentée par l'utilisation du '\code{;}' simple, différent
+du '\code{;;}' de fin de phrase~:
+\centercode{{\em expression$_1$} ; {\em expression$_2$}}
+
+L'\code{expression$_1$} doit être de type \code{unit} car sa valeur de retour n'est pas exploitable
+dans cette construction. Si ce n'est pas le cas, le compilateur émet un avertissement indiquant
+que la valeur retournée par l'expression n'est pas utilisée. Le type de la séquence ainsi que
+sa valeur sont ceux de l'\code{expression$_2$}. Enfin, l'\code{expression$_1$} est bien sûr
+évaluée avant l'\code{expression$_2$}.
+
+<$ocaml code="print_endline chaine;
+String.sub buffer 0 nb_read;;
+1 + 1 ; print_endline chaine;;" eval="top"$>
+
+On peut bien sûr composer les séquences~:
+<$ocaml code="print_endline chaine ;
+print_endline (String.sub buffer 0 10);
+print_endline (String.sub buffer 10 20);
+1 + 1;;" eval="top"$>
+
+La fonction \code{ignore} permet d'indiquer explicitement qu'une valeur de retour est volontairement
+abandonnée~:
+<$ocaml code="ignore(1+1); 42;;" eval="top"$>
+
+Si la valeur de la première expression est de type fonctionnel, le compilateur émet un
+message d'avertissement différent pour indiquer que la fonction n'a peut-être été que
+partiellement appliquée, par exemple si un paramètre a été oublié~:
+<$ocaml code="let f x y = x + y;;
+f 1 ; 42;;" eval="top"$>
+
+Attention aux précédences des constructions !
+<$ocaml code="if true then
+  print_endline \"c'est vrai\";
+  print_endline \"c'est vrai\";;
+if false then
+  print_endline \"c'est vrai\";
+  print_endline \"c'est vrai\";;"
+eval="top"$>
+Que se passe-t-il donc ? En fait, la branche \code{then} prend fin après le point virgule
+situé derrière le premier \code{print\_endline "c'est vrai"}. C'est donc équivalent à
+<$ocaml code="(if false then print_endline \"c'est vrai\");
+print_endline \"c'est vrai\";;" eval="top"$>
+Il faut donc utiliser les parenthèses \code{(} et \code{)} ou bien les mots-clés
+\code{begin} et \code{end} pour forcer la séquence à être dans la branche \code{then}~:
+<$ocaml code="if true then
+  (
+   print_endline \"c'est vrai\";
+   print_endline \"c'est vrai\"
+  );;
+if false then
+  (
+   print_endline \"c'est vrai\";
+   print_endline \"c'est vrai\"
+  );;" eval="top"$>
+
+\subsection{Boucles}
+\cmp{Les structures de contrôle itératives sont elles aussi en dehors du monde
+fonctionnel. La condition de répétition, ou de sortie, d'une boucle n'a de sens
+que si une modification physique de la mémoire permet d'en changer la valeur.
+Il existe deux structures de contrôle itératives~: la boucle {\em for} pour une
+itération bornée et la boucle {\em while} pour une itération non bornée.
+Les structures de boucle elles-mêmes sont des expressions du langage.
+Elles retournent donc une valeur~: la constante \code{()} du type \code{unit}.}
+
+\subsubsection{Boucle {\em for}}
+La boucle for peut être croissante~:
+\centercode{for {\em<identifiant>} = {\em<expression$_1$>} to {\em<expression$_2$>} do {\em<expression$_3$>} done}
+
+ou décroissante~:
+\centercode{for {\em<identifiant>} = {\em<expression$_1$>} downto {\em<expression$_2$>} do {\em<expression$_3$>} done}
+
+La valeur de l'identifiant croît ou décroît toujours d'un pas de un.
+L'\code{identifiant} n'est visible que dans l'\code{expression$_3$} (et masque éventuellement
+une variable de même nom présente dans l'environnement).
+\code{expression$_1$} et \code{expression$_2$} doivent être de type \code{int}.
+L'\code{expression$_3$} doit être de type \code{unit} car sa valeur est ignorée et l'expression
+dans la boucle n'a de sens que si elle a un effet de bord. Si l'expression n'est pas de type
+\code{unit}, le compilateur émet un avertissement.
+<$ocaml code="for i = 10 downto 1 do print_int i; print_string \" \" done; flush stdout;;" eval="top"$>
+
+\subsubsection{Boucle {\em while}}
+La syntaxe de cette boucle est la suivante~:
+\centercode{while {\em<expression$_1$>} do {\em<expression$_2$>} done}
+
+L'\code{expression$_1$} doit être de type \code{bool}. Elle est évaluée au début de chaque tour
+de boucle. Si elle est vraie, l'\code{expression$_2$} est évaluée, sinon la boucle se termine
+en une valeur de type \code{unit}.
+Comme pour le corps de la boucle {\em for}, l'\code{expression$_2$} doit être de type
+\code{unit}, sinon le compilateur émet un avertissement.
+<$ocaml code="let compteur = ref 1;;
+while !compteur <= 10 do
+  print_int !compteur; print_string \" \";
+  incr compteur (* equivalent à compteur := !compteur + 1 *)
+done;;
+flush stdout;;" eval="top"$>
+
+\section{Exercices}
+\begin{exercice}
+Ecrire un programme qui affiche ses arguments, à la manière de la commande UNIX {\tt echo}.
+Pour cela, on utilisera \code{Sys.argv} qui est le tableau des arguments du programme,
+ainsi que le module \refmodule{Array} pour les accès aux tableaux. Le parcours du tableau
+sera réalisé à l'aide d'une boucle.
+On compilera le programme grâce à la commande\\
+\sh{ocamlc -o myecho myecho.ml}
+<$ocaml code="for i = 1 to Array.length Sys.argv - 1 do
+  print_string Sys.argv.(i); print_string \" \"
+done;;
+print_newline();;" hide="true" $>
+\end{exercice}
+
+\begin{exercice}
+En utilisant une boucle, écrire une fonction \code{blank} qui prend une chaîne de
+caractères, la copie et remplace chaque caractère par un blanc, tant qu'elle
+n'a pas rencontré la lettre 's'.
+<$ocaml code="let blank str =
+  let str = String.copy str in
+  let i = ref 0 in
+  let len = String.length str in
+  while !i < len do
+    if str.[!i] = 's' then
+      i := len
+    else
+     ( str.[!i] <- ' ' ; incr i )
+  done;
+  str
+;;" eval="top" hide="true"$>
+Tester ensuite la fonction, par exemple~:
+<$ocaml code="let str = \"coucous_royal\";;
+blank str;;" eval="top"$>
+
+\end{exercice}
+
+\begin{exercice}
+On souhaite écrire une fonction prenant en paramètre une matrice de type
+\code{'a array array} et retournant \code{true} ou \code{false} selon que la matrice
+est symétrique ou non. On suppose que la matrice est carrée. On utilisera les matrices
+\code{mat1} et \code{mat2} définies ci-dessous pour tester~:
+<$ocaml code="(* matrice symétrique: *)
+let mat1 = [| [| 0 ; 1 ; 2 |] ; [| 1 ; 5 ; 10 |] ; [| 2 ; 10 ; 8 |] |];;
+let init _ = Random.int 10 ;;
+(* matrice non symétrique *)
+let mat2 = [| Array.init 3 init ; Array.init 3 init ; Array.init 3 init |];;
+mat2.(0).(1) <- - mat2.(1).(0);;" eval="true"$>
+On commence par écrire une fonction \code{is\_sym\_imper} impérative.
+<$ocaml code="let is_sym_imper mat =
+  let len = Array.length mat in
+  let res = ref true in
+  for i = 0 to len - 1 do
+    for j = i + 1 to len - 1 do
+      if mat.(i).(j) <> mat.(j).(i) then res := false
+    done
+  done;
+  !res
+;;
+is_sym_imper mat1;;
+is_sym_imper mat2;;" eval="top" hide="true" $>
+On donnera ensuite une version fonctionnelle \code{is\_sym\_fun}.
+<$ocaml code="let is_sym_fun mat =
+  let len = Array.length mat in
+  let rec iterj i j =
+    (j > len - 1) ||
+    (mat.(i).(j) = mat.(j).(i) && iterj i (j+1))
+  in
+  let rec iteri i =
+    (i > len - 1) ||
+    (iterj i (i+1) && iteri (i+1))
+  in
+  iteri 0
+;;
+is_sym_fun mat1;;
+is_sym_fun mat2;;" eval="top" hide="true" $>
+\end{exercice}
+
+\iffalse
+\chapter{Modes de compilation et portabilité}
+
+\section{Étapes de compilation}
+
+\subsection{Les compilateurs d'Objective Caml}
+
+\subsection{Description du compilateur de code-octet}
+
+\section{Modes de compilation}
+\subsection{Noms des commandes}
+\subsection{Unité de compilation}
+\subsection{Nommage des extensions de fichiers}
+\subsection{Compilateur de code-octet}
+\subsection{Compilateur natif}
+\subsection{Boucle d'interaction}
+\subsection{Construction de nouvelles boucles d'interaction}
+\section{Exécutables autonomes}
+\section{Portabilité et efficacité}
+\subsection{Autonomie et portabilité}
+\subsection{Efficacité d'exécution}
+\section{Exercices}
+\subsection{Création de toplevels et d'exécutables autonomes}
+\subsection{Comparaison de performances}
+\fi
+
+\chapter{Bibliothèques}
+Comme beaucoup d'autres distributions de compilateurs/langages, OCaml est accompagné
+de bibliothèques. Chaque bibliothèque peut définir de nouveaux types, nouvelles exceptions,
+nouvelles fonctions, nouvelles classes et nouveaux modules.
+Ces bibliothèques soit évitent au développeur d'avoir à réimplementer des fonctions
+de base, soit fournissent des opérations non définissables dans le langage comme les
+fonctions d'entrées/sorties à un nombre variable d'arguments (e.g. \code{printf}).
+
+Elles se présentent sous forme de modules incluant éventuellement d'autres modules.
+Nous allons voir ici comment utiliser ces modules, tandis que la définition de nouveaux
+modules est détaillée dans le chapitre \ref{modules}.
+
+Les bibliothèques de la distribution OCaml sont séparées en trois ensembles~:
+\begin{itemize}
+\item la bibliothèque préchargée (le module \refmodule{Pervasives}), définissant des
+exceptions d'usage général comme \code{Failure} ou \code{Not\_found}, des fonctions
+sur les types de base (entiers, flottants, chaînes, \dots), des fonctions d'entrées/sorties,
+
+\item la bibliothèque dite "standard" dans le sens où elle est toujours présente
+quelle que soit la plateforme sur laquelle est installé OCaml. Cette bibliothèque
+contient plusieurs modules offrant
+\begin{itemize}
+\item l'utilisation de structures de données "de base"
+(listes, vecteurs, tables de hachage, piles, \dots),
+\item des opérations d'entrées/sorties évoluées,
+\item des possibilités de gestion de la persistance (stockage de données),
+\item l'interfaçage avec le système d'exploitation.
+\end{itemize}
+
+\item un autre ensemble de bibliothèques plus spécialisées (comme une bibliothèque
+d'arithématique exacte), dont certaines
+ne sont totalement disponibles que sur certains systèmes d'exploitation
+(telle la bibliothèque Unix) ou bien dépendent de la présence d'autres
+bibliothèques sur ce système (comme l'interface avec Tcl/Tk).
+\end{itemize}
+
+\section{Bibliothèque préchargée}
+Le module \refmodule{Pervasives} est la bibliothèque préchargée par OCaml lors de la compilation
+ou l'évaluation de programmes, c'est-à-dire que tout se passe comme si en tête de chaque
+fichier de code figurait une instruction
+<$ocaml code="open Pervasives;;"$>
+Les éléments de \refmodule{Pervasives} sont donc visibles et accessibles sans nécessité
+de les préfixer (on peut faire appel à \code{compare} au lieu de \code{Pervasives.compare}).
+La construction \code{open ...} est présentée en \ref{stdlib}.
+
+Dans la documentation anglaise, cette bibliothèque est appelée "Core library".
+
+Elle fournit des éléments de base dans des domaines variés. Nous en donnons quelques-uns
+ci-dessous mais il sera utile de parcourir la documentation du module pour
+avoir un bon aperçu de ce qu'il offre.
+
+\subsection{Types et exceptions}
+C'est dans ce module que sont définis les types de base ainsi que les exceptions d'usage général.
+\seemanual{\urldoccoretypes}
+
+\subsection{Comparaisons}
+Plusieurs fonctions de comparaisons sont fournies et sont polymorphes, permettant ainsi
+de comparer n'importe quel couple de valeur d'un même type~:
+
+\begin{tabular}{|l|l|} \hline
+\code{(=) : 'a -> 'a -> bool} & Egalité structurelle \\
+\code{(<>)} & Négation de \code{(=)} \\
+\code{(<)} et \code{(<=)} & relation d'infériorité structurelle stricte ou non\\
+\code{(>)} et \code{(>=)} & relation de supériorité structurelle stricte ou non\\ \hline
+%HEVEA \code{commpare : 'a -> 'a -> int} & \mbox{Comparaison générale~: \\
+%HEVEA \code{compare a b = 0} si \code{a = b} \\
+%HEVEA \code{compare a b < 0} si \code{a < b} \\
+%HEVEA \code{compare a b > 0} si \code{a > b} } \\ \hline
+%BEGIN LATEX
+\code{compare : 'a -> 'a -> int} & Comparaison générale~: \\
+& \code{compare a b = 0} si \code{a = b} \\
+& \code{compare a b < 0} si \code{a < b} \\
+& \code{compare a b > 0} si \code{a > b}  \\ \hline
+%END LATEX
+\code{min : 'a -> 'a -> 'a} & Minimum structurel de deux valeurs\\
+\code{max} & Maximum structurel de deux valeurs\\ \hline
+\code{(==) : 'a -> 'a -> bool} & Egalité physique \\
+\code{(!=)} & Négation de \code{(==)}\\ \hline
+\end{tabular}
+
+Les fonctions entre parenthèses sont utilisables en position infixe.
+
+Quelques exemples~:
+<$ocaml code="\"toto\" = \"tutu\";;
+\"abc\" < \"def\";;
+10 >= 13 ;;
+compare [1;2] [1;2;3];;
+\"toto\" = \"toto\";;
+\"toto\" == \"toto\";;" eval="top"$>
+\seemanual{\urldoccorecomp}
+
+\subsection{Fonctions sur les booléens}
+Les fonctions classiques sur les booléens sont disponibles~:
+
+\begin{tabular}{|l|l|}\hline
+\code{not : bool -> bool} & {\em non} logique \\ \hline
+\code{(\&\&) : bool -> bool -> bool} & {\em et} logique \\ \hline
+\code{(||)} & {\em ou} logique \\ \hline
+\end{tabular}
+
+\subsection{Fonctions sur les entiers}
+
+On trouve les opérations arithmétiques habituelles sur les entiers~:
+
+\begin{tabular}{|l|l|}\hline
+\code{(+)}, \code{(-) : int -> int -> int} & addition, soustraction \\
+\code{(*)}, \code{(/)}, \code{(mod)} & multiplication, division entière, modulo\\ \hline
+\code{\~{}- : int -> int} & négation \\ \hline
+\code{succ}, \code{pred : int -> int} & successeur, prédécesseur \\ \hline
+\code{abs : int -> int} & valeur absolue \\ \hline
+\end{tabular}
+
+Les débordements ({\em overflow}) sont ignorés.
+Dans les cas où ils doivent être gérés, on pourra utiliser
+les constantes \code{min\_int} et \code{max\_int} qui sont respectivement
+les plus petit et plus grand entiers représentables sur la plateforme d'exécution.
+\seemanual{\urldoccoreint}
+
+\subsection{Opérations bit à bit}
+
+Des fonctions sont disponibles pour manipuler les entiers au niveau des bits,
+pour l'utilisation de masques, gestion de protocoles ou données binaires, \dots
+
+\begin{tabular}{|l|l|} \hline
+\code{lnot : int -> int} & négation bit à bit logique \\ \hline
+\code{(lor)}, \code{(land) : int -> int -> int} & {\em ou} et {\em et} bit à bit logique \\ \hline
+\code{(lxor)} & {\em ou exclusif} bit à bit logique \\ \hline
+\code{(lsl)}, \code{(lsr)}, \code{(asr)} & décalages à gauche et à droite \\ \hline
+\end{tabular}
+
+\seemanual{\urldoccorebit}
+
+\subsection{Fonctions sur les flottants}
+
+Il n'y a pas de surchage en OCaml, c'est-à-dire que le même identifiant ne peut pas correspondre
+à deux fonctions différentes selon le type de ses arguments. Les opérations communes
+aux entiers et aux flottants (addition, \dots) se distinguent donc par un '\code{.}' ajouté
+aux opérateurs flottants~:
+
+\begin{tabular}{|l|l|}\hline
+\code{(+.)}, \code{(-.) : float -> float -> float} & addition, soustraction \\
+\code{(*.)}, \code{(/.)}, \code{mod\_float} & multiplication, division, modulo\\ \hline
+\code{~-. : float -> float} & négation \\ \hline
+\code{abs\_float : float -> float} & valeur absolue \\ \hline
+\code{sqrt : float -> float} & racine carrée \\ \hline
+\code{(**) : float -> float -> float} & puissance \\ \hline
+\code{float\_of\_int : int -> float} & création d'un flottant depuis un entier \\
+\code{truncate : float -> int} & création d'un entier à partir de la partie entière d'un flottant \\ \hline
+\end{tabular}
+
+Il existe des valeurs spéciales pour indiquer des valeurs qui ne sont pas des nombres
+("{\em not a number}")~: \code{infinity}, \code{neg\_infinity}, \dots Ces valeurs sont obtenues
+en effectuant certaines opérations comme une division par \code{0.0}.
+
+Beaucoup d'autres fonctions sont disponibles sur les flottants (trigonométrie, \dots).
+\seemanual{\urldoccorefloat}
+
+\subsection{Entrées/Sorties}
+Un certain nombre de fonctions d'entrées/sorties sont disponibles dans la bibliothèque
+préchargée. Certaines fonctions interagissent avec l'entrée standard, la sortie standard
+ou la sortie d'erreur, tandis que d'autres sont plus générales et agissent sur un
+canal ({\em channel}) passé en paramètre.
+
+A l'aide de la documentation de \refmodule{Pervasives}, faire les exercices suivants.
+
+\begin{exercice}
+Ecrire un programme qui affiche la somme de deux entiers saisis par l'utilisateur
+sur l'entrée standard, sous la forme "La somme de A et B est C." avec un retour
+chariot. On pourra lancer son programme par la commande\\
+\sh{ocaml fichier.ml}
+<$ocaml code="let a = read_int ();;
+let b = read_int ();;
+print_string \"La somme de \";;
+print_int a;;
+print_string \" et \";;
+print_int b;;
+print_string \" est \";;
+print_int (a + b);;
+print_string \".\n\";;" hide="true" $>
+\end{exercice}
+
+\begin{exercice}
+Ecrire un programme se comportant comme une simplification de la commande UNIX {\tt cat}~:
+il affichera sur sa sortie standard ce qu'il lit sur son entrée standard. On traitera
+proprement la détection de la fin de lecture.
+<$ocaml code="try
+  while true do print_endline (read_line ()) done
+with
+  End_of_file -> exit 0;;" hide="true" $>
+\end{exercice}
+
+\section{Bibliothèque standard}
+\label{stdlib}
+La bibliothèque dite "standard" contient des modules disponibles sur toutes les plateformes
+sur lesquelles OCaml fonctionne. Elle est donc un socle stable pour développer des applications
+portables.
+
+L'utilisation des éléments d'un module se fait en préfixant l'élément (fonction, type, \dots)
+par le nom du module suivi d'un point, comme dans \code{List.split} ou \code{String.lowercase}.
+Il est également possible d'{\em ouvrir} le module, par l'instruction
+<$ocaml code="open Nom_du_module;;"$>
+pour rendre tous ses éléments visibles après le \code{open}.
+
+Attention, dans ce cas, les éléments du module ouvert masquent les éléments de même nom
+visibles auparavant~:
+<$ocaml code="let length x = x + 1;;
+length 10;;
+open List;;
+length 10;;" eval="errors"$>
+En général, une bonne pratique est de ne pas ouvrir de module,
+mais de préfixer les éléments par leur nom complet afin de faciliter la lecture du programme.
+En effet, la présence du nom du module permet de plus facilement déduire quelle structure
+de données est manipulée, puisqu'il n'est pas nécessaire en OCaml d'indiquer explicitement
+les types. On peut faire une exception pour les constructeurs de type et les champs
+d'enregistrements, c'est-à-dire ouvrir un module pour ne pas avoir à préfixer les constructeurs
+et champs mais préfixer tout de même les autres éléments lors de leur utilisation.
+
+Enfin, il n'y a pas de hiérarchie dans cette bibliothèque, les modules disponibles sont tous
+au même niveau (même si certains modules en contiennent d'autres).
+Nous allons cepandant les introduire par grandes catégories et détailler
+les possibilités de quelques uns d'entre eux.
+
+\subsection{Structures de données}
+
+La bibliothèque standard offre plusieurs modules permettant de construire et
+manipuler des structures de données courantes. Nous avons déjà vu précédemment
+les modules suivants~:
+\begin{itemize}
+\item \refmodule{Array}, pour la manipulation des vecteurs,
+\item \refmodule{Char}, pour les opérations sur les caractères,
+\item \refmodule{List}, pour la manipulation des listes,
+\item \refmodule{String}, pour les manipulations des chaînes de caractères.
+\end{itemize}
+
+Le module \refmodule{Buffer} permet de manipuler des tampons extensibles
+de caractères, dans un style impératif, plus efficaces dans certains algorithmes
+que des concaténations à répétition de chaînes de caractères.
+
+On remarquera que les vecteurs et les listes sont génériques puisqu'ils
+permettent de manipuler des vecteurs et des listes d'éléments arbitraires
+(listes d'entiers, listes de chaînes, \dots).
+
+D'autres structures de données sont disponibles et offrent aussi cette généricité.
+
+\begin{exercice}
+Ecrire une fonction \code{is\_palindrome} prenant en paramètre une chaîne
+de caractères et retournant \code{true} si c'est un palindrome, \code{false} sinon.
+Une chaîne est un palindrome si elle est symétrique (e.g. "radar", "laval").
+<$ocaml code="let is_palindrome s =
+  let len = String.length s in
+  let rec test i =
+    (i > (len + 1) / 2) ||
+    (s.[i] = s.[len - i - 1] && test (i+1))
+  in
+  test 0;;
+is_palindrome \"nonacecanon\";;
+is_palindrome \"anna\";;
+is_palindrome \"baobab\";;" eval="top" hide="true" $>
+\end{exercice}
+
+\begin{exercice}
+On peut spécifier des paramètres optionnels pour les fonctions, avec ou non
+une valeur par défaut.
+
+Dans \code{let f ?x y = ...}, \code{x} sera une valeur du type
+\code{option}. Le type \code{option} est prédéfini ainsi:\\
+\code{type 'a option = None | Some of 'a}\\
+et permet de manipuler des valeurs optionnelles.
+On pourra donc utiliser le filtrage pour procéder par cas sur
+la structure de \code{x}~:
+<$ocaml code="let f ?x y = match x with None -> y | Some x -> x + y;;" eval="top"$>
+
+Lors de l'appel d'une telle fonction, on pourra ou non préciser la valeur
+du paramètre optionnel~:
+<$ocaml code="f 4;;
+f ~x: 1 4;;" eval="top"$>
+
+Pour donner une valeur par défaut à un paramètre, on pourrait utiliser la forme
+suivante~:
+<$ocaml code="let f ?x =
+  let x = match x with None -> 1 | Some x -> x in
+  fun y -> x + y;;" eval="top"$>
+On préférera la syntaxe suivante, plus simple et lisible~:
+<$ocaml code="let f ?(x=1) y = x + y;;" eval="top"$>
+La façon de préciser la valeur de l'argument lors de l'application de \code{f} ne change
+pas~:
+<$ocaml code="f 4;;
+f ~x: 2 4;;" eval="top"$>
+Ecrire une fonction \code{remove\_doubles} prenant en paramètre une liste
+et retournant la même liste mais dans laquelle chaque élément apparaît au plus
+une fois. La fonction acceptera un paramètre optionnel comme fonction de comparaison
+pour savoir si deux éléments sont identiques. Par défaut ce paramètre sera
+la fonction d'égalité polymorphe \code{(=)}.
+<$ocaml code="let list_remove_doubles ?(pred=(=)) l =
+  List.rev
+    (List.fold_left
+      (fun acc e -> if List.exists (pred e) acc then acc else e :: acc)
+      []
+      l
+    )
+;;" eval="top" hide="true" $>
+<$ocaml code="list_remove_doubles [ 1 ; 1 ; 3; 2 ; 2; 2 ; 1; 2; 3; 4];;
+let comp_string s1 s2 = String.lowercase s1 = String.lowercase s2;;
+list_remove_doubles ~pred: comp_string
+  [ \"hello\"; \"HELlo\";\"world\";\"heLLO\"; \"WorLD\"; \"!\"; \"!\"; \"hello\"];;"
+eval="top" $>
+\end{exercice}
+
+\begin{exercice}
+\label{exowords}
+Ecrire une fonction prenant une chaîne de caractères et retournant la liste
+des mots qu'elle contient. Un mot sera composé uniquement des caractères
+'a' à 'z', 'A' à 'Z', 'é', 'ê', 'è', 'à'.
+<$ocaml code="let words s =
+  let len = String.length s in
+  let rec iter acc_words acc_current i =
+    if i >= len then
+      match acc_current with
+        \"\" -> List.rev acc_words
+      | w -> List.rev (w :: acc_words)
+    else
+      match s.[i] with
+      | 'a'..'z' | 'A'..'Z' | 'é' | 'è' | 'ê' | 'à' ->
+        iter acc_words (Printf.sprintf \"%s%c\" acc_current s.[i]) (i+1)
+		  | _ ->
+		    match acc_current with
+		      \"\" -> iter acc_words acc_current (i+1)
+		    | w -> iter (w::acc_words) \"\" (i+1)
+  in
+  iter [] \"\" 0
+;;" eval="top" hide="true" $>
+<$ocaml code="words \"maitre corbeau sur un arbre perché ... par l'odeur alléché...\";;"
+eval="top"$>
+\end{exercice}
+
+
+\subsubsection{Tables de hachage}
+Le module \refmodule{Hashtbl} permet d'utiliser des tables de hachage.
+Les tables de hachage sont des structures de données permettant de stocker
+des associations clé-valeur, avec modification en place.
+L'ajout d'une valeur pour une clé existante masque
+la valeur précédente associée à cette clé. Les clés et les valeurs peuvent être de n'importe
+quel type, tant que l'on sait comment comparer les clés (égalité) et que l'on a une fonction
+pour calculer un indice à partir d'une clé (fonction de hachage).
+En effet, les valeurs ne sont pas stockées
+dans un tableau de taille infinie, mais au contraire dans un tableau de taille finie,
+et la fonction de hachage doit permettre une répartition la plus homogène possible
+dans le tableau,
+afin d'avoir des temps d'accès les plus courts. Si deux clés ont la même valeur
+de hachage, les deux associations clé-valeur sont stockées dans une liste à l'indice
+commun du tableau. La taille de la table doit donc être adaptée au nombre d'associations
+à stocker. Si elle est trop petite, les conflits dans les hash de clés seront nombreux
+et au final on parcourra souvent les listes d'associations ayant la même valeur de
+hachage. Si elle est trop grande, elle prend inutilement de la place.
+Enfin, on conseille de prendre un nombre premier comme taille de la table.
+
+Un type de table de hachage générique est disponible, utilisant des fonctions
+d'égalité et de hachage prédéfinies. Il est également possible de définir
+son propre type de table de
+hachage spécialisé pour un type de données. Pour cela, on définit un module
+contenant les fonctions d'égalité et de hachage et on passe ce module à un
+autre module (\refmodule{Hashtbl.Make}), afin de construire un nouveau module
+permettant la manipulation de tables de hachage spécialisées par
+les fonctions du module en paramètre. Les modules prenant d'autres modules
+en paramètres sont appelés foncteurs. Ils sont exposés dans la section \ref{foncteurs}.
+
+Voici un exemple d'utilisation de table de hachage~:
+<$ocaml code="type person = { name : string ; firstname : string };;
+let users = Hashtbl.create 101;;
+let robert = { name = \"Bidochon\" ; firstname = \"Robert\"};;
+Hashtbl.add users \"bidochon\" robert;;
+Hashtbl.find users \"bidochon\";;
+let raymonde = { name = \"Bidochon\" ; firstname = \"Raymonde\"};;
+Hashtbl.add users \"bidochon\" raymonde (* robert est masque *);;
+Hashtbl.find users \"bidochon\";;
+Hashtbl.remove users \"bidochon\" (* robert est demasque *);;
+Hashtbl.find users \"bidochon\";;
+Hashtbl.remove users \"bidochon\" (* robert est supprime *);;
+Hashtbl.find users \"bidochon\";;" eval="top"$>
+Le type de la table \code{users} à sa création a le type \code{('\_a, '\_b) Hashtbl.t}~:
+\code{users} est du type \code{Hashtbl.t} mais les deux paramètres de type ne sont pas
+encore fixés (on a \code{`\_a} au lieu d'un \code{`a} qui indiquerait le polymorphisme),
+ils le seront dès que la suite du programme mettra des contraintes sur ces types.
+On peut d'ailleurs le vérifier maintenant que la table a été utilisée~:
+<$ocaml code="users;;" eval="top"$>
+
+L'indication \code{= <abstr>} signifie que le type est abstrait. C'est le cas de beaucoup
+de structures de données prédéfinies~: leur représentation interne est masquée et il faut
+donc obligatoirement passer par les fonctions fournies pour manipuler ces structures.
+Cet aspect sera exposé dans la partie sur les modules dans le chapitre \ref{modules}.
+
+\begin{exercice}
+\label{exowordcount}
+Ecrire un programme prenant en paramètre un nom de fichier et comptant le nombre
+d'occurences de chaque mot apparaissant dans le fichier. A la fin, le programme
+affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
+\code{words} définie dans l'exercice \ref{exowords}.
+<$ocaml code="(** la fonction suivante incremente le compteur du mot en parametre.
+si le mot n'est pas dans la table, il est ajoute avec un compteur a 1. *)
+let add_word table w =
+  try
+    let n = Hashtbl.find table w in
+    Hashtbl.replace table w (n+1)
+  with Not_found ->
+    Hashtbl.add table w 1
+;;
+
+(** la fonction de comptage des mots d'un fichier en parametre.
+Pour chaque ligne, on recupere la liste des mots avec la fonction 'words',
+puis on incremente le compteur de chaque mot avec la fonction 'add_word'
+definie ci-dessus. On lit jusqu'a la fin du fichier (exception End_of_file)
+et on retourne la table de comptage. *)
+let count_in_file file =
+  let table = Hashtbl.create 101 in
+  let ic = open_in file in
+  try
+    while true do
+      let line = input_line ic in
+      List.iter (add_word table) (words line)
+    done;
+    assert false
+  with
+    End_of_file -> close_in ic; table
+;;
+
+let print_words =
+  Hashtbl.iter
+    (fun wrd n -> Printf.printf \"%s: %d\n\" wrd n)
+;;
+
+let table = count_in_file \"texte.txt\"(* remplacer par Sys.argv.(1) pour le fichier en parametre *);;
+print_words table;;
+flush stdout;;" eval="top" hide="true" $>
+\end{exercice}
+
+\subsubsection{Dictionnaires}
+Ces structures de données permettent d'associer des valeurs à des clés, comme pour
+les tables de hachage mais dans un style applicatif, sans effet de bord. Elles sont
+basées sur des arbres binaires et nécessitent pour cela de savoir comment
+ordonner les clés des paires (clé, valeur) à ranger.
+
+On crée un module pour gérer ce genre de structure en utilisant le foncteur
+\refmodule{Map.Make}, du module \refmodule{Map}. On peut utiliser la fonction générique
+\code{Pervasives.compare} comme fonction d'ordre, notamment quand on utilise comme clé
+un type de données prédéfini pour lequel cette fonction a le comportement souhaité~:
+<$ocaml code="module MyKey = struct
+  type t = int
+  let compare = Pervasives.compare
+end;;
+module MyMap = Map.Make(MyKey);;
+let map = MyMap.empty;;
+let map = MyMap.add 1 \"coucou\" map;;
+let map = MyMap.add 2 \"bonjour\" map;;
+let map = MyMap.add 3 42 map;;
+MyMap.iter
+  (fun key value -> Printf.printf \"cle=%d, valeur=%s\n\" key value)
+  map;;
+flush stdout;;" eval="errors"$>
+
+\begin{exercice}
+Reprendre l'exercice \ref{exowordcount} en utilisant un dictionnaire.
+<$ocaml code="(** nous utiliserons un dictionnaire avec des string comme cles *)
+module Dict = Map.Make
+  (struct type t = string let compare = Pervasives.compare end);;
+
+(** la fonction suivante incremente le compteur du mot en parametre.
+si le mot n'est pas dans le dictionnaire, il est ajoute avec un compteur a 1. *)
+let add_word dict wrd =
+  try
+    let n = Dict.find wrd dict in
+    Dict.add wrd (n+1) dict
+  with Not_found ->
+    Dict.add wrd 1 dict
+;;
+
+(** la fonction de comptage des mots d'un fichier en parametre.
+Pour chaque ligne, on recupere la liste des mots avec la fonction 'words',
+puis on incremente le compteur de chaque mot avec la fonction 'add_word'
+definie ci-dessus. On lit jusqu'a la fin du fichier (exception End_of_file)
+et on retourne le dictionnaire. *)
+let count_in_file file =
+  let ic = open_in file in
+  let rec read_lines dict =
+    let line_opt =
+      try Some (input_line ic)
+      with End_of_file -> None
+    in
+    (* le rattrapage de l'exception de fin de fichier est confine
+       pour permettre la recursivite terminale *)
+    match line_opt with
+      None -> dict
+    | Some line ->
+       let dict = List.fold_left add_word dict (words line) in
+       read_lines dict
+  in
+  let dict = read_lines Dict.empty in
+  close_in ic;
+  dict
+;;
+
+let print_words =
+  Dict.iter
+    (fun wrd n -> Printf.printf \"%s: %d\n\" wrd n)
+;;
+
+let dict = count_in_file \"texte.txt\"(* remplacer par Sys.argv.(1) pour le fichier en parametre *);;
+print_words dict;;
+flush stdout;;" eval="true" hide="true" $>
+\end{exercice}
+
+\subsubsection{Ensembles}
+Le module \refmodule{Set} permet de définir des structures de données représentant
+des ensembles de valeurs d'un même type. Il est alors possible d'obtenir le plus
+grand élément, le plus petit, de faire des unions, intersections, \dots.
+
+De même que pour les dictionnaires, on crée un module de gestion d'ensembles
+à l'aide d'un foncteur, \refmodule{Set.Make}. Le module passé en paramètre
+doit définir le type des éléments et la fonction d'ordre sur ces éléments.
+On utilise dans l'exemple ci-dessous le même module \code{MyKey} que dans
+l'exemple des dictionnaires, pour faire un module de manipulation d'ensembles
+d'entiers~:
+<$ocaml code="Random.self_init();;
+module IntSet = Set.Make(MyKey);;
+let rec f set i =
+    if i <= 100 then
+      f (IntSet.add (Random.int 4000) set) (i+1)
+    else
+      set;;
+let set = f IntSet.empty 1;;
+Printf.printf \"Plus petit element tiré: %d, plus grand: %d\n\"
+  (IntSet.min_elt set) (IntSet.max_elt set);;
+flush stdout;;
+let sum = IntSet.fold (+) set 0;; " eval="top"$>
+
+\begin{exercice}
+Ecrire un programme prenant deux fichiers et affichant la liste des mots en commun
+sur la sortie standard. On utilisera encore la fonction \code{words}
+de l'exercice \ref{exowords}.
+<$ocaml code="(** nous creons un module pour representer les ensemble de mots *)
+module Words = Set.Make
+  (struct type t = string let compare = Pervasives.compare end);;
+
+(** la fonction suivante cree l'ensemble des mots du fichier en parametre.
+  Pour chaque ligne, on recupere la liste des mots avec la fonction 'words'
+  et on ajoute chacun de ces mots a l'ensemble en cours de construction.
+  A la fin du fichier (exception End_of_file), on retourne l'ensemble
+  construit. *)
+let word_set_of_file file =
+  let ic = open_in file in
+  let rec read_lines set =
+    let line_opt =
+      try Some (input_line ic)
+      with End_of_file -> None
+    in
+    (* le rattrapage de l'exception de fin de fichier est confine
+       pour permettre la recursivite terminale *)
+    match line_opt with
+       None -> set
+     | Some line ->
+        let set = List.fold_left
+          (fun set wrd -> Words.add wrd set)
+            set (words line)
+        in
+        read_lines set
+  in
+  let set = read_lines Words.empty in
+  close_in ic;
+  set
+;;
+
+let print_words = Words.iter print_endline ;;
+
+let set1 = word_set_of_file \"texte.txt\" (* remplacer par Sys.argv.(1) *);;
+let set2 = word_set_of_file \"texte2.txt\" (* et Sys.argv.(2) *) ;;
+print_words (Words.inter set1 set2);;" eval="true" hide="true" $>
+\end{exercice}
+
+\subsubsection{Files d'attente}
+Le module \refmodule{Queue} implémente les files d'attente
+(ou FIFO, pour First In First Out). Le type \code{Queue.t}
+des files est donc paramétré par le type des éléments dans la file, de la même
+façon que le type \code{list}.
+Les modifications des files sont faites en place (par effet de bord).
+
+\subsubsection{Piles}
+Le module \refmodule{Stack} implémente les piles, là encore avec un
+type \code{Stack.t} paramétré par le type des éléments stockés dans la pile.
+Les modifications sont faites en place.
+
+\subsubsection{Remarques}
+On peut remarquer que certaines conventions de nommage sont respectées dans la
+bibliothèque standard. Ainsi, les modules définissant un type de données le nomment
+\code{t}, et les fonctions similaires partagent le même nom~:
+\begin{itemize}
+\item \code{String.length}, \code{Array.length}, \code{List.length}, etc.
+\item \code{List.fold\_left}, \code{Array.fold\_left}, \code{Hashtbl.fold}, etc.
+\end{itemize}
+L'ordre des arguments est aussi cohérent. Ces conventions facilitent l'utilisation d'un
+module à la place d'un autre pour changer de structure de données. Nous verrons un exemple
+dans la section sur les foncteurs (section \ref{foncteurs}).
+
+\subsection{Calcul}
+Le module \refmodule{Complex} définit un type de données pour les nombres complexes
+et des fonctions pour les manipuler.
+
+Différents modules permettent d'effectuer des calculs sur des entiers avec
+des représentations différentes du type \code{int}~:
+\begin{itemize}
+\item \refmodule{Int32}~: entiers 32 bits,
+\item \refmodule{Int64}~: entiers 64 bits,
+\item \refmodule{Nativeint}~: entiers 32 ou 64 bits, selon l'architecture,
+\item \refmodule{Big\_int}~: entiers de taille arbitraire.
+\end{itemize}
+
+\subsection{Entrées-sorties}
+
+Le module \refmodule{Printf} donne accès aux fonctions équivalentes aux fonctions
+\code{printf}, \code{sprintf}, \code{fprintf}, etc. du langage C. Par exemple~:
+<$ocaml code="let str = Printf.sprintf \"La somme de %d et %d est %d\" 1 2 (1+2);;
+let buffer = Buffer.create 256;;
+Printf.bprintf buffer \"Le produit de %d et %d donne %d\" 4 5 (4*5);;
+Buffer.contents buffer;;" eval="top"$>
+Le type des paramètres des fonctions du module \refmodule{Printf} est
+spécial, pour permettre le passage d'un nombre variable de paramètres en fonctions
+de la chaîne de {\em format} donnée~:
+<$ocaml code="Printf.printf;;" eval="top"$>
+
+Comme en C, des fonctions de lecture de valeurs de différents types depuis
+des chaînes sont disponibles, dans le module \refmodule{Scanf}. Dans l'exemple
+suivant, la fonction en paramètre de \code{sscanf} prend deux arguments entiers
+car la chaîne de format contient deux \code{\%d}. La cohérence de type
+entre la chaîne de format et la fonction données est réalisée par le compilateur~:
+<$ocaml code="let str = \"1 + 2\";;
+let sum = Scanf.sscanf str \"%d + %d\" (fun a b -> a + b) ;;" eval="top"$>
+
+Des fonctionnalités de formatage de sortie texte plus élaborées sont disponibles
+dans le module \refmodule{Format}~: définition de marges, retour à la ligne automatique
+en cas de dépassement de la largeur maximum imposée, manipulation de "boîtes"
+de pretty-print, \dots.
+
+Enfin, l'échange, le stockage et la lecture de données peuvent se faire
+en utilisant les fonctions génériques de sérialisation du module
+\refmodule{Marshal}. Les données ne doivent cependant pas contenir de
+fonctions.
+
+\subsection{Interface avec le système}
+
+\subsubsection{Analyse de la ligne de commande}
+Le module \refmodule{Arg} offre des facilités pour analyser la ligne de
+commande de lancement du programme.
+
+\begin{exercice} Ecrire un programme qui
+accepte deux entiers sur la ligne de commande ainsi qu'une option
+{\tt -prod}. Le programme affiche la somme des deux entiers, ou bien le
+produit si l'option {\tt -prod} est passée. On écrira le code dans un
+fichier {\tt fichier.ml} et on l'exécutera par exemple par la commande\\
+\sh{ocaml fichier.ml -prod 1 2}\\
+<$ocaml code="let prod = ref false;;
+let options =
+  [ \"-prod\", Arg.Set prod, \" calcul du produit au lieu de la somme\" ];;
+
+let read_options () =
+  let args = ref [] in
+  Arg.parse options
+    (fun s -> args := s :: !args)
+    (Printf.sprintf \"Utilisation: %s [-prod] a b\" Sys.argv.(0));
+  match !args with
+    [a;b] ->
+      begin
+        try (int_of_string a, int_of_string b)
+        with _ -> failwith \"Un argument n'est pas un entier\"
+      end
+  | _ -> failwith \"Il faut deux et seulement deux entiers en arguments\"
+;;
+
+let (a, b) =
+  try read_options ()
+  with Failure msg -> prerr_endline msg; exit 1;;
+
+let result = (if !prod then ( * ) else ( + )) a b;;
+print_int result;;" hide="true" $>
+\end{exercice}
+
+\subsubsection{Noms de fichiers}
+Le module \refmodule{Filename} contient des fonctions de manipulation des
+noms de fichiers, utiles notamment pour produire du code portable sur
+UNIX/Linux/Mac OS X et Windows en fournissant les fonctions
+\code{current\_dir\_name}, \code{parent\_dir\_name}, \code{concat},
+\code{dirname}, \dots. Par exemple~:
+<$ocaml code="let file = \"/home/foo/file.txt\";;
+let dir = Filename.dirname file;;
+let bname = Filename.basename file;;
+Filename.concat dir bname;;
+Filename.check_suffix file \"txt\";;" eval="top"$>
+
+\subsubsection{Gestion des exceptions}
+Le module \refmodule{Printexc} offre des fonctions de convenance pour traiter
+et afficher les exceptions, comme par exemple \code{Printexc.to\_string}
+qui retourne une chaîne pour représenter l'exception ou \code{Printexc.print} qui
+affiche une exception non rattrapée lors de l'application d'une fonction
+et relève l'exception~:
+<$ocaml code="int_of_string \"bouh!\";;
+Printexc.print int_of_string \"bouh!\";;" eval="errors"$>
+
+\subsubsection{Contrôle du ramasse-miettes}
+Le module \refmodule{Gc} permet de modifier le comportement du ramasse-miettes
+ou glaneur de cellules ({\em garbage collector} en anglais)
+et d'obtenir diverses statistiques sur la gestion
+de la mémoire. Il est également possible d'indiquer un traitement
+à effectuer lorsque la mémoire occupée par une valeur est libérée
+par le GC (lorsque cette valeur n'est plus accessible).
+
+\subsubsection{Interface avec le système d'exploitation}
+Le module \refmodule{Sys} offre des fonctions portables de communication
+avec le système d'exploitation concernant le système de fichiers,
+le répertoire courant, les signaux, certaines constantes comme la taille
+des mots, la longueur maximale d'une chaîne de caractères, etc.
+On trouve également dans ce module \code{Sys.argv} qui est le tableau
+des arguments de la ligne de commande. Comme en C, \code{Sys.argv.(0)}
+est le nom de la commande lancée.
+<$ocaml code="print_endline (Sys.getcwd());;
+Sys.chdir \"/tmp\";;
+print_endline (Sys.getcwd());;
+Sys.command \"ls | head -n 3\";;" eval="top"$>
+
+\subsection{Utilitaires}
+Quelques autres modules sont indiqués ici à titre informatif~:
+\begin{itemize}
+\item \refmodule{Digest} offre des fonctions de calcul de {\em hash} utilisant
+l'algorithme MD5~:
+<$ocaml code="let md5 = Digest.string (Marshal.to_string robert []);;
+Digest.to_hex md5;;" eval="top"$>
+\item \refmodule{Lazy} permet d'utiliser de l'évaluation paresseuse, en
+reportant l'évaluation d'une expression au moment où elle sera nécessaire~:
+<$ocaml code="let f a b () = print_endline \"evaluation!\"; a + b ;;
+let res = Lazy.lazy_from_fun (f 1 2);;
+Lazy.force res;;" eval="top"$>
+\item \refmodule{Lexing} et \refmodule{Parsing} servent lorsqu'on utilise
+les outils {\tt ocamllex} et {\tt ocamlyacc} (cf. section \ref{ocamlyacc}),
+\item \refmodule{Random} permet la génération pseudo-aléatoire de nombres~:
+<$ocaml code="Random.self_init()
+ (* initialisation en utilisant une source aleatoire de la machine *);;
+Random.int 10000 (* un nombre aleatoire entre 0 et 10000 *) ;;
+Random.int 10000 ;;
+Random.float 1000. ;;" eval="top"$>
+\end{itemize}
+
+\section{Autres bibliothèques de la distribution}
+La distribution contient encore d'autres bibliothèques, dont certaines disponibles
+selon le système d'exploitation et les bibliothèques installées~:
+\begin{itemize}
+\item\refmodule{Bigarray} permet la manipulation de tableaux de grande taille,
+\item\refmodule{Dbm} offre une interface pour les bases DBM (paires clé-valeur),
+\item\refmodule{Dynlink} permet le chargement dynamique de code, utile pour
+la création d'architecture à base de greffons ({\em plugins}),
+\item\refmodule{Graphics} offre des fonctions pour créer des graphiques simples,
+\item\code{Labltk} est l'interface avec la bibliothèque graphique Tcl/Tk, pour
+créer des interfaces utilisateur graphiques simples (par le module \refmodule{Tk}
+et les autres modules du répertoire {\tt labltk} de l'installation),
+\item\refmodule{Num} est une bibliothèque de calcul arithmétique en précision arbitraire,
+avec des modules comme \refmodule{Big\_int},
+\item\refmodule{Str} permet l'utilisation d'expressions régulières (recherche,
+substitution, \dots),
+\item\code{Threads} permet la création de programme multi-threads, grâce aux modules
+\refmodule{Thread}, \refmodule{Mutex}, \refmodule{Condition} et \refmodule{Event},
+\item\refmodule{Unix} offre l'accès aux fonctions systèmes UNIX.
+\end{itemize}
+
+Lorsqu'on utilise ces bibliothèques dans un programme OCaml, il faut ajouter ces
+bibliothèques sur la ligne de commande de création de l'exécutable, à la façon des
+bibliothèques {\tt libXXX.a} en C. Une bibliothèque {\tt B} dépendant d'une bibliothèque
+{\tt A} doit être placée après la bibliothèque dont elle dépend~:\\
+\sh{ocamlc -o mon\_exe a.cma b.cma module1.cmo ...}
+pour la compilation code-octet, ou \\
+\sh{ocamlopt -o mon\_exe a.cmxa b.cmxa module1.cmx ...}
+pour la compilation en code natif.
+
+\begin{exercice}
+Ecrire un programme qui affiche la liste des fichiers du répertoire {\tt "/tmp"},
+en utilisant la bibliothèque Unix. On compilera son programme par la commande\\
+\sh{ocamlc -o lstmp unix.cma lstmp.ml} (si votre programme est dans le fichier
+{\tt lstmp.ml}).
+<$ocaml code="let dir_handle = Unix.opendir \"/tmp\";;
+try
+  while true do
+    let f = Unix.readdir dir_handle in
+    print_endline f
+  done
+with End_of_file -> Unix.closedir dir_handle;;" eval="true" hide="true"$>
+\end{exercice}
+\begin{exercice}
+Ecrire un programme qui simule la commande {\tt printenv}, c'est-à-dire qui affiche
+la liste des variables d'environnement et leur contenu sous la forme {\tt VAR=VALUE}.
+Si des arguments sont passés sur la ligne de commande, seul le contenu des variables
+données est affiché. On utilisera la bibliothèque Unix.
+<$ocaml code="let print_one acc_err var =
+  try print_endline (Unix.getenv var); acc_err
+  with Not_found -> true;;
+
+match Array.length Sys.argv with
+  n when n <= 1 ->
+    (* affiche tout l'environnement *)
+    Array.iter print_endline (Unix.environment ());
+    exit 0
+| n ->
+    let args = Array.sub Sys.argv 1 (n - 1) in
+    let error = Array.fold_left print_one false args in
+    exit (if error then 1 else 0)
+;;" hide="true" $>
+On testera le programme avec les commandes suivantes.\\
+Affichage de tout l'environnement~: \sh{./myprintenv}\\
+Affichage des variables SHELL et TERM~: \sh{./myprintenv SHELL TERM}\\
+Test d'erreur~: \sh{./myprintenv FOO ; echo \$?}
+\end{exercice}
+
+\chapter{Programmation modulaire}
+\label{modules}
+La programmation modulaire est la séparation d'un programme en différents
+{\em modules}, définissant chacun des types de données et des fonctions
+pour traiter un aspect du programme. Par exemple, on peut définir
+un module pour le traitement des dates dans une application. Un module
+peut utiliser d'autres modules. Chaque module possède une implémentation
+et une interface.
+
+L'intérêt de la séparation interface/implémentation est la possibilité
+de faire évoluer l'implémentation d'un module (correction, optimisation) de façon
+transparente pour les modules utilisant ce module, tant que l'interface
+reste compatible.
+
+Une bibliothèque regroupe souvent plusieurs modules (comme la bibliothèque Labltk).
+
+Voyons comment sont définis et utilisés les modules en OCaml.
+
+\section{Modules simples}
+\subsection{Interface et implémentation}
+L'interface d'un module définit ce que le module offre, ce qui peut être utilisé
+depuis un autre module. L'implémentation du module doit définir les éléments
+présents dans l'interface mais peut en définir d'autres, qui ne seront alors visibles
+qu'à l'intérieur du module. L'interface d'un module est aussi appelée signature.
+
+En OCaml, l'interface d'un module \code{M} est définie dans un fichier {\tt m.mli}
+(ou {\tt M.mli})
+tandis que son implémentation est définie dans un fichier {\tt m.ml}
+(ou {\tt M.ml}). S'il n'y a
+pas de fichier d'interface correspondant à un fichier {\tt m.ml}, alors le compilateur
+considère que tout ce qui est défini dans l'implémentation est visible dans l'interface,
+avec les types inférés par le compilateur.
+
+On notera la relation entre le nom d'un module "racine" et le nom des fichiers définissant
+son interface et son implémentation.
+
+Voyons un exemple d'implémentation dans un fichier {\tt m.ml}~:
+<$ocaml code="type pair = int * int;;
+let x = 1;;
+let y = 2;;
+let make_pair x y = (x,y);;
+let first (x,_) = x;;
+let second (_,y) = y;;" eval="true"$>
+On peut définir une interface pour ce module dans le fichier {\tt m.mli}~:
+<$ocaml code="type pair;;
+val x : int;;
+val make_pair : int -> int -> pair;;
+val first : pair -> int;;
+val second : pair -> int;;"$>
+On a ici rendu le type \code{pair} abstrait, car sa définition est masquée. On a également
+masqué la valeur \code{y} mais exposé \code{x} en indiquant son type. Enfin, on a exposé
+les fonctions \code{first} et \code{second} prenant en paramètre une valeur du type abstrait.
+Le type \code{pair} étant abstrait, nous sommes obligés d'utiliser la fonction \code{make\_pair}
+pour créer des valeurs du type \code{pair}. Le passage d'un couple d'entiers \code{(1,2)}
+à la place d'une paire sera impossible en dehors du module car la définition du type étant
+masquée, \code{pair} et \code{int * int} sont considérés comme deux types non unifiables.
+
+Pour ne pas abstraire un type de donnée, il faut redonner la même définition
+dans l'interface.
+
+Lorsqu'un module ne contient que la définition de types de données, il n'est pas nécessaire
+d'avoir un fichier d'implémentation.
+
+\subsection{Compilation séparée}
+La compilation d'un module dont on a donné explicitement l'interface dans un fichier
+{\tt .mli} et l'implémentation dans un fichier {\tt .ml} commence par la compilation
+de l'interface~:\\
+\sh{ocamlc -c m.mli}
+Un fichier {\tt m.cmi} est produit, qui est l'interface compilée.
+Ensuite, l'implémentation est compilée à son tour~:\\
+\sh{ocamlc -c m.ml}\\
+Un fichier {\tt .cmo} de code-octet est produit.
+Dans le cas d'une compilation en code natif,
+\sh{ocamlopt -c m.ml}\\
+produit un fichier {\tt m.o} contenant le code natif compilé
+et un fichier {\tt m.cmx} contenant des informations supplémentaires nécessaires
+au compilateur OCaml lors de l'édition des liens.
+
+Si un fichier {\tt m.mli} existe mais pas de fichier {\tt m.cmi}, alors le compilateur
+signale une erreur indiquant que l'inteface doit être compilée d'abord, puisque
+le code de l'implémentation doit être compatible avec l'interface.
+
+S'il n'y a pas de fichier {\tt m.mli}, la compilation de {\tt m.ml} produit
+à la fois le fichier {\tt m.cmo} (ou les fichiers {\tt m.cmx} et {\tt m.o})
+et le fichier d'interface compilée
+{\tt m.cmi}. Dans ce cas, tous les éléments de {\tt m.ml} sont rendus visibles.
+
+\subsection{Sous-modules}
+Il est possible en OCaml de définir des modules à l'intérieur d'autres modules.
+Comme pour les valeurs et les types, les sous-modules peuvent apparaître ou
+non dans la signature du module qui les contient. Ils seront alors visibles ou
+non dans l'interface du module de plus haut niveau qui les contient.
+
+Voyons un exemple, en définissant un module \code{M} contenant un module {N}.
+Nous définissons l'interface dans le fichier {\tt m.mli}~:
+<$ocaml code="module N : sig
+  type t
+  val x : int
+  val foo : int -> t
+end;;" $>
+et l'implémentation dans le fichier {\tt m.ml}~:
+<$ocaml code="module N = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;" eval="true"$>
+
+Cependant, il est déjà possible de restreindre leur signature dans la partie
+implémentation, en imposant une contrainte de type dans l'implémentation~:
+<$ocaml code="module N : sig
+  type t
+  val x : t
+  val foo : t -> t
+ end = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;" eval="top"$>
+Ce type de contrainte permet de s'assurer par exemple que certains éléments
+du module \code{N} ne sont pas utilisés dans la suite du module conteneur
+\code{M}, puisque les restrictions dûes à l'interface de \code{M} ne s'appliquent
+que pour le code extérieur à \code{M}.
+
+\subsection{Types de modules}
+Pour les types de données, on peut noter~:
+<$ocaml code="val x : int * int;;
+val y : (int * int) * (int * int);;" $>
+ou bien définir un type et l'utiliser par la suite dans les annotations de types~:
+<$ocaml code="type t = int * int;;
+val x : t ;;
+val y : t * t;;"$>
+De façon analogue, il est possible de définir des types de modules, c'est-à-dire
+de donner un nom à une signature~:
+<$ocaml code="module type Mon_type = sig
+  type t
+  val x : t
+  val foo : t -> t
+end;;" eval="true"$>
+et utiliser ensuite ce type de module comme signature~:
+<$ocaml code="
+module N2 : Mon_type = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;" eval="top"$>
+
+En allant plus loin, on peut définir des vues différentes sur un même module, par exemple~:
+<$ocaml code="module type Vue1 = sig
+  type t
+  val create : int -> t
+end;;
+module type Vue2 = sig
+  type t
+  val read : t -> int
+end;;" eval="true"$>
+<$ocaml code="module Base = struct
+  type t = string
+  let create = string_of_int
+  let read = int_of_string
+end;;
+module M1 = (Base : Vue1 with type t = Base.t);;
+module M2 = (Base : Vue2 with type t = Base.t);;
+M2.read (M1.create 42);;
+M1.read (M1.create 63);;" eval="errors"$>
+
+\section{Foncteurs et réutilisabilité}
+\label{foncteurs}
+\cmp{Les modules paramétrés} ou {\em foncteurs} \cmp{sont aux modules ce que les fonctions
+sont aux valeurs.} Il s'agit de modules prenant en paramètre un module et renvoyant un
+autre module. Le module retourné peut à son tour être un foncteur, tout comme une fonction
+"à plusieurs arguments" est une fonction prenant un paramètre et retournant une autre
+fonction.
+
+Les foncteurs permettent d'écrire des modules s'abstrayant des structures de données
+manipulées, dont la représentation et les fonctions de manipulations sont fournies
+par un module en paramètre. Il est alors aisément possible d'appliquer un même algorithme
+à deux structures de données différentes, tant que le module en paramètre fournit
+les fonctions pour effectuer les opérations de base.
+
+Voyons la définition et l'utilisation de foncteurs au travers d'un exemple.
+Nous souhaitons modéliser un guichet auquel est associé une file d'attente.
+La file d'attente sera abstraite, permettant la mise en place de différentes
+politiques de priorité, de façon transparente pour le code de gestion du guichet.
+
+Nous commençons donc par définir le type de la file d'attente~:
+<$ocaml code="module type QueueType = sig
+  type 'a t
+  exception Empty
+  val create : unit -> 'a t
+  val pop : 'a t -> 'a
+  val push : 'a -> 'a t -> unit
+end;;" eval="true"$>
+Ensuite, nous définissons notre module de guichet, prenant en paramètre
+une file d'attente~:
+<$ocaml code="module Guichet = functor (Q : QueueType) -> struct
+  let create = Q.create
+  let add = Q.push
+  let handle_one f guichet =
+    try f (Q.pop guichet)
+    with Q.Empty -> ()
+  let rec handle_all f guichet =
+    match
+      try Some (Q.pop guichet)
+      with Q.Empty -> None
+    with
+    | None -> ()
+    | Some elt -> f elt; handle_all f guichet
+end;;" eval="true"$>
+Nous ne pouvons pas encore utiliser notre module, puisqu'il s'agit d'un foncteur~:
+<$ocaml code="Guichet.create();;" eval="errors"$>
+Nous allons simuler notre guichet en utilisant d'abord une file FIFO. La signature
+demandée pour le module en paramètre est un sous-ensemble de la signature du module
+\refmodule{Queue}, nous pouvons donc utiliser ce module comme modélisation de
+file d'attente. En appliquant ce module à notre foncteur, nous obtenons un
+guichet "premier arrivé, premier servi"~:
+<$ocaml code="module Guichet_FIFO = Guichet(Queue);;
+let fifo = Guichet_FIFO.create ();;
+List.iter (fun n -> Guichet_FIFO.add n fifo) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+Guichet_FIFO.handle_all (fun n -> print_int n; print_newline ()) fifo;;" eval="top"$>
+Nous pouvons également modéliser la file d'attente par une pile; dans ce cas,
+le premier servi est le dernier arrivé~:
+<$ocaml code="module Guichet_pile = Guichet(Stack);;
+let pile = Guichet_pile.create ();;
+List.iter (fun n -> Guichet_pile.add n pile) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+Guichet_pile.handle_all (fun n -> print_int n; print_newline ()) pile;;" eval="top"$>
+Nous pouvons même faire un foncteur permettant de construire et
+tester un module de guichet, car les deux codes de tests ci-dessus
+sont les mêmes à la différence du guichet~:
+<$ocaml code="module Test (Q : QueueType) = struct
+  module G = Guichet(Q)
+  let guichet = G.create ()
+  let _ = List.iter (fun n -> G.add n guichet) [ 1 ; 2 ; 3 ; 4 ; 5 ]
+  let _ = G.handle_all (fun n -> print_int n; print_newline ()) guichet
+end;;
+module Foo = Test(Queue);;
+module Foo = Test(Stack);;" eval="true"$>
+On remarque que le compilateur impose correctement que les fonctions passées en
+paramètres aux fonctions \code{handle\_one} et \code{handle\_all} prennent en paramètres
+des valeurs du type des valeurs de la file d'attente~:
+<$ocaml code="Guichet_FIFO.handle_one print_string fifo;;" eval="errors"$>
+On aurait pu masquer la représentation interne du guichet en utilisant une signature
+et en ajoutant un type de guichet~:
+<$ocaml code="module type GuichetAbstType = sig
+  type 'a t
+  val create : unit -> 'a t
+  val add : 'a -> 'a t -> unit
+  val handle_one : ('a -> unit) -> 'a t -> unit
+  val handle_all : ('a -> 'b) -> 'a t -> unit
+end;;" eval="true" $>
+<$ocaml code="module GuichetAbst (Q : QueueType) : GuichetAbstType = struct
+  type 'a t = 'a Q.t
+  include Guichet(Q)
+end;;
+module Foo=GuichetAbst(Stack);;"eval="top"$>
+On ne peut plus maintenant accéder à la représentation de la file depuis l'extérieur de
+la modélisation du guichet~:
+<$ocaml code="Stack.pop (Foo.create ());;" eval="errors"$>
+
+\section{Déclarations locales de modules, modules anonymes}
+On peut déclarer localement un module, c'est-à-dire le construire en réduisant sa visibilité
+à une expression~:
+<$ocaml code="let module Bar = struct let x = 1 end in Bar.x + 1;;" eval="top"$>
+Le module \code{Bar} n'est accessible que dans l'expression située après le \code{in}~:
+<$ocaml code="Bar.x;;" eval="errors"$>
+
+Il est également possible de construire des modules anonymes (sans nom). C'est
+souvent le cas lors de l'application d'un foncteur prenant un petit module en
+paramètre. Dans ce cas, on utilise directement la syntaxe \code{struct ... end}
+plutôt que la syntaxe \code{module M = ...} et l'utilisation de \code{M} dans
+la suite~:
+<$ocaml code="module IntSet =
+  Set.Make (struct type t = int let compare = Pervasives.compare end);;"
+  eval="top"$>
+
+\chapter{Environnement de développement}
+
+\section{Les outils de la distribution}
+
+\subsection{Interprète}
+L'interprète ({\em toplevel}) {\tt ocaml} évalue au vol le code OCaml qui lui est
+passé. Il peut interpréter des fichiers passés sur la ligne de commande ou bien
+se comporter comme un shell et interpréter les phrases que l'utilisateur saisit.
+\seemanual{\urldoctoplevelraw}
+
+\subsection{Compilation}
+La distribution d'OCaml fournit différents outils destinés à la compilation, listés
+dans le tableau suivant~:
+\begin{center}
+\begin{tabular}{|l|l|}\hline
+{\tt ocamlc}, {\tt ocamlc.opt} & compilateur vers du code-octet, en version
+code-octet ou en version native \\ \hline
+{\tt ocamlopt}, {\tt ocamlopt.opt} & compilateur vers du code natif, en version
+code-octet ou en version native \\ \hline
+{\tt ocamlmklib} & génération de bibliothèques contenant du code C et du code OCaml \\ \hline
+{\tt ocamlbuild} & outil de compilation automatisée (gérant notamment les dépendances) \\
+& Documentation: \myurl{http://brion.inria.fr/gallium/index.php/Ocamlbuild} \\ \hline
+{\tt ocamlcp} & frontal à ocamlc permettant d'instrumenter le code pour utiliser le profileur \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Débogage}
+La distribution OCaml fournit un débogueur, {\tt ocamldebug}, permettant de suivre
+l'exécution d'un programme pas à pas, de revenir en arrière, d'inspecter des valeurs,
+mettre des points d'arrêt. Le programme doit être compilé en code-octet avec l'option
+{\tt -g}. \seemanual{\urlocamldebug}
+
+La distribution inclut également un profileur, {\tt ocamlprof}, capable d'afficher
+le nombre de passages à chaque point d'un programme compilé avec {\tt ocamlcp}.
+\seemanual{\urlocamlprof}
+
+On pourra également utiliser l'outil GNU {\tt gprof} par exemple pour afficher le temps
+passé dans chaque fonction.
+
+\subsection{Pré-processeurs}
+
+Les outils de pre-processing permettent de définir des extensions de syntaxe
+du langage afin par exemple de simplifier l'écriture de certaines constructions
+répétitives, de générer automatiquement du code pour chaque déclaration
+de type (comme des fonctions de lecture/écriture), \dots.
+
+Deux outils de pre-processing sont disponibles pour OCaml~:
+\begin{itemize}
+\item Camlp4~: inclus dans la distribution OCaml,
+\item Camlp5~: \urlcamlpp.
+\end{itemize}
+
+\subsection{Documentation}
+L'outil {\tt ocamldoc} (ou {\tt ocamldoc.opt} pour la version en code natif)
+fourni est l'équivalent de {\tt javadoc} ou {\tt doxygen} pour OCaml.
+Il permet de générer une documentation de référence en utilisant des commentaires formattés.
+
+Ces commentaires sont des commentaires OCaml habituels, sauf qu'ils commencent par
+{\tt (**} au lieu de {\tt (*}. Ils se terminent comme les commentaires normaux par {\tt *)}.
+Le principe général est de placer un commentaire spécial juste au-dessus ou en-dessous
+de l'élément (valeur, type, module, \dots) commenté.
+
+OCamldoc permet de générer des documentations aux formats \LaTeX, HTML, Texinfo, pages man.
+Il est également possible de définir son propre générateur et d'ajouter des éléments
+de syntaxe pour générer des documentations spécialisées.
+
+\seemanual{\urlocamldoc}
+
+\subsection{Autres outils}
+\label{ocamlyacc}
+Comme {\tt yacc} et {\tt lex} pour C, les outils {\tt ocamlyacc} et {\tt ocamllex}
+sont des générateurs d'analyseurs respectivement syntaxiques ({\em parsers}) et
+lexicaux ({\em lexers}).
+Le manuel OCaml donne un exemple concret de leur utilisation.\seemanual{\urlocamlyacc}
+
+L'outil {\tt ocamldep} analyse des fichiers sources OCaml et génère leurs dépendances
+dans un format compris par l'outil Make. Cela permet de ne pas avoir à indiquer explicitement
+les dépendances pour la compilation séparée des modules à l'aide d'un Makefile.
+\seemanual{\urlocamldep}
+
+Enfin, {\tt ocamlbrowser} permet la navigation dans les interfaces et implémentations,
+par exemple pour trouver facilement le type d'une fonction.
+\seemanual{\urlocamlbrowser}
+
+\section{Editeurs, environnements, \dots}
+
+Avec le temps, plusieurs solutions d'édition de code OCaml ont vu le jour~:
+\begin{itemize}
+\item le mode {\bf Emacs} standard~: la distribution OCaml fournit un mode Emacs offrant la coloration
+syntaxique, l'indentation et l'accès aux commandes de compilation, l'affichage des annotations
+de type, \dots,
+
+\item {\bf Tuareg} est un autre mode Emacs~: \myurl{http://www-rocq.inria.fr/~acohen/tuareg/},
+
+\item {\bf OMLet} est un mode pour l'éditeur
+Vim~:
+%BEGIN LATEX
+\myurl{http://www.lix.polytechnique.fr/~dbaelde/productions/omlet.html},
+%END LATEX
+%HEVEA\myurl{http://www.lix.polytechnique.fr/\~{}dbaelde/productions/omlet.html},
+
+\item {\bf Chamo} est une sorte d'Emacs développé en OCaml et inclus dans Cameleon2,
+un environnement de développement pour
+OCaml~: \myurl{http://home.gna.org/cameleon/chamo.fr.html},
+
+\item {\bf OCaIDE} est un greffon pour Eclipse~: \myurl{http://ocaml.eclipse.ortsa.com:8480/ocaide/},
+
+\item un greffon pour {\bf Netbeans IDE} est également disponible~:
+\myurl{http://ocamlplugin.loki-a.com/}.
+\end{itemize}
+
+L'outil Findlib commence à s'imposer comme outil standard pour la gestion des bibliothèques
+installées~: \myurl{http://projects.camlcity.org/projects/findlib.html/}.
+
+D'autres outils sont listés dans la bosse Caml, dans le thème "Software development" et
+ses sous-thèmes~:\\ \myurl{http://caml.inria.fr/cgi-bin/hump.en.cgi?sort=0&browse=52}.
+
+
+\chapter{Conclusion}
+
+\section{Conclusion}
+Au cours de cette formation, nous avons vu les concepts et constructions principales
+du langage Objective Caml, ainsi qu'une partie des bibliothèques fournies en standard.
+
+Ce langage est bâti sur des bases théoriques solides avancées et propose plusieurs
+paradigmes de programmation (fonctionnelle, impérative, objets).
+Il possède un grand pouvoir d'expressivité, notamment grâce au polymorphisme
+et aux fonctions de $1^{er}$ ordre.
+
+\cmp{Les types structurés et les types abstraits permettent d'aborder les
+problèmes d'algorithmique et leurs structures de données complexes tout en
+s'abstrayant des problèmes de représentation mémoire et d'allocation.\\
+Le modèle théorique fonctionnel sous-jacent au langage fournit une introduction
+précise aux notions d'évaluation et de typage dont << l'honnête programmeur >>
+se doit d'être instruit.\\
+Les différents modèles de programmation peuvent être abordés indépendamment les
+uns des autres~: de la structuration modulaire ou par objets des logiciels à la
+programmation système de bas niveau, il est peu de domaines où OCaml ne soit
+pas pertinent.\\
+Son adéquation avec la programmation symbolique en fait un excellent support
+pour des enseignements théoriques comme la compilation ou l'intelligence
+artificielle.
+}
+
+\cmp{Un des premiers sujets de satisfaction du développement en OCaml est son confort
+d'utilisation. Le compilateur se charge rapidement et son inférence statique de
+types ne laisse rien échapper. D'autres analyses statiques du code donnent de
+précieux indices d'anomalies sinon d'erreurs pour le programmeur~: les filtrages
+incomplets sont signalés, l'application partielle d'une fonction dans une
+séquence est détectée, etc. À ce premier sujet de satisfaction s'en ajoute
+un second~: le compilateur engendre très rapidement un code efficace.}
+
+Plusieurs aspects du langage n'ont pas été abordés~:
+\begin{itemize}
+\item les classes et objets,
+\item les modules récursifs,
+\item les types variants polymorphes.
+\end{itemize}
+
+Nous n'avons pas abordé non plus certains aspects techniques~:
+\begin{itemize}
+\item les possibilités d'interface avec les langages C et Fortran,
+permettant la réalisation de {\em bindings} avec les bibliothèques
+développées dans ces langages (Gtk, ...),
+\item la gestion de la mémoire.
+\end{itemize}
+
+Ces aspects pourraient être dévéloppés dans des formations ultérieures.
+
+\section{Pour aller plus loin}
+\label{goingfurther}
+En plus des documentations indiquées dans la section \ref{documentations},
+on pourra consulter les références suivantes pour continuer son apprentissage
+du langage et des concepts, dans différents domaines d'application~:
+\begin{itemize}
+\item Le livre "Le langage Caml" de Pierre Weis et Xavier Leroy est un cours de
+programmation utilisant Caml~:
+%BEGIN LATEX
+\myurl{http://pauillac.inria.fr/~xleroy/bibrefs/Weis-Leroy-Caml.html}
+%END LATEX
+%HEVEA\myurl{http://pauillac.inria.fr/\~{}xleroy/bibrefs/Weis-Leroy-Caml.html}
+\item Le livre "Développement d'applications avec Objective Caml" dont est inspirée
+cette formation présente tous les aspects du langage et les biblitohèques fournies,
+à l'aide de nombreux exemples dans de nombreux domaines (communication, concurrence,
+graphisme, interfaces utilisateurs, \dots)~:\\
+\urldoctopleveldaocaml
+
+\item "Programmation système avec Objective Caml" est un cours de programmation
+système dans lequel OCaml remplace le langage C utilisé traditionnellement pour ce
+genre de cours~:\\
+\myurl{http://ocamlunix.forge.ocamlcore.org/}
+
+\item Les notes de cours "Using, Understanding, and Unraveling
+The OCaml Language" introduisent les concepts théoriques sur lesquels
+est basé OCaml avec des exemples pratiques~:\\
+\myurl{http://caml.inria.fr/pub/docs/u3-ocaml/index.html}
+
+\item Le livre "OCaml for Scientists" introduit la programmation en Objective Caml
+sous l'angle de ses utilisations pour le calcul scientifique; cet ouvrage est
+disponible dans les centres de documentation des centres de Rocquencourt et Grenoble.
+
+\item Une liste de livres sur OCaml et/ou la programmation fonctionnelle~:
+\myurl{http://caml.inria.fr/about/books.fr.html}
+\end{itemize}
+
+
+
+
+
+
