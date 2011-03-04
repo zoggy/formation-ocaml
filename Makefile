@@ -17,7 +17,8 @@ MKDIR=mkdir -p
 
 GEN_TEX=gen_tex.x
 
-all: $(PDF)
+pdf: $(PDF)
+all: pdf html
 html: $(HTML)
 
 $(PDF): $(SKEL_TEX) $(TEX)
@@ -58,3 +59,8 @@ mon_module.cmo: mon_module.ml
 
 mon_module2.cmo: mon_module2.ml
 	$(OCAMLC) -c $<
+
+# install web page
+installweb: all
+	scp -r web/index.html web/style.css html formation_ocaml.pdf \
+	zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
