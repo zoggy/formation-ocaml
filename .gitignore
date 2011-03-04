@@ -1,0 +1,13 @@
+*.cm*
+*.o
+*.a
+*.x
+*.pdf
+*.toc
+*.htoc
+*aux
+*log
+*annot
+html/
+formation.tex
+.chamo*
