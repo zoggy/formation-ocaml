@@ -1,0 +1,7 @@
+Requirements:
+- compiled sources of ocaml >= 3.11
+- highlight
+- ocaml-pcre
+- xml-light
+
+ 
