@@ -3325,7 +3325,7 @@ Avec le temps, plusieurs solutions d'édition de code OCaml ont vu le jour~:
 syntaxique, l'indentation et l'accès aux commandes de compilation, l'affichage des annotations
 de type, \dots,
 
-\item {\bf Tuareg} est un autre mode Emacs~: \myurl{http://www-rocq.inria.fr/~acohen/tuareg/},
+\item {\bf Tuareg} est un autre mode Emacs~: \myurl{https://forge.ocamlcore.org/projects/tuareg/},
 
 \item {\bf OMLet} est un mode pour l'éditeur
 Vim~:
