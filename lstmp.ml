@@ -1,3 +1,16 @@
+(*********************************************************************************)
+(*  "Introduction au langage OCaml" par Maxence Guesdon est mis                  *)
+(*  à disposition selon les termes de la licence Creative Commons                *)
+(*   Paternité                                                                   *)
+(*   Pas d'Utilisation Commerciale                                               *)
+(*   Partage des Conditions Initiales à l'Identique                              *)
+(*   2.0 France.                                                                 *)
+(*                                                                               *)
+(*  Contact: Maxence.Guesdon@inria.fr                                            *)
+(*                                                                               *)
+(*                                                                               *)
+(*********************************************************************************)
+
 let dir_handle = Unix.opendir "/tmp";;
 
 try

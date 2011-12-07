@@ -1,3 +1,16 @@
+#################################################################################
+#  "Introduction au langage OCaml" par Maxence Guesdon est mis                  #
+#  à disposition selon les termes de la licence Creative Commons                #
+#   Paternité                                                                   #
+#   Pas d'Utilisation Commerciale                                               #
+#   Partage des Conditions Initiales à l'Identique                              #
+#   2.0 France.                                                                 #
+#                                                                               #
+#  Contact: Maxence.Guesdon@inria.fr                                            #
+#                                                                               #
+#                                                                               #
+#################################################################################
+
 LATEX=pdflatex
 BIBTEX=bibtex
 HEVEA=hevea
@@ -53,6 +66,19 @@ $(GEN_TEX): gen_tex.ml mon_module.cmo mon_module2.cmo
 clean:
 	$(RM) *.cm* $(GEN_TEX) *.annot *.o
 	$(RM) $(TEX) $(PDF) $(HTML) *.html *.htoc *.toc *.log *.haux *.aux
+
+# headers :
+###########
+HEADFILES= Makefile *.ml *.tex *.xml
+
+headers: dummy
+	echo $(HEADFILES)
+	headache -h header -c .headache_config `ls $(HEADFILES) `
+
+noheaders: dummy
+	headache -r -c .headache_config `ls $(HEADFILES) `
+
+dummy:
 
 mon_module.cmo: mon_module.ml
 	$(OCAMLC) -c $<

@@ -1,3 +1,16 @@
+(*********************************************************************************)
+(*  "Introduction au langage OCaml" par Maxence Guesdon est mis                  *)
+(*  à disposition selon les termes de la licence Creative Commons                *)
+(*   Paternité                                                                   *)
+(*   Pas d'Utilisation Commerciale                                               *)
+(*   Partage des Conditions Initiales à l'Identique                              *)
+(*   2.0 France.                                                                 *)
+(*                                                                               *)
+(*  Contact: Maxence.Guesdon@inria.fr                                            *)
+(*                                                                               *)
+(*                                                                               *)
+(*********************************************************************************)
+
 (** Read the xml file for oug formation and generate corresponding
    latex and additional files. *)
 
@@ -199,7 +212,7 @@ let doc_of_file file =
 
 let latex_highlight lang options s =
   let com = Printf.sprintf
-    "highlight -f --latex %s %s"
+    "highlight -f -O latex %s %s"
       (match lang with
          "" -> "--force"
        | _ -> Printf.sprintf "--syntax=%s" lang
@@ -307,7 +320,6 @@ let replace doc =
   | Xml.PCData _ -> assert false
   in
   let replace matched =
-    prerr_endline ("replace "^matched);
     let len = String.length matched in
     matched.[0] <- ' ';
     matched.[1] <- '<';
@@ -316,7 +328,6 @@ let replace doc =
       try Xml.parse_string matched
       with Xml.Error e -> failwith (Printf.sprintf "%s:\n%s" (Xml.error e) matched)
     in
-    prerr_endline "replaced!" ;
     let t = xml_to_t xml in
     string_of_t t
   in
@@ -325,6 +336,7 @@ let replace doc =
   let iflags = Pcre.cflags [`MULTILINE] in
   let rex = Pcre.regexp ~iflags "(*ANYCRLF)<\\$([^\\$])*\\$>" in
   Pcre.substitute ~rex ~subst: replace doc
+;;
 
 let usage = Printf.sprintf "Usage: %s <xml file>" Sys.argv.(0);;
 

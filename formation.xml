@@ -1,3 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  "Introduction au langage OCaml" par Maxence Guesdon est mis                  %
+%  à disposition selon les termes de la licence Creative Commons                %
+%   Paternité                                                                   %
+%   Pas d'Utilisation Commerciale                                               %
+%   Partage des Conditions Initiales à l'Identique                              %
+%   2.0 France.                                                                 %
+%                                                                               %
+%  Contact: Maxence.Guesdon@inria.fr                                            %
+%                                                                               %
+%                                                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section*{Préambule}
 Cette formation est une introduction au langage Objective Caml, aussi appelé
 OCaml. Une partie du plan de cette formation est basée sur le plan du livre
