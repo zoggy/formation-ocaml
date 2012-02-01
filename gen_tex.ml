@@ -153,6 +153,8 @@ let stdout_file = Filename.temp_file "gentex" "txt";;
 let original_stderr = Unix.dup Unix.stderr;;
 let original_stdout = Unix.dup Unix.stdout;;
 
+let log_oc = open_out "log";;
+
 let eval_ocaml_phrase ?(exc=false) phrase =
   try
     let lexbuf = Lexing.from_string phrase in
@@ -167,11 +169,15 @@ let eval_ocaml_phrase ?(exc=false) phrase =
     in
     Unix.dup2 fd_out Unix.stdout;
     Unix.close fd_out;
+    Printf.fprintf log_oc "executing phrase: %s\n" phrase;
     let phrase = !Toploop.parse_toplevel_phrase lexbuf in
     ignore(Toploop.execute_phrase true Format.str_formatter phrase);
     let exec_output = Format.flush_str_formatter () in
     let err = string_of_file stderr_file in
     let out = string_of_file stdout_file in
+    Printf.fprintf log_oc "exec_output: %s\n" exec_output;
+    Printf.fprintf log_oc "err: %s\n" err;
+    Printf.fprintf log_oc "out: %s\n" out;
     (
      match err with
        "" -> ()
@@ -214,11 +220,12 @@ let latex_highlight lang options s =
   let com = Printf.sprintf
     "highlight -f -O latex %s %s"
       (match lang with
-         "" -> "--force"
+         "" -> "--syntax=txt"
        | _ -> Printf.sprintf "--syntax=%s" lang
       )
       (String.concat " " options)
   in
+  Printf.fprintf log_oc "executing command: %s\n" com;
   let (ic,oc) = Unix.open_process com in
   output_string oc s;
   close_out oc;
@@ -351,7 +358,8 @@ let main () =
   try
     let doc = replace doc in
     restore_fd ();
-    output_string stdout doc
+    output_string stdout doc;
+    close_out log_oc;
   with
     e ->
       restore_fd ();
