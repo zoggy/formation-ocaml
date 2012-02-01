@@ -277,7 +277,7 @@ let string_of_ocaml =
     in
     let s_code = string_of_code (*(latex_highlight_ocaml options *)eval in
     Printf.sprintf "%s%s%s"
-      (if code.hide then (incr code_id; Printf.sprintf "\\begin{answer}{code%d}\n" !code_id) else "")
+      (if code.hide then (incr code_id; Printf.sprintf "\\begin{answer}{code%d}" !code_id) else "")
       s_code
       (if code.hide then "\\end{answer}\n" else "")
 ;;

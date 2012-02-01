@@ -47,12 +47,13 @@ $(HTML): $(SKEL_TEX) $(TEX)
 	$(HEVEA) $<
 	$(HACHA) -tocbis $@
 	rpl "<BODY >" "<BODY><CENTER><DIV class=\"contents\">" *.html
-	rpl "</BODY>" "</DIV></CENTER><BODY>" *.html
+	rpl -q "<BR><BR>" "" *.html
+	rpl "</BODY>" "</DIV></CENTER><script type=\"text/javascript\" src=\"jquery.js\"></script><script type=\"text/javascript\" src=\"bootstrap-collapse.js\"></script><BODY>" *.html
 	$(MKDIR) html
 	mv *.html html/
 	cp images/warning.png images/expand_collapse.png images/draft.png images/*.gif *.gif html/
 	cp ocaml.png fond.png html/
-	cp style.css html/
+	cp bootstrap-collapse.js jquery.js style.css html/
 
 CAMLSRCDIR=/home/guesdon/devel/ocaml-3.12
 $(GEN_TEX): gen_tex.ml mon_module.cmo mon_module2.cmo

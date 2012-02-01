@@ -30,6 +30,7 @@
 \date{29 janvier 2010}
 \author{Maxence Guesdon}
 
+%\loadcssfile{bootstrap.css}
 \loadcssfile{style.css}
 %BEGIN LATEX
 \newcommand{\myurl}[1]{\small{\url{#1}}}
@@ -76,7 +77,7 @@
 & \\ \includegraphics[width=1cm]{images/interfacetip.png} & \vspace{-0.7cm}}{\\ & \\ \hline\end{tabular}\end{center}}
 
 \newenvironment{answer}[1]{
-%HEVEA\begin{rawhtml}<span class="code_expand" onclick="if(document.getElementById('\end{rawhtml}#1\begin{rawhtml}').style.display=='none') {document.getElementById('\end{rawhtml}#1\begin{rawhtml}').style.display='block';} else {document.getElementById('\end{rawhtml}#1\begin{rawhtml}').style.display='none';}"><img src="expand_collapse.png" alt="+/-"/></span><div id="\end{rawhtml}#1\begin{rawhtml}" class="codeblock">\end{rawhtml}
+%HEVEA\begin{rawhtml}<button href="#\end{rawhtml}#1\begin{rawhtml}" data-toggle="collapse" class="btn btn-primary">Réponse</button><div id="\end{rawhtml}#1\begin{rawhtml}" class="collapse codeblock">\end{rawhtml}
 }{
 %HEVEA\begin{rawhtml}</div>\end{rawhtml}
 }
@@ -95,13 +96,13 @@
 }
 
 \newcommand{\startwarning}{
-%HEVEA\begin{rawhtml}<div class="warning"><table><tr valign="top"><td><img src="warning.png" title="Attention!"/></td><td>\end{rawhtml}\
+%HEVEA\begin{rawhtml}<div class="alert alert-block alert-error"><h4 class="alert-heading">Attention</h4>\end{rawhtml}\
 %BEGIN LATEX
 \begin{warning}
 %END LATEX
 }
 \newcommand{\stopwarning}{
-%HEVEA\begin{rawhtml}</td></tr></table></div>\end{rawhtml}\
+%HEVEA\begin{rawhtml}</div>\end{rawhtml}\
 %BEGIN LATEX
 \end{warning}
 %END LATEX
@@ -119,7 +120,13 @@
 \newcommand{\code}[1]{{\tt\bf\textcolor[rgb]{0.6,0.1,0.6}{#1}}}
 \newcommand{\centercode}[1]{\\ \begin{minipage}{15cm}\code{#1}\end{minipage}}
 \newcommand{\com}[1]{{\tt\bf\textcolor[rgb]{0.1,0.1,0.1}{#1}}}
-\newcommand{\shell}[1]{\com{\$ #1}\\}
+%\newcommand{\shell}[1]{\com{\$ #1}\\}
+\newcommand{\shell}[1]{\
+%HEVEA\begin{rawhtml}<div class="sh">$ \end{rawhtml}#1\begin{rawhtml}</div>\end{rawhtml} \
+%BEGIN LATEX \
+\com{\$ #1} \\ \
+%END LATEX \
+}
 
 % highlight
 %\newcommand{\hlstd}[1]{\textcolor[rgb]{0.17,0.48,0.2}{#1}}
