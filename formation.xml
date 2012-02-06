@@ -622,6 +622,12 @@ let foo =
 " eval="top"$>
 Des conseils sur l'indentation sont donnés à l'adresse \urlindentconseils.
 
+\startwarning
+Une déclaration locale (\code{let ... = ... in ...})
+ne peut englober une déclaration globale (\code{let ... = ... ;;})~:
+<$ocaml code="let x = 1 in let y = 2;;" eval="errors"$>
+\stopwarning
+
 \subsubsection{Déclaration simultanées}
 Il est possible de déclarer simultanément plusieurs valeurs globales~:
 \centercode{let {\em <ident$_1$>} = {\em <expression$_1$>} \\
@@ -750,6 +756,19 @@ let add1 = add 1 (* application \"partielle\" de add pour obtenir une fonction d
 add1 41 ;;
 " eval="errors"$>
 
+\startwarning
+Les parenthèses ne peuvent être mises n'importe où~:
+<$ocaml code="let f x y = x + y ;;
+f 1 2 ;;
+(f 1) 2 ;;
+(f 1 2) ;;
+((f 1) 2) ;;
+f ( 1 ) 2 ;;
+f 1 ( 1 + 1);;
+f ( 0 + 1 ) ( 2 + 0 );;
+f (1 2);;" eval="errors"$>
+\stopwarning
+
 \subsubsection{Fermetures}
 Considérons l'exemple suivant~:
 <$ocaml code="
@@ -864,6 +883,7 @@ string_of_int ;;
 List.map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
 " eval="top"$>
 
+
 \subsubsection{Contrainte de type}
 Il est possible de forcer le type des valeurs, ce qui est utile dans plusieurs cas~:
 \begin{itemize}
@@ -890,6 +910,13 @@ mon_map square [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
 mon_map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
 mon_map int_of_string [ \"1\" ; \"2\" ; \"3\" ; \"4\" ; \"5\" ; \"6\" ];;
 " eval="errors"$>
+
+
+\startwarning
+Il n'est pas possible de forcer le type d'un identifiant à être polymorphe
+là où il ne l'est pas~:
+<$ocaml code="let (f : 'a -> 'a -> int) = fun x y -> x + 1;;" eval="errors"$>
+\stopwarning
 
 \subsection{Exercices}
 On pourra s'aider de la documentation du module \refmodule{List}.
