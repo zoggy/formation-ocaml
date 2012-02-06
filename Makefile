@@ -49,6 +49,7 @@ $(HTML): $(SKEL_TEX) $(TEX)
 	rpl "<BODY >" "<BODY><CENTER><DIV class=\"contents\">" *.html
 	rpl -q "<BR><BR>" "" *.html
 	rpl "</BODY>" "</DIV></CENTER><script type=\"text/javascript\" src=\"jquery.js\"></script><script type=\"text/javascript\" src=\"bootstrap-collapse.js\"></script><BODY>" *.html
+	rpl "&#X2019;" "'" *.html
 	$(MKDIR) html
 	mv *.html html/
 	cp images/warning.png images/expand_collapse.png images/draft.png images/*.gif *.gif html/
