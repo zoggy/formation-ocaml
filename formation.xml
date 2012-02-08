@@ -264,10 +264,10 @@ Les documentations de base pour développer en OCaml sont les suivantes~:
 et chaque module de la bibliothèque standard possède sa propre page de manuel. Ainsi,
 on accédera à la page {\tt man} du module {\tt List} par la commande\\
 \shell{man List}
-\item La documentation de référence des bibliothèques OCaml installées sous AFS a été générée
-de façon uniforme et permet un accès rapide et regroupé à plusieurs bibliothèques en plus
-de la bibliothèque standard~: \\
-\urlafsdoc
+%\item La documentation de référence des bibliothèques OCaml installées sous AFS a été générée
+%de façon uniforme et permet un accès rapide et regroupé à plusieurs bibliothèques en plus
+%de la bibliothèque standard~: \\
+%\urlafsdoc
 \item Pour les utilisateurs de Firefox, la Caml Side Bar\\
 (\urlcamlsidebar)\\
 offre un accès rapide aux documentations, au manuel et à la liste des contributions, ainsi que
@@ -2469,7 +2469,7 @@ La façon de préciser la valeur de l'argument lors de l'application de \code{f} n
 pas~:
 <$ocaml code="f 4;;
 f ~x: 2 4;;" eval="top"$>
-Ecrire une fonction \code{remove\_doubles} prenant en paramètre une liste
+Ecrire une fonction \code{list\_remove\_doubles} prenant en paramètre une liste
 et retournant la même liste mais dans laquelle chaque élément apparaît au plus
 une fois. La fonction acceptera un paramètre optionnel comme fonction de comparaison
 pour savoir si deux éléments sont identiques. Par défaut ce paramètre sera
@@ -2575,7 +2575,7 @@ Cet aspect sera exposé dans la partie sur les modules dans le chapitre \ref{modu
 \begin{exercice}
 \label{exowordcount}
 Ecrire un programme prenant en paramètre un nom de fichier et comptant le nombre
-d'occurences de chaque mot apparaissant dans le fichier. A la fin, le programme
+d'occurrences de chaque mot apparaissant dans le fichier. A la fin, le programme
 affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
 \code{words} définie dans l'exercice \ref{exowords}.
 <$ocaml code="(** la fonction suivante incremente le compteur du mot en parametre.
@@ -3378,10 +3378,19 @@ Vim~:
 un environnement de développement pour
 OCaml~: \myurl{http://home.gna.org/cameleon/chamo.fr.html},
 
+\item {\bf OCaml editor} est un éditeur de code OCaml:
+\myurl{http://ocamleditor.forge.ocamlcore.org/},
+
+\item {\bf ODT} est un ensemble de greffons pour Eclipse:
+\myurl{http://ocamldt.free.fr/},
+
 \item {\bf OCaIDE} est un greffon pour Eclipse~: \myurl{http://ocaml.eclipse.ortsa.com:8480/ocaide/},
 
 \item un greffon pour {\bf Netbeans IDE} est également disponible~:
-\myurl{http://ocamlplugin.loki-a.com/}.
+\myurl{http://ocamlplugin.loki-a.com/},
+
+\item une {\bf application web} pour essayer OCaml en ligne~:
+\myurl{http://try.ocamlpro.com}.
 \end{itemize}
 
 L'outil Findlib commence à s'imposer comme outil standard pour la gestion des bibliothèques
