@@ -3472,7 +3472,8 @@ graphisme, interfaces utilisateurs, \dots)~:\\
 \item "Programmation système avec Objective Caml" est un cours de programmation
 système dans lequel OCaml remplace le langage C utilisé traditionnellement pour ce
 genre de cours~:\\
-\myurl{http://ocamlunix.forge.ocamlcore.org/}
+en anglais~: \myurl{http://ocamlunix.forge.ocamlcore.org/}\\
+et en français~: \myurl{http://cristal.inria.fr/\~{}remy/poly/system/camlunix/index.html}
 
 \item Les notes de cours "Using, Understanding, and Unraveling
 The OCaml Language" introduisent les concepts théoriques sur lesquels
