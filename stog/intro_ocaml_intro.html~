@@ -1,0 +1,330 @@
+<chapter id="introduction" title="Introduction">
+<p>
+<cmp>Objective Caml est un langage récent qui se place dans
+l'histoire des langages de programmation comme un lointain descendant de
+LISP ayant su tirer les enseignements de ses cousins en incorporant les
+principales caractéristiques des autres langages. Il est développé à l'INRIA
+et s'appuie sur une longue expérience de conception de langages de la famille
+ML. Objective Caml est généraliste pour l'expression d'algorithmes symboliques
+ou numériques. Il est orienté objet et possède un système de modules paramétrés.
+Il permet le développement d'applications concurrentes ou distribuées. Il possède
+une excellente sûreté à l'exécution grâce à son typage statique, son mécanisme
+d'exceptions et son récupérateur automatique de mémoire. Il est performant tout
+en étant portable. Enfin, il dispose d'un riche environnement de développement.
+</cmp>
+</p>
+<p>
+OCaml est développé et maintenu principalement par des chercheurs et ingénieurs
+de l'INRIA (équipe-projet Gallium, SED de Rocquencourt, Pierre Weis de l'équipe-projet
+Estime) ainsi que par des chercheurs extérieurs comme
+Jacques Garrigue (Université de Nagoya, au Japon) et Alain Frisch (société Lexifi).
+</p>
+
+<section id="intro:description" title="Description du langage">
+<p>
+Nous listons ici les traits principaux d'Objective Caml. Tous ces aspects ne sont pas abordés
+dans cette formation. Ceux qui le sont figurent en gras.
+</p>
+<ul>
+<li><cmp>OCaml est un <b>langage fonctionnel</b>:
+il manipule les fonctions comme étant des valeurs du langage. Celles-ci peuvent
+être utilisées en tant que paramètres d'autres fonctions ou être retournées comme résultat
+d'un appel de fonction.</cmp>
+</li>
+<li><cmp>OCaml est <b>typé statiquement</b>:
+la vérification de la compatibilité entre les types des paramètres formels et des
+paramètres d'appel est effectuée au moment de la compilation du programme. Dès lors,
+il n'est pas nécessaire de faire ces vérifications durant l'exécution du programme ce
+qui accroît son efficacité. En outre, la vérification de type permet d'éliminer
+la plupart des erreurs introduites par maladresse ou étourderie et contribue à
+la sûreté de l'exécution.</cmp>
+</li>
+<li><cmp>OCaml est <b>polymorphe paramétrique</b>:
+une fonction qui n'explore pas la totalité de la structure d'un de ses arguments accepte que celui-ci ait un type non entièrement déterminé. Ce paramètre est alors dit polymorphe. Cette particularité permet de développer un code générique utilisable pour des structures de données différentes tant que la représentation exacte de cette structure n'a pas besoin d'être connue par le code en question. L'algorithme de typage est à même de faire cette distinction.</cmp>
+</li>
+
+<li><cmp>OCaml possède <b>une inférence de types</b>:
+le programmeur n'a besoin de donner aucune information de type à l'intérieur de son programme. Le langage se charge seul de déduire du code le type le plus général des expressions et des déclarations qui y figurent. Cette inférence est effectuée conjointement à la vérification, lors de la compilation du programme.</cmp>
+</li>
+<li> <cmp>OCaml est muni d'un <b>mécanisme d'exceptions</b>:
+il est possible de rompre l'exécution normale d'un programme à un endroit et de la reprendre à un autre endroit du programme prévu à cet effet. Ce mécanisme permet de gérer les situations exceptionnelles, mais il peut aussi être adopté comme style de programmation.</cmp>
+</li>
+<li> <cmp>OCaml possède des <b>traits impératifs</b>:
+les entrées-sorties, les modifications physiques de valeurs et les structures de contrôle itératives sont possibles sans avoir recours aux traits de la programmation fonctionnelle. Le mélange des deux styles est bien entendu accepté et offre une grande souplesse de développement ainsi que la possibilité de définir des structures de données nouvelles.</cmp>
+</li>
+<li> <cmp>OCaml exécute des processus légers (threads):
+les principaux outils de création, de synchronisation pour la gestion de la mémoire partagée et de communication entre différents processus légers sont prédéfinis.</cmp>
+</li>
+<li> <cmp>OCaml communique sur le réseau Internet:
+les bases nécessaires à l'ouverture de canaux de communication entre différentes machines sont prédéfinies et permettent la réalisation d'applications suivant l'architecture client-serveur.</cmp>
+</li>
+<li> <cmp>OCaml dispose de <b>nombreuses bibliothèques</b>:
+structures de données classiques, entrées-sorties, interfaçage avec les ressources du système, analyses lexicale et syntaxique, calcul sur les grands nombres, valeurs persistantes, etc.</cmp>
+</li>
+<li> <cmp>OCaml dispose d'un <b>environnement de programmation</b>:
+incluant une boucle d'interaction, une trace de l'exécution, un calcul des dépendances et une analyse de performance.</cmp>
+</li>
+<li> <cmp>OCaml interagit avec le langage C:
+via l'appel de fonctions C à partir d'un programme OCaml et réciproquement, permettant ainsi l'accès aux nombreuses bibliothèques C.</cmp>
+</li>
+<li> <cmp>OCaml dispose de <b>trois modes d'exécution</b>:
+interactif par le biais d'une boucle d'interaction, compilation vers du code-octet interprété par une machine virtuelle, compilation vers du code machine. Le programmeur peut donc choisir entre souplesse de développement, portabilité du code objet sur différentes architectures ou performance sur une architecture donnée.</cmp>
+</li>
+<li> OCaml dispose d'un <em>garbage collector</em> ("GC"), aussi appelé "glaneur de cellules" ou
+"ramasse-miettes", c'est-à-dire qu'il n'y a aucune allocation explicite de mémoire,
+le GC s'occupant d'allouer automatiquement l'espace mémoire nécessaire au stockage des
+structures de données manipulées et de le libérer automatiquement lorsque ces données
+ne sont plus accessibles.
+</li>
+</ul>
+</section>
+
+<section id="intro:eval" title="Evaluation, compilation, exécution">
+<p>
+Il existe plusieurs façons d'exécuter un programme OCaml:
+</p>
+<subsection id="intro:toplevel" title="Utilisation de l'interprète (toplevel)">
+<p>
+Il est possible d'interpréter le code d'un programme, de façon interactive ou non,
+grâce au <em>toplevel</em>.
+Le toplevel OCaml permet de saisir et exécuter interactivement du code OCaml,
+de la même façon que dans un interprète de commandes UNIX (<em>shell</em>).
+L'inférence et la vérification des types sont faites et le code exécuté immédiatement.
+Ce mode permet de tester facilement de petits bouts de programme, sans avoir à compiler puis
+exécuter toute une application.
+</p>
+<p>
+Le toplevel est lancé par la commande <icode>ocaml</icode>. L'utilisateur peut alors saisir des
+<em>phrases</em> OCaml terminées par "<icode>;;</icode>" qui sont évaluées immédiatement. Le toplevel
+affiche les types et valeurs des expressions évaluées avant de réafficher le prompt:
+</p>
+<ocaml-eval toplevel="true">"Hello World !" (* code saisi par l'utilisateur *);;
+42.0;;</ocaml-eval>
+
+<p>
+Il est possible de charger des modules additionnels compilés
+(cf. chapitre <a href="#modules">Modules</a>) soit en donnant ces modules sur la ligne de commande:
+</p>
+<command-line>ocaml mon_module.cmo mon_module2.cmo</command-line>
+<fixme text="ajouter les modules mon_module*.cmo"/>
+<p>
+soit en utilisant des directives de chargement <icode>#load</icode> à l'invite du toplevel:
+</p>
+<ocaml-eval toplevel="true">#load "mon_module.cmo";;
+#load "monmodule2.cmo";;
+</ocaml-eval>
+<p>
+Le contenu des modules chargés est alors accessible depuis le code saisi dans le toplevel.
+</p>
+<p>
+Il est également possible de lancer le toplevel sur un fichier de code OCaml, ce dernier
+sera évalué comme si son contenu était saisi à l'invite du toplevel:
+</p>
+<command-line>ocaml mon_module.ml</command-line>
+<p>
+Pour faciliter la saisie de code dans le toplevel, on pourra utiliser l'outil
+<a href="http://pauillac.inria.fr/~ddr/ledit/"><icode>ledit</icode></a>
+qui offre des fonctionnalités d'édition de ligne de commande (historique, utilisation des flèches
+du clavier, ...) de la façon suivante:
+</p>
+<command-line>ledit ocaml</command-line>
+<p>
+Il existe également un toplevel graphique,
+<a href="http://zoggy.github.com/ocamltop-gtk/"><icode>OCamltop-gtk</icode></a>
+permettant de sauvegarder
+et recharger le code saisi ainsi que d'afficher la structure des valeurs calculées.
+</p>
+<p>
+Pour la suite de la formation, nous utiliserons un éditeur et ferons exécuter notre code
+par la commande
+</p>
+<command-line>ocaml notre_fichier.ml</command-line>
+<p>
+Pour en savoir plus sur le toplevel, consulter le manuel:
+\urldoctoplevel
+\urldoctopleveldaocaml
+<fixme text="mettre les urls"/>
+</p>
+</subsection>
+
+<subsection id="ocamlc" title="Compilation vers du code-octet">
+<p>
+Il existe deux compilateurs OCaml différents, l'un compilant vers du code-octet (<em>byte-code</em>}),
+l'autre vers du code natif.
+</p>
+<p>
+Le code-octet peut être exécuté par une machine virtuelle OCaml sur d'autres architectures
+que celle pour laquelle il a été compilé. C'est le même principe que le code-octet pour machine
+virtuelle Java. Des performances moindres sont la contrepartie de cette portabilité. Par ailleurs,
+dans le cas d'utilisation de bibliothèques C, ces bibliothèques doivent être présentes sur
+la machine d'exécution.
+</p>
+<p>
+Les principales extensions des fichiers utilisées par les compilateurs OCaml et leurs
+significations sont indiquées dans le tableau de la figure <block href="extnsions"/>.
+</p>
+<figure id="extensions"
+   title="Principales extensions des noms de fichiers utilisées par les compilateur OCaml.">
+<table class="table table-stripped table-bordered table-condensed">
+<tr>
+<td><icode>.ml</icode></td>
+<td>Source d'implémentation , équivalent des <icode>.c</icode> en C)</td>
+</tr>
+<tr>
+<td><icode>.mli</icode></td>
+<td>Source d'interface (cf. chapitre <a href="modules">Modules</a>),
+sorte d'équivalent des <icode>.h</icode>} en C)</td>
+</tr>
+<tr>
+<td><icode>.cmo</icode></td>
+<td>Implémentation compilée en code-octet</td>
+</tr>
+<tr>
+<td><icode>.cmi</icode></td>
+<td>Interface compilée</td>
+</tr>
+<tr>
+<td><icode>.cmx</icode> et <icode>.o</icode></td>
+<td>Implémentation compilée en code natif</td>
+</tr>
+<tr>
+<td><icode>.cma</icode></td>
+<td>Bibliothèque (regroupement de plusieurs implémentations compilées) en code-octet</td>
+</tr>
+<tr>
+<td><icode>.cmxa</icode> et <icode>.a</icode></td>
+<td>Bibliothèque en code natif</td>
+</tr>
+</table>
+</figure>
+<p>
+Le compilateur code-octet est <icode>ocamlc</icode>, invoqué par des
+commandes de la forme suivante:
+</p>
+<command-line>ocamlc [options] fichiers</command-line>
+<p>
+Les options les plus courantes sont les suivantes:
+</p>
+<ul>
+<li><icode>-c</icode>: indique au compilateur de simplement compiler
+les fichiers sources en paramètres, sans faire l'édition de liens
+pour créer un exécutable. Ainsi, la commande
+<command-line>ocamlc -c foo.ml</command-line>
+produira un fichier <icode>.cmo</icode>, le code-octet correspondant au code
+de <icode>foo.ml</icode>.
+Le fichier <icode>.cmo</icode> pour un fichier <icode>.ml</icode> est donc
+l'équivalent des fichiers objets <icode>.o</icode> pour les fichiers
+de code C <icode>.c</icode>. Contrairement au langage C pour lequel les
+fichiers d'interface <icode>.h</icode> ne sont pas compilés, il est
+nécessaire en OCaml de compiler le code des interfaces:
+<command-line>ocamlc -c foo.mli</command-line>
+compilera donc l'interface <icode>foo.mli</icode>dans un fichier
+<icode>foo.cmi</icode>. Dans le cas où un fichier <icode>.mli</icode>
+existe pour un fichier <icode>.ml</icode>, il est nécessaire de
+compiler d'abord l'interface pour créer le <icode>.cmi</icode>. La
+compilation du <icode>.ml</icode> en <icode>.cmo</icode> vérifiera que
+l'implémentation (<icode>.ml</icode>) correspond bien à l'interface. S'il
+n'existe pas de fichier d'interface <icode>.mli</icode> pour un
+fichier d'implémentation <icode>.ml</icode>, la compilation du
+<icode>.ml</icode> créera le <icode>.cmo</icode> ainsi que l'interface
+compilée <icode>.cmi</icode>.
+L'interface ainsi créée exposera tous les éléments de l'implémentation.
+</li>
+
+<li><icode>-o</icode>: indique le nom du fichier à créer, notamment lors de
+la création d'exécutables. Ainsi, la commande suivante crée l'exécutable
+<icode>program</icode> à partir des trois fichiers de code-octet
+en paramètres:
+<command-line>ocamlc -o program foo.cmo bar.cmo gee.cmo</command-line>
+Les fichiers <icode>.cmo</icode> doivent être indiqués par ordre de
+dépendance, avec en premier les modules ne dépendant d'aucun autre.
+</li>
+
+<li><icode>-I</icode>: indique un répertoire supplémentaire dans lequel
+chercher les fichiers nécessaires à la compilation (interfaces et implémentations
+des modules et bibliothèques utilisés).
+C'est l'équivalent de la même option pour la compilation de fichiers C.
+Ces indications sont également appelées <em>includes</em>. Par défaut, les
+répertoires utilisés sont le répertoire courant et le répertoire standard
+des bibliothèques d'OCaml, indiqué par la commande
+<command-line>{ocamlc -where</command-line>
+Les répertoires indiqués par <icode>-I</icode> sont ajoutés en tête de la
+liste des répertoires à examiner, mais dans l'ordre dans lequel ils
+sont indiqués. Ainsi, la commande
+<command-line>ocamlc -I rep1 -I rep2 ...</command-line>
+indiquera au compilateur de chercher les fichiers <icode>.cmo</icode>,
+<icode>.cmi</icode> et <icode>.cma</icode> dans les répertoires <icode>rep1</icode>,
+<icode>rep2</icode>, <icode>.</icode> et le répertoire standard des
+bibliothèques OCaml, dans cet ordre.
+La recherche de tels fichiers n'est pas faite récursivement dans les répertoires inclus.
+Ainsi, si le répertoire standard des bibliotèques OCaml est <icode>/opt/ocaml/lib/ocaml</icode>
+et que l'on souhaite utiliser la bibliothèque <icode>Labltk</icode>, on devra spécifier ce
+répertoire à inclure:
+<command-line>ocamlc -I /opt/ocaml/lib/ocaml/labltk ...</command-line>
+Une notation abrégée existe pour ajouter un répertoire se trouvant sous le répertoire standard;
+ainsi l'option <icode>-I</icode> ci-dessous a le même effet que celle de la commande précédente:
+<command-line>ocamlc -I +labltk ...</command-line>
+Cette notation permet de s'abstraire du répertoire d'installation des bibliothèques standard.
+</li>
+</ul>
+<p>
+Beaucoup d'autres options de compilation existent. Nous ne présentons ici que les options
+de base permettant de compiler des programmes simples.
+On se réfèrera donc au manuel pour connaître toutes les options et possibilités du
+compilateur:
+<fixme text="lien"/>
+\urldococamlc
+</p>
+</subsection>
+
+<subsection id="ocamlopt" title="Compilation vers du code natif">
+<p>
+La compilation vers du code natif permet d'obtenir de bien meilleures performances
+pour l'exécutable produit. Cependant, l'exécutable obtenu ne peut pas être exécuté sur
+d'autres architectures que celle sur laquelle il a été compilé.
+</p>
+<p>
+Le compilateur vers du code natif est <icode>ocamlopt</icode>.
+Il s'utilise de la même façon que le compilateur <icode>ocamlc</icode>
+(cf. <a href="#ocamlc">cette section</a>),
+mais utilise des extensions différentes pour les fichiers utilisés et produits
+(cf. <figure href="extensions"/>).
+</p>
+<p>
+La documentation relative au compilateur vers du code natif se trouve
+<a href="">ici</a>.
+<fixme text="lien"/>
+</p>
+</subsection>
+</section>
+
+<section id="website" title="Le site web">
+<p>
+Le site <a href="http://caml.inria.fr/">caml.inria.fr</a> est le site officiel
+d'OCaml et on y trouve, en plus des distributions, tout le matériel nécessaire
+pour débuter en OCaml: documentations, références de livres, tutoriels, liens, ...
+</p>
+</section>
+
+<section id="documentations" title="Accès aux documentations">
+<p>
+Les documentations de base pour développer en OCaml sont les suivantes:
+</p>
+<fixme text="liens"/>
+<ul>
+<li>Le manuel de référence: urlrefmanual</li>
+<li>Les pages <icode>man</icode>: chaque outil (<icode>ocamlc</icode>,
+<icode>ocamlopt</icode>, <icode>ocamldoc</icode>, ...)
+et chaque module de la bibliothèque standard possède sa propre page de manuel.
+Ainsi, on accédera à la page <icode>man</icode> du module <mod>List</mod>
+ par la commande
+<command-line>man List</command-line>
+</li>
+<li>Pour les utilisateurs de Firefox, la Caml Side Bar (\urlcamlsidebar)
+offre un accès rapide aux documentations, au manuel et à la liste des contributions,
+ainsi que des possibilités de recherche dans ces documentations et sur le site \urlcamlsite.
+</li>
+</ul>
+
+</section>
+</chapter>

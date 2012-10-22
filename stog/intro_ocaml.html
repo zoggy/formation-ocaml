@@ -1,0 +1,89 @@
+<page title="Introduction à OCaml"
+ bib-files="ocaml.bib"
+ with-contents="true"
+>
+<functions_>
+<cmp><contents/></cmp>
+<fixme text="hello"><div class="alert alert-error">FIXME: <text/></div></fixme>
+<figure id="" title="" href="">
+    <block counter-name="figure" class="figure"
+           label="Figure" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+</figure>
+
+<warning id="" title="" href="">
+    <block counter-name="warning" class="warning"
+           label="Avertissement" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+</warning>
+
+<exercice id="" title="" href="">
+    <block counter-name="exercice" class="exercice"
+           label="Exercice" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+</exercice>
+
+<stx><tt><contents/></tt></stx>
+<centerstx><div class="center"><tt><contents/></tt></div></centerstx>
+<ml><icode defer_="1" lang="ocaml"><contents/></icode></ml>
+<stxid><em>&lt;<contents/>&gt;</em></stxid>
+</functions_>
+<cite-format><bib-field name="title"/></cite-format>
+<sectionning>chapter,section,subsection,subsubsection,paragraph</sectionning>
+<contents>
+<prepare-toc>
+<prepare-notes>
+<toc>Table des matères</toc>
+<chapter title="Préambule">
+<p>
+Cette formation est une introduction au langage Objective Caml, aussi appelé
+OCaml. Une partie du plan de cette formation est basée sur le plan du livre
+<cite href="chailloux2000"/>.
+Certains paragraphes sont repris verbatim de cet ouvrage, avec l'accord des auteurs,
+et apparaissent <cmp>ainsi</cmp>.
+</p>
+<p>
+OCaml est un langage très riche offrant de nombreuses possibilités. De plus,
+les différents outils de développement fournis en standard sont très puissants
+et flexibles. Enfin, la bibliothèque standard recouvre beaucoup de domaines
+(interface système, structures de données, parallélisme, interface graphique, ...).
+</p>
+<p>
+Nous nous contenterons de présenter les bases permettant de commencer
+à programmer en OCaml, de façon à nous concenter sur l'essentiel sans
+nous perdre dans les détails. Par exemple, toutes les options de compilation
+ne sont pas explicitées et l'on se reportera au manuel de référence pour
+une utilisation plus poussée. Toutes les bibliothèques ne seront pas
+non plus utilisées dans cette formation.
+</p>
+<p>
+L'objectif de cette formation est
+d'acquérir les bases syntaxiques et sémantiques du langage ainsi que la
+connaissance des bibliothèques et outils de développement disponibles pour
+approfondir ensuite selon ses besoins.
+</p>
+</chapter>
+<include file="./intro_ocaml_intro.html"/>
+<include file="./intro_ocaml_fun.html"/>
+<include file="./intro_ocaml_modules.html"/>
+
+<chapter id="bibliography" title="Bibliographie">
+<bibliography/>
+</chapter>
+<notes/>
+</prepare-notes>
+</prepare-toc>
+</contents>
+</page>
