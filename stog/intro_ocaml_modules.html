@@ -1,3 +1,397 @@
 <chapter id="modules" title="Programmation modulaire">
-<section id="foncteurs" title="Foncteurs"/>
+<p>
+La programmation modulaire est la séparation d'un programme en différents
+{\em modules}, définissant chacun des types de données et des fonctions
+pour traiter un aspect du programme. Par exemple, on peut définir
+un module pour le traitement des dates dans une application. Un module
+peut utiliser d'autres modules. Chaque module possède une implémentation
+et une interface.
+</p>
+<p>
+L'intérêt de la séparation interface/implémentation est la possibilité
+de faire évoluer l'implémentation d'un module (correction, optimisation) de façon
+transparente pour les modules utilisant ce module, tant que l'interface
+reste compatible.
+</p>
+<p>
+Une bibliothèque regroupe souvent plusieurs modules (comme la bibliothèque Labltk).
+</p>
+<p>
+Voyons comment sont définis et utilisés les modules en OCaml.
+</p>
+
+<section id="simplemodules" title="Modules simples">
+<subsection id="intfimpl" title="Interface et implémentation">
+<p>
+L'interface d'un module définit ce que le module offre, ce qui peut être utilisé
+depuis un autre module. L'implémentation du module doit définir les éléments
+présents dans l'interface mais peut en définir d'autres, qui ne seront alors visibles
+qu'à l'intérieur du module. L'interface d'un module est aussi appelée signature.
+</p>
+<p>
+En OCaml, l'interface d'un module <ml>M</ml> est définie dans un fichier <icode>m.mli</icode>
+(ou <icode>M.mli</icode>)
+tandis que son implémentation est définie dans un fichier <icode>m.ml</icode>
+(ou <icode>M.ml</icode>). S'il n'y a
+pas de fichier d'interface correspondant à un fichier <icode>m.ml</icode>, alors le compilateur
+considère que tout ce qui est défini dans l'implémentation est visible dans l'interface,
+avec les types inférés par le compilateur.
+</p>
+<p>
+On notera la relation entre le nom d'un module "racine" et le nom des fichiers définissant
+son interface et son implémentation.
+</p>
+<p>
+Voyons un exemple d'implémentation dans un fichier <icode>m.ml</icode>:
+</p>
+<ocaml-eval><![CDATA[
+type pair = int * int;;
+let x = 1;;
+let y = 2;;
+let make_pair x y = (x,y);;
+let first (x,_) = x;;
+let second (_,y) = y;;
+]]></ocaml-eval>
+<p>
+On peut définir une interface pour ce module dans le fichier <icode>m.mli</icode>:
+</p>
+<ocaml><![CDATA[
+type pair;;
+val x : int;;
+val make_pair : int -> int -> pair;;
+val first : pair -> int;;
+val second : pair -> int;;
+]]></ocaml>
+<p>
+On a ici rendu le type <ml>pair</ml> abstrait, car sa définition est masquée. On a également
+masqué la valeur <ml>y</ml> mais exposé <ml>x</ml> en indiquant son type. Enfin, on a exposé
+les fonctions <ml>first</ml> et <ml>second</ml> prenant en paramètre une valeur du type abstrait.
+Le type <ml>pair</ml> étant abstrait, nous sommes obligés d'utiliser la fonction <ml>make_pair</ml>
+pour créer des valeurs du type <ml>pair</ml>. Le passage d'un couple d'entiers <ml>(1,2)</ml>
+à la place d'une paire sera impossible en dehors du module car la définition du type étant
+masquée, <ml>pair</ml> et <ml>int * int</ml> sont considérés comme deux types non unifiables.
+</p>
+<p>
+Pour ne pas abstraire un type de donnée, il faut redonner la même définition
+dans l'interface.
+</p>
+<p>
+Lorsqu'un module ne contient que la définition de types de données, il n'est pas nécessaire
+d'avoir un fichier d'implémentation.
+</p>
+</subsection>
+
+<subsection id="sepcompil" title="Compilation séparée">
+<p>
+La compilation d'un module dont on a donné explicitement l'interface dans un fichier
+<icode>.mli</icode> et l'implémentation dans un fichier <icode>.ml</icode> commence par la compilation
+de l'interface:
+</p>
+<sh>ocamlc -c m.mli</sh>
+<p>
+Un fichier <icode>m.cmi</icode> est produit, qui est l'interface compilée.
+Ensuite, l'implémentation est compilée à son tour:
+</p>
+<sh>ocamlc -c m.ml</sh>
+<p>
+Un fichier <icode>.cmo</icode> de code-octet est produit.
+Dans le cas d'une compilation en code natif,
+</p>
+<sh>ocamlopt -c m.ml</sh>
+<p>
+produit un fichier <icode>m.o</icode> contenant le code natif compilé
+et un fichier <icode>m.cmx</icode> contenant des informations supplémentaires nécessaires
+au compilateur OCaml lors de l'édition des liens.
+</p>
+<p>
+Si un fichier <icode>m.mli</icode> existe mais pas de fichier <icode>m.cmi</icode>, alors le compilateur
+signale une erreur indiquant que l'inteface doit être compilée d'abord, puisque
+le code de l'implémentation doit être compatible avec l'interface.
+</p>
+<p>
+S'il n'y a pas de fichier <icode>m.mli</icode>, la compilation de <icode>m.ml</icode> produit
+à la fois le fichier <icode>m.cmo</icode> (ou les fichiers <icode>m.cmx</icode> et <icode>m.o</icode>)
+et le fichier d'interface compilée
+<icode>m.cmi</icode>. Dans ce cas, tous les éléments de <icode>m.ml</icode> sont rendus visibles.
+</p>
+</subsection>
+
+<subsection id="submodules" title="Sous-modules">
+<p>
+Il est possible en OCaml de définir des modules à l'intérieur d'autres modules.
+Comme pour les valeurs et les types, les sous-modules peuvent apparaître ou
+non dans la signature du module qui les contient. Ils seront alors visibles ou
+non dans l'interface du module de plus haut niveau qui les contient.
+</p>
+<p>
+Voyons un exemple, en définissant un module <ml>M</ml> contenant un module {N}.
+Nous définissons l'interface dans le fichier <icode>m.mli</icode>:
+</p>
+<ocaml><![CDATA[
+module N : sig
+  type t
+  val x : int
+  val foo : int -> t
+end;;
+]]></ocaml>
+<p>
+et l'implémentation dans le fichier <icode>m.ml</icode>:
+</p>
+<ocaml-eval><![CDATA[
+module N = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;
+]]></ocaml-eval>
+<p>
+Cependant, il est déjà possible de restreindre leur signature dans la partie
+implémentation, en imposant une contrainte de type dans l'implémentation:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+module N : sig
+  type t
+  val x : t
+  val foo : t -> t
+ end = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;
+]]></ocaml-eval>
+<p>
+Ce type de contrainte permet de s'assurer par exemple que certains éléments
+du module <ml>N</ml> ne sont pas utilisés dans la suite du module conteneur
+<ml>M</ml>, puisque les restrictions dûes à l'interface de <ml>M</ml> ne s'appliquent
+que pour le code extérieur à <ml>M</ml>.
+</p>
+</subsection>
+
+<subsection id="modtypes" title="Types de modules">
+<p>
+Pour les types de données, on peut noter:
+</p>
+<ocaml><![CDATA[
+val x : int * int;;
+val y : (int * int) * (int * int);;
+]]></ocaml>
+<p>
+ou bien définir un type et l'utiliser par la suite dans les annotations de types:
+</p>
+<ocaml><![CDATA[
+type t = int * int;;
+val x : t ;;
+val y : t * t;;"
+]]></ocaml>
+<p>
+De façon analogue, il est possible de définir des types de modules, c'est-à-dire
+de donner un nom à une signature:
+</p>
+<ocaml-eval><![CDATA[
+module type Mon_type = sig
+  type t
+  val x : t
+  val foo : t -> t
+end;;
+]]></ocaml-eval>
+<p>
+et utiliser ensuite ce type de module comme signature:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+module N2 : Mon_type = struct
+  type t = int
+  let x = 1
+  let y = 2
+  let foo x = x + 1
+end;;
+]]></ocaml-eval>
+<p>
+En allant plus loin, on peut définir des vues différentes sur un même module, par exemple:
+</p>
+<ocaml-eval><![CDATA[
+module type Vue1 = sig
+  type t
+  val create : int -> t
+end;;
+module type Vue2 = sig
+  type t
+  val read : t -> int
+end;;
+]]></ocaml-eval>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+module Base = struct
+  type t = string
+  let create = string_of_int
+  let read = int_of_string
+end;;
+module M1 = (Base : Vue1 with type t = Base.t);;
+module M2 = (Base : Vue2 with type t = Base.t);;
+M2.read (M1.create 42);;
+M1.read (M1.create 63);;
+]]></ocaml-eval>
+</subsection>
+</section>
+
+<section id="foncteurs" title="Foncteurs et réutilisabilité">
+<p><cmp>Les modules paramétrés</cmp> ou <em>foncteurs</em>
+<cmp>sont aux modules ce que les fonctions
+sont aux valeurs.</cmp> Il s'agit de modules prenant en paramètre un module et renvoyant un
+autre module. Le module retourné peut à son tour être un foncteur, tout comme une fonction
+"à plusieurs arguments" est une fonction prenant un paramètre et retournant une autre
+fonction.
+</p>
+<p>
+Les foncteurs permettent d'écrire des modules s'abstrayant des structures de données
+manipulées, dont la représentation et les fonctions de manipulations sont fournies
+par un module en paramètre. Il est alors aisément possible d'appliquer un même algorithme
+à deux structures de données différentes, tant que le module en paramètre fournit
+les fonctions pour effectuer les opérations de base.
+</p>
+<p>
+Voyons la définition et l'utilisation de foncteurs au travers d'un exemple.
+Nous souhaitons modéliser un guichet auquel est associé une file d'attente.
+La file d'attente sera abstraite, permettant la mise en place de différentes
+politiques de priorité, de façon transparente pour le code de gestion du guichet.
+</p>
+<p>
+Nous commençons donc par définir le type de la file d'attente:
+</p>
+<ocaml-eval><![CDATA[
+module type QueueType = sig
+  type 'a t
+  exception Empty
+  val create : unit -> 'a t
+  val pop : 'a t -> 'a
+  val push : 'a -> 'a t -> unit
+end;;
+]]></ocaml-eval>
+<p>
+Ensuite, nous définissons notre module de guichet, prenant en paramètre
+une file d'attente:
+</p>
+<ocaml-eval><![CDATA[
+module Guichet = functor (Q : QueueType) -> struct
+  let create = Q.create
+  let add = Q.push
+  let handle_one f guichet =
+    try f (Q.pop guichet)
+    with Q.Empty -> ()
+  let rec handle_all f guichet =
+    match
+      try Some (Q.pop guichet)
+      with Q.Empty -> None
+    with
+    | None -> ()
+    | Some elt -> f elt; handle_all f guichet
+end;;
+]]></ocaml-eval>
+<p>
+Nous ne pouvons pas encore utiliser notre module, puisqu'il s'agit d'un foncteur:
+</p>
+<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+Guichet.create();;
+]]></ocaml-eval>
+<p>
+Nous allons simuler notre guichet en utilisant d'abord une file FIFO. La signature
+demandée pour le module en paramètre est un sous-ensemble de la signature du module
+<fixme text="\refmodule{Queue}"/>, nous pouvons donc utiliser ce module comme modélisation de
+file d'attente. En appliquant ce module à notre foncteur, nous obtenons un
+guichet "premier arrivé, premier servi":
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+module Guichet_FIFO = Guichet(Queue);;
+let fifo = Guichet_FIFO.create ();;
+List.iter (fun n -> Guichet_FIFO.add n fifo) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+Guichet_FIFO.handle_all (fun n -> print_int n; print_newline ()) fifo;;
+]]></ocaml-eval>
+<p>
+Nous pouvons également modéliser la file d'attente par une pile; dans ce cas,
+le premier servi est le dernier arrivé:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+module Guichet_pile = Guichet(Stack);;
+let pile = Guichet_pile.create ();;
+List.iter (fun n -> Guichet_pile.add n pile) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+Guichet_pile.handle_all (fun n -> print_int n; print_newline ()) pile;;
+]]></ocaml-eval>
+<p>
+Nous pouvons même faire un foncteur permettant de construire et
+tester un module de guichet, car les deux codes de tests ci-dessus
+sont les mêmes à la différence du guichet:
+</p>
+<ocaml-eval><![CDATA[
+module Test (Q : QueueType) = struct
+  module G = Guichet(Q)
+  let guichet = G.create ()
+  let _ = List.iter (fun n -> G.add n guichet) [ 1 ; 2 ; 3 ; 4 ; 5 ]
+  let _ = G.handle_all (fun n -> print_int n; print_newline ()) guichet
+end;;
+module Foo = Test(Queue);;
+module Foo = Test(Stack);;
+]]></ocaml-eval>
+<p>
+On remarque que le compilateur impose correctement que les fonctions passées en
+paramètres aux fonctions <ml>handle_one</ml> et <ml>handle_all</ml> prennent en paramètres
+des valeurs du type des valeurs de la file d'attente:
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+Guichet_FIFO.handle_one print_string fifo;;
+]]></ocaml-eval>
+<p>
+On aurait pu masquer la représentation interne du guichet en utilisant une signature
+et en ajoutant un type de guichet:
+</p>
+<ocaml-eval><![CDATA[
+module type GuichetAbstType = sig
+  type 'a t
+  val create : unit -> 'a t
+  val add : 'a -> 'a t -> unit
+  val handle_one : ('a -> unit) -> 'a t -> unit
+  val handle_all : ('a -> 'b) -> 'a t -> unit
+end;;
+]]></ocaml-eval>
+<ocaml-eval toplevel="true"><![CDATA[
+module GuichetAbst (Q : QueueType) : GuichetAbstType = struct
+  type 'a t = 'a Q.t
+  include Guichet(Q)
+end;;
+module Foo=GuichetAbst(Stack);;
+]]></ocaml-eval>
+<p>
+On ne peut plus maintenant accéder à la représentation de la file depuis l'extérieur de
+la modélisation du guichet:
+</p>
+<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+Stack.pop (Foo.create ());;
+]]></ocaml-eval>
+</section>
+
+<section id="modother" title="Déclarations locales de modules, modules anonymes">
+<p>
+On peut déclarer localement un module, c'est-à-dire le construire en réduisant sa visibilité
+à une expression:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let module Bar = struct let x = 1 end in Bar.x + 1;;
+]]></ocaml-eval>
+<p>
+Le module <ml>Bar</ml> n'est accessible que dans l'expression située après le <ml>in</ml>:
+</p>
+<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+Bar.x;;
+]]></ocaml-eval>
+<p>
+Il est également possible de construire des modules anonymes (sans nom). C'est
+souvent le cas lors de l'application d'un foncteur prenant un petit module en
+paramètre. Dans ce cas, on utilise directement la syntaxe <ml>struct ... end</ml>
+plutôt que la syntaxe <ml>module M = ...</ml> et l'utilisation de <ml>M</ml> dans
+la suite:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+module IntSet =
+  Set.Make (struct type t = int let compare = Pervasives.compare end);;
+]]></ocaml-eval>
+</section>
 </chapter>
