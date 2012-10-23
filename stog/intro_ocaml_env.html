@@ -1,3 +1,153 @@
 <chapter id="devenv" title="Environnement de développement">
-<section id="ocamlyacc" title="ocamlyacc"/>
+<section id="disttools" title="Les outils de la distribution">
+
+<subsection id="toploop" title="Interprète">
+<p>
+L'interprète (<em>toplevel</em>) <icode>ocaml</icode> évalue au vol le code OCaml qui lui est
+passé. Il peut interpréter des fichiers passés sur la ligne de commande ou bien
+se comporter comme un shell et interpréter les phrases que l'utilisateur saisit.
+<fixme text="\seemanual{\urldoctoplevelraw}"/>
+</p>
+</subsection>
+
+<subsection id="compilation" title="Compilation">
+<p>
+La distribution d'OCaml fournit différents outils destinés à la compilation, listés
+dans le tableau suivant:
+</p>
+<table class="table table-stripped table-bordered table-condensed">
+<tr><td><icode>ocamlc</icode>, <icode>ocamlc.opt</icode></td>
+<td> compilateur vers du code-octet, en version code-octet ou en version native</td>
+</tr>
+<tr><td><icode>ocamlopt</icode>, <icode>ocamlopt.opt</icode></td>
+<td>compilateur vers du code natif, en version code-octet ou en version native</td>
+</tr>
+<tr><td><icode>ocamlmklib</icode></td>
+<td>génération de bibliothèques contenant du code C et du code OCaml</td>
+</tr>
+<tr><td><icode>ocamlbuild</icode></td>
+<td>outil de compilation automatisée (gérant notamment les dépendances)</td>
+</tr>
+<tr><td><icode>ocamlcp</icode></td>
+<td>frontal à ocamlc permettant d'instrumenter le code pour utiliser le profileur</td>
+</tr>
+</table>
+</subsection>
+
+<subsection id="debug" title="Débogage">
+<p>
+La distribution OCaml fournit un débogueur, <icode>ocamldebug</icode>, permettant de suivre
+l'exécution d'un programme pas à pas, de revenir en arrière, d'inspecter des valeurs,
+mettre des points d'arrêt. Le programme doit être compilé en code-octet avec l'option
+<icode>-g</icode>. <fixme text="\seemanual{\urlocamldebug}"/>
+</p>
+<p>
+La distribution inclut également un profileur, <icode>ocamlprof</icode>, capable d'afficher
+le nombre de passages à chaque point d'un programme compilé avec <icode>ocamlcp</icode>.
+<fixme text="\seemanual{\urlocamlprof}"/>
+</p>
+<p>
+On pourra également utiliser l'outil GNU <icode>gprof</icode> par exemple pour afficher le temps
+passé dans chaque fonction.
+</p>
+</subsection>
+
+<subsection id="preproc" title="Pré-processeurs">
+<p>
+Les outils de pre-processing permettent de définir des extensions de syntaxe
+du langage afin par exemple de simplifier l'écriture de certaines constructions
+répétitives, de générer automatiquement du code pour chaque déclaration
+de type (comme des fonctions de lecture/écriture), ...
+</p>
+<p>
+Deux outils de pre-processing sont disponibles pour OCaml:
+</p>
+<ul>
+<li>Camlp4: inclus dans la distribution OCaml,</li>
+<li> Camlp5: <fixme href="\urlcamlpp"/>.</li>
+</ul>
+</subsection>
+
+<subsection id="doc" title="Documentation">
+<p>
+L'outil <icode>ocamldoc</icode> (ou <icode>ocamldoc.opt</icode> pour la version en code natif)
+fourni est l'équivalent de <icode>javadoc</icode> ou <icode>doxygen</icode> pour OCaml.
+Il permet de générer une documentation de référence en utilisant des commentaires formattés.
+</p>
+<p>
+Ces commentaires sont des commentaires OCaml habituels, sauf qu'ils commencent par
+<icode>(**</icode> au lieu de <icode>(*</icode>. Ils se terminent comme les commentaires
+normaux par <icode>*)</icode>.
+Le principe général est de placer un commentaire spécial juste au-dessus ou en-dessous
+de l'élément (valeur, type, module, ...) commenté.
+</p>
+<p>
+OCamldoc permet de générer des documentations aux formats <latex>\LaTeX</latex>,
+HTML, Texinfo, pages man.
+Il est également possible de définir son propre générateur et d'ajouter des éléments
+de syntaxe pour générer des documentations spécialisées.
+</p>
+<p>
+<fixme text="\seemanual{\urlocamldoc}"/>
+</p>
+</subsection>
+
+<subsection id="ocamlyacc" title="Autres outils">
+<p>
+Comme <icode>yacc</icode> et <icode>lex</icode> pour C, les outils
+<icode>ocamlyacc</icode> et <icode>ocamllex</icode>
+sont des générateurs d'analyseurs respectivement syntaxiques (<em>parsers</em>) et
+lexicaux (<em>lexers</em>).
+Le manuel OCaml donne un exemple concret de leur utilisation.
+<fixme text="\seemanual{\urlocamlyacc}"/>
+</p>
+<p>
+L'outil <icode>ocamldep</icode> analyse des fichiers sources OCaml et génère leurs dépendances
+dans un format compris par l'outil Make. Cela permet de ne pas avoir à indiquer explicitement
+les dépendances pour la compilation séparée des modules à l'aide d'un Makefile.
+<fixme text="\seemanual{\urlocamldep}"/>
+</p>
+<p>
+Enfin, <icode>ocamlbrowser</icode> permet la navigation dans les interfaces et implémentations,
+par exemple pour trouver facilement le type d'une fonction.
+<fixme text="\seemanual{\urlocamlbrowser}"/>
+</p>
+</subsection>
+</section>
+
+<section id="ide" title="Editeurs, environnements, ...">
+<p>
+Avec le temps, plusieurs solutions d'édition de code OCaml ont vu le jour:
+</p>
+<ul>
+<li> le mode <b>Emacs</b> standard: la distribution OCaml fournit un mode Emacs offrant la coloration
+syntaxique, l'indentation et l'accès aux commandes de compilation, l'affichage des annotations
+de type, ...,</li>
+<li><ext-a href="https://forge.ocamlcore.org/projects/tuareg/">Tuareg</ext-a>
+est un autre mode Emacs,</li>
+<li><ext-a href="http://www.lix.polytechnique.fr/~dbaelde/productions/omlet.html">OMLet</ext-a>
+est un mode pour l'éditeur Vim,</li>
+<li><ext-a href="http://zoggy.github.com/chamo/">Chamo</ext-a>
+est une sorte d'Emacs développé en OCaml,</li>
+<li><ext-a href="http://ocamleditor.forge.ocamlcore.org/">OCaml editor</ext-a>
+est un éditeur de code OCaml,</li>
+<li><ext-a href="http://ocamldt.free.fr/">ODT</ext-a> est un ensemble de greffons
+pour Eclipse,</li>
+<li><ext-a href="http://ocaml.eclipse.ortsa.com:8480/ocaide/">OCaIDE</ext-a> est
+un greffon pour Eclipse,</li>
+<li><ext-a href="http://ocamlplugin.loki-a.com/">un greffon pour Netbeans IDE</ext-a>
+est également disponible,</li>
+<li><ext-a href="http://try.ocamlpro.com">une application web</ext-a> pour essayer OCaml en ligne.</li>
+</ul>
+<fixme text="add typerex"/>
+<p>
+L'outil <ext-a href="http://projects.camlcity.org/projects/findlib.html/">Findlib</ext-a>
+s'est imposé comme outil standard pour la gestion des bibliothèques installées.
+</p>
+<p>
+D'autres outils sont listés dans la bosse Caml, dans le thème
+<ext-a href="http://caml.inria.fr/cgi-bin/hump.en.cgi?sort=0&amp;browse=52">"Software development"</ext-a>
+ et ses sous-thèmes.
+</p>
+</section>
 </chapter>
