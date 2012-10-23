@@ -165,7 +165,7 @@ string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
 <ocaml-eval toplevel="true">();;</ocaml-eval>
 <p>
 <cmp>Cette valeur sera plus particulièrement utilisée dans les programmes impératifs
-(cf. <fixme text="#progimperative"/>) pour les fonctions qui effectuent des effets
+(cf. <elt href="#progimperative"/>) pour les fonctions qui effectuent des effets
 de bord. Les fonctions dont le résultat est la valeur <icode>()</icode> simulent la notion
 de procédure qui n'existe pas en OCaml comme le fait le type void dans le langage C.</cmp>
 </p>
@@ -277,24 +277,24 @@ et les caractères (en utilisant les codes ascii), l'ordre naturel sur les flott
 <p>
 La syntaxe de la conditionnelle peut prendre deux formes:
 </p>
-<ul>
-<li><stx>if <stxid>expression de type bool</stxid> then <stxid>expression</stxid></stx></li>
-<li><stx>if <stxid>expression de type bool</stxid> then <stxid>expression1</stxid> else <stxid>expression2</stxid></stx></li>
-</ul>
+<centerstx>
+if <stxid>expression de type bool</stxid> then <stxid>expression</stxid>
+if <stxid>expression de type bool</stxid> then <stxid>expression1</stxid> else <stxid>expression2</stxid>
+</centerstx>
 <p>
-La première forme, sans écriture de la branche \code{else}, est en fait évaluée comme
+La première forme, sans écriture de la branche <ml>else</ml>, est en fait évaluée comme
 </p>
 <centerstx>if <stxid>expression de type bool</stxid> then <stxid>expression</stxid> else ()</centerstx>
 <p>
 Le typage correct de l'expression toute entière impose que les expressions des
-branches \code{then} et \code{else} soient du même type. En effet, si ce n'était pas
+branches <ml>then</ml> et <ml>else</ml> soient du même type. En effet, si ce n'était pas
 le cas, l'expression entière aurait un type différent selon que l'expression de
 condition est vraie ou fausse. L'expression toute entière est donc du même type
 que celui des branches.
 </p>
 <p>
 Pour cette raison, l'expression du <ml>then</ml> de la première forme doit être de
-type \code{unit}, car l'expression de la branche <ml>else</ml> implicite
+type <ml>unit</ml>, car l'expression de la branche <ml>else</ml> implicite
 est <ml>()</ml>, qui est de type <ml>unit</ml>.
 </p>
 <p>
@@ -1018,105 +1018,146 @@ palindrome_list [];;
 ]]></ocaml-eval>
 </exercice>
 </subsection>
-<!--
 
-<subsection id="" title="{Déclaration de valeurs par filtrage d'un motif}
-Il est possible d'utiliser le {\em pattern-matching} pour déclarer plusieurs
+<subsection id="fun:declfilt" title="Déclaration de valeurs par filtrage d'un motif">
+<p>
+Il est possible d'utiliser le <em>pattern-matching</em> pour déclarer plusieurs
 variables en même temps, en filtrant le résultat d'une expression:
-<ocaml-eval toplevel="true"><![CDATA[
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let (x, y, z) = (1, "2", 3.0);;
 let [s1 ; s2 ; s3] = [ "un" ; "deux" ; "trois"];;
-let [x1 ; x2] = [ 1 ; 2 ; 3 ] ;;" eval="errors"$>
+let [x1 ; x2] = [ 1 ; 2 ; 3 ] ;;
+]]></ocaml-eval>
+</subsection>
 
-
-<subsection id="" title="{Déclaration de types}
+<subsection id="fun:decltypes" title="Déclaration de types">
+<p>
 OCaml permet de définir ses propres types de données, en plus de ceux de base.
 La syntaxe est la suivante:
-<centerstx>type {\em<identifiant>} = {\em<définition>}}
-
+</p>
+<centerstx>type <stxid>identifiant</stxid> = <stxid>définition</stxid></centerstx>
+<p>
 Les types mutuellement récursifs seront définis de la façon suivante:
-<centerstx>type {\em<identifiant$_1$>} = {\em<définition$_1$>}\\
-and {\em<identifiant$_2$>} = {\em<définition$_2$>}\\
+</p>
+<centerstx>type <stxid>identifiant_1</stxid> = <stxid>définition_1</stxid>
+and <stxid>identifiant_2</stxid> = <stxid>définition_2</stxid>
 ...\\
-and {\em<identifiant$_N$>} = {\em<définition$_N$>}}
-
-On remarquera qu'il n'y a pas de mot-clé <ml>rec} pour les définitions de type,
+and <stxid>identifiant_N</stxid> = <stxid>définition_N</stxid>
+</centerstx>
+<p>
+On remarquera qu'il n'y a pas de mot-clé <ml>rec</ml> pour les définitions de type,
 chaque type pouvant être récursif sans syntaxe particulière.
-
+</p>
+<p>
 Les identifiants de types ont la même syntaxe que les identifiants de valeurs, mais
 sont dans un espace de noms différent, ce qui signifie que l'on peut définir une
-valeur <ml>foo} et un type <ml>foo} sans problème.
-
+valeur <ml>foo</ml> et un type <ml>foo</ml> sans problème.
+</p>
+<p>
 Les paramètres des types paramétrés doivent être indiqués avant l'identifiant:
-<centerstx>type 'a {\em<identifiant>} = {\em<définition utilisant le paramètre de type 'a>}\\
-type ('a, 'b) {\em<identifiant>} = {\em<définition utilisant 'a et 'b>}}
-
+</p>
+<centerstx>type 'a <stxid>identifiant</stxid> = <stxid>définition utilisant le paramètre de type 'a</stxid>
+type ('a, 'b) <stxid>identifiant</stxid> = <stxid>définition utilisant 'a et 'b</stxid>
+</centerstx>
+<p>
 Ainsi, on peut définir le type des listes de paires d'éléments d'un type en paramètre:
+</p>
 <ocaml-eval toplevel="true"><![CDATA[type 'a pairs = ('a * 'a) list;;
 let int_pair_list = [ (1, 2) ; (5, 4) ] ;;
 let (int_pairs : int pairs) = [ (1, 2) ; (3, -3) ; (6, 8)];;
-let (bool_pairs : bool pairs) = [ (true, true) ; (false, false) ; (true, false)];;"
-eval="top"$>
+let (bool_pairs : bool pairs) = [ (true, true) ; (false, false) ; (true, false)];;
+]]></ocaml-eval>
+<p>
 Ce type étant défini uniquement à partir de types existants, nous devons indiquer explicitement
 le type que nous voulons voir apparaître, sinon le compilateur infère le type à partir des types
-de base, comme pour <ml>int_pair_list} ci-dessus. Cependant, nous pouvons utiliser
-indifféremment des valeurs de type <ml>'a pairs} ou du type <ml>('a * 'a) list}, le compilateur
+de base, comme pour <ml>int_pair_list</ml> ci-dessus. Cependant, nous pouvons utiliser
+indifféremment des valeurs de type <ml>'a pairs</ml> ou du type <ml>('a * 'a) list</ml>, le compilateur
 réalisant l'unification de ces types pour vérifier qu'ils sont bien compatibles:
-<ocaml-eval toplevel="true"><![CDATA[(=);;
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+(=);;
 int_pair_list;;
 int_pairs;;
-int_pair_list = int_pairs;;" eval="top"$>
+int_pair_list = int_pairs;;
+]]></ocaml-eval>
+<p>
 Si les types ne sont pas compatibles, le compilateur signale une erreur:
-<ocaml-eval toplevel="true"><![CDATA[let (float_pairs : float pairs) = [ (1., 2.) ; (3., 4.)];;
-int_pairs = float_pairs;;" eval="errors"$>
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+let (float_pairs : float pairs) = [ (1., 2.) ; (3., 4.)];;
+int_pairs = float_pairs;;
+]]></ocaml-eval>
+</subsection>
 
-<subsection id="" title="{Enregistrements}
-\label{records}
-<subsubsection id="" title="Définition d'un type}
-\cmp{Les enregistrements sont des n-uplets dont chaque champ est nommé à la manière des {\tt record} de Pascal ou des {\tt struct} de C. Un enregistrement correspond toujours à la déclaration d'un nouveau type. Un type enregistrement est défini par la déclaration de son nom, du nom de chacun de ses champs et de leur type.}
-
+<subsection id="records" title="Enregistrements">
+<subsubsection id="fun:records:decl" title="Définition d'un type">
+<p><cmp>Les enregistrements sont des n-uplets dont chaque champ est nommé
+à la manière des <icode>record</icode> de Pascal ou des <icode>struct</icode> de C.
+Un enregistrement correspond toujours à la déclaration d'un nouveau type. Un type
+enregistrement est défini par la déclaration de son nom, du nom de chacun
+de ses champs et de leur type.</cmp>
+</p>
+<p>
 La syntaxe est la suivante:
-<centerstx>type {\em [<variables de type>]} {\em<identifiant>} = \{\\
-\:\:{\em<nom_de_champ$_1$>} : {\em<type$_1$>} ;\\
-\:\:...\\
-\:\:{\em<nom_de_champ$_n$>} : {\em<type$_n$>} ;\\
-\}}
-
+</p>
+<centerstx>type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> = {
+  <stxid>nom_de_champ_1</stxid> : <stxid>type_1</stxid> ;
+  ...
+  <stxid>nom_de_champ_n</stxid> : <stxid>type_n</stxid> ;
+}</centerstx>
+<p>
 Un type enregistrement ne peut avoir deux noms de champs identiques.
-
-<subsubsection id="" title="Création de valeurs}
+</p>
+</subsubsection>
+<subsubsection id="fun:records:create" title="Création de valeurs">
+<p>
 Par mesure de sûreté, le compilateur impose que chaque champ soit initialisé, lors de la création
 d'une valeur de type enregistrement. Cela évite des problèmes de champs non initialisés comme
 on peut en rencontrer en langage C.
-
+</p>
+<p>
 On peut créer une valeur d'un type enregistrement de deux façons:
-\begin{itemize}
+</p>
+<ul>
 <li>soit à partir de rien, avec la syntaxe suivante:
-<centerstx>\{ champ$_1$ = {\em<expression$_1$>} ; ... ; champ$_n$ = {\em<expression$_n$>} \}}
+<centerstx>{ champ_1 = <stxid>expression_1</stxid> ; ... ; champ_n = <stxid>expression_n</stxid> }</centerstx>
+</li>
 <li>soit à partir d'une autre valeur du même type, en modifiant certains champs:
-<centerstx>\{ {\em<identifiant>} with champ$_i$ = {\em<expression$_i$>} ; ... ; champ$_j$ = {\em<expression$_j$>} \} }
-\end{itemize}
-L'ordre dans lequel le contenu des champs est défini est sans importance. Cependant, on aura à c\oe ur
+<centerstx>{ <stxid>identifiant</stxid> with champ_i = <stxid>expression_i</stxid> ; ... ; champ_j = <stxid>expression_j</stxid> } </centerstx>
+</li>
+</ul>
+<p>
+L'ordre dans lequel le contenu des champs est défini est sans importance. Cependant, on aura à cœur
 de définir les champs toujours dans le même ordre afin de faciliter la lecture et la maintenance
 du programme. Par ailleurs, l'ordre d'évaluation lors de l'affectation des champs n'étant
 pas spécifié, on ne se reposera pas dessus si celles-ci ont des effets de bord (lors de
 l'utilisation de traits impératifs du langage).
-
-<subsubsection id="" title="Accès aux champs}
-L'accès à un champ d'une valeur de type enregistrement se fait en utilisant le point '<ml>.}'
-entre l'identifiant de la valeur et le nom du champ. Ainsi, <ml>foo.bar.gee} représente
-l'accès à la valeur du champ <ml>gee} de la valeur du champ <ml>bar} de la valeur <ml>foo}.
-
-<subsubsection id="" title="Filtrage}
+</p>
+</subsubsection>
+<subsubsection id="fun:records:access" title="Accès aux champs">
+<p>
+L'accès à un champ d'une valeur de type enregistrement se fait en utilisant le point '<ml>.</ml>'
+entre l'identifiant de la valeur et le nom du champ. Ainsi, <ml>foo.bar.gee</ml> représente
+l'accès à la valeur du champ <ml>gee</ml> de la valeur du champ <ml>bar</ml> de la valeur <ml>foo</ml>.
+</p>
+</subsubsection>
+<subsubsection id="fun:records:filt" title="Filtrage">
+<p>
 Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type enregistrement,
 en mettant des contraintes sur tout ou partie des champs du type:
-<centerstx>match {\em<expression>} with\\
-\{ champ$_i$ = {\em<motif$_i$>} ; ... ; champ$_y$ = {\em<motif$_y$>} \} -> ...}
-
-<subsubsection id="" title="Exemple}
-Voici un exemple de définition et d'utilisation d'un type enregistrement <ml>coord}
-avec deux champs <ml>x} et <ml>y}, tous deux de type <ml>float}:
-<ocaml-eval toplevel="true"><![CDATA[type coord = { x : float ; y : float};;
+</p>
+<centerstx>match <stxid>expression</stxid> with
+{ champ_i = <stxid>motif_i</stxid> ; ... ; champ_y = <stxid>motif_y</stxid> } -> ...
+</centerstx>
+</subsubsection>
+<subsubsection id="fun:records:exemple" title="Exemple">
+<p>
+Voici un exemple de définition et d'utilisation d'un type enregistrement <ml>coord</ml>
+avec deux champs <ml>x</ml> et <ml>y</ml>, tous deux de type <ml>float</ml>:
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+type coord = { x : float ; y : float};;
 let origin = { x = 0. ; y = 0. };;
 let add p1 p2 = { x = p1.x +. p2.x ; y = p1.y +. p2.y };;
 let unite = { x = 1. ; y = 1. };;
@@ -1125,264 +1166,387 @@ let p1 = add (add origin unite) unite;;
 p1 = unite;;
 match add p1 unite with
   { x = mon_x } as foo when foo.y > 1. -> string_of_float mon_x
-| { x = x ; y = y } -> string_of_float (x +. y);;" eval="errors"$>
+| { x = x ; y = y } -> string_of_float (x +. y);;
+]]></ocaml-eval>
+</subsubsection>
+</subsection>
 
-
-<subsection id="" title="{Types somme}
-<subsubsection id="" title="Définition d'un type}
-\cmp{À la différence des n-uplets ou des enregistrements, qui correspondent à un produit cartésien, la déclaration d'un type somme correspond à une union d'ensembles. On regroupe dans un même type des types différents (par exemple des entiers et des chaînes de caractères). Les différents membres de la somme sont discriminés par des constructeurs qui permettent d'une part, comme leur nom l'indique, de construire les valeurs de ce type et d'autre part d'accéder aux composantes de ces valeurs grâce au filtrage de motif. Appliquer un constructeur à un argument, c'est indiquer que la valeur retournée appartient à ce nouveau type.}
-
-\cmp{On déclare un type somme en donnant le nom de ses constructeurs et le type de leur éventuel argument.}
-
+<subsection id="fun:variants" title="Types somme">
+<subsubsection id="fun:variants:decl" title="Définition d'un type">
+<p><cmp>À la différence des n-uplets ou des enregistrements, qui correspondent à un produit
+cartésien, la déclaration d'un type somme correspond à une union d'ensembles. On regroupe
+dans un même type des types différents (par exemple des entiers et des chaînes de
+caractères). Les différents membres de la somme sont discriminés par des constructeurs qui
+permettent d'une part, comme leur nom l'indique, de construire les valeurs de ce type
+et d'autre part d'accéder aux composantes de ces valeurs grâce au filtrage de motif.
+Appliquer un constructeur à un argument, c'est indiquer que la valeur retournée appartient à ce nouveau type.
+</cmp>
+</p>
+<p><cmp>On déclare un type somme en donnant le nom de ses constructeurs et le type de leur éventuel argument.</cmp>
+</p>
+<p>
 La syntaxe est la suivante:
-<centerstx>type {\em [<variables de type>]} {\em<identifiant>} =\\
-\:\:| {\em<Constructeur$_1$>}\\
-\:\:...\\
-\:\:| {\em<Constructeur$_i$>} of {\em<type$_i$>}\\
-\:\:...\\
-\:\:| {\em<Constructeur$_n$>} of {\em<type$_{n_1}$>} * ... * {\em<type$_{n_m}$>}
-}
-
+</p>
+<centerstx>type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> =
+  <stxid>Constructeur_1</stxid>
+  ...
+| <stxid>Constructeur_i</stxid> of <stxid>type_i</stxid>
+  ...
+| <stxid>Constructeur_n</stxid> of <stxid>type_n1</stxid> * ... * <stxid>type_nm</stxid>
+</centerstx>
+<p>
 Les noms des constructeurs doivent commencer par une majuscule.
-
+</p>
+<p>
 Chaque constructeur d'un type somme peut avoir 0, 1 ou plusieurs paramètres, dont le type est indiqué
 dans la définition du type somme.
-
+</p>
+<p>
 Un type somme ne peut avoir deux constructeurs de même nom.
-
+</p>
+<p>
 Voici un exemple de définition d'un type somme:
-<ocaml-eval toplevel="true"><![CDATA[type direction =
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type direction =
   Nord
 | Sud
 | Est
 | Ouest
-| Compose of direction * direction;;" eval="top"$>
-
-<subsubsection id="" title="Création de valeurs}
+| Compose of direction * direction;;
+]]></ocaml-eval>
+</subsubsection>
+<subsubsection id="fun:variants:create" title="Création de valeurs">
+<p>
 Une valeur d'un type somme est créée à l'aide d'un constructeur de ce type et des paramètres
 adaptés selon le constructeur, par la syntaxe suivante:
-\begin{itemize}
-<li>pour un constructeur sans paramètre: <ml>\em<Constructeur>},
-<li>pour un constructeur avec un paramètre: <ml>\em<Constructeur> <expression>},
-<li>pour un constructeur avec $n$ paramètres:
- <centerstx>{\em<Constructeur>} ({\em<expression$_1$>},...,{\em<expression$_n$>})},
-\end{itemize}
-Avec notre exemple de type <ml>direction}, cela donne par exemple:
-<ocaml-eval toplevel="true"><![CDATA[let nne = Compose (Nord, Compose (Nord, Est));;" eval="top"$>
+</p>
+<ul>
+<li>pour un constructeur sans paramètre: <stxid>Constructeur</stxid>,</li>
+<li>pour un constructeur avec un paramètre: <stxid>Constructeur</stxid> <stxid>expression</stxid>,</li>
+<li>pour un constructeur avec n paramètres:
+ <centerstx><stxid>Constructeur</stxid> (<stxid>expression_1</stxid>,...,<stxid>expression_n</stxid>)</centerstx>
+</li>
+</ul>
+<p>
+Avec notre exemple de type <ml>direction</ml>, cela donne par exemple:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[let nne = Compose (Nord, Compose (Nord, Est));;]]></ocaml-eval>
+</subsubsection>
 
-<subsubsection id="" title="Filtrage}
+<subsubsection id="fun:variants:filt" title="Filtrage">
+<p>
 Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type somme,
 en procédant par cas sur les constructeurs du type:
-<centerstx>match {\em<expression de type somme>} with\\
-| {\em<Constructeur$_1$>} -> {\em<expression$_1$>}\\
-| {\em<Constructeur$_i$>} {\em<motif$_i$>} -> {\em<expression$_i$>}\\
-| {\em<Constructeur$_j$>} ({\em<motif$_{j_1}$>}, ..., {\em<motif$_{j_n}$>}) -> {\em<expression$_j$>}\\
-...}
-
+</p>
+<centerstx>match <stxid>expression de type somme</stxid> with
+| <stxid>Constructeur_1</stxid> -> <stxid>expression_1</stxid>
+| <stxid>Constructeur_i</stxid> <stxid>motif_i</stxid> -> <stxid>expression_i</stxid>
+| <stxid>Constructeur_j</stxid> (<stxid>motif_j1}</stxid>, ..., <stxid>motif_jn</stxid>) -> <stxid>expression_j</stxid>
+...
+</centerstx>
+<p>
 Par exemple:
-<ocaml-eval toplevel="true"><![CDATA[let rec string_of_direction = function
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let rec string_of_direction = function
   Nord -> "nord"
 | Sud -> "sud"
 | Est -> "est"
 | Ouest -> "ouest"
 | Compose (d1, d2) -> (string_of_direction d1)^"-"^(string_of_direction d2);;
-string_of_direction nne;;" eval="top"$>
+string_of_direction nne;;
+]]></ocaml-eval>
+</subsubsection>
 
-<subsubsection id="" title="Exercice}
-\begin{exercice}
-\label{exoexpr}
-Définir un type somme <ml>expr} pour représenter les expressions contenant les
+<subsubsection id="fun:variants:exo" title="Exercice">
+<exercice id="exoexpr" title="Représentation d'expressions arithmétiques">
+<p>
+Définir un type somme <ml>expr</ml> pour représenter les expressions contenant les
 4 opérations habituelles sur les entiers ainsi que les valeurs entières. On aura
 donc 5 constructeurs.
-<ocaml-eval toplevel="true"><![CDATA[type expr =
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+type expr =
   Val of int
 | Add of expr * expr
 | Sub of expr * expr
 | Mul of expr * expr
-| Div of expr * expr;;" eval="true" hide="true" $>
+| Div of expr * expr;;
+]]></ocaml-eval>
+<p>
 Ensuite, définir une fonction prenant une valeur de ce type et calculant la
 valeur entière en réalisant l'opération décrite.
-<ocaml-eval toplevel="true"><![CDATA[let rec eval = function
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+let rec eval = function
   Val n -> n
 | Add (e1, e2) -> (eval e1) + (eval e2)
 | Sub (e1, e2) -> (eval e1) - (eval e2)
 | Mul (e1, e2) -> (eval e1) * (eval e2)
 | Div (e1, e2) -> (eval e1) / (eval e2)
 ;;
-eval (Add (Val 2, Mul (Val 4, Sub (Val 12, Val 2))));;"
- eval="top" hide="true" $>
-\end{exercice}
-
-<subsection id="" title="{Portée des déclarations}
-
+eval (Add (Val 2, Mul (Val 4, Sub (Val 12, Val 2))));;
+]]></ocaml-eval>
+</exercice>
+</subsubsection>
+</subsection>
+<subsection id="fun:typescope" title="Portée des déclarations">
+<p>
 Les déclarations de type ont la même portée que les déclarations globales de variables et peuvent
 comme elles être masquées par de nouvelles déclarations avec des noms similaires.
-Cependant, les valeurs définies avec un type <ml>t} ne changent pas de type en cas
-de définition d'un nouveau type <ml>t} (et heureusement!). Par contre, ces homonymies peuvent
+Cependant, les valeurs définies avec un type <ml>t</ml> ne changent pas de type en cas
+de définition d'un nouveau type <ml>t</ml> (et heureusement!). Par contre, ces homonymies peuvent
 rendre les messages d'erreur du compilateur un peu déroutants:
-<ocaml-eval toplevel="true"><![CDATA[type t = Foo | Bar;;
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+type t = Foo | Bar;;
 let x = Foo;;
 type t = Gee | Buz;;
 let y = Gee;;
-x = y;;" eval="errors"$>
+x = y;;
+]]></ocaml-eval>
+<p>
 Le même phénomène de masquage est possible sur les noms des champs des types enregistrements:
-<ocaml-eval toplevel="true"><![CDATA[type rec1 = { champ : int; champ2: int };;
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+type rec1 = { champ : int; champ2: int };;
 let x = { champ = 0 ; champ2 = 1;};;
 type rec2 = { champ : int ; champ3 : int};;
-let y = { x with champ = 3 };;" eval="errors"$>
+let y = { x with champ = 3 };;
+]]></ocaml-eval>
+<p>
 et sur les noms des constructeurs de types sommes:
-<ocaml-eval toplevel="true"><![CDATA[type t = Foo | Bar;;
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+type t = Foo | Bar;;
 let x = Foo;;
 type t2 = Foo;;
 match x with
   Foo -> 0
 | Bar -> 1;;
 match x with
-| Foo -> 0;;" eval="errors"$>
+| Foo -> 0;;
+]]></ocaml-eval>
+<p>
 En conséquence, il est souvent utile de choisir des noms "à préfixe" pour les champs et
 les constructeurs, par exemple:
-<ocaml-eval toplevel="true"><![CDATA[type user = { user_name : string; user_login: string};;
-type host = { host_name : string; host_ipv4: int * int * int * int};;" eval="true" $>
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type user = { user_name : string; user_login: string};;
+type host = { host_name : string; host_ipv4: int * int * int * int};;
+]]></ocaml-eval>
+<p>
 Même si cela est plus verbeux, cela facilite la lecture et la maintenance des programmes.
-
-<subsection id="" title="{Types fonctionnels}
+</p>
+</subsection>
+<subsection id="fun:funtypes" title="Types fonctionnels">
+<p>
 Les types fonctionnels sont les types représentant des fonctions, comme nous en avons
 déjà vu précédemment. Il est possible de créer ses propres types fonctionnels ou encore
 d'utiliser des types fonctionnels pour les champs d'enregistrements ou les paramètres
 de constructeurs.
-
+</p>
+<p>
 Ainsi, on peut définir le type d'un afficheur de messages:
-<ocaml-eval toplevel="true"><![CDATA[type printer = string -> unit;;" eval="top"$>
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type printer = string -> unit;;
+]]></ocaml-eval>
+<p>
 Tout comme il est possible d'avoir des champs fonctionnels dans un type enregistrement:
-<ocaml-eval toplevel="true"><![CDATA[type output_context = {
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type output_context = {
   output_error : string -> unit ;
   output_message : string -> unit ;
-}" eval="true"$>
-ou bien, en utilisant notre type <ml>printer}:
-<ocaml-eval toplevel="true"><![CDATA[type output_context = {
+}]]></ocaml-eval>
+<p>
+ou bien, en utilisant notre type <ml>printer</ml>:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type output_context = {
   output_error : printer ;
   output_message : printer ;
-}" eval="true"$>
-
+}
+]]></ocaml-eval>
+<p>
 On peut également avoir des paramètres fonctionnels pour des constructeurs:
-<ocaml-eval toplevel="true"><![CDATA[type action =
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type action =
   Init of (unit -> output_context)
 | Compute of (unit -> unit)
-| Terminate of (unit -> unit);;" eval="true"$>
+| Terminate of (unit -> unit);;
+]]></ocaml-eval>
+<p>
 Ces valeurs fonctionnelles peuvent être nommées dans des motifs de filtrage pour être appliquées:
-<ocaml-eval toplevel="true"><![CDATA[let action = Compute (fun () -> print_endline "coucou");;
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let action = Compute (fun () -> print_endline "coucou");;
 match action with
   Compute f -> f () (* application de la fonction f a () *)
 | Init f -> ignore(f())
-| Terminate f -> f();;" eval="top"$>
-
-<subsection id="" title="{Exercice}
-\begin{exercice}
-On souhaite rendre les expressions de l'exercice \ref{exoexpr} génériques. Pour cela, ajouter
-un paramètre de type au type <ml>expr} pour ne plus limiter les valeurs des
+| Terminate f -> f();;
+]]></ocaml-eval>
+</subsection>
+<subsection id="funtypesexo" title="Exercice">
+<exercice id="funtypesexercice" title="Expressions génériques">
+<p>
+On souhaite rendre les expressions de l'<exercice href="exoexpr"/> génériques. Pour cela, ajouter
+un paramètre de type au type <ml>expr</ml> pour ne plus limiter les valeurs des
 expressions à des entiers.
-<ocaml-eval toplevel="true"><![CDATA[type 'a expr =
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+type 'a expr =
   Val of 'a
 | Add of 'a expr * 'a expr
 | Sub of 'a expr * 'a expr
 | Mul of 'a expr * 'a expr
-| Div of 'a expr * 'a expr;;" eval="true" hide="true" $>
-Ensuite, on veut pouvoir paramétrer la fonction <ml>eval} pour spécifier le traitement
+| Div of 'a expr * 'a expr;;
+]]></ocaml-eval>
+<p>
+Ensuite, on veut pouvoir paramétrer la fonction <ml>eval</ml> pour spécifier le traitement
 à effectuer pour chaque opérateur de notre type expression. Définir un type enregistrement
-<ml>operators} permettant de donner la fonction associée à chaque opérateur d'expression.
+<ml>operators</ml> permettant de donner la fonction associée à chaque opérateur d'expression.
 Ce type est paramétré par le type des valeurs calculées.
-<ocaml-eval toplevel="true"><![CDATA[type 'a operators = {
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+type 'a operators = {
   op_add : 'a -> 'a -> 'a ;
   op_sub : 'a -> 'a -> 'a ;
   op_mul : 'a -> 'a -> 'a ;
   op_div : 'a -> 'a -> 'a ;
-};;" eval="true" hide="true" $>
-Enfin, définir une nouvelle fonction <ml>eval} prenant en paramètre supplémentaire
+};;
+]]></ocaml-eval>
+<p>
+Enfin, définir une nouvelle fonction <ml>eval</ml> prenant en paramètre supplémentaire
 les fonctions à utiliser pour effectuer les calculs lors de l'évaluation (une valeur
-de type <ml>operators}).
-<ocaml-eval toplevel="true"><![CDATA[let rec eval ops = function
+de type <ml>operators</ml>).
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+let rec eval ops = function
   Val v -> v
 | Add (e1, e2) -> ops.op_add (eval ops e1) (eval ops e2)
 | Sub (e1, e2) -> ops.op_sub (eval ops e1) (eval ops e2)
 | Mul (e1, e2) -> ops.op_mul (eval ops e1) (eval ops e2)
 | Div (e1, e2) -> ops.op_div (eval ops e1) (eval ops e2)
-;;" eval="top" hide="true" $>
-Définir une valeur du type <ml>operators} et s'en servir pour évaluer une expression
+;;
+]]></ocaml-eval>
+<p>
+Définir une valeur du type <ml>operators</ml> et s'en servir pour évaluer une expression
 contenant des flottants.
-<ocaml-eval toplevel="true"><![CDATA[let float_ops = {
+</p>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+let float_ops = {
   op_add = (+.) ;
   op_sub = (-.) ;
   op_mul = ( *. ) ;
   op_div = (/.) ;
 };;
-eval float_ops (Add (Val 2., Mul (Val 4., Sub (Val 12., Val 2.))));;"
-eval="top" hide="true" $>
-\end{exercice}
+eval float_ops (Add (Val 2., Mul (Val 4., Sub (Val 12., Val 2.))));;
+]]></ocaml-eval>
+</exercice>
+</subsection>
+</section>
 
-\section{Typage, domaine de définition et exceptions}
-\cmp{Le type inféré d'une fonction correspond à un sur-ensemble de son domaine de définition. Ce n'est pas parce qu'une fonction prend un paramètre de type int qu'elle saura calculer une valeur pour tous les entiers passés en argument. On traite en général ce problème en utilisant le mécanisme d'exceptions d'OCaml. Le déclenchement d'une exception provoque une rupture du calcul qui peut être interceptée et traitée par le programme. Pour cela l'exécution du programme doit avoir posé un récupérateur d'exception avant le calcul de l'expression qui provoque le déclenchement de cette exception.}
+<section id="fun:domain" title="Typage, domaine de définition et exceptions">
+<p><cmp>{Le type inféré d'une fonction correspond à un sur-ensemble de son domaine
+de définition. Ce n'est pas parce qu'une fonction prend un paramètre de type <ml>int</ml>
+qu'elle saura calculer une valeur pour tous les entiers passés en argument. On
+traite en général ce problème en utilisant le mécanisme d'exceptions d'OCaml. Le
+déclenchement d'une exception provoque une rupture du calcul qui peut être interceptée
+et traitée par le programme. Pour cela l'exécution du programme doit avoir posé un
+récupérateur d'exception avant le calcul de l'expression qui provoque le
+déclenchement de cette exception.</cmp>
+</p>
 
-<subsection id="" title="{Fonctions partielles et exceptions}
-\label{exceptions}
-\cmp{Le domaine de définition d'une fonction correspond à l'ensemble des valeurs sur lesquelles la fonction effectue son calcul.}
-
+<subsection id="exceptions" title="Fonctions partielles et exceptions">
+<p><cmp>Le domaine de définition d'une fonction correspond à l'ensemble des valeurs sur
+lesquelles la fonction effectue son calcul.</cmp>
+</p>
+<p>
 Que faire quand est passée à une fonction une valeur qu'elle ne sait pas traiter ?
 Retourner une valeur arbitraire n'est pas la bonne solution. Les exceptions sont faites pour
-gérer ces situations. Par exemple, la fonction <ml>List.hd} récupérant le premier élément d'une liste
-lèvera une exception <ml>Invalid_argument} si une liste vide lui est passée.
-
+gérer ces situations. Par exemple, la fonction <ml>List.hd</ml> récupérant le premier
+élément d'une liste lèvera une exception <ml>Invalid_argument</ml> si une liste vide
+lui est passée.
+</p>
+<p>
 Une fonction peut être partielle parce qu'elle ne traite pas tous les formes possibles d'un
 paramètre:
-<ocaml-eval toplevel="true"><![CDATA[type dummy = One | Two | Three;;
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+type dummy = One | Two | Three;;
 let succ = function
   One -> Two
 | Two -> Three
-;;" eval="top"$>
+;;
+]]></ocaml-eval>
+<p>
 Le compilateur signale que la fonction est partielle, en indiquant que la structure de filtrage
-ne traite pas le cas <ml>Three}. En effet, l'application de cette fonction à la valeur <ml>Three}
+ne traite pas le cas <ml>Three</ml>. En effet, l'application de cette fonction à la valeur <ml>Three</ml>
 déclenchera une exception prédéfinie pour ce genre de cas:
-<ocaml-eval toplevel="true"><![CDATA[succ Three;;" eval="errors"$>
+</p>
+<ocaml-eval toplevel="true" error-exc="false">succ Three;;</ocaml-eval>
+<p>
 Ce genre d'exception n'est pas très facile à traiter car elle est utilisée pour n'importe quel
-{\em pattern-matching} non exhaustif. On préférera donc définir et utiliser
+<em>pattern-matching</em> non exhaustif. On préférera donc définir et utiliser
 ses propres exceptions afin d'être en mesure de traiter efficacement et précisément chaque erreur.
-
+</p>
+<p>
 Les exceptions prédéfinies et utilisées par les modules de la bibliothèque standard d'OCaml
-sont indiquées ici:
-\myurl{http://caml.inria.fr/pub/docs/manual-ocaml/manual033.html#htoc253}
-
-<subsection id="" title="{Définition d'une exception}
+sont indiquées ici <fixme text="{http://caml.inria.fr/pub/docs/manual-ocaml/manual033.html#htoc253}"/>.
+</p>
+</subsection>
+<subsection id="fun:exc:def" title="Définition d'une exception">
+<p>
 Une nouvelle exception est définie avec la syntaxe
-<centerstx>exception {\em<Identifiant>}}
-
+</p>
+<centerstx>exception <stxid>Identifiant</stxid></centerstx>
+<p>
 L'identifiant doit commencer par une majuscule, comme pour les constructeurs de type somme.
 On peut également définir une exception portant une valeur d'un type indiqué à la définition:
-<centerstx>exception {\em<Identifiant>} of {\em<type>}}
-
+</p>
+<centerstx>exception <stxid>Identifiant</stxid> of <stxid>type</stxid></centerstx>
+<p>
 ce qui permet de passer de l'information sur les causes, l'endroit et les conditions menant à
 ce comportement exceptionnel.
-<ocaml-eval toplevel="true"><![CDATA[exception Mon_erreur of string"
-eval="top"$>
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+exception Mon_erreur of string
+]]></ocaml-eval>
+<p>
 Les exceptions peuvent être vues comme des valeurs d'un type somme
-<ml>exn} qui serait enrichi à chaque création d'exception:
-<ocaml-eval toplevel="true"><![CDATA[Mon_erreur "message"" eval="top"$>
-
+<ml>exn</ml> qui serait enrichi à chaque création d'exception:
+</p>
+<ocaml-eval toplevel="true">Mon_erreur "message"</ocaml-eval>
+<p>
 Remarque: Le type d'une exception ne peut être polymorphe.
-
-<subsection id="" title="{Déclenchement d'une exception}
-Une exception est déclenchée (ou levée) grâce à la fonction <ml>raise} prédéfinie:
-<ocaml-eval toplevel="true"><![CDATA[raise (Mon_erreur "Ceci n'est pas un message d'erreur");;" eval="top"$>
-
-Nous pouvons redéfinir notre fonction <ml>succ} pour lever une exception appropriée:
-<ocaml-eval toplevel="true"><![CDATA[let succ = function
+</p>
+</subsection>
+<subsection id="fun:exc:raise" title="Déclenchement d'une exception">
+<p>
+Une exception est déclenchée (ou levée) grâce à la fonction <ml>raise</ml> prédéfinie:
+</p>
+<ocaml-eval toplevel="true">raise (Mon_erreur "Ceci n'est pas un message d'erreur");;</ocaml-eval>
+<p>
+Nous pouvons redéfinir notre fonction <ml>succ</ml> pour lever une exception appropriée:
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let succ = function
   One -> Two
 | Two -> Three
 | Three -> raise (Mon_erreur "Je ne sais pas compter plus loin")
-;;" eval="top"$>
-
+;;
+]]></ocaml-eval>
+<p>
 La levée d'une exception interrompt l'évaluation normale de l'expression qui la contient.
 Cela peut avoir de l'importance lorsque l'ordre d'évaluation n'est pas spécifié, comme
 dans l'exemple suivant:
-<ocaml-eval toplevel="true"><![CDATA[let f x =
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let f x =
   (* l'affichage, trait imperatif par excellence,
      n'est la que pour montrer l'ordre d'execution *)
   print_endline (Printf.sprintf "Appel de f avec x = %d" x);
@@ -1390,51 +1554,68 @@ dans l'exemple suivant:
     raise (Mon_erreur "c'est negatif !")
   else
     x + 1;;
-(f (-1)) + (f 1);;" eval="top"$>
+(f (-1)) + (f 1);;
+]]></ocaml-eval>
+<p>
 On constate ici que l'ordre d'évaluation des arguments passés à une fonction (ici
-l'opérateur infixe <ml>(+)}) est de droite à gauche. Cela signifie que nous avons
+l'opérateur infixe <ml>(+)</ml>) est de droite à gauche. Cela signifie que nous avons
 tout de même effectué une partie du calcul avant de lever l'exception. De telles
 situations peuvent rendre plus difficile la correction d'un programme. On s'appliquera
 parfois, pour se prémunir contre de telles situations, à forcer l'ordre d'évaluation
 des paramètres avant de les passer à la fonction:
-<ocaml-eval toplevel="true"><![CDATA[let p1 = f (-1) in
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let p1 = f (-1) in
 let p2 = f 1 in
-p1 + p2;;" eval="top"$>
+p1 + p2;;
+]]></ocaml-eval>
+<p>
 On se trouve ici au bord de la programmation impérative.
-
-<subsection id="" title="{Récupération d'une exception}
+</p>
+</subsection>
+<subsection id="fun:exc:try" title="Récupération d'une exception">
+<p>
 La construction suivante permet de récupérer (on dit aussi "attraper") une
-exception levée dans l'<ml><expression>}:
-<centerstx>try {\em<expression>}\\
-with\\
-\:\:{\em<motif$_1$>} -> {\em<expression$_1$>}\\
-| ...\\
-| {\em<motif$_n$>} -> {\em<expression$_n$>}\\
-}
-
-Dans la partie <ml>with}, on donne des motifs de filtrage d'exception, qui fonctionnent
+exception levée dans l'<stxid>expression</stxid>:
+</p>
+<centerstx>try <stxid>expression</stxid>
+with
+  <stxid>motif_1</stxid> -> <stxid>expression_1</stxid>
+| ...
+| <stxid>motif_n</stxid> -> <stxid>expression_n</stxid>
+</centerstx>
+<p>
+Dans la partie <ml>with</ml>, on donne des motifs de filtrage d'exception, qui fonctionnent
 de la même façon que les motifs de filtrage de valeurs. Concrètement, on pourra écrire
 comme suite de notre exemple:
-<ocaml-eval toplevel="true"><![CDATA[try ignore(succ Three)
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+try ignore(succ Three)
   with
     Mon_erreur s -> print_endline ("Erreur: "^s)
-  | Failure s ->  print_endline ("Failure: "^s);;" eval="top"$>
+  | Failure s ->  print_endline ("Failure: "^s);;
+]]></ocaml-eval>
+<p>
 Contrairement au filtrage sur des valeurs, le compilateur ne peut ici indiquer si
-les motifs du bloc <ml>with} sont exhaustifs. Cela nécessiterait de connaître
+les motifs du bloc <ml>with</ml> sont exhaustifs. Cela nécessiterait de connaître
 toutes les exceptions potentiellement levées à chaque point du code, ce qui demanderait
 une analyse de flots de données, notamment à cause des possibilités de passage de
 fonction en paramètre. En effet, une telle fonction pourrait lever une exception,
 mais, dans bien des situations, le paramètre effectif ne sera connu qu'à l'exécution.
-
+</p>
+<p>
 Par ailleurs, on ne souhaite pas forcément rattraper toutes les exceptions possibles
 à chaque point d'un programme, mais plutôt rattraper seulement certaines,
 que l'on peut traiter, en laissant volontairement remonter celles correspondant
 à des cas plus inattendus dans lequels on ne peut rien faire d'autre qu'interrompre
 le traitement en cours.
-
-Il est possible de rattraper toutes les exceptions, avec le motif universel '<ml>_}', ou
+</p>
+<p>
+Il est possible de rattraper toutes les exceptions, avec le motif universel '<ml>_</ml>', ou
 bien de lier l'exception rattrapée à un identifiant, comme ci-dessous:
-<ocaml-eval toplevel="true"><![CDATA[try List.hd []
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+try List.hd []
 with
   e ->
     (* traitement effectue pour n'importe quelle exception *)
@@ -1446,97 +1627,124 @@ with
     in
     print_endline ("Some info about the exception: "^msg);
     (* relancons l'exception *)
-    raise e;;" eval="top"$>
-
-<subsection id="" title="{Exercice}
-\begin{exercice}
-Ecrire une fonction <ml>try_finalize} spécifiée de la façon suivante:
-<ml>try_finalize f x g y} applique la fonction <ml>f} à la valeur <ml>x}.
-\begin{itemize}
-<li>si une exception est levée, alors on évalue <ml>g y} et on relève ensuite l'exception,
-<li>si aucune exception n'est levée, on évalue aussi <ml>g y} et on retourne la valeur
-retournée par <ml>f x}.
-<li>si une exception est levée par <ml>g y}, cette exception est levée par
-la fonction <ml>try_finalize}.
-\end{itemize}
-<ocaml-eval toplevel="true"><![CDATA[let try_finalize f x g y =
+    raise e;;
+]]></ocaml-eval>
+</subsection>
+<subsection id="fun:exc:exos" title="Exercice">
+<exercice id="fun:exc:exercice" title="try_finalize">
+<p>
+Ecrire une fonction <ml>try_finalize</ml> spécifiée de la façon suivante:
+<ml>try_finalize f x g y</ml> applique la fonction <ml>f</ml> à la valeur <ml>x</ml>.
+</p>
+<ul>
+<li>si une exception est levée, alors on évalue <ml>g y</ml> et on relève ensuite l'exception,</li>
+<li>si aucune exception n'est levée, on évalue aussi <ml>g y</ml> et on retourne la valeur
+retournée par <ml>f x</ml>.</li>
+<li>si une exception est levée par <ml>g y</ml>, cette exception est levée par
+la fonction <ml>try_finalize</ml>.</li>
+</ul>
+<ocaml-eval toplevel="true" hide="true"><![CDATA[
+let try_finalize f x g y =
   let v = try f x with exn -> ignore(g y); raise exn in
   ignore(g y);
   v;;
 try_finalize (fun x -> x * 2) 21 print_endline "application de g a y";;
 try_finalize (fun x -> 1 / x) 0 print_endline "application de g a y";;
-" eval="top" hide="true" $>
-\end{exercice}
+]]></ocaml-eval>
+</exercice>
+</subsection>
+</section>
 
-%\section{Polymorphisme et valeurs de retour des fonctions}
-%\todo{A enlever pour ne pas trop alourdir la formation ?}
-
-\section{Récursivité terminale}
+<section id="fun:termrec" title="Récursivité terminale">
+<p>
 La programmation fonctionnelle conduit souvent à écrire des fonctions récursives.
 Il existe deux types de récursivités: terminale et non-terminale. Illustrons cette
 différence sur un exemple, la fonction de map sur les listes.
-
+</p>
+<p>
 Voici une première version, récursive non-terminale:
-<ocaml-eval toplevel="true"><![CDATA[let rec map_nt f = function
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let rec map_nt f = function
   [] -> []
 | h::q -> (f h) :: (map_nt f q);;
-map_nt ((+) 1) [ 1 ; 2 ; 3 ; 4 ];;" eval="top"$>
-La fonction <ml>map_nt} effectue bien le calcul demandé, mais présente un
+map_nt ((+) 1) [ 1 ; 2 ; 3 ; 4 ];;
+]]></ocaml-eval>
+<p>
+La fonction <ml>map_nt</ml> effectue bien le calcul demandé, mais présente un
 risque de débordement de pile dans le cas de grandes listes:
-<ocaml-eval toplevel="true"><![CDATA[let big_list =
+</p>
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+let big_list =
   let rec build n acc =
     if n < 2_000_000 then build (n+1) (n::acc) else acc
   in
   build 0 [];;
-map_nt ((+) 1) big_list;;" eval="errors"$>
-Que se passe-t-il ? Notre fonction <ml>map_nt} fonctionne par cas sur la structure
+map_nt ((+) 1) big_list;;
+]]></ocaml-eval>
+<p>
+Que se passe-t-il ? Notre fonction <ml>map_nt</ml> fonctionne par cas sur la structure
 de la liste en paramètre:
-\begin{itemize}
-<li>soit la liste est vide, la fonction retourne donc la liste vide,
+</p>
+<ul>
+<li>soit la liste est vide, la fonction retourne donc la liste vide,</li>
 <li>soit la liste n'est pas vide, dans ce cas la fonction crée une nouvelle
-liste composée de l'application de <ml>f} à la tête de la liste, et de l'application
-récursive de <ml>map_nt} à la queue de la liste. Cette opération de création de
+liste composée de l'application de <ml>f</ml> à la tête de la liste, et de l'application
+récursive de <ml>map_nt</ml> à la queue de la liste. Cette opération de création de
  la nouvelle liste nécessite le calcul de la nouvelle tête de liste et de la nouvelle
  queue de liste. Ensuite seulement la nouvelle liste est créée et retournée.
  De ce fait, les appels récursifs s'empilent jusqu'au débordement de la pile d'appel.
  Cette fonction est dire récursive non-terminale car il reste du calcul à effectuer
  avec la valeur retournée par l'appel récursif.
-\end{itemize}
+ </li>
+</ul>
+<p>
 Voyons maintenant une autre définition, cette fois récursive terminale:
-<ocaml-eval toplevel="true"><![CDATA[let map f l =
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let map f l =
   let rec iter acc = function
     [] -> List.rev acc
   | h::q -> iter ((f h) :: acc) q
   in
   iter [] l;;
-map string_of_int big_list;;" eval="top"$>
-Notre fonction <ml>map} n'est plus récursive mais se contente
-de définir et d'appeler une autre fonction <ml>iter} qui, elle, est
-récursive terminale. Cette fonction <ml>iter} prend en paramètre un
+map string_of_int big_list;;
+]]></ocaml-eval>
+<p>
+Notre fonction <ml>map</ml> n'est plus récursive mais se contente
+de définir et d'appeler une autre fonction <ml>iter</ml> qui, elle, est
+récursive terminale. Cette fonction <ml>iter</ml> prend en paramètre un
 accumulateur, ce qui permet, lors de l'appel récursif, d'avoir déjà
 effectué la création de la nouvelle liste composée de la nouvelle tête
-(<ml>f h}) et du reste de la nouvelle liste déjà calculé (<ml>acc}).
-
+(<ml>f h</ml>) et du reste de la nouvelle liste déjà calculé (<ml>acc</ml>).
+</p>
+<p>
 Cette façon de procéder donne une liste en ordre inverse, d'où l'appel
-à <ml>List.rev} pour retourner l'accumulateur (la nouvelle liste) lors
+à <ml>List.rev</ml> pour retourner l'accumulateur (la nouvelle liste) lors
 qu'on tombe sur le cas de la liste vide (fin de la liste à traiter).
-
-La fonction <ml>iter} est bien récursive terminale car l'appel récursif
+</p>
+<p>
+La fonction <ml>iter</ml> est bien récursive terminale car l'appel récursif
 à elle-même est bien le dernier calcul effectué dans le cas où la liste
 n'est pas vide.
-
+</p>
+<p>
 Cependant, c'est l'appel récursif et non la fonction qui est ou non
-terminal.
-Dans l'exemple suivant
-<ocaml-eval toplevel="true"><![CDATA[let rec foo x =
-  if x < 1 then f (x + 1) else 1 + f (x - 1);;" eval="top"$>
-la fonction <ml>foo} est récursive et s'appelle à deux endroits.
-Le premier appel récursif (<ml>f (x + 1)}) est bien terminal. Par
-contre, le second (<ml>f (x - 1)}) ne l'est pas, car la valeur de
+terminal. Dans l'exemple suivant
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let rec foo x =
+  if x < 1 then f (x + 1) else 1 + f (x - 1);;
+]]></ocaml-eval>
+<p>
+la fonction <ml>foo</ml> est récursive et s'appelle à deux endroits.
+Le premier appel récursif (<ml>f (x + 1)</ml>) est bien terminal. Par
+contre, le second (<ml>f (x - 1)</ml>) ne l'est pas, car la valeur de
 retour de cet appel sera additionnée à 1. On ne peut donc pas parler
 de fonction récursive terminale mais d'un appel terminal et d'un
 appel non terminal.
-
+</p>
+<p>
 Les appels récursifs terminaux sont compilés de façon efficace
 (avec des sauts plutôt qu'en utilisant la pile) par
 le compilateur: au lieu de faire augmenter la taille de la pile,
@@ -1544,16 +1752,19 @@ l'appel récursif est placé au même endroit que l'appel original, ce qui
 donne un gain de temps pour retourner la valeur finale (pas de besoin
 de dépiler des milliers d'appels récursifs) et un gain de place (la pile
 n'augmente pas de taille). Nous avons donc pu appliquer notre fonction
-sur <ml>big_list}.
-
-\startwarning
-L'utilisation de constructions <ml>try ... with} pour la gestion des exceptions
+sur <ml>big_list</ml>.
+</p>
+<warning id="warningrecter" title="Exceptions et récurivité terminale">
+<p>
+L'utilisation de constructions <ml>try ... with</ml> pour la gestion des exceptions
 peut faire d'une fonction récursive terminale une fonction récursive non-terminale.
-Supposons que nous voulions modifier notre fonction <ml>map} pour, en cas
-d'exception <ml>Failure} lors de l'application de <ml>f} à un élement de la liste,
+Supposons que nous voulions modifier notre fonction <ml>map</ml> pour, en cas
+d'exception <ml>Failure</ml> lors de l'application de <ml>f</ml> à un élement de la liste,
 conserver la valeur initiale de l'élément. Nous pouvons tenter la définition
 suivante:
-<ocaml-eval toplevel="true"><![CDATA[let safe_map f l =
+</p>
+<ocaml-eval toplevel="true" error-exec="false"><![CDATA[
+let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc
   | h::q ->
@@ -1562,14 +1773,18 @@ suivante:
   in
   iter [] l
 ;;
-safe_map ((+) 1) big_list;;" eval="top"$>
-La présence du bloc <ml>try ... with} en vue de rattraper l'exception <ml>Failure}
+safe_map ((+) 1) big_list;;
+]]></ocaml-eval>
+<p>
+La présence du bloc <ml>try ... with</ml> en vue de rattraper l'exception <ml>Failure</ml>
 ne permet plus au compilateur d'optimiser les appels récursifs sur la pile. En effet,
 l'appel récursif n'est plus forcément le dernier calcul effectué, car s'il lève
 une exception, il faudra la filtrer, dans ce contexte et non dans celui
 l'appel récursif.
 On écrira donc plutôt:
-<ocaml-eval toplevel="true"><![CDATA[let safe_map f l =
+</p>
+<ocaml-eval toplevel="true"><![CDATA[
+let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc
   | h::q ->
@@ -1578,21 +1793,25 @@ On écrira donc plutôt:
   in
   iter [] l
 ;;
-safe_map ((+) 1) big_list;;" eval="top"$>
+safe_map ((+) 1) big_list;;
+]]></ocaml-eval>
+<p>
 Dans ce cas, l'appel récursif redevient le dernier calcul, le rattrapage d'exception
-étant limité au calcul de <ml>f h}.
-\stopwarning
-
+étant limité au calcul de <ml>f h</ml>.
+</p>
+</warning>
+<p>
 Un appel peut être terminal même s'il ne s'agit pas d'un appel récursif.
 Le compilateur pourra faire des optimisations dans ce cas aussi.
-
-L'option {\tt -annot} des compilateurs OCaml génère, à la compilation
-d'un fichier d'implémentation {\tt foo.ml}, un fichier {\tt foo.annot}
+</p>
+<p>
+L'option <icode>-annot</icode> des compilateurs OCaml génère, à la compilation
+d'un fichier d'implémentation <icode>foo.ml</icode>, un fichier <icode>foo.annot</icode>
 contenant diverses informations, notamment les types inférés pour chaque
 expression et, depuis la version 3.11.0, une indication de terminalité
-pour chaque appel de fonction: {\tt tail} indiquera que l'appel est
-terminal, tandis que {\tt stack} indiquera que l'appel se fera sur la pile.
--->
+pour chaque appel de fonction: <icode>tail</icode> indiquera que l'appel est
+terminal, tandis que <icode>stack</icode> indiquera que l'appel se fera sur la pile.
+</p>
 </section>
 
 </chapter>
