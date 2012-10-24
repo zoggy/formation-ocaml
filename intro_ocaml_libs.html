@@ -18,7 +18,7 @@ Les bibliothèques de la distribution OCaml sont séparées en trois ensembles~:
 <ul>
 <li>la bibliothèque préchargée (le module <moduledoc name="Pervasives"/>), définissant des
 exceptions d'usage général comme <ml>Failure</ml> ou <ml>Not_found</ml>, des fonctions
-sur les types de base (entiers, flottants, chaînes, \dots), des fonctions d'entrées/sorties,
+sur les types de base (entiers, flottants, chaînes, ...), des fonctions d'entrées/sorties,
 </li>
 <li>la bibliothèque dite "standard" dans le sens où elle est toujours présente
 quelle que soit la plateforme sur laquelle est installé OCaml. Cette bibliothèque
@@ -177,10 +177,10 @@ pour l'utilisation de masques, gestion de protocoles ou données binaires, ...
 <td>négation bit à bit logique</td>
 </tr>
 <tr><td><ml>(lor)</ml>, <ml>(land) : int -> int -> int</ml></td>
-<td>{\em ou} et {\em et} bit à bit logique</td>
+<td><em>ou</em> et <em>et</em> bit à bit logique</td>
 </tr>
 <tr><td><ml>(lxor)</ml></td>
-<td>{\em ou exclusif} bit à bit logique</td>
+<td><em>ou exclusif</em> bit à bit logique</td>
 </tr>
 <tr><td><ml>(lsl)</ml>, <ml>(lsr)</ml>, <ml>(asr)</ml></td>
 <td>décalages à gauche et à droite</td>
@@ -790,7 +790,7 @@ Sys.chdir old_dir;;
 Quelques autres modules sont indiqués ici à titre informatif:
 </p>
 <ul>
-<li><moduledoc name="Digest"/> offre des fonctions de calcul de {\em hash} utilisant
+<li><moduledoc name="Digest"/> offre des fonctions de calcul de <em>hash</em> utilisant
 l'algorithme MD5:
 <ocaml-eval toplevel="true"><![CDATA[
 let md5 = Digest.string (Marshal.to_string robert []);;
