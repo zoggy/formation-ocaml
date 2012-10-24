@@ -358,7 +358,8 @@ Ecrire une fonction <ml>is_palindrome</ml> prenant en paramètre une chaîne
 de caractères et retournant <ml>true</ml> si c'est un palindrome, <ml>false</ml> sinon.
 Une chaîne est un palindrome si elle est symétrique (e.g. "radar", "laval").
 </p>
-<ocaml-eval toplevel="true" hid="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let is_palindrome s =
   let len = String.length s in
   let rec test i =
@@ -370,6 +371,7 @@ is_palindrome "nonacecanon";;
 is_palindrome "anna";;
 is_palindrome "baobab";;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 
 <exercice id="exooptparams" title="Paramètres optionnels">
@@ -424,7 +426,7 @@ f ~x: 2 4;;
 <p>
 Ecrire une fonction <ml>list_remove_doubles</ml> prenant en paramètre une liste
 et retournant la même liste mais dans laquelle chaque élément apparaît au plus
-une fois. La fonction acceptera un paramètre optionnel comme fonction de comparaison
+une fois. La fonction acceptera en paramètre optionnel une fonction de comparaison
 pour savoir si deux éléments sont identiques. Par défaut ce paramètre sera
 la fonction d'égalité polymorphe <ml>(=)</ml>.
 </p>
