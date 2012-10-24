@@ -63,7 +63,7 @@ de type (comme des fonctions de lecture/écriture), ...
 Deux outils de pre-processing sont disponibles pour OCaml:
 </p>
 <ul>
-<li><ext-a ref="&lt;urlcamlp4/&gt;">Camlp4</ext-a>: inclus dans la distribution OCaml,</li>
+<li><ext-a href="&lt;urlcamlp4/&gt;">Camlp4</ext-a>: inclus dans la distribution OCaml,</li>
 <li><ext-a href="&lt;urlcamlp5/&gt;">Camlp</ext-a>.</li>
 </ul>
 </subsection>
@@ -108,6 +108,11 @@ les dépendances pour la compilation séparée des modules à l'aide d'un Makefi
 <seemanual href="&lt;urlocamldep/&gt;"/>
 </p>
 <p>
+<icode>ocamlbuild</icode> est un outil de compilation automatique, trouvant les dépendances
+automatiquement entre modules.
+<seemanual href="&lt;urlocamlbuild/&gt;"/>
+</p>
+<p>
 Enfin, <icode>ocamlbrowser</icode> permet la navigation dans les interfaces et implémentations,
 par exemple pour trouver facilement le type d'une fonction.
 <seemanual href="&lt;urlocamlbrowser/&gt;"/>
@@ -127,23 +132,33 @@ de type, ...,</li>
 est un autre mode Emacs,</li>
 <li><ext-a href="http://www.lix.polytechnique.fr/~dbaelde/productions/omlet.html">OMLet</ext-a>
 est un mode pour l'éditeur Vim,</li>
+<li><ext-a href="http://www.typerex.org/">Typerex</ext-a>, une suite d'outils offrant des fonctionnalités
+avancées (refactoring, navigation, ...) avec des commandes emacs,</li>
 <li><ext-a href="http://zoggy.github.com/chamo/">Chamo</ext-a>
 est une sorte d'Emacs développé en OCaml,</li>
 <li><ext-a href="http://ocamleditor.forge.ocamlcore.org/">OCaml editor</ext-a>
 est un éditeur de code OCaml,</li>
 <li><ext-a href="http://ocamldt.free.fr/">ODT</ext-a> est un ensemble de greffons
 pour Eclipse,</li>
-<li><ext-a href="http://ocaml.eclipse.ortsa.com:8480/ocaide/">OCaIDE</ext-a> est
+<li><ext-a href="http://www.algo-prog.info/ocaide/">OCaIDE</ext-a> est
 un greffon pour Eclipse,</li>
 <li><ext-a href="http://ocamlplugin.loki-a.com/">un greffon pour Netbeans IDE</ext-a>
 est également disponible,</li>
 <li><ext-a href="http://try.ocamlpro.com">une application web</ext-a> pour essayer OCaml en ligne.</li>
 </ul>
-<fixme text="add typerex ocamlbuild"/>
 <p>
 L'outil <ext-a href="http://projects.camlcity.org/projects/findlib.html/">Findlib</ext-a>
 s'est imposé comme outil standard pour la gestion des bibliothèques installées.
 </p>
+<p>
+Plusieurs gestionnaires de paquets existent, permettant d'installer et recompiler automatiquement
+des bibliothèques et leurs dépendances:
+</p>
+<ul>
+<li><ext-a href="https://github.com/OCamlPro/opam">OPAM</ext-a>,</li>
+<li><ext-a href="https://github.com/thelema/odb">Odb</ext-a>,</li>
+<li><ext-a href="http://godi.camlcity.org/godi/index.html">Godi</ext-a> et <ext-a href="http://wodi.forge.ocamlcore.org/">Wodi</ext-a>.</li>
+</ul>
 <p>
 D'autres outils sont listés dans la bosse Caml, dans le thème
 <ext-a href="http://caml.inria.fr/cgi-bin/hump.en.cgi?sort=0&amp;browse=52">"Software development"</ext-a>
