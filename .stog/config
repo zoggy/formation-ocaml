@@ -1,7 +1,8 @@
 (* Regexps of files to ignore *)
 ignored =
   [".*less"; ".*\\.cm.*"; ".*intro_ocaml_.*"; ".*/\\.chamo.*"; ".*\\.git.*";
-   ".*Makefile"; ".*tmpl$"; ".*\\.stog"]
+   ".*Makefile"; ".*tmpl$"; ".*\\.stog"; ".*env"; ".*ocaml\\.bib";
+   ".*stog_course\\.ml"]
 (* Regexps of files containing elements *)
 elements = [".*\\.xml$"; ".*\\.html$"]
 (* Regexps of files matching 'elements' regexps but not containing elements
