@@ -78,7 +78,7 @@ let tab = Array.create 10 0;;
 let tab = Array.init 10 (fun i -> i * 2);;
 ]]></ocaml-eval>
 <p>
-Les indices d'un vecteur de longueur $n$ vont de 0 à n-1.
+Les indices d'un vecteur de longueur n vont de 0 à n-1.
 </p>
 </subsubsection>
 
@@ -99,7 +99,7 @@ tab.(3);;
 ]]></ocaml-eval></li>
 </ul>
 <p>
-L'accès à un élément d'un vecteur de longueur $n$ en utilisant un indice en
+L'accès à un élément d'un vecteur de longueur n en utilisant un indice en
 dehors de la plage 0..n-1 déclenche la levée d'une exception <ml>Invalid_argument</ml>:
 </p>
 <ocaml-eval toplevel="true" error-exc="false">tab.(42);;</ocaml-eval>

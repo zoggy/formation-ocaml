@@ -22,7 +22,7 @@ let fun_solution env atts subs =
       (* create a unique id *)
       let id = make_id () in
       [ Xtmpl.T ("button",
-         ["href", "#"^id ; "data-toggle", "collapse" ; "class", "btn btn-primary"],
+         ["href", "#"^id ; "data-toggle", "collapse" ; "class", "btn btn-info solution"],
          [get_solution_label env]) ;
         Xtmpl.T ("div",
          ["id", id ; "class", "collapse codeblock"],
