@@ -1,94 +1,21 @@
-#################################################################################
-#  "Introduction au langage OCaml" par Maxence Guesdon est mis                  #
-#  à disposition selon les termes de la licence Creative Commons                #
-#   Paternité                                                                   #
-#   Pas d'Utilisation Commerciale                                               #
-#   Partage des Conditions Initiales à l'Identique                              #
-#   2.0 France.                                                                 #
-#                                                                               #
-#  Contact: Maxence.Guesdon@inria.fr                                            #
-#                                                                               #
-#                                                                               #
-#################################################################################
+STOG=stog.byte
+DEST_DIR=/tmp/form-ocaml
+BASE_URL_OPTION=
+STOG_OPTIONS=-d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing -v
 
-LATEX=pdflatex
-BIBTEX=bibtex
-HEVEA=hevea
-HACHA=hacha
-OCAML=ocaml
-OCAMLC=ocamlc.opt -dtypes
-HIGHLIGHT=highlight
+build:
+	rm -fr $(DEST_DIR)
+	$(STOG) $(STOG_OPTIONS) .
+	$(MAKE) style
 
-PDF=formation_ocaml.pdf
-HTML=$(PDF:.pdf=.html)
-SKEL_TEX=$(PDF:.pdf=.tex)
-TEX=formation.tex
-XML=$(TEX:.tex=.xml)
+style:
+	lessc less/style.less > $(DEST_DIR)/style.css
 
-RM=rm -f
-MKDIR=mkdir -p
+test:
+	$(MAKE) BASE_URL_OPTION="--site-url file://$(DEST_DIR)" build
 
-GEN_TEX=gen_tex.x
-
-pdf: $(PDF)
-all: pdf html
-html: $(HTML)
-
-$(PDF): $(SKEL_TEX) $(TEX)
-	$(LATEX) $<
-	$(LATEX) $<
-	$(LATEX) $<
-
-$(TEX): $(XML) $(GEN_TEX)
-	./$(GEN_TEX) $< | grep -v "mbox{}" > $@
-
-$(HTML): $(SKEL_TEX) $(TEX)
-	$(HEVEA) $<
-	$(HEVEA) $<
-	$(HACHA) -tocbis $@
-	rpl "<BODY >" "<BODY><CENTER><DIV class=\"contents\">" *.html
-	rpl -q "<BR><BR>" "" *.html
-	rpl "</BODY>" "</DIV></CENTER><script type=\"text/javascript\" src=\"jquery.js\"></script><script type=\"text/javascript\" src=\"bootstrap-collapse.js\"></script><BODY>" *.html
-	rpl "&#X2019;" "'" *.html
-	$(MKDIR) html
-	mv *.html html/
-	cp images/warning.png images/expand_collapse.png images/draft.png images/*.gif *.gif html/
-	cp ocaml.png fond.png html/
-	cp bootstrap-collapse.js jquery.js style.css html/
-
-CAMLSRCDIR=/home/guesdon/devel/ocaml-3.12
-$(GEN_TEX): gen_tex.ml mon_module.cmo mon_module2.cmo
-	$(OCAMLC) -o $@ \
-	`ocamlfind query -i-format pcre` \
-	-I $(CAMLSRCDIR)/parsing \
-	-I $(CAMLSRCDIR)/driver \
-	-linkall \
-	unix.cma str.cma toplevellib.cma pcre.cma xml-light.cma $<
-
-clean:
-	$(RM) *.cm* $(GEN_TEX) *.annot *.o
-	$(RM) $(TEX) $(PDF) $(HTML) *.html *.htoc *.toc *.log *.haux *.aux
-
-# headers :
-###########
-HEADFILES= Makefile *.ml *.tex *.xml
-
-headers: dummy
-	echo $(HEADFILES)
-	headache -h header -c .headache_config `ls $(HEADFILES) `
-
-noheaders: dummy
-	headache -r -c .headache_config `ls $(HEADFILES) `
-
-dummy:
-
-mon_module.cmo: mon_module.ml
-	$(OCAMLC) -c $<
-
-mon_module2.cmo: mon_module2.ml
-	$(OCAMLC) -c $<
-
-# install web page
-installweb: all
-	scp -r web/index.html web/style.css html formation_ocaml.pdf \
-	zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
+#install: build
+#	scp $(DEST_DIR)/* yquem.inria.fr:public_html/
+#
+#installhtml: build
+#	scp $(DEST_DIR)/*.html yquem.inria.fr:public_html/
