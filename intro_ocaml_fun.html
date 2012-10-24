@@ -1,6 +1,4 @@
-<chapter id="progfonctionnelle" title="Programmation fonctionnelle">
-<prepare-toc depth="1">
-<toc/>
+<mychapter id="progfonctionnelle" title="Programmation fonctionnelle">
 <p>
 La syntaxe d'OCaml et le paradigme de programmation fonctionnelle
 permettent de mieux voir un programme comme une fonction retournant
@@ -573,7 +571,7 @@ square 24.0 (* erreur: le parametre doit etre un entier *) ;;
 let add1 = add 1 (* application "partielle" de add pour obtenir une fonction d'increment *) ;;
 add1 41 ;;
 ]]></ocaml-eval>
-<warning id="fun:parenth">
+<warning id="fun:parenth" title="Place des parenthèses">
 <p>
 Les parenthèses ne peuvent être mises n'importe où:
 </p>
@@ -964,7 +962,7 @@ car les deux <ml>x</ml> de <ml>x = x</ml> font référence tous deux à l'identi
 dans le motif <ml>[x]</ml>. Les clauses <ml>when</ml> sont également appelées
 <em>gardes</em>.
 </p>
-<warning id="multiplebind">
+<warning id="multiplebind" title="Pas de liaisons multiples">
 <p>
 Il n'est pas possible de lier plusieurs fois la même variable dans un motif, y compris
 pour exprimer une contrainte d'égalité entre deux parties de l'expression filtrée:
@@ -1815,5 +1813,4 @@ pour chaque appel de fonction: <icode>tail</icode> indiquera que l'appel est
 terminal, tandis que <icode>stack</icode> indiquera que l'appel se fera sur la pile.
 </p>
 </section>
-</prepare-toc>
-</chapter>
+</mychapter>

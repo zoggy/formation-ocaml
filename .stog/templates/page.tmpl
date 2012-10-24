@@ -1,0 +1,43 @@
+<html>
+<head>
+<title><site-title/> : <elt-title/></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="&lt;site-url/&gt;/style.css"></link>
+<link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'></link>
+<link href='http://fonts.googleapis.com/css?family=Leckerli+One' rel='stylesheet' type='text/css'></link>
+
+<!--<script src="less.js" type="text/javascript">foo</script>-->
+<link href="/favicon.png" rel="shortcut icon" type="image/png" />
+<rssfeed/>
+</head>
+<body>
+<div id="page">
+<div id="header">
+<div id="site-title"><a href="&lt;site-url/&gt;/index.html"><site-title/></a></div>
+<div class="site-desc"><site-description/></div>
+</div>
+<if elt-type="post"><div class="date"><elt-date/></div></if>
+<if elt-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><elt-title/></div></if>
+<if entete=""><span/><p class="alert alert-info"><entete/></p></if>
+<div id="elt-body"><elt-body/></div>
+<if elt-type="post"><div class="comments">
+<div>
+<div class="elt-keywords">
+  <div class="bloc-keywords">
+  Thèmes: <div class="keywords"><elt-topics ep=", "/></div>
+  </div>
+  <div class="bloc-keywords">
+  Mots-clés: <div class="keywords"><elt-keywords sep=", "/></div>
+  </div>
+</div>
+</div>
+<div itemprop="articleSection" class="section">
+  <comments/>
+</div>
+</div>
+</if>
+</div>
+
+<footer id="bottombar">
+</footer>
+</body>
+</html>
