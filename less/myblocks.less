@@ -1,0 +1,42 @@
+.myblock(@bg: #eeeeee) {
+  .rounded-box ();
+  padding: 0;
+  background-color: @bgcolor;
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  div.title {
+  .rounded-box();
+  padding: 0.3em 0.5em 0.3em 0.5em;
+  background-color: @bg;
+  border-color: @color2;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  font-weight: bold;
+  }
+  div.contents {
+    padding: 0.5em;
+  }
+}
+
+div.exercice {
+  .myblock ();
+}
+
+div.warning {
+  .myblock (lighten(@orange, 30));
+}
+
+div.figure {
+  .myblock (lighten(@green, 40));
+}
+
+div.ocaml-toplevel {
+  color: #666666;
+  font-style: italic;
+}
+
+pre {
+  margin-left: 1em;
+  margin-right: 1em;
+}

@@ -906,10 +906,10 @@ match List.map string_of_int [ 1 ; 2 ; 3 ] with
 Dans cet exemple, nous filtrons une valeur de type <ml>string list</ml>. Les premier
 (<ml>[]</ml>) et deuxième (<ml>_::[]</ml>) motifs filtrent respectivement
 la liste vide et n'importe quelle liste à un élément, et
-partagent le même traitement associé (<ml>assert</ml><note>la fonction assert prend
+partagent le même traitement associé (<ml>assert false</ml><note>la fonction assert prend
 en paramètre une expression de type <ml>bool</ml> et lève une exception
-<ml>Assertion_failed</ml> si l'expression est évaluée à <ml>false</ml>.</note> <ml>false</ml>.
-Le troisième motif <ml>[s1;s2]</ml> filtre les listes à deux éléments, en liant le
+<ml>Assertion_failed</ml> si l'expression est évaluée à <ml>false</ml>.</note>).
+Le troisième motif <ml>[s1 ; s2]</ml> filtre les listes à deux éléments, en liant le
 premier élément à l'identifiant <ml>s1</ml> et le second à l'élément <ml>s2</ml>. Dans
 notre exemple, la liste filtrée aura toujours trois éléments donc nous ne passerons
 jamais dans cette branche.
