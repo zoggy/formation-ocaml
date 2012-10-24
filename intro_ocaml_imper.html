@@ -70,7 +70,7 @@ les valeurs du vecteur entre <ml>[|</ml> et <ml>|]</ml>:
 </p>
 <ocaml-eval toplevel="true">let tab = [| 1 ; 2 ; 3 ; 4 |];;</ocaml-eval>
 <p>
-Il est également possible d'utiliser des fonctions du module <fixme text="\refmodule{Array}"/>
+Il est également possible d'utiliser des fonctions du module <moduledoc name="Array"/>
 pour créer des vecteurs:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
@@ -141,7 +141,7 @@ invalide (en dehors des bornes).
 <subsubsection id="vectors:other" title="Autres opérations">
 <p>
 D'autres opérations sur les vecteurs sont disponibles via des fonctions prédéfinies
-du module <fixme text="\refmodule{Array}"/>:
+du module <moduledoc name="Array"/>:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
 Array.length tab (* longueur *) ;;
@@ -150,7 +150,7 @@ Array.to_list tab (* creation d'une liste a partir des elements du vecteur *);;
 Array.map string_of_int tab (* map sur les elements du vecteur *) ;;
 ]]></ocaml-eval>
 <p>
-On consultera la documentation du module <fixme text="\refmodule{Array}"/>.
+On consultera la documentation du module <moduledoc name="Array"/>.
 </p>
 </subsubsection>
 </subsection>
@@ -175,8 +175,8 @@ Le caractère <ml>\</ml> est utilisé pour indiquer des caractères spéciaux:
 <li><ml>\"</ml> permet d'insérer le caractère " au lieu de signaler la
 fin de la chaîne,</li>
 <li><ml>\n</ml> indique une fin de ligne,</li>
-<li><ml>\r}</ml> indique un retour charriot,</li>
-<li><ml>\t}</ml> indique une tabulation.</li>
+<li><ml>\r</ml> indique un retour charriot,</li>
+<li><ml>\t</ml> indique une tabulation.</li>
 </ul>
 <ocaml-eval toplevel="true"><![CDATA[
 print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
@@ -234,7 +234,7 @@ chaine.[1];;
 <subsubsection id="strings:other" title="Autres opérations">
 <p>
 D'autres opérations sur les chaînes sont offertes par les fonctions du module
-<fixme text="\refmodule{String}"/>. Par exemple:
+<moduledoc name="String"/>. Par exemple:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
 String.length chaine (* longeur d'une chaine *);;
@@ -244,7 +244,7 @@ String.concat ", " animaux (* concatenation d'une liste de chaines en utilisant 
 ]]></ocaml-eval>
 <p>
 Pour d'autres fonctions, on consultera la documentation du module
-<fixme text="\refmodule{String}"/>.
+<moduledoc name="String"/>.
 </p>
 </subsubsection>
 </subsection>
@@ -351,8 +351,8 @@ On notera que, grâce au typage, on ne pourra utiliser un canal d'entrée
 <subsection id="inout:read" title="Lecture">
 <p>
 Voici quelques fonctions de lecture sur un canal de type <ml>in_channel</ml>.
-D'autres fonctions sont disponibles dans la bibliothèque de base:
-<fixme text="\refdocinputfuns"/>.
+D'autres fonctions sont disponibles dans la
+<ext-a href="&lt;urldocinputfuns/&gt;">bibliothèque de base</ext-a>.
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
 let first_line = input_line ic (* lecture d'une ligne *);;
@@ -372,8 +372,8 @@ close_in ic;;
 <subsection id="inout:write" title="Ecriture">
 <p>
 Voici quelques fonctions d'écriture sur un canal de type <ml>out_channel</ml>.
-D'autres fonctions sont disponibles dans la bibliothèque de base:
-<fixme text="\refdocoutputfuns"/>.
+D'autres fonctions sont disponibles dans la
+<ext-a href="&lt;urldocoutputfuns/&gt;">bibliothèque de base</ext-a>.
 </p>
 <p>
 Il est important de savoir que ces canaux sont munis de tampons (buffers). Cela
@@ -541,7 +541,7 @@ flush stdout;;
 <p>
 Ecrire un programme qui affiche ses arguments, à la manière de la commande UNIX <icode>echo</icode>.
 Pour cela, on utilisera <ml>Sys.argv</ml> qui est le tableau des arguments du programme,
-ainsi que le module <fixme text="\refmodule{Array}"/> pour les accès aux tableaux. Le parcours du tableau
+ainsi que le module <moduledoc name="Array"/> pour les accès aux tableaux. Le parcours du tableau
 sera réalisé à l'aide d'une boucle.
 On compilera le programme grâce à la commande
 </p>

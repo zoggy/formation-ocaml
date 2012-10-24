@@ -6,7 +6,7 @@
 L'interprète (<em>toplevel</em>) <icode>ocaml</icode> évalue au vol le code OCaml qui lui est
 passé. Il peut interpréter des fichiers passés sur la ligne de commande ou bien
 se comporter comme un shell et interpréter les phrases que l'utilisateur saisit.
-<fixme text="\seemanual{\urldoctoplevelraw}"/>
+<seemanual href="&lt;urldoctoplevel/&gt;"/>
 </p>
 </subsection>
 
@@ -39,12 +39,12 @@ dans le tableau suivant:
 La distribution OCaml fournit un débogueur, <icode>ocamldebug</icode>, permettant de suivre
 l'exécution d'un programme pas à pas, de revenir en arrière, d'inspecter des valeurs,
 mettre des points d'arrêt. Le programme doit être compilé en code-octet avec l'option
-<icode>-g</icode>. <fixme text="\seemanual{\urlocamldebug}"/>
+<icode>-g</icode>. <seemanual href="&lt;urlocamldebug/&gt;"/>
 </p>
 <p>
 La distribution inclut également un profileur, <icode>ocamlprof</icode>, capable d'afficher
 le nombre de passages à chaque point d'un programme compilé avec <icode>ocamlcp</icode>.
-<fixme text="\seemanual{\urlocamlprof}"/>
+<seemanual href="&lt;urlocamlprof/&gt;"/>
 </p>
 <p>
 On pourra également utiliser l'outil GNU <icode>gprof</icode> par exemple pour afficher le temps
@@ -63,8 +63,8 @@ de type (comme des fonctions de lecture/écriture), ...
 Deux outils de pre-processing sont disponibles pour OCaml:
 </p>
 <ul>
-<li>Camlp4: inclus dans la distribution OCaml,</li>
-<li> Camlp5: <fixme href="\urlcamlpp"/>.</li>
+<li><ext-a ref="&lt;urlcamlp4/&gt;">Camlp4</ext-a>: inclus dans la distribution OCaml,</li>
+<li><ext-a href="&lt;urlcamlp5/&gt;">Camlp</ext-a>.</li>
 </ul>
 </subsection>
 
@@ -88,7 +88,7 @@ Il est également possible de définir son propre générateur et d'ajouter des 
 de syntaxe pour générer des documentations spécialisées.
 </p>
 <p>
-<fixme text="\seemanual{\urlocamldoc}"/>
+<seemanual href="&lt;urlocamldoc/&gt;"/>
 </p>
 </subsection>
 
@@ -99,18 +99,18 @@ Comme <icode>yacc</icode> et <icode>lex</icode> pour C, les outils
 sont des générateurs d'analyseurs respectivement syntaxiques (<em>parsers</em>) et
 lexicaux (<em>lexers</em>).
 Le manuel OCaml donne un exemple concret de leur utilisation.
-<fixme text="\seemanual{\urlocamlyacc}"/>
+<seemanual href="&lt;urlocamlyacc/&gt;"/>
 </p>
 <p>
 L'outil <icode>ocamldep</icode> analyse des fichiers sources OCaml et génère leurs dépendances
 dans un format compris par l'outil Make. Cela permet de ne pas avoir à indiquer explicitement
 les dépendances pour la compilation séparée des modules à l'aide d'un Makefile.
-<fixme text="\seemanual{\urlocamldep}"/>
+<seemanual href="&lt;urlocamldep/&gt;"/>
 </p>
 <p>
 Enfin, <icode>ocamlbrowser</icode> permet la navigation dans les interfaces et implémentations,
 par exemple pour trouver facilement le type d'une fonction.
-<fixme text="\seemanual{\urlocamlbrowser}"/>
+<seemanual href="&lt;urlocamlbrowser/&gt;"/>
 </p>
 </subsection>
 </section>
@@ -139,7 +139,7 @@ un greffon pour Eclipse,</li>
 est également disponible,</li>
 <li><ext-a href="http://try.ocamlpro.com">une application web</ext-a> pour essayer OCaml en ligne.</li>
 </ul>
-<fixme text="add typerex"/>
+<fixme text="add typerex ocamlbuild"/>
 <p>
 L'outil <ext-a href="http://projects.camlcity.org/projects/findlib.html/">Findlib</ext-a>
 s'est imposé comme outil standard pour la gestion des bibliothèques installées.

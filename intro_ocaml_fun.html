@@ -41,7 +41,7 @@ unsigned int fact (unsigned int n) {
 <p>
 Le noyau fonctionnel du langage permet d'appliquer des fonctions à des valeurs.
 Les valeurs sont typées et peuvent être de types de base (entier, flottant, ...,
-cf. <fixme text="lien #basetypes"/>), de types plus élaborés construits à partir d'autres
+cf. <elt href="#basetypes"/>), de types plus élaborés construits à partir d'autres
 types, ou bien de type fonction. En effet, en OCaml, les fonctions sont des
 valeurs <em>de premier ordre</em>, c'est-à-dire que le langage permet de les manipuler
 comme d'autres valeurs "simples" comme les entiers. En particulier, on peut définir
@@ -74,9 +74,9 @@ bits sur une machine 64 bits. Cela est dû à la façon dont sont encodées les
 valeurs.
 </p>
 <p>
-Il existe beaucoup d'autres opérations sur les entiers, incluant également
-la manipulation au niveau bits:
-<fixme text="lien \pervasivesurl{6_Integerarithmetic}"/>
+Il existe beaucoup
+d'<ext-a href="&lt;urldoccoreint/&gt;">autres opérations</ext-a>
+sur les entiers, incluant également la manipulation au niveau bits.
 </p>
 <p>
 On remarquera que l'interprète a automatiquement déterminé le type des expressions
@@ -105,8 +105,9 @@ truncate 3.5 (* ne conserve que la partie entière *) ;;
             n'est pas un nombre, 'not a number' ou 'NaN' *);;
 ]]></ocaml-eval>
 <p>
-D'autres opérations sont disponibles sur les flottants; on consultera le manuel
-pour les découvrir:<fixme text="\pervasivesurl{6_Floatingpointarithmetic}."/>
+D'autres opérations sont disponibles sur les flottants; on consultera le
+<ext-a href="&lt;urldoccorefloat/&gt;">manuel</ext-a>
+pour les découvrir.
 </p>
 <p>
 Les opérateurs <icode>+</icode> et <icode>+.</icode> ne sont pas génériques et s'appliquent respectivement
@@ -134,7 +135,7 @@ int_of_char 'a' (* son code ASCII *) ;;
 char_of_int 123 (* le caractere de code ASCII 123 *) ;;
 ]]></ocaml-eval>
 <p>
-D'autres fonctions sont disponibles dans le module <fixme text="\refmodule{Char}"/>.
+D'autres fonctions sont disponibles dans le module <moduledoc name="Char"/>.
 </p>
 </paragraph>
 <paragraph title="Les chaînes de caractères (type string)">
@@ -145,7 +146,7 @@ String.length "hello world!" (* longueur de chaine *);;
 "hello world!".[4] (* acces à un caractere, indice commencant a zero *) ;;
 ]]></ocaml-eval>
 <p>
-Beaucoup d'autres fonctions sont disponibles dans le module <fixme text="\refmodule{String}"/>.
+Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="String"/>.
 </p>
 <warning id="noautoconv" title="Pas de conversion automatique">
 <p>Il n'existe pas de conversion automatique d'un type vers un autre comme dans
@@ -231,7 +232,7 @@ List.tl [ 1 ; 2 ; 3 ] (* recuperation de la queue de la liste (i.e. sans la tete
 String.concat "-" [ "hello" ; "world" ; "!" ] (* concatenation d'une liste de chaines *) ;;
 ]]></ocaml-eval>
 <p>
-Beaucoup d'autres fonctions sont disponibles dans le module <fixme text="\refmodule{List}"/>.
+Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="List"/>.
 </p>
 </paragraph>
 </subsubsection>
@@ -371,8 +372,8 @@ visible que dans une seule expression. La syntaxe est la suivante:
 </p>
 <centerstx>let <stxid>identifiant</stxid> = <stxid>expression_1</stxid> in <stxid>expression_2</stxid></centerstx>
 <p>
-La valeur de l'<icode>expression_1</icode> est calculée et liée à
-l'<icode>identifiant</icode>. Ce dernier n'est visible que dans l'<icode>expression_2</icode>. Exemple:
+La valeur de l'<stxid>expression_1</stxid> est calculée et liée à
+l'<stxid>identifiant</stxid>. Ce dernier n'est visible que dans l'<stxid>expression_2</stxid>. Exemple:
 </p>
 <ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let foo = (* declaration globale foo *)
@@ -399,7 +400,7 @@ let foo =
     gee + bar + 2;;
 ]]></ocaml-eval>
 <p>
-Des conseils sur l'indentation sont donnés à l'adresse <fixme texte="\urlindentconseils"/>.
+Des conseils sur l'indentation sont <ext-a href="&lt;urldocindentconseils/&gt;">disponibles</ext-a>.
 </p>
 <warning id="warninglocaldecl" title="Déclarations locales et globales">
 <p>
@@ -640,8 +641,8 @@ let (++) (x, y) n = (x + n, y + n);;
 (++) (2, 0) 2 (* utilisation en position préfixe *) ;;
 ]]></ocaml-eval>
 <p>
-Les caractères réservés à ce genre de définition sont indiqués ici:
-<fixme text="\myurl{http://caml.inria.fr/pub/docs/manual-ocaml/lex.html}"/>.
+Les caractères réservés à ce genre de définition sont
+<ext-a href="http://caml.inria.fr/pub/docs/manual-ocaml/lex.html">indiqués ici</ext-a>.
 </p>
 </subsubsection>
 
@@ -776,7 +777,7 @@ là où il ne l'est pas:
 
 <subsection id="fun:exercices" title="Exercices">
 <p>
-On pourra s'aider de la documentation du module <fixme text="\refmodule{List}"/>.
+On pourra s'aider de la documentation du module <moduledoc name="List"/>.
 </p>
 <exercice id="redeflistmap" title="Redéfinition de List.map">
 <p>
@@ -849,11 +850,11 @@ La syntaxe est la suivante:
 </centerstx>
 <p>
 L'évaluation de cette expression se déroule ainsi:
-L'<ml>expression_0</ml> est évaluée. Sa valeur est ensuite comparée au premier motif
-<ml>pattern_1</ml>. Si la valeur est filtrée (elle correspond aux contraintes de ce motif), alors
-l'<ml>expression_1</ml> est évaluée en une valeur qui est la valeur de toute la construction
-<ml>match ... with</ml>. Si ce n'est pas le cas, la valeur de <ml>expression_0</ml>} est comparée
-au motif <ml>pattern_2</ml>, et ainsi de suite jusqu'à ce qu'un motif corresponde à la valeur.
+L'<stxid>expression_0</stxid> est évaluée. Sa valeur est ensuite comparée au premier motif
+<stxid>pattern_1</stxid>. Si la valeur est filtrée (elle correspond aux contraintes de ce motif), alors
+l'<stxid>expression_1</stxid> est évaluée en une valeur qui est la valeur de toute la construction
+<ml>match ... with</ml>. Si ce n'est pas le cas, la valeur de <stxid>expression_0</stxid> est comparée
+au motif <stxid>pattern_2</stxid>, et ainsi de suite jusqu'à ce qu'un motif corresponde à la valeur.
 </p>
 <p>
 Si aucun motif ne correspond à la valeur à filtrer, une exception (cf. <elt href="#exceptions"/>)
@@ -1042,7 +1043,7 @@ Les types mutuellement récursifs seront définis de la façon suivante:
 </p>
 <centerstx>type <stxid>identifiant_1</stxid> = <stxid>définition_1</stxid>
 and <stxid>identifiant_2</stxid> = <stxid>définition_2</stxid>
-...\\
+...
 and <stxid>identifiant_N</stxid> = <stxid>définition_N</stxid>
 </centerstx>
 <p>
@@ -1496,7 +1497,8 @@ ses propres exceptions afin d'être en mesure de traiter efficacement et précis
 </p>
 <p>
 Les exceptions prédéfinies et utilisées par les modules de la bibliothèque standard d'OCaml
-sont indiquées ici <fixme text="{http://caml.inria.fr/pub/docs/manual-ocaml/manual033.html#htoc253}"/>.
+sont indiquées
+<ext-a href="&lt;urldoccoretypes/&gt;">ici</ext-a>.
 </p>
 </subsection>
 <subsection id="fun:exc:def" title="Définition d'une exception">

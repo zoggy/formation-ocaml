@@ -105,13 +105,12 @@ affiche les types et valeurs des expressions évaluées avant de réafficher le 
 Il est possible de charger des modules additionnels compilés
 (cf. chapitre <elt href="#modules"/>) soit en donnant ces modules sur la ligne de commande:
 </p>
-<command-line>ocaml mon_module.cmo mon_module2.cmo</command-line>
-<fixme text="ajouter les modules mon_module*.cmo"/>
+<sh>ocaml mon_module.cmo mon_module2.cmo</sh>
 <p>
 soit en utilisant des directives de chargement <icode>#load</icode> à l'invite du toplevel:
 </p>
 <ocaml-eval toplevel="true">#load "mon_module.cmo";;
-#load "monmodule2.cmo";;
+#load "mon_module2.cmo";;
 </ocaml-eval>
 <p>
 Le contenu des modules chargés est alors accessible depuis le code saisi dans le toplevel.
@@ -123,11 +122,11 @@ sera évalué comme si son contenu était saisi à l'invite du toplevel:
 <command-line>ocaml mon_module.ml</command-line>
 <p>
 Pour faciliter la saisie de code dans le toplevel, on pourra utiliser l'outil
-<a href="http://pauillac.inria.fr/~ddr/ledit/"><icode>ledit</icode></a>
+<ext-a href="http://pauillac.inria.fr/~ddr/ledit/"><icode>ledit</icode></ext-a>
 qui offre des fonctionnalités d'édition de ligne de commande (historique, utilisation des flèches
 du clavier, ...) de la façon suivante:
 </p>
-<command-line>ledit ocaml</command-line>
+<sh>ledit ocaml</sh>
 <p>
 Il existe également un toplevel graphique,
 <a href="http://zoggy.github.com/ocamltop-gtk/"><icode>OCamltop-gtk</icode></a>
@@ -140,10 +139,9 @@ par la commande
 </p>
 <command-line>ocaml notre_fichier.ml</command-line>
 <p>
-Pour en savoir plus sur le toplevel, consulter le manuel:
-\urldoctoplevel
-\urldoctopleveldaocaml
-<fixme text="mettre les urls"/>
+Pour en savoir plus sur le toplevel, consulter le manuel
+<ext-a href="&lt;urldoctoplevel/&gt;">ici</ext-a> ou
+<ext-a href="&lt;urldoctopleveldaocaml/&gt;">là</ext-a>.
 </p>
 </subsection>
 
@@ -270,10 +268,9 @@ Cette notation permet de s'abstraire du répertoire d'installation des biblioth�
 <p>
 Beaucoup d'autres options de compilation existent. Nous ne présentons ici que les options
 de base permettant de compiler des programmes simples.
-On se réfèrera donc au manuel pour connaître toutes les options et possibilités du
-compilateur:
-<fixme text="lien"/>
-\urldococamlc
+On se réfèrera donc au
+<ext-a href="&lt;urldococamlc/&gt;">manuel</ext-a> pour connaître toutes les options et possibilités du
+compilateur.
 </p>
 </subsection>
 
@@ -291,16 +288,15 @@ mais utilise des extensions différentes pour les fichiers utilisés et produits
 (cf. <figure href="extensions"/>).
 </p>
 <p>
-La documentation relative au compilateur vers du code natif se trouve
-<a href="">ici</a>.
-<fixme text="lien"/>
+On peut consulter la
+<ext-a href="&lt;urldococamlopt/&gt;">documentation relative au compilateur</ext-a> vers du code natif.
 </p>
 </subsection>
 </section>
 
 <section id="website" title="Le site web">
 <p>
-Le site <a href="http://caml.inria.fr/">caml.inria.fr</a> est le site officiel
+Le site <a href="&lt;urlcamlsite/&gt;"><urlcamlsite/></a> est le site officiel
 d'OCaml et on y trouve, en plus des distributions, tout le matériel nécessaire
 pour débuter en OCaml: documentations, références de livres, tutoriels, liens, ...
 </p>
@@ -310,9 +306,8 @@ pour débuter en OCaml: documentations, références de livres, tutoriels, liens
 <p>
 Les documentations de base pour développer en OCaml sont les suivantes:
 </p>
-<fixme text="liens"/>
 <ul>
-<li>Le manuel de référence: urlrefmanual</li>
+<li>Le <ext-a href="&lt;urlrefmanual/&gt;">manuel de référence</ext-a>,</li>
 <li>Les pages <icode>man</icode>: chaque outil (<icode>ocamlc</icode>,
 <icode>ocamlopt</icode>, <icode>ocamldoc</icode>, ...)
 et chaque module de la bibliothèque standard possède sa propre page de manuel.
@@ -320,9 +315,10 @@ Ainsi, on accédera à la page <icode>man</icode> du module <mod>List</mod>
  par la commande
 <command-line>man List</command-line>
 </li>
-<li>Pour les utilisateurs de Firefox, la Caml Side Bar (\urlcamlsidebar)
+<li>Pour les utilisateurs de Firefox, la <ext-a href="&lt;urlcamlsidebar/&gt;">Caml Side Bar</ext-a>
 offre un accès rapide aux documentations, au manuel et à la liste des contributions,
-ainsi que des possibilités de recherche dans ces documentations et sur le site \urlcamlsite.
+ainsi que des possibilités de recherche dans ces documentations et sur le
+<ext-a href="&lt;urlcamlsite/&gt;">site d'OCaml</ext-a>.
 </li>
 </ul>
 
