@@ -252,7 +252,8 @@ sur l'entrée standard, sous la forme "La somme de A et B est C." avec un retour
 chariot. On pourra lancer son programme par la commande
 </p>
 <sh>ocaml fichier.ml</sh>
-<ocaml hide="true"><![CDATA[
+<solution>
+<ocaml><![CDATA[
 let a = read_int ();;
 let b = read_int ();;
 print_string "La somme de ";;
@@ -263,6 +264,7 @@ print_string " est ";;
 print_int (a + b);;
 print_string ".\n";;
 ]]></ocaml>
+</solution>
 </exercice>
 <exercice id="exocat" title="Implémenter cat">
 <p>
@@ -270,12 +272,14 @@ Ecrire un programme se comportant comme une simplification de la commande UNIX <
 il affichera sur sa sortie standard ce qu'il lit sur son entrée standard. On traitera
 proprement la détection de la fin de lecture.
 </p>
-<ocaml hide="true"><![CDATA[
+<solution>
+<ocaml><![CDATA[
 try
   while true do print_endline (read_line ()) done
 with
   End_of_file -> exit 0;;
 ]]></ocaml>
+</solution>
 </exercice>
 </subsection>
 </section>
@@ -424,7 +428,8 @@ une fois. La fonction acceptera un paramètre optionnel comme fonction de compar
 pour savoir si deux éléments sont identiques. Par défaut ce paramètre sera
 la fonction d'égalité polymorphe <ml>(=)</ml>.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let list_remove_doubles ?(pred=(=)) l =
   List.rev
     (List.fold_left
@@ -434,6 +439,7 @@ let list_remove_doubles ?(pred=(=)) l =
     )
 ;;
 ]]></ocaml-eval>
+</solution>
 <ocaml-eval toplevel="true"><![CDATA[
 list_remove_doubles [ 1 ; 1 ; 3; 2 ; 2; 2 ; 1; 2; 3; 4];;
 let comp_string s1 s2 = String.lowercase s1 = String.lowercase s2;;
@@ -448,7 +454,9 @@ Ecrire une fonction prenant une chaîne de caractères et retournant la liste
 des mots qu'elle contient. Un mot sera composé uniquement des caractères
 'a' à 'z' et 'A' à 'Z'.
 </p>
-<ocaml-eval defer_="1" toplevel="true" hide="true"><include file="./words.ml"/></ocaml-eval>
+<solution>
+<ocaml-eval defer_="1" toplevel="true"><include file="./words.ml"/></ocaml-eval>
+</solution>
 <ocaml-eval defer_="1" toplevel="true"><![CDATA[
 words "maitre corbeau sur un arbre perche ... par l'odeur alleche...";;
 ]]></ocaml-eval>
@@ -527,7 +535,9 @@ d'occurrences de chaque mot apparaissant dans le fichier. A la fin, le programme
 affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
 <ml>words</ml> définie dans l'<exercice href="exowords"/>.
 </p>
-<ocaml defer_="1" hide="true"><include file="./count_words.ml"/></ocaml>
+<solution>
+<ocaml defer_="1"><include file="./count_words.ml"/></ocaml>
+</solution>
 </exercice>
 </subsubsection>
 
@@ -564,7 +574,9 @@ flush stdout;;
 <p>
 Reprendre l'<exercice href="exowordcount"/> en utilisant un dictionnaire.
 </p>
-<ocaml defer_="1" hide="true"><include file="./count_words_dict.ml"/></ocaml>
+<solution>
+<ocaml defer_="1"><include file="./count_words_dict.ml"/></ocaml>
+</solution>
 </exercice>
 </subsubsection>
 
@@ -603,7 +615,9 @@ Ecrire un programme prenant deux fichiers et affichant la liste des mots en comm
 sur la sortie standard. On utilisera encore la fonction <ml>words</ml>
 de l'<exercice href="exowords"/>.
 </p>
-<ocaml defer_="1" hide="true"><include file="./diff_words.ml"/></ocaml>
+<solution>
+<ocaml defer_="1"><include file="./diff_words.ml"/></ocaml>
+</solution>
 </exercice>
 </subsubsection>
 
@@ -718,7 +732,9 @@ produit si l'option <icode>-prod</icode> est passée. On écrira le code dans un
 fichier <icode>fichier.ml</icode> et on l'exécutera par exemple par la commande
 </p>
 <sh>ocaml fichier.ml -prod 1 2</sh>
-<ocaml defer_="1" hide="true"><include file="./exercice_arg.ml"/></ocaml>
+<solution>
+<ocaml defer_="1"><include file="./exercice_arg.ml"/></ocaml>
+</solution>
 </exercice>
 </subsubsection>
 
@@ -863,7 +879,9 @@ en utilisant la bibliothèque Unix. On compilera son programme par la commande
 <p>
 (si votre programme est dans le fichier <icode>lstmp.ml</icode>).
 </p>
-<ocaml-eval defer_="1" hide="true"><include file="./lstmp.ml"/></ocaml-eval>
+<solution>
+<ocaml-eval defer_="1"><include file="./lstmp.ml"/></ocaml-eval>
+</solution>
 </exercice>
 
 <exercice id="printenv" title="Implémentation de printenv">
@@ -873,7 +891,9 @@ la liste des variables d'environnement et leur contenu sous la forme <icode>VAR=
 Si des arguments sont passés sur la ligne de commande, seul le contenu des variables
 données est affiché. On utilisera la bibliothèque Unix.
 </p>
-<ocaml defer_="1" hide="true"><include raw="true" file="./printenv.ml"/></ocaml>
+<solution>
+<ocaml defer_="1"><include raw="true" file="./printenv.ml"/></ocaml>
+</solution>
 <p>
 On testera le programme avec les commandes suivantes.
 </p>

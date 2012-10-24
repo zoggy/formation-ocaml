@@ -1,7 +1,7 @@
 STOG=stog.byte
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-STOG_OPTIONS=-d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing -v
+STOG_OPTIONS=-d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN) -v
 
 EXERCICES=count_words.cmo \
 	count_words_dict.cmo \
@@ -13,7 +13,9 @@ EXERCICES=count_words.cmo \
 	printenv.cmo \
 	words.cmo
 
-build: $(EXERCICES)
+PLUGIN=stog_course.cmo
+
+build: $(EXERCICES) $(PLUGIN)
 	rm -fr $(DEST_DIR)
 	$(STOG) $(STOG_OPTIONS) .
 	$(MAKE) style
@@ -27,7 +29,7 @@ test:
 .SUFFIXES: .ml .cmo
 
 %.cmo: %.ml
-	ocamlc -c $<
+	ocamlfind ocamlc -package stog -rectypes -c $<
 
 #install: build
 #	scp $(DEST_DIR)/* yquem.inria.fr:public_html/

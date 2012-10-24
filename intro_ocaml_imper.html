@@ -546,12 +546,14 @@ sera réalisé à l'aide d'une boucle.
 On compilera le programme grâce à la commande
 </p>
 <sh>ocamlc -o myecho myecho.ml</sh>
-<ocaml-eval hide="true"><![CDATA[
+<solution>
+<ocaml-eval><![CDATA[
 for i = 1 to Array.length Sys.argv - 1 do
   print_string Sys.argv.(i); print_string " "
 done;;
 print_newline();;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 
 <exercice id="replace" title="Remplacement de caractère">
@@ -560,7 +562,8 @@ En utilisant une boucle, écrire une fonction <ml>blank</ml> qui prend une chaî
 caractères, la copie et remplace chaque caractère par un blanc, tant qu'elle
 n'a pas rencontré la lettre 's'.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let blank str =
   let str = String.copy str in
   let i = ref 0 in
@@ -574,6 +577,7 @@ let blank str =
   str
 ;;
 ]]></ocaml-eval>
+</solution>
 <p>
 Tester ensuite la fonction, par exemple:
 </p>
@@ -600,7 +604,8 @@ mat2.(0).(1) <- - mat2.(1).(0);;
 <p>
 On commence par écrire une fonction <ml>is_sym_imper</ml> impérative.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let is_sym_imper mat =
   let len = Array.length mat in
   let res = ref true in
@@ -614,6 +619,7 @@ let is_sym_imper mat =
 is_sym_imper mat1;;
 is_sym_imper mat2;;
 ]]></ocaml-eval>
+</solution>
 <p>
 On donnera ensuite une version fonctionnelle <ml>is_sym_fun</ml>.
 </p>

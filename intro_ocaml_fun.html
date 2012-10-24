@@ -786,7 +786,8 @@ d'éléments et retournant une nouvelle liste, résultat de l'application de $f$
 La fonction conserve l'ordre des éléments. On utilisera la récursion et les fonctions
 <ml>List.length</ml>, <ml>List.tl</ml>, <ml>List.hd</ml> et le constructeur <ml>::</ml>.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let rec map f l =
   if List.length l <= 0 then
     []
@@ -794,6 +795,7 @@ let rec map f l =
     (f (List.hd l)) :: (map f (List.tl l));;
 map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6];;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 
 <exercice id="minint" title="Le plus petit entier">
@@ -801,10 +803,12 @@ map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6];;
 Ecrire une fonction prenant une liste d'entiers et retournant le plus petit ou
 <ml>max_int</ml> si la liste est vide.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[let min_elt = List.fold_left min max_int;;
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[let min_elt = List.fold_left min max_int;;
 min_elt [ 10 ; 4 ; 45; 69 ; 2 ; 13 ];;
 min_elt [];;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 
 <exercice id="average" title="Moyenne d'une liste">
@@ -812,7 +816,8 @@ min_elt [];;
 Ecrire une fonction prenant une liste d'entiers et retournant la moyenne sous
 forme d'un flottant, ou <ml>0.</ml> si la liste est vide.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[let avg list =
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[let avg list =
   if List.length list > 0 then
     let sum = List.fold_left (+) 0 list in
     (float sum) /. (float (List.length list))
@@ -821,6 +826,7 @@ forme d'un flottant, ou <ml>0.</ml> si la liste est vide.
 avg [ 10 ; 4 ; 45; 69 ; 2 ; 13 ];;
 avg [];;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 </subsection>
 </section>
@@ -996,7 +1002,8 @@ est très utilisée.
 Définir une fonction prenant en paramètre une liste d'éléments quelconques et
 retournant vrai si la liste est un palindrome, faux sinon.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[let palindrome_list l =
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[let palindrome_list l =
   let len = List.length l in
   let rec iter n = function
     [], [] -> true
@@ -1007,6 +1014,7 @@ retournant vrai si la liste est un palindrome, faux sinon.
   iter 0 (l, List.rev l)
 ;;
 ]]></ocaml-eval>
+</solution>
 <p>
 Quelques tests:
 </p>
@@ -1267,7 +1275,8 @@ Définir un type somme <ml>expr</ml> pour représenter les expressions contenant
 4 opérations habituelles sur les entiers ainsi que les valeurs entières. On aura
 donc 5 constructeurs.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 type expr =
   Val of int
 | Add of expr * expr
@@ -1275,11 +1284,13 @@ type expr =
 | Mul of expr * expr
 | Div of expr * expr;;
 ]]></ocaml-eval>
+</solution>
 <p>
 Ensuite, définir une fonction prenant une valeur de ce type et calculant la
 valeur entière en réalisant l'opération décrite.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let rec eval = function
   Val n -> n
 | Add (e1, e2) -> (eval e1) + (eval e2)
@@ -1289,6 +1300,7 @@ let rec eval = function
 ;;
 eval (Add (Val 2, Mul (Val 4, Sub (Val 12, Val 2))));;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 </subsubsection>
 </subsection>
@@ -1398,7 +1410,8 @@ On souhaite rendre les expressions de l'<exercice href="exoexpr"/> génériques.
 un paramètre de type au type <ml>expr</ml> pour ne plus limiter les valeurs des
 expressions à des entiers.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 type 'a expr =
   Val of 'a
 | Add of 'a expr * 'a expr
@@ -1406,13 +1419,15 @@ type 'a expr =
 | Mul of 'a expr * 'a expr
 | Div of 'a expr * 'a expr;;
 ]]></ocaml-eval>
+</solution>
 <p>
 Ensuite, on veut pouvoir paramétrer la fonction <ml>eval</ml> pour spécifier le traitement
 à effectuer pour chaque opérateur de notre type expression. Définir un type enregistrement
 <ml>operators</ml> permettant de donner la fonction associée à chaque opérateur d'expression.
 Ce type est paramétré par le type des valeurs calculées.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 type 'a operators = {
   op_add : 'a -> 'a -> 'a ;
   op_sub : 'a -> 'a -> 'a ;
@@ -1420,12 +1435,14 @@ type 'a operators = {
   op_div : 'a -> 'a -> 'a ;
 };;
 ]]></ocaml-eval>
+</solution>
 <p>
 Enfin, définir une nouvelle fonction <ml>eval</ml> prenant en paramètre supplémentaire
 les fonctions à utiliser pour effectuer les calculs lors de l'évaluation (une valeur
 de type <ml>operators</ml>).
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let rec eval ops = function
   Val v -> v
 | Add (e1, e2) -> ops.op_add (eval ops e1) (eval ops e2)
@@ -1434,11 +1451,13 @@ let rec eval ops = function
 | Div (e1, e2) -> ops.op_div (eval ops e1) (eval ops e2)
 ;;
 ]]></ocaml-eval>
+</solution>
 <p>
 Définir une valeur du type <ml>operators</ml> et s'en servir pour évaluer une expression
 contenant des flottants.
 </p>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let float_ops = {
   op_add = (+.) ;
   op_sub = (-.) ;
@@ -1447,6 +1466,7 @@ let float_ops = {
 };;
 eval float_ops (Add (Val 2., Mul (Val 4., Sub (Val 12., Val 2.))));;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 </subsection>
 </section>
@@ -1645,7 +1665,8 @@ retournée par <ml>f x</ml>.</li>
 <li>si une exception est levée par <ml>g y</ml>, cette exception est levée par
 la fonction <ml>try_finalize</ml>.</li>
 </ul>
-<ocaml-eval toplevel="true" hide="true"><![CDATA[
+<solution>
+<ocaml-eval toplevel="true"><![CDATA[
 let try_finalize f x g y =
   let v = try f x with exn -> ignore(g y); raise exn in
   ignore(g y);
@@ -1653,6 +1674,7 @@ let try_finalize f x g y =
 try_finalize (fun x -> x * 2) 21 print_endline "application de g a y";;
 try_finalize (fun x -> 1 / x) 0 print_endline "application de g a y";;
 ]]></ocaml-eval>
+</solution>
 </exercice>
 </subsection>
 </section>
