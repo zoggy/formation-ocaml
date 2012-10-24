@@ -31,8 +31,5 @@ test:
 %.cmo: %.ml
 	ocamlfind ocamlc -package stog -rectypes -c $<
 
-#install: build
-#	scp $(DEST_DIR)/* yquem.inria.fr:public_html/
-#
-#installhtml: build
-#	scp $(DEST_DIR)/*.html yquem.inria.fr:public_html/
+installweb: build
+	scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
