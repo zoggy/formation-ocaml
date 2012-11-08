@@ -20,6 +20,9 @@ build: $(EXERCICES) $(PLUGIN)
 	$(STOG) $(STOG_OPTIONS) .
 	$(MAKE) style
 
+clean:
+	rm -f $(PLUGIN)
+
 style:
 	lessc less/style.less > $(DEST_DIR)/style.css
 
