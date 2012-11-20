@@ -69,19 +69,22 @@
    padding-bottom: 10px;
 }
 
+/*
 pre {
     background: transparent;
     /*color: #CCC;*/
     margin-bottom: 0;
     padding-bottom: 0;
 }
+*/
 
+/*
 table td {
     font-size: 12px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
-
+*/
 table {
    margin-top: 20px;
    margin-bottom: 20px;

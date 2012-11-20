@@ -1,27 +1,133 @@
 <slideshow title="Développer en OCaml"
   with-contents="true"
+  sectionning=""
 >
 <myheader id="">
 <header class="slide" id="&lt;id/&gt;"><contents/></header>
 </myheader>
-<slide id="" title="">
-<div class="slide" title="&lt;title/&gt;" id="&lt;id/&gt;"><contents/></div>
+
+<slide id="" title="" mapto="" href="" is_section="false">
+<block href="&lt;href/&gt;"
+   id="&lt;id/&gt;" title="&lt;title/&gt;"
+   with-contents="true"
+   >
+<long-title-format><title/></long-title-format>
+<short-title-format><title/></short-title-format>
+<contents
+><div class="slide" title="&lt;title/&gt;" id="&lt;id/&gt;"
+><if title=""><main_/><if is_section="true"><main_/><h1><title/></h1></if></if><contents/>
+<if mapto=""><main_/><div class="mapto"><elt href="intro_ocaml#&lt;mapto/&gt;"/></div></if></div>
+</contents></block>
 </slide>
 
+<section id="" title="" mapto="">
+<env_ thecontents="&lt;contents/&gt;" thetitle="&lt;title/&gt;">
+<slide id="&lt;id/&gt;" title="&lt;title/&gt;" is_section="true"><div class="big-title"><thetitle/></div><thecontents/></slide>
+</env_>
+</section>
+
+<inc-code id=""><inc elt-hid="intro_ocaml" id="&lt;id/&gt;"/></inc-code>
+
+<ddiv><div class="delayed"><contents/></div></ddiv>
+<dli contents="&lt;contents/&gt;"><li class="delayed"><contents/></li></dli>
+
 <contents>
-<myheader id="intro" class="slide">
+<myheader>
 <h1> </h1>
- <img class="logo" src="../ocaml.png" width="500"/>
+ <div class="logo"><img src="../ocaml.png" width="500"/></div>
   <p class="attribution">Maxence Guesdon</p>
 </myheader>
 
-<slide>
-coucou le super slide
-<p>oui le slide</p>
-<div class="delayed"><inc elt-hid="intro_ocaml" id="code-ints"/></div>
+<slide title="Plan" id="plan">
+<ul>
+<li><elt href="#intro"/>,</li>
+<li><elt href="#progfonc"/>,</li>
+<li><elt href="#stdlib"/>.</li>
+</ul>
 </slide>
 
+<section id="intro" title="Introduction">
+<p>Présentation du langage</p>
+<ul>
+<li><elt href="#caracteristiques"/>,</li>
+<li><elt href="#modes"/>,</li>
+<li><elt href="#extensions_"/>.</li>
+</ul>
+</section>
 
+<slide id="caracteristiques" title="Caractéristiques" mapto="intro:description">
+<p>OCaml est:</p>
+<ul>
+<dli>un langage généraliste multi-paradigme: fonctionnel, impératif, objet,</dli>
+<dli>typé statiquement, avec inférence des types,</dli>
+<dli>polymorphe paramétrique,</dli>
+<dli>doté d'un système d'exceptions,</dli>
+<dli>livré avec de nombreuses bibliothèques,</dli>
+<dli>utilisé par une large et dynamique communauté,</dli>
+<dli>interfaçable avec C et Fortran,</dli>
+<dli>muni d'un ramsse-miettes (garbage-collector),</dli>
+<dli>rapide et portable,</dli>
+<dli>issu de la recherche académique (INRIA) et utilisé également dans l'industrie.</dli>
+</ul>
+</slide>
+
+<slide id="modes" title="3 modes d'exécution" mapto="intro:eval">
+<ul>
+<dli>interprète: <icode>ocaml</icode>. Comme un shell.
+<sh>$ ocaml</sh>
+ou <sh>$ ocaml fichier.ml ...</sh>
+</dli>
+<dli>compilation en bytecode: <icode>ocamlc</icode>. Pour la portabilité.
+<sh>$ ocamlc -c -I .... fichier.ml
+$ ocamlc -o mon_prog fichier.cmo fichier2.cmo ...</sh>
+</dli>
+<dli>compilation en code natif: <icode>ocamlopt</icode>. Pour la rapidité.
+<sh>$ ocamlopt -c -I .... fichier.ml
+$ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
+</dli>
+</ul>
+</slide>
+
+<slide id="extensions_" title="Extensions" mapto="extensions">
+<inc-code id="extensions"/>
+</slide>
+
+<section id="progfonc" title="Programmation fonctionnelle">
+<ul>
+<li><elt href="#basetypes"/>,</li>
+<li><elt href="#funs"/>,</li>
+<li><elt href="#let"/>,</li>
+<li><elt href="#modules"/>,</li>
+</ul>
+</section>
+
+<slide id="basetypes" title="Types de base" mapto="basetypes">
+dd
+</slide>
+
+<slide id="funs" title="Fonctions" mapto="fun:expr">
+dd
+</slide>
+
+<slide id="let" title="Déclarations" mapto="fun:decl">
+dd
+</slide>
+
+<slide id="modules" title="Modules" mapto="modules">
+dd
+</slide>
+
+<section id="stdlib" title="Utiliser la bibliothèque standard">
+dd<!--<ul>
+<li><elt href="#basetypes"/>,</li>
+<li><elt href="#let"/>,</li>
+<li><elt href="#funs"/>,</li>
+<li><elt href="#modules"/>,</li>
+</ul>-->
+</section>
+
+
+<!--
 <slide id="tryocaml" title="TryOcaml">
 <script type="text/javascript" src="widget.js"></script>
 <script type="text/javascript">
@@ -55,22 +161,25 @@ new TWTR.Widget({
 <a href="http://tryocaml.ocamlpro.com">TryOCaml</a> (thanks to <a href="http://ocamlpro.com/">OCamlpro</a>)
 <div class="ocaml">
 <div id="toplevel-container">
-<!--   <div id="dragndrop"><img src="arrow.png" width="140" height="70"/></div>-->
    <pre id="output"> Welcome to TryOCaml</pre>
    <div id="sharp">#</div>
    <div id="toplevel"> </div>
 </div>
 <div id="buttons"></div>
-<!--  <div id="graphics"> </div>-->
-  <table class="zebra-striped">
-<!--  <thead><tr><th id="text-commands">Commands</th><th id="text-effects">Effects</th></tr></thead>-->
-     <tr><td id="text-enter">Enter / Return</td> <td id="text-submit">Submit code</td></tr>
-     <tr><td id="text-arrows">Up / Down</td><td id="text-history">Cycle through history</td></tr>
-     <tr><td id="text-newline">Shift + Enter</td><td id="text-multiline">Multiline edition</td></tr>
-</table>
 </div>
 </slide>
 <script type="text/javascript" src="try-ocaml.js"></script>
+-->
+<!--<table class="zebra-striped">
+  <tr><td id="text-enter">Enter / Return</td> <td id="text-submit">Submit code</td></tr>
+  <tr><td id="text-arrows">Up / Down</td><td id="text-history">Cycle through history</td></tr>
+  <tr><td id="text-newline">Shift + Enter</td><td id="text-multiline">Multiline edition</td></tr>
+</table>
+-->
+<footer class="slide">
+<h2>Merci!</h2>
+
+</footer>
 </contents>
 </slideshow>
 

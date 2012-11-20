@@ -17,7 +17,7 @@ PLUGIN=stog_course.cmxs
 
 build: $(EXERCICES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
-	$(STOG) $(STOG_OPTIONS) .  #--only slides/slides
+	$(STOG) $(STOG_OPTIONS) .  # --only slides/slides
 	$(MAKE) style
 
 clean:

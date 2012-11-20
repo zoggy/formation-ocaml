@@ -21,8 +21,8 @@ section > header.slide > h1 {
 * {
 	padding:0;
 	margin:0;
-	font:inherit;
-	color:inherit;
+/*	font:inherit;
+	color:inherit;*/
 }
 
 html {
@@ -85,10 +85,6 @@ strong, b {
 	font-weight:bold;
 }
 
-	pre strong {
-		text-shadow: 0 0 .6em white;
-	}
-
 .slide {
 	/*padding:0 2.5% 2%;*/
 	margin: 0 auto;
@@ -103,10 +99,7 @@ strong, b {
 	border-color: transparent;
 }
 
-.slide p { font-size: 16pt; }
-.slide pre { 	font-size: 13pt;
-  text-shadow: none ;
-}
+.slide p, .slide ul { font-size: 20pt; }*/
 
 #indicator {
 	background: rgba(255, 255, 255, .6);
@@ -281,7 +274,58 @@ div.slide-header div.link a {
 header#intro {
   text-align: center;
 }
-img.logo {
-  margin-top: 2em;
+div.logo {
+  margin: 2em auto;
+  width: 100%;
+  text-align:center;
 }
 
+.slide h1 {
+  color: #ccc ;
+  font-size: 150%;
+  margin-bottom: 0.3em;
+  }
+
+.slide h2 {
+  color: #ccc ;
+  font-size: 130%;
+  margin-bottom: 0.3em;
+  }
+
+span.icode { color: #333 ;
+   text-shadow: none;
+   padding-top: 4px;
+   font-size: 12pt;
+  }
+
+.slide table {
+  background-color: #334;
+  font-size: 20pt;
+  text-shadow: none;
+}
+
+div.figure {
+  background-color: #334 ;
+}
+
+div.figure div.title {
+  background-color: #445;
+}
+
+div.mapto {
+  font-size: 75%;
+  text-align: right;
+}
+
+pre {
+  font-size: 13pt;
+  background-color: #efefef;
+  text-shadow: false;
+}
+
+div.big-title {
+  font-size: 250%;
+  margin: 3em auto 2em;;
+  width: 100%;
+  text-align:center;
+}
