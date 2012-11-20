@@ -1,4 +1,4 @@
-STOG=stog.byte
+STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
 STOG_OPTIONS=-d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN) -v
@@ -13,11 +13,11 @@ EXERCICES=count_words.cmo \
 	printenv.cmo \
 	words.cmo
 
-PLUGIN=stog_course.cmo
+PLUGIN=stog_course.cmxs
 
 build: $(EXERCICES) $(PLUGIN)
-	rm -fr $(DEST_DIR)
-	$(STOG) $(STOG_OPTIONS) .
+#	rm -fr $(DEST_DIR)
+	$(STOG) $(STOG_OPTIONS) .  #--only slides/slides
 	$(MAKE) style
 
 clean:
@@ -33,6 +33,9 @@ test:
 
 %.cmo: %.ml
 	ocamlfind ocamlc -package stog -rectypes -c $<
+
+%.cmxs: %.ml
+	ocamlfind ocamlopt -shared -package stog -rectypes -o $@  $<
 
 installweb: build
 	scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/

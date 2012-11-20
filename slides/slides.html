@@ -1,0 +1,76 @@
+<slideshow title="Développer en OCaml"
+  with-contents="true"
+>
+<myheader id="">
+<div class="wrapper"><header class="slide" id="&lt;id/&gt;"><contents/></header></div>
+</myheader>
+<slide id="" title="">
+<div class="wrapper"><div class="slide" title="&lt;title/&gt;" id="&lt;id/&gt;"><contents/></div></div>
+</slide>
+
+<contents>
+<myheader id="intro" class="slide">
+<h1> </h1>
+ <img class="logo" src="../ocaml.png" width="500"/>
+  <p class="attribution">Maxence Guesdon</p>
+</myheader>
+
+<slide>
+coucou le super slide
+<p>oui le slide</p>
+<div class="delayed"><inc elt-hid="intro_ocaml" id="code-ints"/></div>
+</slide>
+
+
+<slide id="tryocaml" title="TryOcaml">
+<script type="text/javascript" src="widget.js"></script>
+<script type="text/javascript">
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 4,
+  interval: 30000,
+  width: 'auto',
+  height: 300,
+  theme: {
+    shell: {
+      background: '#000000',
+      color: '#333'
+    },
+    tweets: {
+      background: '#ddf4fb',
+      color: '#15156b',
+      links: '#0a0f07'
+    }
+  },
+  features: {
+    scrollbar: true,
+    loop: false,
+    live: false,
+    behavior: 'default'
+  }
+}).render().setUser('tryocaml').start();
+</script>
+<div class="hidden" id="languages">_</div>
+<a href="http://tryocaml.ocamlpro.com">TryOCaml</a> (thanks to <a href="http://ocamlpro.com/">OCamlpro</a>)
+<div class="ocaml">
+<div id="toplevel-container">
+<!--   <div id="dragndrop"><img src="arrow.png" width="140" height="70"/></div>-->
+   <pre id="output"> Welcome to TryOCaml</pre>
+   <div id="sharp">#</div>
+   <div id="toplevel"> </div>
+</div>
+<div id="buttons"></div>
+<!--  <div id="graphics"> </div>-->
+  <table class="zebra-striped">
+<!--  <thead><tr><th id="text-commands">Commands</th><th id="text-effects">Effects</th></tr></thead>-->
+     <tr><td id="text-enter">Enter / Return</td> <td id="text-submit">Submit code</td></tr>
+     <tr><td id="text-arrows">Up / Down</td><td id="text-history">Cycle through history</td></tr>
+     <tr><td id="text-newline">Shift + Enter</td><td id="text-multiline">Multiline edition</td></tr>
+</table>
+</div>
+</slide>
+<script type="text/javascript" src="try-ocaml.js"></script>
+</contents>
+</slideshow>
+
