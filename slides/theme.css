@@ -264,7 +264,7 @@ div.slide-header {
   left: 0;
   width: 100%;
   text-align: right;
-  /*background: black;*/
+  background: black;
   height: 2.2em;
   z-index: 500;
 }
