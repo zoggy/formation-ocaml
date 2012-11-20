@@ -32,11 +32,13 @@
 <ddiv contents="&lt;contents/&gt;"><div class="delayed persistent"><contents/></div></ddiv>
 <dli contents="&lt;contents/&gt;"><li class="delayed persistent"><contents/></li></dli>
 
+<mylist sep="&lt;span&gt;,  &lt;/span&gt;"><list defer_="1" sep="&lt;sep/&gt;"><contents/></list></mylist>
+
 <contents>
 <myheader>
 <h1> </h1>
  <div class="logo"><img src="../ocaml.png" width="500"/></div>
-  <div class="attribution">Maxence Guesdon - INRIA Saclay ïle-de-France -
+  <div class="attribution">Maxence Guesdon - INRIA Saclay Île-de-France -
   Durée: environ 2h</div>
 </myheader>
 
@@ -101,8 +103,7 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 <li><elt href="#let"/>,</li>
 <li><elt href="#funs"/>,</li>
 <li><elt href="#patternmatching"/>,</li>
-<li><elt href="#types"/>,</li>
-<li><elt href="#modules"/>,</li>
+<li><elt href="#types"/>.</li>
 </ul>
 </section>
 
@@ -160,7 +161,8 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 </slide>
 
 <slide id="conditionnelle" title="Conditionnelle" mapto="conditionnelle">
-<ocaml>if expression1 then expression2 else expression3</ocaml>
+<ocaml>if expression1 then expression2 else expression3
+if expression1 then expression2</ocaml>
 <inc-code id="code-conditionnelle"/>
 </slide>
 
@@ -257,21 +259,96 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 </slide>
 
 <slide id="types" title="Déclaration de types" mapto="fun:decltypes">
-dd
+<inc-code id="code-decltypes"/>
+<dinc-code id="code-decltypes2"/>
+<dinc-code id="code-decltypes3"/>
 </slide>
 
-<slide id="modules" title="Modules" mapto="modules">
+<slide id="records" title="Types enregistrements (records)" mapto="records">
+<inc-code id="code-records"/>
+</slide>
 
+<slide id="variants" title="Types sommes (variants)" mapto="fun:variants">
+<inc-code id="code-variants"/>
+<ddiv><p>Création de valeur:</p>
+<inc-code id="code-variants-create"/>
+</ddiv>
+<ddiv><p>Filtrage de valeur:</p>
+<inc-code id="code-variants-filt"/>
+</ddiv>
+</slide>
+
+<slide id="ex5" title="Exercice: représentation d'expressions" mapto="fun:variants:exo">
+<inc-code id="exoexpr"/>
 </slide>
 
 <section id="stdlib" title="Utiliser la bibliothèque standard">
-dd<!--<ul>
-<li><elt href="#basetypes"/>,</li>
-<li><elt href="#let"/>,</li>
-<li><elt href="#funs"/>,</li>
-<li><elt href="#modules"/>,</li>
-</ul>-->
+<ul>
+<li><elt href="#stdlibis"/>,</li>
+<li><elt href="#usingmods"/>,</li>
+<!--<li><elt href="#funs"/>,</li>
+<li><elt href="#modules"/>,</li>-->
+</ul>
 </section>
+
+<slide id="stdlibis" title="La bibliothèque standard" mapto="libs">
+<p>
+Elle comporte
+</p>
+<ul>
+<dli>le module <icode>Pervasives</icode> contenant les types, fonctions et
+exceptions de base,</dli>
+<dli>un ensemble d'autres modules pour:
+  <ul>
+    <dli>manipuler des structures de données usuelles:
+      <mylist><icode>List</icode><icode>String</icode><icode>Map</icode><icode>Hashtbl</icode><icode>Array</icode><icode>Set</icode><icode>Stack</icode><icode>Queue</icode>...</mylist>
+      </dli>
+    <dli>effectuer des calculs:
+      <mylist><icode>Complex</icode><icode>Int32</icode><icode>Int64</icode><icode>Native_int</icode><icode>Big_int</icode></mylist>
+    </dli>
+    <dli>effectuer des entrées-sorties:
+      <mylist><icode>Format</icode><icode>Printf</icode><icode>Scanf</icode><icode>Marshal</icode></mylist>
+    </dli>
+    <dli>accéder au système:
+      <mylist><icode>Arg</icode><icode>Sys</icode><icode>Printexc</icode><icode>Gc</icode></mylist>
+    </dli>
+    <dli>effectuer diverses opérations:
+      <mylist><icode>Digest</icode><icode>Random</icode><icode>Lexing</icode><icode>Parsing</icode><icode>Lazy</icode></mylist>
+    </dli>
+  </ul>
+</dli>
+</ul>
+<ddiv><p>Des bibliothèques additionnelles sont disponibles selon les systèmes:
+<mylist><icode>Unix</icode><icode>Dynlink</icode><icode>Str</icode><icode>Threads</icode><icode>...</icode></mylist>
+</p></ddiv>
+</slide>
+
+<slide id="usingmods" title="Utiliser un module">
+<p>Deux façons de faire référence à un élément d'un module:</p>
+<ul>
+<dli>Par son nom qualifié:
+<ocaml-eval>List.length [ 1 ; 2 ; 3];;</ocaml-eval></dli>
+<dli>En ajoutant à l'environnement courant les éléments d'un module:
+<ocaml-eval>open List;; length [ 1 ; 2 ; 3];;</ocaml-eval></dli>
+</ul>
+<ddiv><p>Attention au masquage:</p>
+<inc-code id="code-openwarning"/>
+</ddiv>
+</slide>
+
+<slide id="missing" title="Ce que nous n'avons pas vu">
+<ul>
+<li><elt href="intro_ocaml#exceptions">Exceptions</elt>,</li>
+<li><elt href="intro_ocaml#fun:polyconst">Polymorphisme et contraintes de type</elt>,</li>
+<li><elt href="intro_ocaml#modules">Modules</elt>,</li>
+<li><elt href="intro_ocaml#progimperative">Programmation impérative</elt>,</li>
+<li><elt href="intro_ocaml#devenv">Les outils de développement</elt>,</li>
+<li>Programmation objet,</li>
+<li>...</li>
+</ul>
+</slide>
+
+
 
 <!--
 <slide id="tryocaml" title="TryOcaml">
@@ -304,7 +381,7 @@ new TWTR.Widget({
 }).render().setUser('tryocaml').start();
 </script>
 <div class="hidden" id="languages">_</div>
-<a href="http://tryocaml.ocamlpro.com">TryOCaml</a> (thanks to <a href="http://ocamlpro.com/">OCamlpro</a>)
+<a href="http://tryocaml.ocamlpro.com">TryOCaml</a> (thanks to <a href="http://ocamlpro.com/">OCamlPro</a>)
 <div class="ocaml">
 <div id="toplevel-container">
    <pre id="output"> Welcome to TryOCaml</pre>

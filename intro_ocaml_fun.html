@@ -1074,7 +1074,7 @@ type ('a, 'b) <stxid>identifiant</stxid> = <stxid>définition utilisant 'a et 'b
 <p>
 Ainsi, on peut définir le type des listes de paires d'éléments d'un type en paramètre:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[type 'a pairs = ('a * 'a) list;;
+<ocaml-eval id="code-decltypes" toplevel="true"><![CDATA[type 'a pairs = ('a * 'a) list;;
 let int_pair_list = [ (1, 2) ; (5, 4) ] ;;
 let (int_pairs : int pairs) = [ (1, 2) ; (3, -3) ; (6, 8)];;
 let (bool_pairs : bool pairs) = [ (true, true) ; (false, false) ; (true, false)];;
@@ -1086,7 +1086,7 @@ de base, comme pour <ml>int_pair_list</ml> ci-dessus. Cependant, nous pouvons ut
 indifféremment des valeurs de type <ml>'a pairs</ml> ou du type <ml>('a * 'a) list</ml>, le compilateur
 réalisant l'unification de ces types pour vérifier qu'ils sont bien compatibles:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-decltypes2" toplevel="true"><![CDATA[
 (=);;
 int_pair_list;;
 int_pairs;;
@@ -1095,7 +1095,7 @@ int_pair_list = int_pairs;;
 <p>
 Si les types ne sont pas compatibles, le compilateur signale une erreur:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-decltypes3" toplevel="true" error-exc="false"><![CDATA[
 let (float_pairs : float pairs) = [ (1., 2.) ; (3., 4.)];;
 int_pairs = float_pairs;;
 ]]></ocaml-eval>
@@ -1167,7 +1167,7 @@ en mettant des contraintes sur tout ou partie des champs du type:
 Voici un exemple de définition et d'utilisation d'un type enregistrement <ml>coord</ml>
 avec deux champs <ml>x</ml> et <ml>y</ml>, tous deux de type <ml>float</ml>:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-records" toplevel="true" error-exc="false"><![CDATA[
 type coord = { x : float ; y : float};;
 let origin = { x = 0. ; y = 0. };;
 let add p1 p2 = { x = p1.x +. p2.x ; y = p1.y +. p2.y };;
@@ -1218,7 +1218,7 @@ Un type somme ne peut avoir deux constructeurs de même nom.
 <p>
 Voici un exemple de définition d'un type somme:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-variants" toplevel="true"><![CDATA[
 type direction =
   Nord
 | Sud
@@ -1242,7 +1242,7 @@ adaptés selon le constructeur, par la syntaxe suivante:
 <p>
 Avec notre exemple de type <ml>direction</ml>, cela donne par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[let nne = Compose (Nord, Compose (Nord, Est));;]]></ocaml-eval>
+<ocaml-eval id="code-variants-create" toplevel="true"><![CDATA[let nne = Compose (Nord, Compose (Nord, Est));;]]></ocaml-eval>
 </subsubsection>
 
 <subsubsection id="fun:variants:filt" title="Filtrage">
@@ -1259,7 +1259,7 @@ en procédant par cas sur les constructeurs du type:
 <p>
 Par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-variants-filt" toplevel="true"><![CDATA[
 let rec string_of_direction = function
   Nord -> "nord"
 | Sud -> "sud"
