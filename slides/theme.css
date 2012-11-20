@@ -91,6 +91,8 @@ strong, b {
 
 .slide {
 	/*padding:0 2.5% 2%;*/
+	margin: 0 auto;
+	width: 900px;
 	padding: 0 1% 2%;
 	background: rgba(0,0,0,.1);
 	background-clip: padding-box;
@@ -283,11 +285,3 @@ img.logo {
   margin-top: 2em;
 }
 
-.wrapper {
-position:relative;
-margin:0 auto;
-width:900px;
-text-align:left;
-background: transparent;
-height: 100%;
-}
