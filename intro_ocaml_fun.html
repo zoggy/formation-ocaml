@@ -86,8 +86,8 @@ d'autres exemples d'inférence de type au fur et à mesure de la formation.
 </p>
 </paragraph>
 
-<paragraph title="Les flottants (type float)">
-<ocaml-eval toplevel="true"><![CDATA[
+<paragraph id="floats" title="Les flottants (type float)">
+<ocaml-eval id="code-floats" toplevel="true"><![CDATA[
 1.0 (* le réel 1.0 *);;
 1.0e+5 (* notation avec exposant *) ;;
 1.2 +. 1. (* l'addition avec l'opérateur '+.' *) ;;
@@ -118,8 +118,8 @@ sur des entiers et des flottants (idem pour les autres opérateurs exposés plus
 1 +. 2.0 ;;
 ]]></ocaml-eval>
 </paragraph>
-<paragraph title="Les booléens (type bool)">
-<ocaml-eval toplevel="true"><![CDATA[
+<paragraph id="booleans" title="Les booléens (type bool)">
+<ocaml-eval id="code-booleans" toplevel="true"><![CDATA[
 true (* la valeur 'vrai' *) ;;
 false (* la valeur 'faux' *) ;;
 true && false (* ET paresseux sequentiel, evalue de gauche a droite *) ;;
@@ -128,8 +128,8 @@ not true (* NON logique *) ;;
 ]]></ocaml-eval>
 </paragraph>
 
-<paragraph title="Les caractères (type char)">
-<ocaml-eval toplevel="true"><![CDATA[
+<paragraph id="chars" title="Les caractères (type char)">
+<ocaml-eval id="code-chars" toplevel="true"><![CDATA[
 'a' (* le caractere 'a' *) ;;
 int_of_char 'a' (* son code ASCII *) ;;
 char_of_int 123 (* le caractere de code ASCII 123 *) ;;
@@ -138,8 +138,8 @@ char_of_int 123 (* le caractere de code ASCII 123 *) ;;
 D'autres fonctions sont disponibles dans le module <moduledoc name="Char"/>.
 </p>
 </paragraph>
-<paragraph title="Les chaînes de caractères (type string)">
-<ocaml-eval toplevel="true"><![CDATA[
+<paragraph id="strings" title="Les chaînes de caractères (type string)">
+<ocaml-eval id="code-strings" toplevel="true"><![CDATA[
 "hello world!";;
 "hello " ^ "world!" (* concatenation *);;
 String.length "hello world!" (* longueur de chaine *);;
@@ -159,11 +159,11 @@ string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
 </warning>
 </paragraph>
 
-<paragraph title="Le type unit">
+<paragraph id="unit" title="Le type unit">
 <p>
 <cmp>Le type unit décrit un ensemble ne possédant qu'une seule valeur, notée <icode>()</icode>.</cmp>
 </p>
-<ocaml-eval toplevel="true">();;</ocaml-eval>
+<ocaml-eval id="code-unit" toplevel="true">();;</ocaml-eval>
 <p>
 <cmp>Cette valeur sera plus particulièrement utilisée dans les programmes impératifs
 (cf. <elt href="#progimperative"/>) pour les fonctions qui effectuent des effets
@@ -171,13 +171,13 @@ de bord. Les fonctions dont le résultat est la valeur <icode>()</icode> simulen
 de procédure qui n'existe pas en OCaml comme le fait le type void dans le langage C.</cmp>
 </p>
 </paragraph>
-<paragraph title="Les n-uplets">
+<paragraph id="tuples" title="Les n-uplets">
 <p>
 Les n-uplets permettent de grouper plusieurs valeurs, potentiellement de types différents.
 Un n-uplet à 2 éléments est aussi appelé paire. Voici quelques exemples de constructions
 de n-uplets:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-tuples" toplevel="true"><![CDATA[
 (1, 2) (* paire d'entiers *) ;;
 (1, "2") (* paire composee d'un entier et d'une chaine *) ;;
 fst (1, 2) (* acces a la premiere composante de la paire *) ;;
@@ -207,13 +207,13 @@ type "flèche"), décrivant une fonction prenant en argument une paire d'éléme
 </warning>
 </paragraph>
 
-<paragraph title="Les listes (type 'a list)">
+<paragraph id="lists" title="Les listes (type 'a list)">
 <p>
 Le type <icode>list</icode> est prédéfini et permet de construire des listes d'éléments de même type.
 C'est un type paramétré, <icode>'a</icode> indique le paramètre de type, qui est peut être instancié
 selon le type des éléments de la liste:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-lists" toplevel="true" error-exc="false"><![CDATA[
 [] (* une liste vide, donc sans contrainte sur le type des elements *) ;;
 [ 1 ] (* une liste d'entiers a un element *) ;;
 [ 1 ; 2 ; 3 ] (* une liste de 3 entiers *) ;;
@@ -223,7 +223,7 @@ selon le type des éléments de la liste:
 <p>
 Voyons quelques exemples de manipulation de listes:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-lists2" toplevel="true"><![CDATA[
 1 :: 2 :: 3 :: [] (* ajout d'element en tete de liste par l'operateur 'cons' :: *) ;;
 [ 1 ; 2 ] @ [ 3 ; 4 ; 5] (* concatenation de deux listes (de meme type) *) ;;
 List.length [ "hello" ; "world" ; "!" ] (* acces a la longeur *) ;;
@@ -248,7 +248,7 @@ des deux arguments doit être le même.
 <p>
 Voyons ces fonctions:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-comparisons" toplevel="true"><![CDATA[
 1 = 2 (* egalite structurelle sur des entiers *) ;;
 "hello" = "world" (* ... ou sur des chaines *) ;;
 (1, 2, 3) = (1, 2, 4) (* ... ou des n-uplets *) ;;
@@ -301,7 +301,7 @@ est <ml>()</ml>, qui est de type <ml>unit</ml>.
 <p>
 Voyons quelques exemples:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-conditionnelle" toplevel="true" error-exc="false"><![CDATA[
 if true then 1 lsl 5 + 10 else 1
   (* lsl est le décalage logique de bits vers la gauche *) ;;
 (if 12 * 4 < 40 then 15 else 2) + (if 3 > 4 then 10 else 4 * 10)
@@ -331,7 +331,7 @@ et <icode>'</icode> mais doivent commencer par une lettre minuscule ou le caract
 Il existe deux types de déclarations: globales et locales.
 </p>
 
-<subsubsection id="fun:decllocal" title="Déclarations globales">
+<subsubsection id="fun:declglob" title="Déclarations globales">
 <p>
 La syntaxe est la suivante:
 </p>
@@ -342,7 +342,7 @@ l'<icode>identifiant</icode>. Cet identifiant est alors connu et peut être util
 toutes les expressions qui suivent dans le programme. Il est alors remplacé dans
 ces expressions par sa valeur associée:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-declglob" toplevel="true"><![CDATA[
 let x = 1 ;;
 let y = 41 ;;
 let z = x + y ;;
@@ -365,7 +365,7 @@ Dans la fonction C ci-dessus, on peut déjà utiliser la variable <icode>toto</i
 </p>
 </subsubsection>
 
-<subsubsection id="fun:declglob" title="Déclarations locales">
+<subsubsection id="fun:decllocal" title="Déclarations locales">
 <p>
 Il est possible de déclarer localement des valeurs. Le nom de la valeur n'est alors
 visible que dans une seule expression. La syntaxe est la suivante:
@@ -375,14 +375,14 @@ visible que dans une seule expression. La syntaxe est la suivante:
 La valeur de l'<stxid>expression_1</stxid> est calculée et liée à
 l'<stxid>identifiant</stxid>. Ce dernier n'est visible que dans l'<stxid>expression_2</stxid>. Exemple:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-decllocal" toplevel="true" error-exc="false"><![CDATA[
 let foo = (* declaration globale foo *)
-  let bar =
-    let glop = 1 in (* declaration locale de glop *)
-    glop + 2
-  in (* declaration locale de bar, glop n'est plus visible *)
-    let gee = bar + 1 in (* declaration locale de gee, utilisant bar *)
-      gee + bar + 2 (* utilisation de gee et bar locales *);;
+    let bar =
+      let glop = 1 in (* declaration locale de glop *)
+      glop + 2
+    in (* declaration locale de bar, glop n'est plus visible *)
+      let gee = bar + 1 in (* declaration locale de gee, utilisant bar *)
+        gee + bar + 2 (* utilisation de gee et bar locales *);;
 let buz = bar + foo (* bar n'est plus visible ici *) ;;
 ]]></ocaml-eval>
 <p>
@@ -431,7 +431,7 @@ and <stxid>identN</stxid> = <stxid>expressionN</stxid> in
 Les valeurs ne deviennent cependant visibles qu'après toutes les déclarations
 simultanées:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-declsimul" toplevel="true" error-exc="false"><![CDATA[
 let x_int = 1
 and x_float = 1.0;;
 let y_int = 2
@@ -441,7 +441,7 @@ and y_float = float_of_int y_int;;
 Une autre façon de définir plusieurs valeurs en même temps est d'utiliser la
 notation des n-uplets:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-declsimul2" toplevel="true" error-exc="false"><![CDATA[
 let (a, b, c) = (1, 2, 3);;
 let (a, b) = (1, 2, 3);;
 let (a, b, c) = (1, 2);;
@@ -482,7 +482,7 @@ paramètres:
 <p>
 Voyons quelques exemples de définition de fonctions:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-funs" toplevel="true"><![CDATA[
 function x -> x * x (* la fonction carre sur les entiers *) ;;
 function x -> function y -> x +. y (* l'addition sur les flottants *) ;;
 fun x y -> x +. y (* raccourci syntaxique pour l'expression ci-dessus *)
@@ -507,7 +507,7 @@ une valeur de type <ml>float</ml>.
 L'application d'une fonction à une valeur s'écrit en juxtaposant une valeur
 fonctionnelle et un paramètre:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[(function x -> x + 1) 41 ;;
+<ocaml-eval id="code-funs2" toplevel="true"><![CDATA[(function x -> x + 1) 41 ;;
 ((function x -> function y -> x +. y) 1.0) 41.0 ;;
 (function x -> function y -> x +. y) 1.0 41.0 (* suppression des parentheses inutiles *) ;;
 ]]></ocaml-eval>
@@ -523,7 +523,7 @@ une fonction qui est alors appliquée à <ml>41.0</ml> pour finalement calculer
 <p>
 Il est donc possible d'appliquer un seul paramètre à la même valeur fonctionnelle:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[(function x -> function y -> x +. y) 1.0;;]]></ocaml-eval>
+<ocaml-eval id="code-funs3" toplevel="true"><![CDATA[(function x -> function y -> x +. y) 1.0;;]]></ocaml-eval>
 <p>
 Le résultat est une expression fonctionnelle. Cet aspect est parfois appelé
 <em>application partielle</em> quand on considère la fonction comme ayant deux paramètres
@@ -554,7 +554,7 @@ Les fonctions définies et appliquées "au vol" sont appelées fonctions anonyme
 elles ne sont pas liées à un identifiant. Bien souvent, on nommera les fonctions pour
 les appliquer plus tard, en effectuant des déclarations globales ou locales:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-funs4" toplevel="true"><![CDATA[
 let square = function x -> x * x (* fonction carre sur les entiers *) ;;
 let add = fun x y -> x + y (* en utilisant le raccourci de syntaxe *) ;;
 let sub = function x -> function y -> x - y ;;
@@ -565,7 +565,7 @@ Enfin, le compilateur effectue des vérifications de type lors de l'application 
 comme nous l'avons vu précédemment sur les opérateurs arithmétiques.
 Voyons quelques exemples corrects et incorrects:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-funs5" toplevel="true" error-exc="false"><![CDATA[
 square 24 ;;
 square 24.0 (* erreur: le parametre doit etre un entier *) ;;
 (square 1) 2 (* erreur (square 1) n'est pas une fonction et ne peut etre appliquee *) ;;
@@ -576,7 +576,7 @@ add1 41 ;;
 <p>
 Les parenthèses ne peuvent être mises n'importe où:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[let f x y = x + y ;;
+<ocaml-eval id="code-parenth" toplevel="true" error-exc="false"><![CDATA[let f x y = x + y ;;
 f 1 2 ;;
 (f 1) 2 ;;
 (f 1 2) ;;
@@ -593,7 +593,7 @@ f (1 2);;
 <p>
 Considérons l'exemple suivant:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-closures" toplevel="true"><![CDATA[
 let increment = 2;;
 let add_increment x = x + increment ;;
 add_increment 1 ;;
@@ -653,14 +653,14 @@ Elle peut également être prise comme argument d'une fonction. Les fonctions pr
 en argument ou retournant des valeurs fonctionnelles sont dites d'ordre supérieur.</cmp>
 Par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[let h = function f -> function y -> (f y) + y ;;
+<ocaml-eval id="code-higher" toplevel="true"><![CDATA[let h = function f -> function y -> (f y) + y ;;
 ]]></ocaml-eval>
 <p>
 La bibliothèques standard est pleine de fonctions d'ordre supérieur, souvent polymorphes.
 Ainsi, la fonction <ml>List.map</ml> prend en paramètres une fonction et une liste et applique
 la fonction à chaque élément de la liste pour construire une nouvelle liste:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[List.map ;;
+<ocaml-eval id="code-higher2" toplevel="true"><![CDATA[List.map ;;
 List.map square [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];;
 ]]></ocaml-eval>
 </subsubsection>
@@ -672,20 +672,20 @@ L'ajout à l'environnement d'une variable globale ou locale est fait à la fin d
 Il est donc impossible d'utiliser la variable dans sa définition, puisqu'elle n'est pas
 encore dans l'environnement:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="code-recur" toplevel="true" error-exc="false"><![CDATA[
 let compte x = if x <= 0 then x else compte (x-1) + 1;;
 ]]></ocaml-eval>
 <p>
 Pour pouvoir déclarer des valeurs <em>récursives</em> (qui font appel à elles-mêmes), il
 faut explicitement les indiquer comme telles, en utilisant le mot-clé <ml>rec</ml>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[let rec compte x = if x <= 0 then x else compte (x-1) + 1;;
+<ocaml-eval id="code-recur2" toplevel="true"><![CDATA[let rec compte x = if x <= 0 then x else compte (x-1) + 1;;
 compte 10;;
 ]]></ocaml-eval>
 <p>
 Il est également possible de définir des valeurs mutuellement récursives globales:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-recur3" toplevel="true"><![CDATA[
 let rec triple x = if x <= 0 then 0 else triple_aux (x - 2) + 1
 and triple_aux x = triple (x+1) + 2;;
 triple 20;;
@@ -846,14 +846,16 @@ bien qu'il ne soit pas question d'évaluation mais de test sur la structure et
 le contenu des valeurs filtrées.
 Le terme anglais pour le filtrage est <em>pattern matching</em>.
 </p>
+<div id="patternsyntax">
 <p>
 La syntaxe est la suivante:
 </p>
-<centerstx>match <stxid>expression_0</stxid>} with
+<centerstx>match <stxid>expression_0</stxid> with
  | <stxid>pattern_1</stxid> -> <stxid>expression_1</stxid>
  | <stxid>pattern_2</stxid> -> <stxid>expression_2</stxid>
  | ...
 </centerstx>
+</div>
 <p>
 L'évaluation de cette expression se déroule ainsi:
 L'<stxid>expression_0</stxid> est évaluée. Sa valeur est ensuite comparée au premier motif
@@ -883,7 +885,7 @@ Les motifs permettent à la fois
 <p>
 Voyons maintenant quelques exemples.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[match 1 + 1 with
+<ocaml-eval id="code-pattern-int" toplevel="true"><![CDATA[match 1 + 1 with
   0 -> print_endline "bizarre"
 | 1 -> print_endline "etrange"
 | 2 -> print_endline "ouf!"
@@ -896,7 +898,7 @@ de l'expression <ml>print_endline "ouf!"</ml>. Le compilateur émet un avertisse
 indiquant que la construction de filtrage n'est pas exhaustive, en exhibant un cas
 non filtré, la valeur <ml>3</ml>.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="code-pattern-list" toplevel="true"><![CDATA[
 match List.map string_of_int [ 1 ; 2 ; 3 ] with
   []
 | _ :: [] -> assert false
@@ -960,7 +962,7 @@ Si ce n'est pas le cas, l'effet sera le même que si le motif ne correspondait p
 <p>
 A noter que l'on n'écrira pas:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[match [ 0 ] with
+<ocaml-eval id="code-badmatch" toplevel="true"><![CDATA[match [ 0 ] with
 | [x] when x = x -> true
 | _ -> false
 ;;]]></ocaml-eval>
@@ -1033,7 +1035,7 @@ palindrome_list [];;
 Il est possible d'utiliser le <em>pattern-matching</em> pour déclarer plusieurs
 variables en même temps, en filtrant le résultat d'une expression:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id ="code-declfilt" toplevel="true" error-exc="false"><![CDATA[
 let (x, y, z) = (1, "2", 3.0);;
 let [s1 ; s2 ; s3] = [ "un" ; "deux" ; "trois"];;
 let [x1 ; x2] = [ 1 ; 2 ; 3 ] ;;

@@ -212,7 +212,7 @@ section > header.slide {
 	right: 0;
 	bottom: 1em;
 	padding: .5em 1em;
-	font-size: 50%;
+	font-size: 20pt;
 	text-shadow: .05em .05em .1em black;
 }
 
@@ -275,7 +275,7 @@ header#intro {
   text-align: center;
 }
 div.logo {
-  margin: 2em auto;
+  margin: 4em auto;
   width: 100%;
   text-align:center;
 }
@@ -284,12 +284,14 @@ div.logo {
   color: #ccc ;
   font-size: 150%;
   margin-bottom: 0.3em;
+  line-height: 1.6em;
   }
 
 .slide h2 {
   color: #ccc ;
   font-size: 130%;
   margin-bottom: 0.3em;
+  line-height: 1.3em;
   }
 
 span.icode { color: #333 ;
@@ -312,6 +314,18 @@ div.figure div.title {
   background-color: #445;
 }
 
+div.exercice {
+  font-size: 14pt;
+  color: #333;
+}
+
+div.exercice p {
+  font-size: 14pt;
+  color: #333;
+  text-shadow: none ;
+  font-weight: normal;
+}
+
 div.mapto {
   font-size: 75%;
   text-align: right;
@@ -320,7 +334,8 @@ div.mapto {
 pre {
   font-size: 13pt;
   background-color: #efefef;
-  text-shadow: false;
+  text-shadow: none;
+  font-weight: bold;
 }
 
 div.big-title {

@@ -27,15 +27,17 @@
 </section>
 
 <inc-code id=""><inc elt-hid="intro_ocaml" id="&lt;id/&gt;"/></inc-code>
+<dinc-code id=""><div class="delayed persistent"><inc-code id="&lt;id/&gt;"/></div></dinc-code>
 
-<ddiv><div class="delayed"><contents/></div></ddiv>
-<dli contents="&lt;contents/&gt;"><li class="delayed"><contents/></li></dli>
+<ddiv contents="&lt;contents/&gt;"><div class="delayed persistent"><contents/></div></ddiv>
+<dli contents="&lt;contents/&gt;"><li class="delayed persistent"><contents/></li></dli>
 
 <contents>
 <myheader>
 <h1> </h1>
  <div class="logo"><img src="../ocaml.png" width="500"/></div>
-  <p class="attribution">Maxence Guesdon</p>
+  <div class="attribution">Maxence Guesdon - INRIA Saclay ïle-de-France -
+  Durée: environ 2h</div>
 </myheader>
 
 <slide title="Plan" id="plan">
@@ -95,26 +97,171 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 <section id="progfonc" title="Programmation fonctionnelle">
 <ul>
 <li><elt href="#basetypes"/>,</li>
-<li><elt href="#funs"/>,</li>
+<li><elt href="#conditionnelle"/>,</li>
 <li><elt href="#let"/>,</li>
+<li><elt href="#funs"/>,</li>
+<li><elt href="#patternmatching"/>,</li>
+<li><elt href="#types"/>,</li>
 <li><elt href="#modules"/>,</li>
 </ul>
 </section>
 
 <slide id="basetypes" title="Types de base" mapto="basetypes">
-dd
+<h2>Entiers</h2>
+<inc-code id="code-ints"/>
+</slide>
+
+<slide id="floats" title="Types de base" mapto="floats">
+<h2>Flottants</h2>
+<inc-code id="code-floats"/>
+</slide>
+
+<slide id="booleans" title="Types de base" mapto="booleans">
+<h2>Booléens</h2>
+<inc-code id="code-booleans"/>
+</slide>
+
+<slide id="chars" title="Types de base" mapto="chars">
+<h2>Caractères</h2>
+<inc-code id="code-chars"/>
+</slide>
+
+<slide id="strings" title="Types de base" mapto="strings">
+<h2>Chaînes de caractères</h2>
+<inc-code id="code-strings"/>
+</slide>
+
+<slide id="unit" title="Types de base" mapto="unit">
+<h2>Unit</h2>
+<inc-code id="code-unit"/>
+</slide>
+
+<slide id="tuples" title="Types de base" mapto="tuples">
+<h2>Tuples</h2>
+<inc-code id="code-tuples"/>
+</slide>
+
+<slide id="lists" title="Types de base" mapto="lists">
+<h2>Listes</h2>
+<inc-code id="code-lists"/>
+</slide>
+
+<slide id="noconv" title="Types de base">
+<h2>Attention</h2>
+<ocaml-eval toplevel="true" error-exc="false">
+1 +. 2.0 ;;
+1 + 2.0;;
+</ocaml-eval>
+</slide>
+
+<slide title="Types de base" mapto="fun:comparaisons">
+<h2>Comparaisons</h2>
+<inc-code id="code-comparisons"/>
+</slide>
+
+<slide id="conditionnelle" title="Conditionnelle" mapto="conditionnelle">
+<ocaml>if expression1 then expression2 else expression3</ocaml>
+<inc-code id="code-conditionnelle"/>
+</slide>
+
+
+<slide id="let" title="Déclarations" mapto="fun:decl">
+<p>Déclaration globale:</p>
+<ocaml>let ident = expression;;</ocaml>
+<inc-code id="code-declglob"/>
+
+<ddiv>
+<p>Déclaration locale:</p>
+<ocaml>let ident = expression1 in expression2</ocaml>
+<inc-code id="code-decllocal"/>
+</ddiv>
+</slide>
+
+<slide id="letrec" title="Déclarations simultanées" mapto="fun:recdecl">
+<inc-code id="code-declsimul"/>
+<dinc-code id="code-declsimul2"/>
 </slide>
 
 <slide id="funs" title="Fonctions" mapto="fun:expr">
-dd
+<p>Définition:
+<inc-code id="code-funs"/>
+</p>
+<ddiv><p>Application:</p>
+<inc-code id="code-funs2"/>
+</ddiv>
+<ddiv><p>Application partielle:</p>
+<inc-code id="code-funs3"/>
+</ddiv>
 </slide>
 
-<slide id="let" title="Déclarations" mapto="fun:decl">
+<slide id="funs2" title="Nommage de fonctions" mapto="fun:expr">
+<inc-code id="code-funs4"/>
+<p>Utilisation:</p>
+<dinc-code id="code-funs5"/>
+</slide>
+
+
+<slide id="parenth" title="Place des parenthèses" mapto="fun:parenth">
+<inc-code id="code-parenth"/>
+</slide>
+
+<slide id="closures" title="Fermetures" mapto="fun:closures">
+<inc-code id="code-closures"/>
+</slide>
+
+<slide id="higherorder" title="Fonctions d'ordre supérieur" mapto="fun:higher">
+<inc-code id="code-higher"/>
+<dinc-code id="code-higher2"/>
+</slide>
+
+<slide id="recur" title="Récursion" mapto="fun:recur">
+<inc-code id="code-recur"/>
+<dinc-code id="code-recur2"/>
+<dinc-code id="code-recur3"/>
+</slide>
+
+<slide id="ex" title="Exercice" mapto="redeflistmap">
+<inc-code id="redeflistmap"/>
+</slide>
+
+<slide id="ex2" title="Exercice" mapto="minint">
+<inc-code id="minint"/>
+</slide>
+
+<slide id="ex3" title="Exercice" mapto="average">
+<inc-code id="average"/>
+</slide>
+
+<slide id="patternmatching" title="Filtrage de motif (pattern matching)" mapto="filtrage">
+<inc-code id="patternsyntax"/>
+<ddiv><p>Filtrage d'un entier:</p>
+<inc-code id="code-pattern-int"/>
+</ddiv>
+</slide>
+
+<slide id="patternmatching2" title="Filtrage de motif (pattern matching)" mapto="filtrage">
+<p>Filtrage d'une liste:</p>
+<inc-code id="code-pattern-list"/>
+<ddiv><p>Attention:</p>
+<inc-code id="code-badmatch"/>
+</ddiv>
+</slide>
+
+<slide id="patternmatching3" title="Filtrage de motif (pattern matching)" mapto="fun:declfilt">
+<inc-code id="code-declfilt"/>
+</slide>
+
+
+<slide id="ex4" title="Exercice" mapto="palindromlist">
+<inc-code id="palindromlist"/>
+</slide>
+
+<slide id="types" title="Déclaration de types" mapto="fun:decltypes">
 dd
 </slide>
 
 <slide id="modules" title="Modules" mapto="modules">
-dd
+
 </slide>
 
 <section id="stdlib" title="Utiliser la bibliothèque standard">
@@ -125,7 +272,6 @@ dd<!--<ul>
 <li><elt href="#modules"/>,</li>
 </ul>-->
 </section>
-
 
 <!--
 <slide id="tryocaml" title="TryOcaml">
