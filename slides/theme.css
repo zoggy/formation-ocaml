@@ -115,8 +115,8 @@ strong, b {
 
 	.slide p,
 	.slide li {
-		font-weight: bold;
-		letter-spacing: -.03em;
+		font-weight: normal;
+		/*letter-spacing: -.03em;*/
 	}
 
 	.slide > ul {
@@ -247,7 +247,7 @@ section > header.slide {
 	color: orange;
 }
 
-a, a:visited, a:target { color: #EEEEEE ; }
+a, a:visited, a:target, a:link { color: #EEEEEE ; }
 
 div.slide-header {
   padding-top: 5px;
@@ -281,14 +281,14 @@ div.logo {
 }
 
 .slide h1 {
-  color: #ccc ;
+  color: yellow ;
   font-size: 150%;
   margin-bottom: 0.3em;
   line-height: 1.6em;
   }
 
 .slide h2 {
-  color: #ccc ;
+  color: yellow ;
   font-size: 130%;
   margin-bottom: 0.3em;
   line-height: 1.3em;

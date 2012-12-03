@@ -1,0 +1,523 @@
+<slideshow title="N'ayez pas peur d'OCaml"
+  with-contents="true"
+  sectionning=""
+  slide-header="false"
+>
+<myheader id="">
+<header class="slide" id="&lt;id/&gt;"><contents/></header>
+</myheader>
+
+<slide id="" title="" mapto="" href="" is_section="false">
+<block href="&lt;href/&gt;"
+   id="&lt;id/&gt;" title="&lt;title/&gt;"
+   with-contents="true"
+   >
+<long-title-format><title/></long-title-format>
+<short-title-format><title/></short-title-format>
+<contents
+><div class="slide" title="&lt;title/&gt;" id="&lt;id/&gt;"
+><if title=""><main_/><if is_section="true"><main_/><h1><title/></h1></if></if><contents/>
+<if mapto=""><main_/><div class="mapto"><elt href="intro_ocaml#&lt;mapto/&gt;"/></div></if></div>
+</contents></block>
+</slide>
+
+<section id="" title="" mapto="">
+<env_ thecontents="&lt;contents/&gt;" thetitle="&lt;title/&gt;">
+<slide id="&lt;id/&gt;" title="&lt;title/&gt;" is_section="true"><div class="big-title"><thetitle/></div><thecontents/></slide>
+</env_>
+</section>
+
+<inc-code id=""><inc href="intro_ocaml#&lt;id/&gt;"/></inc-code>
+<dinc-code id=""><div class="delayed persistent"><inc-code id="&lt;id/&gt;"/></div></dinc-code>
+
+<ddiv contents="&lt;contents/&gt;"><div class="delayed persistent"><contents/></div></ddiv>
+<dp contents="&lt;contents/&gt;"><p class="delayed persistent"><contents/></p></dp>
+<dli contents="&lt;contents/&gt;"><li class="delayed persistent"><contents/></li></dli>
+
+<mylist sep="&lt;span&gt;,  &lt;/span&gt;"><list defer_="1" sep="&lt;sep/&gt;"><contents/></list></mylist>
+
+<contents>
+<myheader id="intro">
+<div class="big-title">N'ayez pas peur d'OCaml </div>
+    Journée LoOPS - 11 décembre 2012
+  <div class="attribution">Maxence Guesdon - INRIA Saclay Île-de-France </div>
+</myheader>
+
+<section id="plan" title="Plan">
+<ul>
+<li><a href="caracteristiques">Caractéristiques</a>,</li>
+<li><elt href="#histoire"/>,</li>
+<li><a href="#modes">Modes d'exécution</a>,</li>
+<li><a href="#tour">Un petit tour d'OCaml</a>.</li>
+</ul>
+</section>
+
+<inc href="slides#caracteristiques"/>
+
+<slide id="histoire" title="Histoire">
+<dp>Langage développé à l'INRIA (équipes Formel, Cristal, puis Gallium).</dp>
+<dp>Recherche sur les systèmes de types:</dp>
+<ul>
+<dli>inférence de types, typage statique,</dli>
+<dli>un programme bien typé &#x2192; sûreté d'exécution,</dli>
+<dli>accepter le plus de programmes corrects possibles, en rejetant
+  tous les programmes incorrects.</dli>
+</ul>
+<dp>Quelques dates:</dp>
+<ul>
+<dli>1985: langage CAML,</dli>
+<dli>1990: Caml-light,</dli>
+<dli>1995: OCaml,</dli>
+<dli>2002: Création du <a href="http://caml.inria.fr/consortium/index.fr.html">consortium Caml</a>
+ (CEA, Citrix, Dassault, Esterel Technologies, Microsoft, ...)</dli>
+</ul>
+</slide>
+
+<slide id="success-stories" title="Quelques logiciels développés en OCaml">
+<ul>
+<dli>le synchroniseur de fichiers <a href="http://www.cis.upenn.edu/~bcpierce/unison/">Unison</a>,</dli>
+<dli>Le client pair-à-pair <a href="http://mldonkey.sourceforge.net/Main_Page">MLdonkey</a>,</dli>
+<dli>L'assistant de preuve <a href="http://coq.inria.fr/">Coq</a>,</dli>
+<dli>L'analyseur statique <a href="http://www.astree.ens.fr/">ASTRÉE</a>,</dli>
+<dli>L'analyseur de drivers de Microsoft <a href="http://research.microsoft.com/en-us/projects/slam/">SLAM</a>,</dli>
+<dli>Le langage de modélisation financière de <a href="http://www.lexifi.com/">LexiFi</a>,</dli>
+<dli>Logiciels de transactions boursières de <a href="http://www.janestreet.com/">Jane Street Capital</a>,</dli>
+<dli>...</dli>
+</ul>
+<dp>
+Aujourd'hui OCaml est largement utilisé dans la <b>communauté académique</b> (pas seulement pour l'enseignement)
+<b>ET dans l'industrie</b>.
+</dp>
+</slide>
+
+<inc href="slides#modes"/>
+
+<slide id="tour" title="Un petit tour d'OCaml - Inférence de type">
+<ocaml-eval toplevel="true">let f = fun x -> x + 1;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let f x = x + 1;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">(+);;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">f 41;;
+f "41";;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let float_add x y = (float x) +. (float y);;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">float_add  1 2;;</ocaml-eval></ddiv>
+</slide>
+<!--
+<slide id="inference2" title="Inférence de type (2)">
+<ocaml-eval toplevel="true">let foo = 41;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let f x = x + 1;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">f 1;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">f foo;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">f "coucou";;</ocaml-eval></ddiv>
+</slide>
+-->
+<slide id="fonctionnel" title="Les fonctions sont des valeurs">
+<ocaml-eval toplevel="true">
+let f1 = fun x -> x + 1;;
+let f2 x = x * 2;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let h f g x = x + f x * g x;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let h = fun f -> fun g -> fun x -> x + f x * g x;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">h f1 f2 42;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">h f1 (fun x -> x + 10) 42;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="apppartiel" title="Application partielle - Fermetures">
+<ocaml-eval toplevel="true">let f x y = x + y;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let g = f 1;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">g 2;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let f x y = 1000 + x + y;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">g 2;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="polymorphisme" title="Polymorphisme">
+<ocaml-eval toplevel="true">let g f x = (f x) + 1;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">
+let f1 = fun x -> x + 1;;
+g f1 40;;
+</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">
+let f2 x = int_of_float (x -. 4.) ;;
+g f2 45. ;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">g int_of_string;;
+g int_of_string "41";;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">g string_of_int 1;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="polymorphisme2" title="Polymorphisme (2)">
+<ocaml-eval toplevel="true">List.map;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">[];;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let ma_liste = [ 1 ; 2 ; 3 ; 4];;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let ma_liste2 = List.map string_of_int ma_liste;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let ma_liste3 = List.map (fun x -> x + 1) ma_liste;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="types" title="Types">
+<ul>
+<dli>int, Int32, Int64, float, string, char, unit,</dli>
+<dli>tuples: <ocaml-eval toplevel="true">(1, "coucou", 1.0, [ 'c' , 'd']);;</ocaml-eval></dli>
+<dli>listes: <code>type 'a list</code>
+  <ocaml-eval toplevel="true">["maitre" ; "corbeau" ; "sur" ; "un" ; "arbre" ; "perché"];;
+  [ [1.0 ; 2.0] ; [ 3.14 ; 2.72] ];;</ocaml-eval>
+</dli>
+<dli>vecteurs: <code>type 'a array</code>
+  <ocaml-eval toplevel="true">[| 1 ; 2 ; 3 |];;
+  [| "tenait" ; "en" ; "son" ; "bec" ; "un" ; "fromage" |];;
+  [| [ 'a' ; 'b' ; 'c'] ; [ 'd' ; 'e' ; 'f'] |];;</ocaml-eval>
+</dli>
+<dli>types sommes (variants) &#x2248; <code>union</code> en C,</dli>
+<dli>types enregistrements (records) &#x2248; <code>struct</code> en C.</dli>
+</ul>
+</slide>
+
+<slide id="variants" title="Exemple: manipulation d'arbres">
+<ocaml-eval toplevel="true" error-exc="false">type 'a tree = Node of 'a tree list | Leaf of 'a</ocaml-eval>
+<ocaml-eval show-code="false"><![CDATA[
+let gensym = let cpt = ref 0 in fun () -> incr cpt; Printf.sprintf "n%d" !cpt;;
+let dot_of_tree png_file f t =
+  let dot_file = (Filename.chop_extension png_file)^".dot" in
+  let oc = open_out dot_file in
+  let rec iter cur_node t =
+    let node = gensym () in
+    (match cur_node with None -> () | Some n -> Printf.fprintf oc "%s -> %s;\n" n node);
+    match t with
+      Leaf v ->
+        let label = f v in
+        Printf.fprintf oc "%s [label=%S];\n" node label
+    | Node nodes ->
+        Printf.fprintf oc "%s [shape=\"point\"];\n" node;
+        List.iter (iter (Some node)) nodes
+  in
+  Printf.fprintf oc "digraph g { rankdir=\"TB\"\n;";
+  iter None t;
+  output_string oc "}\n";
+  close_out oc;
+  let com = Printf.sprintf "dot -Tpng -o %s %s"
+     (Filename.quote png_file) (Filename.quote dot_file)
+  in
+  match Sys.command com with
+    0 -> ()
+  | n -> failwith ("Command failed: "^com)
+;;
+]]></ocaml-eval>
+<ddiv>
+<image float="right" src="slide_arbre.png" width="200"/>
+<ocaml-eval toplevel="true" error-exc="false">let arbre =
+  Node [
+    Node [ Leaf 11 ; Leaf 9 ] ;
+    Leaf 3 ;
+    Node [ Leaf 4 ; Leaf 15 ]
+  ]
+</ocaml-eval>
+</ddiv>
+<ocaml-eval show-code="false">dot_of_tree "slide_arbre.png" string_of_int arbre</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">
+let rec tree_map f t =
+  match t with
+    Leaf v -> Leaf (f v)
+  | Node nodes -> Node (List.map (tree_map f) nodes)
+;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" >
+let arbre_chaines = tree_map string_of_int arbre;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" >
+tree_map (fun x -> x + 1) arbre;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="height" title="Hauteur">
+<ocaml-eval toplevel="true">
+List.fold_left;;
+</ocaml-eval>
+<ddiv>
+<ocaml-eval toplevel="true">
+let f acc n = acc + n;;
+List.fold_left f 0 [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ]
+  (* f (f (f (f (f (f 0 1) 2) 3) 4) 5) 6 *) ;;
+</ocaml-eval>
+</ddiv>
+<ddiv>
+<ocaml-eval toplevel="true">
+let rec height tree =
+  match tree with
+    Leaf _ -> 1
+  | Node nodes ->
+      1 + List.fold_left (fun acc t -> max acc (height t)) min_int nodes
+;;
+height arbre;;
+</ocaml-eval>
+</ddiv>
+</slide>
+<!--
+<slide id="variants2" title="Merge">
+<ocaml-eval toplevel="true"><![CDATA[
+let merge add start t1 t2 =
+  let rec iter v t1 t2 =
+    match t1, t2 with
+      Leaf v1, Leaf v2 -> Leaf (add v (add v1 v2))
+    | Node _, Leaf v2 ->
+        let f = add (add v v2) in
+        tree_map f t1
+    | Leaf v1, Node _ ->
+        let f = add (add v v1) in
+        tree_map f t2
+    | Node l1, Node l2 ->
+        Node (iter_list v l1 l2)
+
+  and iter_list v l1 l2 =
+    match l1, l2 with
+      [], [] -> []
+    | [], l | l, [] -> List.map (tree_map (add v)) l
+    | h1 :: q1, h2 :: q2 ->
+      let h = iter v h1 h2 in
+      h :: (iter_list v q1 q2)
+  in
+  iter start t1 t2
+;;
+]]></ocaml-eval>
+</slide>
+
+<slide id="variants3" title="Application">
+<ddiv>
+<image float="right" src="slide_arbre.png" width="250"/>
+<ocaml-eval toplevel="true" >arbre;;</ocaml-eval>
+</ddiv>
+<br/><br/>
+<ddiv>
+<image float="right" src="slide_arbre2.png" width="250"/>
+<ocaml-eval toplevel="true" >
+let arbre2 = Node [
+  Leaf 32 ;
+  Leaf 3 ;
+  Node [ Node [ Leaf 11 ; Leaf 0 ] ; Leaf 9 ; Node [ Leaf 45 ; Leaf (-12) ] ] ;
+  ]
+</ocaml-eval>
+<ocaml-eval show-code="false">dot_of_tree "slide_arbre2.png" string_of_int arbre2</ocaml-eval>
+</ddiv>
+
+<ddiv>
+<image float="right" src="slide_arbre3.png" width="300"/>
+<ocaml-eval toplevel="true" >let arbre3 = merge (+) 0 arbre arbre2;;
+</ocaml-eval>
+<ocaml-eval show-code="false">dot_of_tree "slide_arbre3.png" string_of_int arbre3</ocaml-eval>
+</ddiv>
+
+</slide>
+
+<slide id="variants4" title="Application (2)">
+<image float="right" src="slide_arbre4.png" width="300"/>
+<ocaml-eval toplevel="true" >let arbre4 = merge max min_int arbre arbre2;;
+</ocaml-eval>
+<ocaml-eval show-code="false">dot_of_tree "slide_arbre4.png" string_of_int arbre4</ocaml-eval>
+<br/>
+<br/>
+<ddiv>
+<image float="right" src="slide_arbre5.png" width="300"/>
+<ocaml-eval toplevel="true" >let arbre5 = List.fold_left (merge ( + ) 0) arbre [arbre2 ; arbre3 ; arbre4];;
+</ocaml-eval>
+<ocaml-eval show-code="false">dot_of_tree "slide_arbre5.png" string_of_int arbre5</ocaml-eval>
+</ddiv>
+</slide>
+
+
+
+<slide id="filtrage" title="Filtrage (pattern-matching)">
+<ocaml-eval toplevel="true"><![CDATA[
+match [ 1 ; 2 ; 3 ; 4 ] with
+  [] -> "vide"
+| [x] -> "juste "^(string_of_int x)
+| [ _ ; _ ]  -> "deux éléments"
+| 11 :: _ -> "liste quelconque avec 11 en tête"
+| h1 :: h2 :: q -> Printf.sprintf "liste quelconque avec h1=%d, h2=%d" h1 h2
+]]></ocaml-eval>
+<ddiv>
+<ocaml-eval toplevel="true"><![CDATA[
+let (a, b, c, d) = (1, 2.0, "coucou", Leaf 12 );;
+let f x = if x < 0 then (x, -x) else (-x, x);;
+let x = f a;;
+let (_,x2) = x;;
+]]></ocaml-eval>
+</ddiv>
+<ddiv><ocaml-eval toplevel="true"><![CDATA[
+match arbre with
+  Node [ Node [ Leaf n ; _] ; _ ] -> n
+| Node ( (Node ((Leaf m) :: _)) :: _ ) when m > 15 -> -1
+| Node ( (Node ((Leaf m) :: _)) :: _ ) -> m
+| _ -> 0;;
+]]></ocaml-eval></ddiv>
+</slide>
+-->
+
+<slide id="imperative" title="Programmation impérative">
+<ul>
+<li>références:
+<ocaml-eval toplevel="true">let cpt = ref 0;;</ocaml-eval>
+</li>
+<dli>séquence: <ocaml-eval toplevel="true">print_string "coucou"; print_string "toto"; flush stdout</ocaml-eval></dli>
+<dli>boucles <code>for</code> et <code>while</code>:
+<ocaml-eval toplevel="true"><![CDATA[
+for i = 1 to 10 do cpt := !cpt + i ; done;;
+while !cpt < 100 do cpt := !cpt + 10; done;;
+!cpt;;]]></ocaml-eval>
+</dli>
+</ul>
+</slide>
+
+<!--
+<slide id="tac" title="Exemple: Tac">
+<ocaml>type 'a option = None | Some of 'a</ocaml>
+<ddiv>
+<ocaml-eval toplevel="true">
+let tac file =
+  let in_channel = open_in file in
+  let rec iter acc =
+    let line =
+       try Some (input_line in_channel)
+       with End_of_file -> None
+     in
+     match line with
+       None -> acc
+     | Some line -> iter (line :: acc)
+   in
+   let lines = iter [] in
+   close_in in_channel;
+   List.iter print_endline lines
+;;
+</ocaml-eval>
+</ddiv>
+<ddiv>
+<ocaml-eval toplevel="true">
+tac "/etc/shells";;
+</ocaml-eval>
+</ddiv>
+</slide>
+-->
+
+<!--
+<slide id="exemple" title="Exemple: récupération des logins">
+<ocaml>type 'a option = None | Some of 'a</ocaml>
+<ddiv>
+<ocaml-eval toplevel="true"><![CDATA[
+exception Invalid_line of string;;
+let read_line in_channel =
+  try
+    let line = input_line in_channel in
+    try
+      let pos = String.index line ':' in
+      Some (String.sub line 0 pos)
+    with Not_found -> raise (Invalid_line line)
+  with End_of_file -> None
+;;
+]]></ocaml-eval>
+</ddiv>
+</slide>
+<slide id="exemple2" title="Exemple (suite)">
+<ocaml-eval toplevel="true"><![CDATA[let get_logins file =
+  let in_channel = open_in file in
+  let rec read acc =
+    match read_line in_channel with
+      None -> acc
+    | Some login -> read (login :: acc)
+  in
+  let logins = read [] in
+  close_in in_channel;
+  logins
+;;
+]]></ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">
+get_logins "/etc/passwd";;
+</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true" error-exc="false">
+get_logins "/etc/bash.bashrc";;
+</ocaml-eval></ddiv>
+</slide>
+-->
+
+<slide id="objet" title="Programmation objet">
+<ocaml-eval toplevel="true"><![CDATA[
+class point x y =
+  object
+    val mutable x = x
+    val mutable y = y
+    method set_x n = x <- n
+    method set_y n = y <- n
+    method x = x
+    method y = y
+    method to_string = Printf.sprintf "(%d, %d)" x y
+  end;;
+]]></ocaml-eval>
+</slide>
+
+<slide id="objet2" title="Programmaton objet (2)">
+<ocaml-eval toplevel="true">
+class colored_point x y color =
+  object(self)
+    inherit point x y as super
+    method color = color
+    method to_string = Printf.sprintf "%s in %s" super#to_string color
+  end;;
+</ocaml-eval>
+</slide>
+
+<slide id="objet3" title="Programmation objet (3)">
+<ocaml-eval toplevel="true">
+let p = new point 0 0 ;;
+let cp = new colored_point 1 1 "blue";;
+cp#to_string;;
+</ocaml-eval>
+<ddiv>
+<ocaml-eval toplevel="true">
+let debug = fun truc -> "debug: " ^ truc#to_string;;
+</ocaml-eval>
+</ddiv>
+<ddiv>
+<ocaml-eval toplevel="true">
+let dummy = object method to_string = "dummy" end;;
+debug p;;
+debug cp;;
+debug dummy;;
+</ocaml-eval>
+</ddiv>
+<ddiv>
+<ocaml-eval toplevel="true" error-exc="false">
+debug (object method to_int = 1 end);;
+</ocaml-eval>
+</ddiv>
+</slide>
+
+<slide id="concl" title="A retenir">
+<p>
+Points forts:
+</p>
+<ul>
+<dli><b>sûreté</b>: typage fort, ramasse-miettes, syntaxe interdisant les variables non initialisées,
+moult avertissements (filtrages non exhaustifs, variables non utilisées, ...),</dli>
+<dli><b>grande expressivité</b>: fonctions d'ordre supérieur, polymorphisme, modularité, filtrage, ...</dli>
+<dli>liberté de mixer <b>plusieurs paradigmes</b>: fonctionnel, impératif, objet,</dli>
+<dli>facilité de <b>maintenance du code, refactoring</b>: l'inférence de type et les
+contrôles du compilateur (notamment le typage) font qu'on n'a pas peur de modifier le code.</dli>
+</ul>
+</slide>
+
+<slide id="pm" title="Cet après-midi">
+<ul>
+<li>Atelier de 2h,</li>
+<li>les bases du langage,</li>
+<li>la partie programmation fonctionnelle, avec exercices.</li>
+</ul>
+</slide>
+
+<footer class="slide">
+<h1>Merci!</h1>
+<h2>Questions ?</h2>
+<dp>
+Présentation réalisée avec:
+</dp>
+<ul>
+<dli><a href="http://zoggy.github.com/stog/">Stog</a>,</dli>
+<dli><a href="https://github.com/LeaVerou/CSSS">Lea Verrou's CSSS.</a></dli>
+</ul>
+<ddiv>
+<p>Présentation disponible sur:</p>
+<hcode defer_="1">http://form-ocaml.forge.ocamlcore.org<elt-hid/>.html</hcode>
+</ddiv>
+</footer>
+</contents>
+</slideshow>
+

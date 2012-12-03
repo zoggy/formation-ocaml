@@ -1,7 +1,7 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-STOG_OPTIONS=-d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN) -v
+STOG_OPTIONS=-v -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN) -v
 MORE_OPTIONS=
 
 EXERCICES=count_words.cmo \
@@ -19,6 +19,7 @@ PLUGIN=stog_course.cmxs
 build: $(EXERCICES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
 	$(STOG) $(STOG_OPTIONS) $(MORE_OPTIONS) .  # --only slides/slides
+	cp -f slide_arbre*.png $(DEST_DIR)/slides/
 	$(MAKE) style
 
 clean:
