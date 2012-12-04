@@ -92,7 +92,17 @@ Aujourd'hui OCaml est largement utilisé dans la <b>communauté académique</b> 
 
 <inc href="slides#modes"/>
 
-<slide id="tour" title="Un petit tour d'OCaml - Inférence de type">
+<slide id="tour" title="Un petit tour d'OCaml - Déclarations">
+<ocaml-eval toplevel="true">1 + 1;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let x = "bonjour " ^ "le monde";;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let x = 3.0 ** 2. ;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let y =
+    let x = 3 in
+    39 + x;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">x;;</ocaml-eval></ddiv>
+</slide>
+<!--
+<slide id="inference" title="Inférence de type">
 <ocaml-eval toplevel="true">let f = fun x -> x + 1;;</ocaml-eval>
 <ddiv><ocaml-eval toplevel="true">let f x = x + 1;;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">(+);;</ocaml-eval></ddiv>
@@ -101,7 +111,7 @@ f "41";;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">let float_add x y = (float x) +. (float y);;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true" error-exc="false">float_add  1 2;;</ocaml-eval></ddiv>
 </slide>
-<!--
+
 <slide id="inference2" title="Inférence de type (2)">
 <ocaml-eval toplevel="true">let foo = 41;;</ocaml-eval>
 <ddiv><ocaml-eval toplevel="true">let f x = x + 1;;</ocaml-eval></ddiv>
@@ -110,16 +120,39 @@ f "41";;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true" error-exc="false">f "coucou";;</ocaml-eval></ddiv>
 </slide>
 -->
-<slide id="fonctionnel" title="Les fonctions sont des valeurs">
+<slide id="fonctionnel" title="Déclarations de fonctions">
 <ocaml-eval toplevel="true">
-let f1 = fun x -> x + 1;;
-let f2 x = x * 2;;</ocaml-eval>
+let f1 = fun x -> x + 1;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let f2 x = x * 2;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let f3 x y z = x *. y +. z;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let f3 = fun x -> fun y -> fun z -> x *. y +. z;;</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">let f3 = fun x y ->
+  let t = x *. y in
+  fun z -> t +. z;;</ocaml-eval></ddiv>
+</slide>
+
+<slide id="apply" title="Application de fonctions">
+<ocaml-eval toplevel="true">let f x = x ^ " le monde";;
+f "bonjour";;
+</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let f x y z = x + y -z;;
+f 1 2;;
+let g = f 1 2;;
+g 3;;
+f 1 2 3;;
+</ocaml-eval></ddiv>
+</slide>
+
+<slide id="funvalues" title="Les fonctions sont des valeurs">
+<ocaml-eval toplevel="true">
+let f1 = fun x -> x + 1;;</ocaml-eval>
+<ddiv><ocaml-eval toplevel="true">let f2 x = x * 2;;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">let h f g x = x + f x * g x;;</ocaml-eval></ddiv>
-<ddiv><ocaml-eval toplevel="true">let h = fun f -> fun g -> fun x -> x + f x * g x;;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">h f1 f2 42;;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">h f1 (fun x -> x + 10) 42;;</ocaml-eval></ddiv>
 </slide>
 
+<!--
 <slide id="apppartiel" title="Application partielle - Fermetures">
 <ocaml-eval toplevel="true">let f x y = x + y;;</ocaml-eval>
 <ddiv><ocaml-eval toplevel="true">let g = f 1;;</ocaml-eval></ddiv>
@@ -127,6 +160,7 @@ let f2 x = x * 2;;</ocaml-eval>
 <ddiv><ocaml-eval toplevel="true">let f x y = 1000 + x + y;;</ocaml-eval></ddiv>
 <ddiv><ocaml-eval toplevel="true">g 2;;</ocaml-eval></ddiv>
 </slide>
+-->
 
 <slide id="polymorphisme" title="Polymorphisme">
 <ocaml-eval toplevel="true">let g f x = (f x) + 1;;</ocaml-eval>
@@ -152,7 +186,7 @@ g int_of_string "41";;</ocaml-eval></ddiv>
 
 <slide id="types" title="Types">
 <ul>
-<dli>int, Int32, Int64, float, string, char, unit,</dli>
+<li>int, Int32, Int64, float, string, char, unit,</li>
 <dli>tuples: <ocaml-eval toplevel="true">(1, "coucou", 1.0, [ 'c' , 'd']);;</ocaml-eval></dli>
 <dli>listes: <code>type 'a list</code>
   <ocaml-eval toplevel="true">["maitre" ; "corbeau" ; "sur" ; "un" ; "arbre" ; "perché"];;
@@ -163,11 +197,11 @@ g int_of_string "41";;</ocaml-eval></ddiv>
 
 <slide id="types2" title="Types (2)">
 <ul>
-<dli>vecteurs: <code>type 'a array</code>
+<li>vecteurs: <code>type 'a array</code>
   <ocaml-eval toplevel="true">[| 1 ; 2 ; 3 |];;
   [| "tenait" ; "en" ; "son" ; "bec" ; "un" ; "fromage" |];;
   [| [ 'a' ; 'b' ; 'c'] ; [ 'd' ; 'e' ; 'f'] |];;</ocaml-eval>
-</dli>
+</li>
 <dli>types sommes (variants) &#x2248; <code>union</code> en C,</dli>
 <dli>types enregistrements (records) &#x2248; <code>struct</code> en C.</dli>
 </ul>
