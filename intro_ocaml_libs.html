@@ -374,6 +374,36 @@ is_palindrome "baobab";;
 </solution>
 </exercice>
 
+<exercice id="exotac" title="Tac">
+<p>
+Ecrire une fonction <ml>tac</ml> qui lit un fichier en paramètre
+et retourne la liste de ses lignes en ordre inverse.
+</p>
+<solution>
+<ocaml-eval toplevel="true">
+let tac file =
+  let in_channel = open_in file in
+  let rec iter acc =
+    let line =
+       try Some (input_line in_channel)
+       with End_of_file -> None
+     in
+     match line with
+       None -> acc
+     | Some line -> iter (line :: acc)
+   in
+   let lines = iter [] in
+   close_in in_channel;
+   List.iter print_endline lines
+;;
+</ocaml-eval>
+</solution>
+<p>Exemple d'appel:</p>
+<ocaml-eval toplevel="true">
+tac "/etc/shells";;
+</ocaml-eval>
+</exercice>
+
 <exercice id="exooptparams" title="Paramètres optionnels">
 <p>
 On peut spécifier des paramètres optionnels pour les fonctions, avec ou non

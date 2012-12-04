@@ -286,7 +286,8 @@ if expression1 then expression2</ocaml>
 <section id="stdlib" title="Utiliser la bibliothèque standard">
 <ul>
 <li><elt href="#stdlibis"/>,</li>
-<li><elt href="#usingmods"/>,</li>
+<li><elt href="#usingmods">Modules, exceptions</elt>,</li>
+<li><elt href="#tac">Exercices.</elt></li>
 </ul>
 </section>
 
@@ -335,11 +336,50 @@ exceptions de base,</dli>
 </ddiv>
 </slide>
 
+<slide id="exceptions" title="Exceptions">
+<ocaml>
+try ...
+with
+  Exc1 -> ...
+| Exc2 -> ...
+</ocaml>
+<ddiv>
+Exemple:
+<ocaml-eval toplevel="true">
+let first_line file =
+  try
+    let ic = open_in file in
+    try let line = input_line ic in close_in ic; line
+    with End_of_file -> close_in ic; ""
+  with
+    Sys_error msg ->
+      prerr_endline msg;
+      ""
+;;
+first_line "/etc/passwd";;
+first_line "/foo/bar";;
+</ocaml-eval>
+</ddiv>
+<ddiv>Des exceptions sont prédéfinies dans le module <moduledoc name="Pervasives"/>.</ddiv>
+<ddiv>
+<ocaml-eval toplevel="true">
+exception Mon_exception of string * int ;;
+</ocaml-eval></ddiv>
+</slide>
 
+<slide id="tac" title="Exercice" mapto="exotac">
+<ocaml>type 'a option = None | Some of 'a</ocaml>
+<inc-code id="exotac"/>
+</slide>
+
+<slide id="words" title="Exercice" mapto="exowords">
+<inc-code id="exowords"/>
+</slide>
+<!--
 <slide id="next" title="A continuer">
 La suite bientôt...
 </slide>
-
+-->
 <slide id="missing" title="Ce que nous n'avons pas vu">
 <ul>
 <li><elt href="intro_ocaml#exceptions">Exceptions</elt>,</li>
