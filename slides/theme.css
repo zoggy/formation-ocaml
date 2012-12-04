@@ -344,3 +344,10 @@ div.big-title {
   width: 100%;
   text-align:center;
 }
+
+p.important {
+  border-width: 4px;
+  border-color: yellow;
+  padding: 0.5em;
+  border-style: solid;
+}

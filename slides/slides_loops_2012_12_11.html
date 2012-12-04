@@ -31,7 +31,7 @@
 <dinc-code id=""><div class="delayed persistent"><inc-code id="&lt;id/&gt;"/></div></dinc-code>
 
 <ddiv contents="&lt;contents/&gt;"><div class="delayed persistent"><contents/></div></ddiv>
-<dp contents="&lt;contents/&gt;"><p class="delayed persistent"><contents/></p></dp>
+<dp class="" contents="&lt;contents/&gt;"><p class="delayed persistent &lt;class/&gt;"><contents/></p></dp>
 <dli contents="&lt;contents/&gt;"><li class="delayed persistent"><contents/></li></dli>
 
 <mylist sep="&lt;span&gt;,  &lt;/span&gt;"><list defer_="1" sep="&lt;sep/&gt;"><contents/></list></mylist>
@@ -75,16 +75,16 @@
 
 <slide id="success-stories" title="Quelques logiciels développés en OCaml">
 <ul>
-<dli>le synchroniseur de fichiers <a href="http://www.cis.upenn.edu/~bcpierce/unison/">Unison</a>,</dli>
-<dli>Le client pair-à-pair <a href="http://mldonkey.sourceforge.net/Main_Page">MLdonkey</a>,</dli>
-<dli>L'assistant de preuve <a href="http://coq.inria.fr/">Coq</a>,</dli>
-<dli>L'analyseur statique <a href="http://www.astree.ens.fr/">ASTRÉE</a>,</dli>
-<dli>L'analyseur de drivers de Microsoft <a href="http://research.microsoft.com/en-us/projects/slam/">SLAM</a>,</dli>
-<dli>Le langage de modélisation financière de <a href="http://www.lexifi.com/">LexiFi</a>,</dli>
-<dli>Logiciels de transactions boursières de <a href="http://www.janestreet.com/">Jane Street Capital</a>,</dli>
-<dli>...</dli>
+<li>le synchroniseur de fichiers <a href="http://www.cis.upenn.edu/~bcpierce/unison/">Unison</a>,</li>
+<li>Le client pair-à-pair <a href="http://mldonkey.sourceforge.net/Main_Page">MLdonkey</a>,</li>
+<li>L'assistant de preuve <a href="http://coq.inria.fr/">Coq</a>,</li>
+<li>L'analyseur statique <a href="http://www.astree.ens.fr/">ASTRÉE</a>,</li>
+<li>L'analyseur de drivers de Microsoft <a href="http://research.microsoft.com/en-us/projects/slam/">SLAM</a>,</li>
+<li>Le langage de modélisation financière de <a href="http://www.lexifi.com/">LexiFi</a>,</li>
+<li>Logiciels de transactions boursières de <a href="http://www.janestreet.com/">Jane Street Capital</a>,</li>
+<li>...</li>
 </ul>
-<dp>
+<dp class="important">
 Aujourd'hui OCaml est largement utilisé dans la <b>communauté académique</b> (pas seulement pour l'enseignement)
 <b>ET dans l'industrie</b>.
 </dp>
@@ -131,13 +131,17 @@ let f1 = fun x -> x + 1;;</ocaml-eval>
   fun z -> t +. z;;</ocaml-eval></ddiv>
 </slide>
 
-<slide id="apply" title="Application de fonctions">
+<slide id="apply" title="Applications de fonctions">
 <ocaml-eval toplevel="true">let f x = x ^ " le monde";;
 f "bonjour";;
 </ocaml-eval>
-<ddiv><ocaml-eval toplevel="true">let f x y z = x + y -z;;
+<ddiv><ocaml-eval toplevel="true">let f x y z = x + y - z;;
 f 1 2;;
+</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">
 let g = f 1 2;;
+</ocaml-eval></ddiv>
+<ddiv><ocaml-eval toplevel="true">
 g 3;;
 f 1 2 3;;
 </ocaml-eval></ddiv>
