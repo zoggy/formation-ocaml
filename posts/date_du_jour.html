@@ -9,8 +9,9 @@ sur la sortie standard.
 </p>
 <p>Des fonctions de manipulations de date sont disponibles dans le
 module <moduledoc name="Unix"/> fourni avec la distribution OCaml.
-Il existe d'autres bibliothèques pour manipuler les dates, citées
-plus bas, mais le but de ce billet, comme les suivants, est de
+Il existe d'<ext-a href="http://calendar.forge.ocamlcore.org/">autres</ext-a>
+<ext-a href="http://projects.camlcity.org/projects/ocamlnet.html">bibliothèques</ext-a>
+pour manipuler les dates mais le but de ce billet, comme les suivants, est de
 montrer des exemples de code OCaml pour se familiariser à la fois
 avec les constructions du langage et à la fois avec des modules
 de la distribution standard.
@@ -77,8 +78,9 @@ let string_of_month = function
 ;;
 </ocaml-eval>
 <p>
-Le jour du mois et l'année sont des entiers, donc pas besoin d'une fonction
-spéciale pour les afficher. Nous utilisons la fonction <ml>Printf.sprintf</ml>
+Le jour du mois et l'année sont des entiers. Pour l'année, il faut rajouter 1900
+au contenu de <ml>tm_year</ml> pour avoir l'année correspondante.
+Nous utilisons la fonction <ml>Printf.sprintf</ml>
 pour créer une chaîne d'après un format et des arguments (comme la fonction
 <code>sprintf</code> en C). Nous pouvons donc définir la fonction suivante,
 prenant en paramètre une date au format <ml>Unix.tm</ml> et retournant une
@@ -130,6 +132,28 @@ $ ./date_du_jour
 16 décembre 2012</sh>
 </section>
 
+<section id="variante" title="Variante">
+<p>Plutôt que définir une fonction par cas sur l'entier représentant le mois
+pour retourner le nom du mois, il est possible de définir un tableau des
+noms de mois et d'utiliser l'entier représentant le mois dans le type
+<ml>Unix.tm</ml> comme indice dans ce tableau. La fonction deviendrait alors:
+</p>
+<ocaml-eval><![CDATA[
+let date_string_of_tm =
+  let names = [|
+     "janvier" ; "février" ; "mars" ; "avril" ; "mai" ; "juin" ;
+     "juillet" ; "août" ; "septembre" ; "octobre" ; "novembre" ; "décembre"
+     |]
+   in
+   fun i -> names.(i)
+;;
+]]></ocaml-eval>
+<p>Le tableau n'est défini qu'une seule fois.</p>
+<p>
+Cette version est plus efficace puisque la valeur entière du mois n'est
+pas testé contre les différents filtres de la première version de la fonction.
+</p>
+</section>
 <section id="exo" title="Exercice">
 <exercice id="affichage_jour" title="Affichage du jour">
 <p>
