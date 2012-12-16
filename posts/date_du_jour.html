@@ -50,8 +50,8 @@ let date = Unix.gmtime (Unix.time ()) ;;
 
 <section id="tostring" title="Transformer la date en chaîne de caractères">
 <p>
-Pour avoir une représenation lisible, nous allons transformer cette date
-en chaîne de caractère, de la forme "jour du mois" "mois" "année".
+Pour avoir une représentation lisible, nous allons transformer cette date
+en chaîne de caractères, de la forme "jour du mois" "mois" "année".
 </p>
 <p>Le jour du mois est représenté dans le champ <ml>tm_mon</ml> du type
 <ml>Unix.tm</ml> par un entier de 0 (janvier) à 11 (décembre).
@@ -151,7 +151,7 @@ let date_string_of_tm =
 <p>Le tableau n'est défini qu'une seule fois.</p>
 <p>
 Cette version est plus efficace puisque la valeur entière du mois n'est
-pas testé contre les différents filtres de la première version de la fonction.
+pas testée contre les différents filtres de la première version de la fonction.
 </p>
 </section>
 <section id="exo" title="Exercice">
