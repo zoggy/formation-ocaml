@@ -1,0 +1,142 @@
+<post title="Afficher la date du jour"
+section-counter="false"
+date="2012/12/16"
+keywords="unix,date,printf"
+topics="filtrage, définition de fonction, programme"
+>
+<p>Nous allons réaliser un programme simple affichant la date du jour
+sur la sortie standard.
+</p>
+<p>Des fonctions de manipulations de date sont disponibles dans le
+module <moduledoc name="Unix"/> fourni avec la distribution OCaml.
+Il existe d'autres bibliothèques pour manipuler les dates, citées
+plus bas, mais le but de ce billet, comme les suivants, est de
+montrer des exemples de code OCaml pour se familiariser à la fois
+avec les constructions du langage et à la fois avec des modules
+de la distribution standard.
+</p>
+<p>
+Le programme suivra un algorithme très simple:
+</p>
+<ol>
+<li><elt href="#gettime"/>,</li>
+<li><elt href="#tostring"/>,</li>
+<li><elt href="#printstring"/>.</li>
+</ol>
+<p>
+Nous montrons d'abord les différentes parties du programme comme si elles
+étaient entrées dans le topevel ocaml. Le programme final est à la fin.
+</p>
+<section id="gettime" title="Récupérer la date du jour">
+<p>
+La fonction <ml>Unix.time</ml> retourne le nombre de secondes écoulées
+depuis le 1 janvier 1970, tandis que la fonction <ml>Unix.gmtime</ml>
+prend un tel nombre de secondes et renvoie une structure du type
+<ml>Unix.tm</ml>, contenant le détail de la date associée à ce nombre de secondes:
+année, mois, jour du mois, heure, minute, ...
+</p>
+<ocaml-eval toplevel="true">
+Unix.time ;;
+Unix.gmtime;;
+</ocaml-eval>
+<p>
+Pour obtenir le détail de la date du jour, nous pourrons écrire:
+</p>
+<ocaml-eval toplevel="true">
+let date = Unix.gmtime (Unix.time ()) ;;
+</ocaml-eval>
+</section>
+
+<section id="tostring" title="Transformer la date en chaîne de caractères">
+<p>
+Pour avoir une représenation lisible, nous allons transformer cette date
+en chaîne de caractère, de la forme "jour du mois" "mois" "année".
+</p>
+<p>Le jour du mois est représenté dans le champ <ml>tm_mon</ml> du type
+<ml>Unix.tm</ml> par un entier de 0 (janvier) à 11 (décembre).
+</p>
+<p>Pour obtenir une chaîne représentant le mois, nous allons donc créer
+une fonction <ml>string_of_month</ml> procédant par cas sur la valeur
+entière du mois:
+</p>
+<ocaml-eval toplevel="true">
+let string_of_month = function
+  0 -> "janvier"
+| 1 -> "février"
+| 2 -> "mars"
+| 3 -> "avril"
+| 4 -> "mai"
+| 5 -> "juin"
+| 6 -> "juillet"
+| 7 -> "août"
+| 8 -> "septembre"
+| 9 -> "octobre"
+| 10 -> "novembre"
+| 11 -> "décembre"
+| _ -> assert false (* on ne doit pas avoir une autre valeur *)
+;;
+</ocaml-eval>
+<p>
+Le jour du mois et l'année sont des entiers, donc pas besoin d'une fonction
+spéciale pour les afficher. Nous utilisons la fonction <ml>Printf.sprintf</ml>
+pour créer une chaîne d'après un format et des arguments (comme la fonction
+<code>sprintf</code> en C). Nous pouvons donc définir la fonction suivante,
+prenant en paramètre une date au format <ml>Unix.tm</ml> et retournant une
+chaîne représentant la date:
+</p>
+<ocaml-eval toplevel="true">let date_string_of_tm tm =
+  Printf.sprintf "%d %s %d"
+    tm.Unix.tm_mday
+    (string_of_month tm.Unix.tm_mon)
+    (1900 + tm.Unix.tm_year)
+;;
+</ocaml-eval>
+<p>Si nous ne voulions pas avoir à préfixer les noms des champs par
+<ml>Unix.</ml>, il nous suffirait d'ajouter
+</p>
+<ocaml>open Unix;;</ocaml>
+<p>
+plus haut dans le code, rendant tous les éléments (valeurs, types, ...) définis
+dans le module <ml>Unix</ml> visibles dans l'environnement sans besoin de les préfixer.
+</p>
+</section>
+
+<section id="printstring" title="Afficher la chaîne sur la sortie standard">
+<p>
+L'affichage sur la sortie standard peut se faire simplement en utilisant la
+fonction <ml>print_endline : string -> unit</ml> qui affiche une chaîne de caractères
+suivi d'un retour-charriot sur la sortie standard.
+</p>
+</section>
+
+<section id="full" title="Le programme complet">
+<p>
+Le programme complet, placé par exemple dans un fichier <code>date_du_jour.ml</code>:
+</p>
+<ocaml defer_="1"><include file="./date_du_jour.ml"/></ocaml>
+<p>
+Pour le compiler et l'exécuter en byte code, la commande est la suivante, sachant que
+comme le programme utilise la bibliotèque Unix, il faut ajouter cette bibliothèque sur
+la ligne de commande, avant le fichier de notre programme puisque ce dernier en dépend:
+</p>
+<sh>$ ocamlc -o date_du_jour.byte unix.cma date_du_jour.ml
+$ ./date_du_jour.byte
+16 décembre 2012</sh>
+<p>
+Pour compiler en code natif:
+</p>
+<sh>$ ocamlopt -o date_du_jour unix.cmxa date_du_jour.ml
+$ ./date_du_jour
+16 décembre 2012</sh>
+</section>
+
+<section id="exo" title="Exercice">
+<exercice id="affichage_jour" title="Affichage du jour">
+<p>
+Modifier le programme pour afficher également le jour de la semaine,
+en utilisant le champ <ml>tm_wday</ml>.
+</p>
+</exercice>
+</section>
+
+</post>
