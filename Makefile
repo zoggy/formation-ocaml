@@ -1,7 +1,7 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-STOG_OPTIONS=-v -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN) -v
+STOG_OPTIONS=--default-lang fr -v -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN)
 MORE_OPTIONS=
 
 EXERCICES=count_words.cmo \
