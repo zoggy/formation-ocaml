@@ -23,4 +23,4 @@ let date_string_of_tm tm =
     (1900 + tm.Unix.tm_year)
 ;;
 
-let () = print_endline (date_string_of_tm date);;
+print_endline (date_string_of_tm date);;
