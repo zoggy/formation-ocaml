@@ -51,7 +51,7 @@ let char_from_morse = function
 | str ->
    try Str_map.find str map_from_morse
    with Not_found ->
-     let msg = Printf.sprintf "char_from_morse: invalid morse code %S" str in
+     let msg = Printf.sprintf "char_from_morse: invalid Morse code %S" str in
      raise (Invalid_argument msg)
 ;;
 
@@ -84,7 +84,7 @@ let main () =
   let args = ref [] in
   Arg.parse options
     (fun arg -> args := arg :: !args)
-    (Printf.sprintf "Usage: %s [-d] <text|morse>" Sys.argv.(0));
+    (Printf.sprintf "Usage: %s [-d] <text|Morse>" Sys.argv.(0));
   let text = String.concat " " (List.rev !args) in
   let result = (if !decode then from_morse else to_morse) text in
   print_endline result
