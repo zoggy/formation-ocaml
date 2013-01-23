@@ -16,7 +16,7 @@ EXERCICES=count_words.cmo \
 
 PLUGIN=stog_course.cmxs
 
-build: $(EXERCICES) $(PLUGIN)
+build: $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
 	$(STOG) $(STOG_OPTIONS) $(MORE_OPTIONS) .  # --only slides/slides
 	cp -f slide_arbre*.png $(DEST_DIR)/slides/
@@ -24,6 +24,7 @@ build: $(EXERCICES) $(PLUGIN)
 
 clean:
 	rm -f $(PLUGIN)
+	$(BLOG_EXAMPLES)
 
 style:
 	lessc less/style.less > $(DEST_DIR)/style.css
@@ -44,3 +45,14 @@ nocache:
 
 installweb: build
 	scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
+
+blog_examples: $(BLOG_EXAMPLES)
+BLOG_EXAMPLES= \
+	posts/date_du_jour \
+	posts/code_morse
+
+posts/date_du_jour: posts/date_du_jour.ml
+	ocamlopt -o $@ unix.cmxa $^
+posts/code_morse: posts/code_morse.ml
+	ocamlopt -o $@ $^
+	
