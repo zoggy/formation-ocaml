@@ -1,16 +1,16 @@
-<post title="Code morse"
+<post title="Code Morse"
 section-counter="false"
 date="2013/01/23"
-keywords="string"
+keywords="string, map, dictionnaire, codage, decodage, morse"
 topics="filtrage, définition de fonction, programme"
 >
 <p>Nous allons réaliser un programme simple effectuant
-la transcription depuis et vers du code morse.
+la transcription depuis et vers du code Morse.
 </p>
 <sep_/>
-<section id="morsecode" title="Le code morse">
+<section id="morsecode" title="Le code Morse">
 <p>
-Le code morse est un encodage de caractères alphanumériques utilisant
+Le code Morse est un encodage de caractères alphanumériques utilisant
 des impulsions sonores courtes et longues. Les impulsions courtes
 seront représentées par le caractère <icode>.</icode> (point) et
 les longues par le caractère <icode>_</icode> (trait bas).
@@ -22,22 +22,24 @@ Nous souhaitons que notre programme prenne en argument
 la chaîne à encoder ou décoder, ainsi qu'une option indiquant s'il
 s'agit de coder ou décoder. Ensuite, nous procéderons comme suit:
 </p>
-<p>Pour le codage d'un texte vers du code morse:
-Pour chaque caractère, appliquer un mapping vers le code morse
+<ul>
+<li>Pour le codage d'un texte vers du code Morse:
+Pour chaque caractère, appliquer un mapping vers le code Morse
   associé. Si ce n'est pas le dernier caractère, on ajoute un espace
-  en plus. Un espace (séparant les mots) est "transformé" en espace.
-</p>
-<p>Pour le décodage depuis du code morse:
+  en plus.
+</li>
+<li>Pour le décodage depuis du code Morse:
 On découpe la chaîne selon les espaces. On applique un mapping
 de chaque "mot" vers la lettre ou le chiffre correspondant. La chaîne
 vide (issue de deux espaces consécutifs) est transformée en un
 espace, séparateur de mot.
-</p>
+</li>
+</ul>
 </section>
 <section id="mapping" title="Mapping">
 <p>
 La première chose à faire est d'implémenter la correspondance
-entre lettre ou chiffre et code morse. Pour cela, nous définissons
+entre lettre ou chiffre et code Morse. Pour cela, nous définissons
 une liste de ces correspondances, qui est une liste de paires
 (caractère, chaîne):
 </p>
@@ -61,7 +63,7 @@ let mapping =
 <section id="encoding" title="Encodage">
 <p>
 Pour l'encodage, il nous faut définir une fonction prenant
-un caractère et retournant la chaîne du code morse associé.
+un caractère et retournant la chaîne du code Morse associé.
 </p>
 <p>
 Une première possibilité serait d'utiliser la fonction <ml>List.assoc</ml>
@@ -70,7 +72,7 @@ un caractère en paramètre. Cependant, ce n'est pas très efficace, car
 cela nécessite de parcourir souvent une bonne partie de la liste.
 On pourrait mettre en tête de la liste les caractères les plus utilisés,
 mais nous préférons utiliser une dictionnaire, grâce au module
-<moduledoc name="Map"/> de la bilibothèque standard d'OCaml.
+<moduledoc name="Map"/> de la bibliothèque standard d'OCaml.
 </p>
 <p>
 Pour créer notre dictionnaire, nous définissons un module permettant
@@ -97,9 +99,9 @@ module Char_map = Map.Make (Char_key);;
 <p>
 L'étape suivante consiste à créer un dictionnaire associant
 les caractères et leur représentation en code Morse. Pour cela,
-on va itérer sur la liste de correspondance, en remplissant un
+nous allons itérer sur la liste de correspondances, en remplissant un
 dictionnaire, du type <ml>Char_map.t</ml>. Le dictionnaire initial
-utilisée lors de l'itération est le dictionnaire vide <ml>Char_map.empty</ml>:
+utilisé lors de l'itération est le dictionnaire vide <ml>Char_map.empty</ml>:
 </p>
 <ocaml-eval toplevel="true">
 let map_to_morse = List.fold_left
@@ -112,7 +114,7 @@ si on ne la connaît pas.
 <p>
 Avec ce dictionnaire, nous pouvons maintenant facilement définir
 une fonction prenant en paramètre un caractère et renvoyant son
-code morse ou, si le caractère est invalide, levant
+code Morse ou, si le caractère est invalide, levant
 l'exception <ml>Invalid_argument</ml> avec le caractère en question.
 Nous ajoutons un traitement spécial pour gérer le caractère d'espace,
 séparateur de mot: dans ce cas, la fonction renvoie une chaîne
@@ -137,7 +139,7 @@ procédant de la façon suivante:
 <ul>
 <li>Création d'un buffer pour ajouter des chaînes,</li>
 <li>Parcours du texte à encoder: pour chaque caractère, on ajoute
-  au buffer le code correspondant, en utilisant notre fonction <ml>char_to_morese</ml>;
+  au buffer le code correspondant, en utilisant notre fonction <ml>char_to_morse</ml>;
   on ajoute un espace si ce n'est pas le dernier caractère,</li>
 <li>On retourne le contenu du buffer.</li>
 </ul>
@@ -159,8 +161,8 @@ let morse_formation_ocaml = to_morse "FORMATION OCAML";;
 <section id="decoding" title="Décodage">
 <p>
 Pour le décodage, nous définissons également un dictionnaire
-à partir de la liste de correspondance. Cette fois la clé est
-une chaîne (le code morse). A titre d'exemple, nous utilisons
+à partir de la liste de correspondances. Cette fois la clé est
+une chaîne (le code Morse). A titre d'exemple, nous utilisons
 un module anonyme pour créer notre module de dictionnaire:
 </p>
 <ocaml-eval>
@@ -181,12 +183,12 @@ let char_from_morse = function
 | str ->
    try Str_map.find str map_from_morse
    with Not_found ->
-     let msg = Printf.sprintf "char_from_morse: invalid morse code %S" str in
+     let msg = Printf.sprintf "char_from_morse: invalid Morse code %S" str in
      raise (Invalid_argument msg)
 ;;
 </ocaml-eval>
 <p>
-Pour itérer sur les codes morse d'une chaîne, nous devons d'abord découper
+Pour itérer sur les codes Morse d'une chaîne, nous devons d'abord découper
 cette chaîne en codes, en utilisant l'espace comme séparateur.
 Pour cela, nous définissons une fonction découpant une chaîne en mots, et
 gardant les mots vides quand il y a deux espaces. Cela nous permettra
@@ -213,7 +215,7 @@ split_string "maître corbeau sur un arbre  perché";;
 </ocaml-eval>
 <p>
 Il ne nous reste plus qu'à définir la fonction décodant un
-texte en morse:
+texte en Morse:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
 let from_morse str =
@@ -238,11 +240,11 @@ On pourra se référer à la documentation du module <moduledoc name="Arg"/>.
 <ocaml-eval toplevel="true"><![CDATA[
 let main () =
   let decode = ref false in
-  let options = [ "-d", Arg.Set decode, " decode morse code" ] in
+  let options = [ "-d", Arg.Set decode, " decode Morse code" ] in
   let args = ref [] in
   Arg.parse options
     (fun arg -> args := arg :: !args)
-    (Printf.sprintf "Usage: %s [-d] <text|morse>" Sys.argv.(0));
+    (Printf.sprintf "Usage: %s [-d] <text|Morse>" Sys.argv.(0));
   let text = String.concat " " (List.rev !args) in
   let result = (if !decode then from_morse else to_morse) text in
   print_endline result
@@ -259,20 +261,24 @@ with Invalid_argument msg ->
 Si notre code se trouve dans le fichier <icode>code_morse.ml</icode>,
 nous pourons le compiler avec la commande suivante:
 </p>
-<command-line>ocamlopt -o code_morse code_morse.ml</command-line>
+<command-line>$ ocamlopt -o code_morse code_morse.ml</command-line>
 <p>
 Et nous pouvons tester le résultat:
 </p>
-<command-line>
-
-</command-line>
+<command-line><![CDATA[
+$ ./code_morse --help
+Usage: ./code_morse [-d] <text|Morse>
+  -d  decode morse code
+  -help  Display this list of options
+  --help  Display this list of options
+$ ./code_morse "C EST LA FORMATION OCAML"
+_._.  . ... _  ._.. ._  .._. ___ ._. __ ._ _ .. ___ _.  ___ _._. ._ __ ._..
+$ ./code_morse -d "_._.  . ... _  ._.. ._  .._. ___ ._. __ ._ _ .. ___ _.  ___ _._. ._ __ ._.."
+C EST LA FORMATION OCAML
+$ ./code_morse "erreur ce sont des minuscules"
+char_to_morse: invalid character 'e'
+$ ./code_morse -d "____...___" # code inconnu
+char_from_morse: invalid Morse code "____...___"
+]]></command-line>
 </section>
-<!--
-vers le code morse associé. Un caractère non reconnu
-</p>
-<ocaml-eval toplevel="true">
-let to_morse = function
-;
--->
-
 </post>
