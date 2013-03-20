@@ -19,12 +19,14 @@ PLUGIN=stog_course.cmxs
 build: $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
 	$(STOG) $(STOG_OPTIONS) $(MORE_OPTIONS) .  # --only slides/slides
+	sed -i -e "s/\\&amp;amp;/\\&amp;/g" $(DEST_DIR)/*html $(DEST_DIR)/*/*.html
 	cp -f slide_arbre*.png $(DEST_DIR)/slides/
 	$(MAKE) style
 
 clean:
 	rm -f $(PLUGIN)
-	$(BLOG_EXAMPLES)
+	rm -f $(BLOG_EXAMPLES)
+	rm -f *.cm? posts/*.cm?
 
 style:
 	lessc less/style.less > $(DEST_DIR)/style.css
