@@ -1552,7 +1552,7 @@ Remarque: Le type d'une exception ne peut être polymorphe.
 <p>
 Une exception est déclenchée (ou levée) grâce à la fonction <ml>raise</ml> prédéfinie:
 </p>
-<ocaml-eval toplevel="true">raise (Mon_erreur "Ceci n'est pas un message d'erreur");;</ocaml-eval>
+<ocaml-eval toplevel="true" error-exc="false">raise (Mon_erreur "Ceci n'est pas un message d'erreur");;</ocaml-eval>
 <p>
 Nous pouvons redéfinir notre fonction <ml>succ</ml> pour lever une exception appropriée:
 </p>
@@ -1568,7 +1568,7 @@ La levée d'une exception interrompt l'évaluation normale de l'expression qui l
 Cela peut avoir de l'importance lorsque l'ordre d'évaluation n'est pas spécifié, comme
 dans l'exemple suivant:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let f x =
   (* l'affichage, trait imperatif par excellence,
      n'est la que pour montrer l'ordre d'execution *)
@@ -1587,7 +1587,7 @@ situations peuvent rendre plus difficile la correction d'un programme. On s'appl
 parfois, pour se prémunir contre de telles situations, à forcer l'ordre d'évaluation
 des paramètres avant de les passer à la fonction:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let p1 = f (-1) in
 let p2 = f 1 in
 p1 + p2;;
@@ -1637,7 +1637,7 @@ le traitement en cours.
 Il est possible de rattraper toutes les exceptions, avec le motif universel '<ml>_</ml>', ou
 bien de lier l'exception rattrapée à un identifiant, comme ci-dessous:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 try List.hd []
 with
   e ->
@@ -1667,7 +1667,7 @@ retournée par <ml>f x</ml>.</li>
 la fonction <ml>try_finalize</ml>.</li>
 </ul>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let try_finalize f x g y =
   let v = try f x with exn -> ignore(g y); raise exn in
   ignore(g y);
@@ -1788,7 +1788,7 @@ d'exception <ml>Failure</ml> lors de l'application de <ml>f</ml> à un élement 
 conserver la valeur initiale de l'élément. Nous pouvons tenter la définition
 suivante:
 </p>
-<ocaml-eval toplevel="true" error-exec="false"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc

@@ -332,7 +332,7 @@ Les problèmes rencontrés par ces fonctions sont signalés par une levée d'exc
 <ml>Sys_error</ml> avec un message explicite, par exemple lorsqu'un fichier à ouvrir en lecture
 n'existe pas, quand les droits ne sont pas suffisants, etc.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 let ic = open_in "/etc/passwd";;
 let oc = open_out "/tmp/foo";;
 let ic = open_in "/bar";;

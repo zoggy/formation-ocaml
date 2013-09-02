@@ -529,7 +529,7 @@ en paramètres sont appelés foncteurs. Ils sont exposés dans la section <elt h
 <p>
 Voici un exemple d'utilisation de table de hachage:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
 type person = { name : string ; firstname : string };;
 let users = Hashtbl.create 101;;
 let robert = { name = "Bidochon" ; firstname = "Robert"};;
