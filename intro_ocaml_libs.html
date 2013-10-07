@@ -13,7 +13,7 @@ Nous allons voir ici comment utiliser ces modules, tandis que la définition de 
 modules est détaillée dans le chapitre <elt href="#modules"/>.
 </p>
 <p>
-Les bibliothèques de la distribution OCaml sont séparées en trois ensembles~:
+Les bibliothèques de la distribution OCaml sont séparées en trois ensembles:
 </p>
 <ul>
 <li>la bibliothèque préchargée (le module <moduledoc name="Pervasives"/>), définissant des
@@ -131,7 +131,7 @@ Les fonctions classiques sur les booléens sont disponibles:
 <tr><td><ml>(&amp;&amp;) : bool -> bool -> bool</ml></td>
 <td><em>et</em> logique</td>
 </tr>
-<tr><td><ml>(||)</ml></td>
+<tr><td><ml>(||) : bool -> bool -> bool</ml></td>
 <td><em>ou</em> logique</td>
 </tr>
 </table>
@@ -145,7 +145,7 @@ On trouve les opérations arithmétiques habituelles sur les entiers:
 <tr><td><ml>(+)</ml>, <ml>(-) : int -> int -> int</ml></td>
 <td>addition, soustraction</td>
 </tr>
-<tr><td><ml>(*)</ml>, <ml>(/)</ml>, <ml>(mod)</ml></td>
+<tr><td><ml>( * )</ml>, <ml>(/)</ml>, <ml>(mod)</ml></td>
 <td>multiplication, division entière, modulo</td>
 </tr>
 <tr><td><ml>~-</ml> : int -> int}</td>
@@ -202,7 +202,7 @@ aux opérateurs flottants:
 <tr><td><ml>(+.)</ml>, <ml>(-.) : float -> float -> float</ml></td>
 <td>addition, soustraction</td>
 </tr>
-<tr><td><ml>(*.)</ml>, <ml>(/.)</ml>, <ml>mod_float</ml></td>
+<tr><td><ml>( *. )</ml>, <ml>(/.)</ml>, <ml>mod_float</ml></td>
 <td>multiplication, division, modulo</td>
 </tr>
 <tr><td><ml>~-. : float -> float</ml></td>
@@ -214,7 +214,7 @@ aux opérateurs flottants:
 <tr><td><ml>sqrt : float -> float</ml></td>
 <td>racine carrée</td>
 </tr>
-<tr><td><ml>(**) : float -> float -> float</ml></td>
+<tr><td><ml>( ** ) : float -> float -> float</ml></td>
 <td>puissance</td>
 </tr>
 <tr><td><ml>float_of_int : int -> float</ml></td>
@@ -406,8 +406,8 @@ tac "/etc/shells";;
 
 <exercice id="exooptparams" title="Paramètres optionnels">
 <p>
-On peut spécifier des paramètres optionnels pour les fonctions, avec ou non
-une valeur par défaut.
+On peut spécifier des paramètres optionnels pour les fonctions, avec ou sans
+valeur par défaut.
 </p>
 <p>
 Dans <ml>let f ?x y = ...</ml>, <ml>x</ml> sera une valeur du type
@@ -486,6 +486,18 @@ Ecrire une fonction prenant une chaîne de caractères et retournant la liste
 des mots qu'elle contient. Un mot sera composé uniquement des caractères
 'a' à 'z' et 'A' à 'Z'.
 </p>
+<p>
+Note: Il est possible de filtrer un caractère selon un intervalle de caractères
+donné, grâce à la notation <ml>..</ml>:
+</p>
+<ocaml-eval toplevel="true">
+match 'c' with
+  'a'..'z'
+| 'A'..'Z' -> "letter"
+| '0'..'9' -> "number"
+| _ -> "something else"
+;;
+</ocaml-eval>
 <solution>
 <ocaml-eval defer_="1" toplevel="true"><include file="./words.ml"/></ocaml-eval>
 </solution>

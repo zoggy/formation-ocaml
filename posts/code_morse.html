@@ -71,7 +71,7 @@ qui parcourerait le mapping à la recherche de la chaîne associée à
 un caractère en paramètre. Cependant, ce n'est pas très efficace, car
 cela nécessite de parcourir souvent une bonne partie de la liste.
 On pourrait mettre en tête de la liste les caractères les plus utilisés,
-mais nous préférons utiliser une dictionnaire, grâce au module
+mais nous préférons utiliser un dictionnaire, grâce au module
 <moduledoc name="Map"/> de la bibliothèque standard d'OCaml.
 </p>
 <p>
@@ -96,6 +96,15 @@ permettant de manipuler des dictionnaires avec des caractères comme clés:
 <ocaml-eval>
 module Char_map = Map.Make (Char_key);;
 </ocaml-eval>
+<div class="alert alert-info">
+<p>
+Puisque le module <ml>Char</ml> contient déjà un type <ml>t</ml> et
+une fonction <ml>compare</ml> pour la comparaison de caractères,
+nous aurions pu également appliquer directement le foncteur sur
+le module <ml>Char</ml> sans définir notre module <ml>Char_key</ml>:
+</p>
+<ocaml>module Char_map = Map.Make(Char);;</ocaml>
+</div>
 <p>
 L'étape suivante consiste à créer un dictionnaire associant
 les caractères et leur représentation en code Morse. Pour cela,

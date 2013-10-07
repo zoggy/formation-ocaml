@@ -1,6 +1,6 @@
 let prod = ref false;;
 let options =
-  [ "-prod", Arg.Set prod, " compute the prodcut instead of the sum" ];;
+  [ "-prod", Arg.Set prod, " compute the product instead of the sum" ];;
 
 let read_options () =
   let args = ref [] in

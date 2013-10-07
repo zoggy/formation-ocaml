@@ -126,7 +126,7 @@ Array.set tab 0 42;;
 tab.(0);;
 ]]></ocaml-eval></li>
 <li>soit en utilisant la syntaxe <ml>vecteur.(indice) &lt;- valeur</ml>:
-<ocaml-eval topleve="true"><![CDATA[
+<ocaml-eval toplevel="true"><![CDATA[
 tab.(1);;
 tab.(1) <- 42;;
 tab.(1);;
@@ -278,7 +278,7 @@ Par contre, tenter de modifier le champ <ml>champ1</ml> provoque une erreur:
 
 <subsection id="refs" title="Références">
 <p><cmp>OCaml fournit un type polymorphe <ml>'a ref</ml> qui peut être vu comme le type des pointeurs sur
-une valeur quelconque~; en OCaml, on parlera plutôt de référence sur une valeur. Une valeur
+une valeur quelconque; en OCaml, on parlera plutôt de référence sur une valeur. Une valeur
 référencée peut être modifiée. Le type <ml>ref</ml> est définit comme un enregistrement à un
 champ modifiable:</cmp>
 </p>
