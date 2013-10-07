@@ -210,7 +210,7 @@ type "flèche"), décrivant une fonction prenant en argument une paire d'éléme
 <paragraph id="lists" title="Les listes (type 'a list)">
 <p>
 Le type <icode>list</icode> est prédéfini et permet de construire des listes d'éléments de même type.
-C'est un type paramétré, <icode>'a</icode> indique le paramètre de type, qui est peut être instancié
+C'est un type paramétré, <icode>'a</icode> indique le paramètre de type, qui peut être instancié
 selon le type des éléments de la liste:
 </p>
 <ocaml-eval id="code-lists" toplevel="true" error-exc="false"><![CDATA[
@@ -378,7 +378,7 @@ l'<stxid>identifiant</stxid>. Ce dernier n'est visible que dans l'<stxid>express
 let foo = (* declaration globale foo *)
     let bar =
       let glop = 1 in (* declaration locale de glop *)
-      glop + 2
+        glop + 2
     in (* declaration locale de bar, glop n'est plus visible *)
       let gee = bar + 1 in (* declaration locale de gee, utilisant bar *)
         gee + bar + 2 (* utilisation de gee et bar locales *);;
@@ -924,7 +924,7 @@ jamais dans cette branche.
 Le motif <ml>s1 :: s2 :: s3 :: _</ml> filtre toutes les listes d'au moins trois éléments.
 Il utilise l'opérateur de construction de liste <ml>::</ml> (appelé <em>cons</em>), avec à
 gauche un élément et à droite une liste. Dans ce motif, les trois premiers éléments
-de la liste sont associés aux identifiants <ml>s1</ml>}, <ml>s2</ml> et <ml>s3</ml>. Les
+de la liste sont associés aux identifiants <ml>s1</ml>, <ml>s2</ml> et <ml>s3</ml>. Les
 identifiants créés dans un motif ne sont visibles que dans l'expression associée à ce
 motif.
 </p>
@@ -1321,30 +1321,37 @@ let y = Gee;;
 x = y;;
 ]]></ocaml-eval>
 <p>
-Le même phénomène de masquage est possible sur les noms des champs des types enregistrements:
+Le même phénomène de masquage est possible sur les noms des champs des types enregistrements.
+Cependant, depuis la version 4.01 d'OCaml, les informations de typage sont utilisées pour
+lever les possibles ambigüités. Ainsi, dans l'exemple ci-dessous, lors de la définition
+de <ml>y</ml>, le type de <ml>x</ml> est déjà connu comme étant <ml>rec1</ml>, ce qui
+permet au système de type de comprendre <ml>champ = 3</ml> comme le champ <ml>champ</ml>
+du type <ml>rec1</ml> et non du type <ml>rec2</ml>:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval toplevel="true"><![CDATA[
 type rec1 = { champ : int; champ2: int };;
 let x = { champ = 0 ; champ2 = 1;};;
 type rec2 = { champ : int ; champ3 : int};;
 let y = { x with champ = 3 };;
 ]]></ocaml-eval>
 <p>
-et sur les noms des constructeurs de types sommes:
+De même sur les noms des constructeurs de types sommes dans l'exemple ci-dessous.
+Le type de <ml>x</ml>
+étant <ml>t</ml>, le constructeur <ml>Foo</ml> dans le filtre est compris
+comme le constructeur <ml>Foo</ml> du type <ml>t</ml> et non de <ml>t2</ml>.
+Le compilateur indique donc que le cas où la valeur est construite avec <ml>Bar</ml>
+n'est pas traité.
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval toplevel="true"><![CDATA[
 type t = Foo | Bar;;
 let x = Foo;;
 type t2 = Foo;;
 match x with
-  Foo -> 0
-| Bar -> 1;;
-match x with
 | Foo -> 0;;
 ]]></ocaml-eval>
 <p>
-En conséquence, il est souvent utile de choisir des noms "à préfixe" pour les champs et
-les constructeurs, par exemple:
+Même avec ce système de désambigüation, il est souvent utile de choisir des noms "à préfixe"
+pour les champs et les constructeurs, par exemple:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
 type user = { user_name : string; user_login: string};;
