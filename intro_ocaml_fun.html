@@ -1712,7 +1712,8 @@ let big_list =
     if n < 2_000_000 then build (n+1) (n::acc) else acc
   in
   build 0 [];;
-map_nt ((+) 1) big_list;;
+try map_nt ((+) 1) big_list
+with Stack_overflow -> failwith "Debordement!";;
 ]]></ocaml-eval>
 <p>
 Que se passe-t-il ? Notre fonction <ml>map_nt</ml> fonctionne par cas sur la structure
