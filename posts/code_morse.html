@@ -3,7 +3,10 @@ section-counter="false"
 date="2013/01/23"
 keywords="string, map, dictionnaire, codage, decodage, morse"
 topics="filtrage, définition de fonction, programme"
+with-contents="true"
 >
+<oc toplevel=""><ocaml-eval defer_="1" session="morse" toplevel="&lt;toplevel/&gt;"><contents/></ocaml-eval></oc>
+<contents>
 <p>Nous allons réaliser un programme simple effectuant
 la transcription depuis et vers du code Morse.
 </p>
@@ -43,7 +46,7 @@ entre lettre ou chiffre et code Morse. Pour cela, nous définissons
 une liste de ces correspondances, qui est une liste de paires
 (caractère, chaîne):
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 let mapping =
   [ 'A', "._" ; 'B', "_..." ; 'C', "_._." ;
     'D', "_.." ; 'E', "." ; 'F', ".._." ;
@@ -58,7 +61,7 @@ let mapping =
     '4', "...._" ; '5', "....." ; '6', "_...." ;
     '7', "__..." ; '8', "___.." ; '9', "____." ;
   ] ;;
-</ocaml-eval>
+</oc>
 </section>
 <section id="encoding" title="Encodage">
 <p>
@@ -85,17 +88,17 @@ type <ml>char</ml> et la fonction de comparaison est <ml>Pervasives.compare</ml>
 fonction polymorphe du système permettant la comparaison sur n'importe quelle
 structure de données:
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 module Char_key = struct type t = char let compare = Pervasives.compare end;;
-</ocaml-eval>
+</oc>
 <p>
 Il ne nous reste plus qu'à appliquer le foncteur <moduledoc name="Map.Make"/>
 sur notre module définissant le type de la clé pour obtenir un module
 permettant de manipuler des dictionnaires avec des caractères comme clés:
 </p>
-<ocaml-eval>
+<oc>
 module Char_map = Map.Make (Char_key);;
-</ocaml-eval>
+</oc>
 <div class="alert alert-info">
 <p>
 Puisque le module <ml>Char</ml> contient déjà un type <ml>t</ml> et
@@ -112,11 +115,11 @@ nous allons itérer sur la liste de correspondances, en remplissant un
 dictionnaire, du type <ml>Char_map.t</ml>. Le dictionnaire initial
 utilisé lors de l'itération est le dictionnaire vide <ml>Char_map.empty</ml>:
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 let map_to_morse = List.fold_left
   (fun map (char, morse_code) -> Char_map.add char morse_code map)
   Char_map.empty mapping;;
-</ocaml-eval>
+</oc>
 <p>On se référera à la documentation de la fonction <ml>List.fold_left</ml>
 si on ne la connaît pas.
 </p>
@@ -131,7 +134,7 @@ vide; un espace supplémentaire sera rajouté si ce n'est pas le
 dernier caractère, ce qui permettra bien d'avoir deux caractères
 pour séparer les mots (voir plus bas):
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 let char_to_morse = function
   ' ' -> ""
 | c ->
@@ -140,7 +143,7 @@ let char_to_morse = function
      let msg = Printf.sprintf "char_to_morse: invalid character %C" c in
     raise (Invalid_argument msg)
 ;;
-</ocaml-eval>
+</oc>
 <p>
 Pour encoder un message complet, il nous reste à définir une fonction
 procédant de la façon suivante:
@@ -152,7 +155,7 @@ procédant de la façon suivante:
   on ajoute un espace si ce n'est pas le dernier caractère,</li>
 <li>On retourne le contenu du buffer.</li>
 </ul>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc toplevel="true"><![CDATA[
 let to_morse str =
   let len = String.length str in
   let buf = Buffer.create 256 in
@@ -165,7 +168,7 @@ let to_morse str =
 ;;
 (* Pour tester *)
 let morse_formation_ocaml = to_morse "FORMATION OCAML";;
-]]></ocaml-eval>
+]]></oc>
 </section>
 <section id="decoding" title="Décodage">
 <p>
@@ -174,19 +177,19 @@ Pour le décodage, nous définissons également un dictionnaire
 une chaîne (le code Morse). A titre d'exemple, nous utilisons
 un module anonyme pour créer notre module de dictionnaire:
 </p>
-<ocaml-eval>
+<oc>
 module Str_map =
   Map.Make (struct type t = string let compare = Pervasives.compare end);;
-</ocaml-eval>
-<ocaml-eval toplevel="true">
+</oc>
+<oc toplevel="true">
 let map_from_morse = List.fold_left
   (fun map (char, morse) -> Str_map.add morse char map)
   Str_map.empty mapping ;;
-</ocaml-eval>
+</oc>
 <p>
 La fonction de décodage d'une chaîne ressemble à celle d'encodage:
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 let char_from_morse = function
   "" -> ' '
 | str ->
@@ -195,7 +198,7 @@ let char_from_morse = function
      let msg = Printf.sprintf "char_from_morse: invalid Morse code %S" str in
      raise (Invalid_argument msg)
 ;;
-</ocaml-eval>
+</oc>
 <p>
 Pour itérer sur les codes Morse d'une chaîne, nous devons d'abord découper
 cette chaîne en codes, en utilisant l'espace comme séparateur.
@@ -204,7 +207,7 @@ gardant les mots vides quand il y a deux espaces. Cela nous permettra
 de savoir quand insérer un espace supplémentaire pour séparer des mots
 dans la chaîne décodée:
 </p>
-<ocaml-eval toplevel="true">
+<oc toplevel="true">
 let split_string s =
   let len = String.length s in
   let rec iter acc pos =
@@ -221,12 +224,12 @@ let split_string s =
 ;;
 (* pour tester *)
 split_string "maître corbeau sur un arbre  perché";;
-</ocaml-eval>
+</oc>
 <p>
 Il ne nous reste plus qu'à définir la fonction décodant un
 texte en Morse:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc toplevel="true"><![CDATA[
 let from_morse str =
   let words = split_string str in
   let buf = Buffer.create 256 in
@@ -236,7 +239,7 @@ let from_morse str =
 ;;
 (* Pour test *)
 from_morse morse_formation_ocaml;;
-]]></ocaml-eval>
+]]></oc>
 </section>
 <section id="program" title="Le programme">
 <p>
@@ -246,7 +249,7 @@ une option <icode>-d</icode> pour demander le décodage au
 lieu du codage, et concaténer les autres chaînes passées en paramètre.
 On pourra se référer à la documentation du module <moduledoc name="Arg"/>.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc toplevel="true"><![CDATA[
 let main () =
   let decode = ref false in
   let options = [ "-d", Arg.Set decode, " decode Morse code" ] in
@@ -258,7 +261,7 @@ let main () =
   let result = (if !decode then from_morse else to_morse) text in
   print_endline result
 ;;
-]]></ocaml-eval>
+]]></oc>
 <ocaml>
 try main ()
 with Invalid_argument msg ->
@@ -290,4 +293,5 @@ $ ./code_morse -d "____...___" # code inconnu
 char_from_morse: invalid Morse code "____...___"
 ]]></command-line>
 </section>
+</contents>
 </post>

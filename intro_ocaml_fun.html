@@ -1696,7 +1696,7 @@ différence sur un exemple, la fonction de map sur les listes.
 <p>
 Voici une première version, récursive non-terminale:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" session="stack"><![CDATA[
 let rec map_nt f = function
   [] -> []
 | h::q -> (f h) :: (map_nt f q);;
@@ -1706,10 +1706,10 @@ map_nt ((+) 1) [ 1 ; 2 ; 3 ; 4 ];;
 La fonction <ml>map_nt</ml> effectue bien le calcul demandé, mais présente un
 risque de débordement de pile dans le cas de grandes listes:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval toplevel="true" session="stack" error-exc="false"><![CDATA[
 let big_list =
   let rec build n acc =
-    if n < 2_000_000 then build (n+1) (n::acc) else acc
+    if n < 1_000_000 then build (n+1) (n::acc) else acc
   in
   build 0 [];;
 map_nt ((+) 1) big_list;;
@@ -1733,7 +1733,7 @@ récursive de <ml>map_nt</ml> à la queue de la liste. Cette opération de créa
 <p>
 Voyons maintenant une autre définition, cette fois récursive terminale:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" session="stack"><![CDATA[
 let map f l =
   let rec iter acc = function
     [] -> List.rev acc
@@ -1764,7 +1764,8 @@ n'est pas vide.
 Cependant, c'est l'appel récursif et non la fonction qui est ou non
 terminal. Dans l'exemple suivant
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" session="stack"><![CDATA[
+let f x = x + 1;;
 let rec foo x =
   if x < 1 then f (x + 1) else 1 + f (x - 1);;
 ]]></ocaml-eval>
@@ -1795,7 +1796,7 @@ d'exception <ml>Failure</ml> lors de l'application de <ml>f</ml> à un élement 
 conserver la valeur initiale de l'élément. Nous pouvons tenter la définition
 suivante:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval toplevel="true" session="stack" error-exc="false"><![CDATA[
 let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc
@@ -1815,7 +1816,7 @@ une exception, il faudra la filtrer, dans ce contexte et non dans celui
 l'appel récursif.
 On écrira donc plutôt:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval toplevel="true" session="stack"><![CDATA[
 let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc
