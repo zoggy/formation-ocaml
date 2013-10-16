@@ -363,7 +363,7 @@ Une chaîne est un palindrome si elle est symétrique (e.g. "radar", "laval").
 let is_palindrome s =
   let len = String.length s in
   let rec test i =
-    (i > (len + 1) / 2) ||
+    (i > len  / 2) ||
     (s.[i] = s.[len - i - 1] && test (i+1))
   in
   test 0;;

@@ -410,21 +410,21 @@ ne peut englober une déclaration globale (<ml>let ... = ... ;;</ml>):
 </warning>
 </subsubsection>
 
-<subsubsection id="fun:recdecl" title="Déclaration simultanées">
+<subsubsection id="fun:recdecl" title="Déclarations simultanées">
 <p>
 Il est possible de déclarer simultanément plusieurs valeurs globales:
 </p>
 <centerstx>let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
-and <stxid>ident2</stxid> = <stxid>expression2</stxid>
+and <stxid>ident_2</stxid> = <stxid>expression_2</stxid>
 ...
-and <stxid>identN</stxid> = <stxid>expressionN</stxid>;;</centerstx>
+and <stxid>ident_N</stxid> = <stxid>expression_N</stxid>;;</centerstx>
 <p>
 ou locales:
 </p>
-<centerstx>let <stxid>ident1</stxid> = <stxid>expression1</stxid>
-and <stxid>ident2</stxid> = <stxid>expression2</stxid>
+<centerstx>let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
+and <stxid>ident_2</stxid> = <stxid>expression_2</stxid>
 ..
-and <stxid>identN</stxid> = <stxid>expressionN</stxid> in
+and <stxid>ident_N</stxid> = <stxid>expression_N</stxid> in
 <stxid>expression</stxid></centerstx>
 <p>
 Les valeurs ne deviennent cependant visibles qu'après toutes les déclarations
@@ -471,13 +471,13 @@ fonctionnelle est aussi appelée abstraction.</cmp>
 <p>
 On définit une fonction par la syntaxe suivante:
 </p>
-<centerstx>function <stxid>identifiant</stxid> -&gt; <stxid>expression></stxid></centerstx>
+<centerstx>function <stxid>identifiant</stxid> -&gt; <stxid>expression</stxid></centerstx>
 <p>
 Une fonction ne prend qu'un seul paramètre. Cependant, elle peut renvoyer à son
 tour une valeur fonctionnelle, ce qui permet de simuler des fonctions à plusieurs
 paramètres:
 </p>
-<centerstx>function <stxid>identifiant1</stxid> -&gt; function <stxid>identifiant2</stxid> -> <stxid>expression</stxid></centerstx>
+<centerstx>function <stxid>identifiant_1</stxid> -&gt; function <stxid>identifiant_2</stxid> -> <stxid>expression</stxid></centerstx>
 <p>
 Voyons quelques exemples de définition de fonctions:
 </p>
@@ -1252,7 +1252,7 @@ en procédant par cas sur les constructeurs du type:
 <centerstx>match <stxid>expression de type somme</stxid> with
 | <stxid>Constructeur_1</stxid> -> <stxid>expression_1</stxid>
 | <stxid>Constructeur_i</stxid> <stxid>motif_i</stxid> -> <stxid>expression_i</stxid>
-| <stxid>Constructeur_j</stxid> (<stxid>motif_j1}</stxid>, ..., <stxid>motif_jn</stxid>) -> <stxid>expression_j</stxid>
+| <stxid>Constructeur_j</stxid> (<stxid>motif_j1</stxid>, ..., <stxid>motif_jn</stxid>) -> <stxid>expression_j</stxid>
 ...
 </centerstx>
 <p>
