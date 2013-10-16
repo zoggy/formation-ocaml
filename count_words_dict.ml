@@ -18,7 +18,7 @@ let words s =
 ;;
 
 module Dict = Map.Make
-  (struct type t = string let compare = Pervasives.compare end);;
+  (struct type t = string let compare = String.compare end);;
 
 (** la fonction suivante incremente le compteur du mot en parametre.
    si le mot n'est pas dans la table, il est ajoute avec un compteur a 1. *)

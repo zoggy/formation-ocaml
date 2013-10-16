@@ -18,7 +18,7 @@ let words s =
 ;;
 
 module Words = Set.Make
-  (struct type t = string let compare = Pervasives.compare end);;
+  (struct type t = string let compare = String.compare end);;
 
 (** la fonction suivante crée l'ensemble des mots du fichier en parametre.
    Pour chaque ligne, on recupere la liste des mots avec la fonction 'words'
