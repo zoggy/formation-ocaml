@@ -1,6 +1,7 @@
 <page title="Introduction à OCaml"
  bib-files="ocaml.bib"
  with-contents="true"
+ chapter-counter="false"
 >
 <cmp foo=""><span class="cmp"><contents/></span></cmp>
 <fixme text="hello"><div class="alert alert-error">FIXME: <text/></div></fixme>
@@ -34,7 +35,11 @@
 </div></block>
 </exercice>
 <mychapter id="" title="">
-<chapter id="&lt;id/&gt;" title="&lt;title/&gt;"><prepare-toc depth="1"><toc/><contents/></prepare-toc></chapter>
+<chapter id="&lt;id/&gt;" title="&lt;title/&gt;">
+<prepare-notes><prepare-toc depth="1"><toc/><contents/></prepare-toc>
+<notes/>
+</prepare-notes>
+</chapter>
 </mychapter>
 <stx foo=""><tt><contents/></tt></stx>
 <centerstx foo=""><pre class="syntax"><contents/></pre></centerstx>
@@ -74,9 +79,6 @@
 <sectionning>chapter,section,subsection,subsubsection,paragraph</sectionning>
 
 <contents>
-<prepare-toc depth="1">
-<prepare-notes>
-<toc>Table des matères</toc>
 <chapter title="Préambule">
 <p>
 Cette formation est une introduction au langage OCaml (autrefois aussi appelé
@@ -106,6 +108,9 @@ connaissance des bibliothèques et outils de développement disponibles pour
 approfondir ensuite selon ses besoins.
 </p>
 </chapter>
+<cut-elt tag="chapter" hid-sep="/" insert-link="false">
+<prepare-toc depth="1">
+<toc>Table des matères</toc>
 <include file="./intro_ocaml_intro.html"/>
 <include file="./intro_ocaml_fun.html"/>
 <include file="./intro_ocaml_imper.html"/>
@@ -113,11 +118,10 @@ approfondir ensuite selon ses besoins.
 <include file="./intro_ocaml_modules.html"/>
 <include file="./intro_ocaml_env.html"/>
 <include file="./intro_ocaml_conclusion.html"/>
+</prepare-toc>
+</cut-elt>
 <chapter id="bibliography" title="Bibliographie">
 <bibliography/>
 </chapter>
-<notes/>
-</prepare-notes>
-</prepare-toc>
 </contents>
 </page>
