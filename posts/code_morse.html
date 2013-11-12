@@ -96,7 +96,7 @@ Il ne nous reste plus qu'à appliquer le foncteur <moduledoc name="Map.Make"/>
 sur notre module définissant le type de la clé pour obtenir un module
 permettant de manipuler des dictionnaires avec des caractères comme clés:
 </p>
-<oc>
+<oc id="charmap">
 module Char_map = Map.Make (Char_key);;
 </oc>
 <div class="alert alert-info">
@@ -106,7 +106,7 @@ une fonction <ml>compare</ml> pour la comparaison de caractères,
 nous aurions pu également appliquer directement le foncteur sur
 le module <ml>Char</ml> sans définir notre module <ml>Char_key</ml>:
 </p>
-<ocaml>module Char_map = Map.Make(Char);;</ocaml>
+<ocaml id="charmap2">module Char_map = Map.Make(Char);;</ocaml>
 </div>
 <p>
 L'étape suivante consiste à créer un dictionnaire associant

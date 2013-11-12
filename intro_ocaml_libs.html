@@ -229,7 +229,7 @@ Il existe des valeurs spéciales pour indiquer des valeurs qui ne sont pas des n
 ("<em>not a number</em>"): <ml>infinity</ml>, <ml>neg_infinity</ml>, ... Ces valeurs sont obtenues
 en effectuant certaines opérations comme une division par <ml>0.0</ml>.
 </p>
-<p>
+<p id="aeuzuei">
 Beaucoup d'autres fonctions sont disponibles sur les flottants (trigonométrie, ...).
 <seemanual href="&lt;urldoccorefloat/&gt;"/>
 </p>
@@ -246,7 +246,7 @@ canal (<em>channel</em>) passé en paramètre.
 A l'aide de la documentation de <moduledoc name="Pervasives"/>, faire les exercices suivants.
 </p>
 <exercice id="exosumint" title="Somme de deux entiers">
-<p>
+<p id="iopipoyr">
 Ecrire un programme qui affiche la somme de deux entiers saisis par l'utilisateur
 sur l'entrée standard, sous la forme "La somme de A et B est C." avec un retour
 chariot. On pourra lancer son programme par la commande
@@ -481,7 +481,7 @@ list_remove_doubles ~pred: comp_string
 </exercice>
 
 <exercice id="exowords" title="Découpage en liste de mots">
-<p>
+<p id="aopipoipa">
 Ecrire une fonction prenant une chaîne de caractères et retournant la liste
 des mots qu'elle contient. Un mot sera composé uniquement des caractères
 'a' à 'z' et 'A' à 'Z'.
@@ -573,14 +573,14 @@ Cet aspect sera exposé dans la partie sur les modules dans le chapitre <elt hre
 </p>
 
 <exercice id="exowordcount" title="Comptage de mots">
-<p>
+<p id="nvxcnvx">
 Ecrire un programme prenant en paramètre un nom de fichier et comptant le nombre
 d'occurrences de chaque mot apparaissant dans le fichier. A la fin, le programme
 affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
 <ml>words</ml> définie dans l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml defer_="1"><include file="./count_words.ml"/></ocaml>
+<ocaml id ="countwords" defer_="1"><include file="./count_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -619,7 +619,7 @@ flush stdout;;
 Reprendre l'<exercice href="exowordcount"/> en utilisant un dictionnaire.
 </p>
 <solution>
-<ocaml defer_="1"><include file="./count_words_dict.ml"/></ocaml>
+<ocaml id="countwordsdict" defer_="1"><include file="./count_words_dict.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -654,13 +654,13 @@ let sum = IntSet.fold (+) set 0;;
 ]]></ocaml-eval>
 
 <exercice id="exoset" title="Mots en commun">
-<p>
+<p id="sfmksdmflkdm">
 Ecrire un programme prenant deux fichiers et affichant la liste des mots en commun
 sur la sortie standard. On utilisera encore la fonction <ml>words</ml>
 de l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml defer_="1"><include file="./diff_words.ml"/></ocaml>
+<ocaml id="diffwords" defer_="1"><include file="./diff_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -915,7 +915,7 @@ pour la compilation code-octet, ou
 pour la compilation en code natif.
 </p>
 <exercice id="listtmp" title="Lister les fichers de /tmp">
-<p>
+<p id="eiuteoir">
 Ecrire un programme qui affiche la liste des fichiers du répertoire <icode>/tmp</icode>,
 en utilisant la bibliothèque Unix. On compilera son programme par la commande
 </p>

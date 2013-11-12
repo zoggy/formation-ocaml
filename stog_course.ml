@@ -4,16 +4,13 @@ let make_id =
   fun () -> incr cpt; Printf.sprintf "__solution__%d" !cpt
 ;;
 
-let get_solution_label env =
-  let s =
-    match Stog_html.get_in_env env ("", "solution-label") with
-      "" -> "Answer"
-    | s -> s
-  in
-  Xtmpl.xml_of_string s
+let get_solution_label data env =
+  let (data, s) = Stog_engine.get_in_env data env ("", "solution-label") in
+  let s = match s with  "" -> "Answer" | s -> s in
+  (data, Xtmpl.xml_of_string s)
 ;;
 
-let fun_solution env atts subs =
+let fun_solution data env atts subs =
   match Xtmpl.get_arg atts ("", "id") with
     Some s ->
       (* id already present, return same node *)
@@ -21,20 +18,24 @@ let fun_solution env atts subs =
   | None ->
       (* create a unique id *)
       let id = make_id () in
-      [ Xtmpl.E (("", "button"),
-         [ ("", "href"), "#"^id ;
-           ("", "data-toggle"), "collapse" ;
-           ("", "class"), "btn btn-info solution"],
-         [get_solution_label env]) ;
-        Xtmpl.E (("", "div"),
-         [("", "id"), id ; ("", "class"), "collapse codeblock"],
-         subs)
-      ]
+      let (data, xml) = get_solution_label data env in
+      let xmls =
+        [ Xtmpl.E (("", "button"),
+           [ ("", "href"), "#"^id ;
+             ("", "data-toggle"), "collapse" ;
+             ("", "class"), "btn btn-info solution"],
+           [ xml ]) ;
+          Xtmpl.E (("", "div"),
+           [("", "id"), id ; ("", "class"), "collapse codeblock"],
+           subs)
+        ]
+      in
+      (data, xmls)
 ;;
 
-let rules stog elt_id elt = [ ("", "solution"), fun_solution ];;
 
-let () = Stog_plug.register_level_fun 5 (Stog_html.compute_elt rules);;
+let () = Stog_plug.register_html_base_rule
+  ("", "solution") fun_solution ;;
 (*
 This must be added at the end of each page:
 <script type="text/javascript" src="jquery.js"></script>

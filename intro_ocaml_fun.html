@@ -145,7 +145,7 @@ D'autres fonctions sont disponibles dans le module <moduledoc name="Char"/>.
 String.length "hello world!" (* longueur de chaine *);;
 "hello world!".[4] (* acces à un caractere, indice commencant a zero *) ;;
 ]]></ocaml-eval>
-<p>
+<p id="aopopapop">
 Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="String"/>.
 </p>
 <warning id="noautoconv" title="Pas de conversion automatique">
@@ -220,7 +220,7 @@ selon le type des éléments de la liste:
 [ "hello" ; "world" ; "!" ] (* une liste de chaines *) ;;
 [ 1 ; "2" ; 3 ] (* liste invalide car les elements n'ont pas le meme type *) ;;
 ]]></ocaml-eval>
-<p>
+<p id="aoppaaaa">
 Voyons quelques exemples de manipulation de listes:
 </p>
 <ocaml-eval id="code-lists2" toplevel="true"><![CDATA[
@@ -231,7 +231,7 @@ List.hd [ 1 ; 2 ; 3 ] (* recuperation de l'element de tete de liste *) ;;
 List.tl [ 1 ; 2 ; 3 ] (* recuperation de la queue de la liste (i.e. sans la tete) *) ;;
 String.concat "-" [ "hello" ; "world" ; "!" ] (* concatenation d'une liste de chaines *) ;;
 ]]></ocaml-eval>
-<p>
+<p id="apoopapoa">
 Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="List"/>.
 </p>
 </paragraph>
@@ -278,13 +278,13 @@ et les caractères (en utilisant les codes ascii), l'ordre naturel sur les flott
 <p>
 La syntaxe de la conditionnelle peut prendre deux formes:
 </p>
-<centerstx>if <stxid>expression de type bool</stxid> then <stxid>expression</stxid>
+<centerstx id="stxif">if <stxid>expression de type bool</stxid> then <stxid>expression</stxid>
 if <stxid>expression de type bool</stxid> then <stxid>expression1</stxid> else <stxid>expression2</stxid>
 </centerstx>
 <p>
 La première forme, sans écriture de la branche <ml>else</ml>, est en fait évaluée comme
 </p>
-<centerstx>if <stxid>expression de type bool</stxid> then <stxid>expression</stxid> else ()</centerstx>
+<centerstx id="stxif2">if <stxid>expression de type bool</stxid> then <stxid>expression</stxid> else ()</centerstx>
 <p>
 Le typage correct de l'expression toute entière impose que les expressions des
 branches <ml>then</ml> et <ml>else</ml> soient du même type. En effet, si ce n'était pas
@@ -297,7 +297,7 @@ Pour cette raison, l'expression du <ml>then</ml> de la première forme doit êtr
 type <ml>unit</ml>, car l'expression de la branche <ml>else</ml> implicite
 est <ml>()</ml>, qui est de type <ml>unit</ml>.
 </p>
-<p>
+<p id="aopipoqpo">
 Voyons quelques exemples:
 </p>
 <ocaml-eval id="code-conditionnelle" toplevel="true" error-exc="false"><![CDATA[
@@ -331,10 +331,10 @@ Il existe deux types de déclarations: globales et locales.
 </p>
 
 <subsubsection id="fun:declglob" title="Déclarations globales">
-<p>
+<p id="oiaopoiapoi">
 La syntaxe est la suivante:
 </p>
-<centerstx>let <stxid>identifiant</stxid> = <stxid>expression</stxid>;;</centerstx>
+<centerstx id="srclet">let <stxid>identifiant</stxid> = <stxid>expression</stxid>;;</centerstx>
 <p>
 La valeur résultant du calcul de l'<icode>expression</icode> est ensuite associée à
 l'<icode>identifiant</icode>. Cet identifiant est alors connu et peut être utilisé dans
@@ -369,7 +369,7 @@ Dans la fonction C ci-dessus, on peut déjà utiliser la variable <icode>toto</i
 Il est possible de déclarer localement des valeurs. Le nom de la valeur n'est alors
 visible que dans une seule expression. La syntaxe est la suivante:
 </p>
-<centerstx>let <stxid>identifiant</stxid> = <stxid>expression_1</stxid> in <stxid>expression_2</stxid></centerstx>
+<centerstx id="stxletloc">let <stxid>identifiant</stxid> = <stxid>expression_1</stxid> in <stxid>expression_2</stxid></centerstx>
 <p>
 La valeur de l'<stxid>expression_1</stxid> est calculée et liée à
 l'<stxid>identifiant</stxid>. Ce dernier n'est visible que dans l'<stxid>expression_2</stxid>. Exemple:
@@ -414,14 +414,14 @@ ne peut englober une déclaration globale (<ml>let ... = ... ;;</ml>):
 <p>
 Il est possible de déclarer simultanément plusieurs valeurs globales:
 </p>
-<centerstx>let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
+<centerstx id="stxletrec">let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
 and <stxid>ident_2</stxid> = <stxid>expression_2</stxid>
 ...
 and <stxid>ident_N</stxid> = <stxid>expression_N</stxid>;;</centerstx>
-<p>
+<p id="aopiopaipoiapo">
 ou locales:
 </p>
-<centerstx>let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
+<centerstx id="stxletrec2">let <stxid>ident_1</stxid> = <stxid>expression_1</stxid>
 and <stxid>ident_2</stxid> = <stxid>expression_2</stxid>
 ..
 and <stxid>ident_N</stxid> = <stxid>expression_N</stxid> in
@@ -478,7 +478,7 @@ tour une valeur fonctionnelle, ce qui permet de simuler des fonctions à plusieu
 paramètres:
 </p>
 <centerstx>function <stxid>identifiant_1</stxid> -&gt; function <stxid>identifiant_2</stxid> -> <stxid>expression</stxid></centerstx>
-<p>
+<p id="aooaooaa">
 Voyons quelques exemples de définition de fonctions:
 </p>
 <ocaml-eval id="code-funs" toplevel="true"><![CDATA[
@@ -689,7 +689,7 @@ let rec triple x = if x <= 0 then 0 else triple_aux (x - 2) + 1
 and triple_aux x = triple (x+1) + 2;;
 triple 20;;
 ]]></ocaml-eval>
-<p>
+<p id="aoipoipoiapoi">
 ou locales:
 </p>
 <ocaml-eval toplevel="true" error-exc="false"><![CDATA[
@@ -798,7 +798,7 @@ map string_of_int [ 1 ; 2 ; 3 ; 4 ; 5 ; 6];;
 </exercice>
 
 <exercice id="minint" title="Le plus petit entier">
-<p>
+<p id="aoiopiapopaa">
 Ecrire une fonction prenant une liste d'entiers et retournant le plus petit ou
 <ml>max_int</ml> si la liste est vide.
 </p>
@@ -811,7 +811,7 @@ min_elt [];;
 </exercice>
 
 <exercice id="average" title="Moyenne d'une liste">
-<p>
+<p id="auuauyu">
 Ecrire une fonction prenant une liste d'entiers et retournant la moyenne sous
 forme d'un flottant, ou <ml>0.</ml> si la liste est vide.
 </p>
@@ -846,7 +846,7 @@ le contenu des valeurs filtrées.
 Le terme anglais pour le filtrage est <em>pattern matching</em>.
 </p>
 <div id="patternsyntax">
-<p>
+<p id="aoiuoia">
 La syntaxe est la suivante:
 </p>
 <centerstx>match <stxid>expression_0</stxid> with
@@ -1070,7 +1070,7 @@ Les paramètres des types paramétrés doivent être indiqués avant l'identifia
 <centerstx>type 'a <stxid>identifiant</stxid> = <stxid>définition utilisant le paramètre de type 'a</stxid>
 type ('a, 'b) <stxid>identifiant</stxid> = <stxid>définition utilisant 'a et 'b</stxid>
 </centerstx>
-<p>
+<p id="aioyauyuyua">
 Ainsi, on peut définir le type des listes de paires d'éléments d'un type en paramètre:
 </p>
 <ocaml-eval id="code-decltypes" toplevel="true"><![CDATA[type 'a pairs = ('a * 'a) list;;
@@ -1108,10 +1108,10 @@ Un enregistrement correspond toujours à la déclaration d'un nouveau type. Un t
 enregistrement est défini par la déclaration de son nom, du nom de chacun
 de ses champs et de leur type.</cmp>
 </p>
-<p>
+<p id="auytyayiuao">
 La syntaxe est la suivante:
 </p>
-<centerstx>type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> = {
+<centerstx id="stxtypevars">type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> = {
   <stxid>nom_de_champ_1</stxid> : <stxid>type_1</stxid> ;
   ...
   <stxid>nom_de_champ_n</stxid> : <stxid>type_n</stxid> ;
@@ -1153,7 +1153,7 @@ l'accès à la valeur du champ <ml>gee</ml> de la valeur du champ <ml>bar</ml> d
 </p>
 </subsubsection>
 <subsubsection id="fun:records:filt" title="Filtrage">
-<p>
+<p id="apoipoipaopio">
 Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type enregistrement,
 en mettant des contraintes sur tout ou partie des champs du type:
 </p>
@@ -1162,7 +1162,7 @@ en mettant des contraintes sur tout ou partie des champs du type:
 </centerstx>
 </subsubsection>
 <subsubsection id="fun:records:exemple" title="Exemple">
-<p>
+<p id="aiouoiuoai">
 Voici un exemple de définition et d'utilisation d'un type enregistrement <ml>coord</ml>
 avec deux champs <ml>x</ml> et <ml>y</ml>, tous deux de type <ml>float</ml>:
 </p>
@@ -1194,10 +1194,10 @@ Appliquer un constructeur à un argument, c'est indiquer que la valeur retourné
 </p>
 <p><cmp>On déclare un type somme en donnant le nom de ses constructeurs et le type de leur éventuel argument.</cmp>
 </p>
-<p>
+<p id="aiouoiauoi">
 La syntaxe est la suivante:
 </p>
-<centerstx>type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> =
+<centerstx id="stxtypevars2">type [<stxid>variables de type</stxid>] <stxid>identifiant</stxid> =
   <stxid>Constructeur_1</stxid>
   ...
 | <stxid>Constructeur_i</stxid> of <stxid>type_i</stxid>
@@ -1214,7 +1214,7 @@ dans la définition du type somme.
 <p>
 Un type somme ne peut avoir deux constructeurs de même nom.
 </p>
-<p>
+<p id="aopipapoipoa">
 Voici un exemple de définition d'un type somme:
 </p>
 <ocaml-eval id="code-variants" toplevel="true"><![CDATA[
@@ -1245,7 +1245,7 @@ Avec notre exemple de type <ml>direction</ml>, cela donne par exemple:
 </subsubsection>
 
 <subsubsection id="fun:variants:filt" title="Filtrage">
-<p>
+<p id="apoipopopa">
 Il est bien sûr possible d'utiliser le filtrage sur des valeurs de type somme,
 en procédant par cas sur les constructeurs du type:
 </p>
@@ -1313,7 +1313,7 @@ Cependant, les valeurs définies avec un type <ml>t</ml> ne changent pas de type
 de définition d'un nouveau type <ml>t</ml> (et heureusement!). Par contre, ces homonymies peuvent
 rendre les messages d'erreur du compilateur un peu déroutants:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<ocaml-eval id="poaoppoiopa" toplevel="true" error-exc="false"><![CDATA[
 type t = Foo | Bar;;
 let x = Foo;;
 type t = Gee | Buz;;
@@ -1342,7 +1342,7 @@ comme le constructeur <ml>Foo</ml> du type <ml>t</ml> et non de <ml>t2</ml>.
 Le compilateur indique donc que le cas où la valeur est construite avec <ml>Bar</ml>
 n'est pas traité.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="pooaipoipoa" toplevel="true"><![CDATA[
 type t = Foo | Bar;;
 let x = Foo;;
 type t2 = Foo;;
@@ -1368,7 +1368,7 @@ déjà vu précédemment. Il est possible de créer ses propres types fonctionne
 d'utiliser des types fonctionnels pour les champs d'enregistrements ou les paramètres
 de constructeurs.
 </p>
-<p>
+<p id="poipapoiuuauua">
 Ainsi, on peut définir le type d'un afficheur de messages:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
@@ -1377,7 +1377,7 @@ type printer = string -> unit;;
 <p>
 Tout comme il est possible d'avoir des champs fonctionnels dans un type enregistrement:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="apoipoaiuyy" toplevel="true"><![CDATA[
 type output_context = {
   output_error : string -> unit ;
   output_message : string -> unit ;
@@ -1385,7 +1385,7 @@ type output_context = {
 <p>
 ou bien, en utilisant notre type <ml>printer</ml>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="auyuaiyuiy" toplevel="true"><![CDATA[
 type output_context = {
   output_error : printer ;
   output_message : printer ;
@@ -1797,7 +1797,7 @@ d'exception <ml>Failure</ml> lors de l'application de <ml>f</ml> à un élement 
 conserver la valeur initiale de l'élément. Nous pouvons tenter la définition
 suivante:
 </p>
-<ocaml-eval toplevel="true" session="stack" error-exc="false"><![CDATA[
+<ocaml-eval id="safemap" toplevel="true" session="stack" error-exc="false"><![CDATA[
 let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc
@@ -1817,7 +1817,7 @@ une exception, il faudra la filtrer, dans ce contexte et non dans celui
 l'appel récursif.
 On écrira donc plutôt:
 </p>
-<ocaml-eval toplevel="true" session="stack"><![CDATA[
+<ocaml-eval id="safemap2" toplevel="true" session="stack"><![CDATA[
 let safe_map f l =
   let rec iter acc = function
     [] -> List.rev acc

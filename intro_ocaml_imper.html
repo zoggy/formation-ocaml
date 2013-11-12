@@ -69,7 +69,7 @@ La construction d'un vecteur se fait en listant, séparées par des '<ml>;</ml>'
 les valeurs du vecteur entre <ml>[|</ml> et <ml>|]</ml>:
 </p>
 <ocaml-eval toplevel="true">let tab = [| 1 ; 2 ; 3 ; 4 |];;</ocaml-eval>
-<p>
+<p id="lmkmlskdfmskfml">
 Il est également possible d'utiliser des fonctions du module <moduledoc name="Array"/>
 pour créer des vecteurs:
 </p>
@@ -115,7 +115,7 @@ match Array.sub tab 0 2 with
 </subsubsection>
 
 <subsubsection id="vectors:mod" title="Modification">
-<p>
+<p id="oippoee">
 Il existe deux manières équivalentes de modifier un élément d'un vecteur:
 </p>
 <ul>
@@ -181,7 +181,7 @@ fin de la chaîne,</li>
 <ocaml-eval toplevel="true"><![CDATA[
 print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
 ]]></ocaml-eval>
-<p>
+<p id="lskdfmldskmgksdmgl">
 Il est également possible d'utiliser des fonctions créant des chaînes:
 </p>
 <ocaml-eval toplevel="true"><![CDATA[
@@ -211,7 +211,7 @@ un accès déclenche là encore une exception <ml>Invalid_argument</ml>:
 </subsubsection>
 
 <subsubsection id="strings:mod" title="Modifications">
-<p>
+<p id="ooiopiaioi">
 Il existe deux manières équivalentes de modifier un caractère d'une chaîne:
 </p>
 <ul>
@@ -442,7 +442,7 @@ f 1 ; 42;;
 <p>
 Attention aux précédences des constructions !
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="iftrue" toplevel="true"><![CDATA[
 if true then
   print_endline "c'est vrai";
   print_endline "c'est vrai";;
@@ -462,7 +462,7 @@ print_endline "c'est vrai";;
 Il faut donc utiliser les parenthèses <ml>(</ml> et <ml>)</ml> ou bien les mots-clés
 <ml>begin</ml> et <ml>end</ml> pour forcer la séquence à être dans la branche <ml>then</ml>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<ocaml-eval id="iftrue2" toplevel="true"><![CDATA[
 if true then
   (
    print_endline "c'est vrai";
@@ -490,13 +490,13 @@ Elles retournent donc une valeur: la constante <ml>()</ml> du type <ml>unit</ml>
 <p>
 La boucle for peut être croissante:
 </p>
-<centerstx>for <stxid>identifiant</stxid> = <stxid>expression_1</stxid> to <stxid>expression_2</stxid> do
+<centerstx id="stxfor">for <stxid>identifiant</stxid> = <stxid>expression_1</stxid> to <stxid>expression_2</stxid> do
   <stxid>expression_3</stxid>
 done</centerstx>
 <p>
 ou décroissante:
 </p>
-<centerstx>for <stxid>identifiant</stxid> = <stxid>expression_1</stxid> downto <stxid>expression_2</stxid> do
+<centerstx id="stxfordown">for <stxid>identifiant</stxid> = <stxid>expression_1</stxid> downto <stxid>expression_2</stxid> do
   <stxid>expression_3</stxid>
 done</centerstx>
 <p>
@@ -518,7 +518,7 @@ for i = 10 downto 1 do print_int i; print_string " " done; flush stdout;;
 La syntaxe de cette boucle est la suivante:
 </p>
 <centerstx>while <stxid>expression_1</stxid> do <stxid>expression_2</stxid> done</centerstx>
-<p>
+<p id="etazzaez">
 L'<stxid>expression_1</stxid> doit être de type <ml>bool</ml>. Elle est évaluée au début de chaque tour
 de boucle. Si elle est vraie, l'<stxid>expression_2</stxid> est évaluée, sinon la boucle se termine
 en une valeur de type <ml>unit</ml>.
