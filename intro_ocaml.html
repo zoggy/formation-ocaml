@@ -6,34 +6,44 @@
 <cmp foo=""><span class="cmp"><contents/></span></cmp>
 <fixme text="hello"><div class="alert alert-error">FIXME: <text/></div></fixme>
 <figure id="" title="" href="">
-    <block counter-name="figure" class="figure"
+  <if href="">
+    <block protect_="title,id" counter-name="figure" class="figure"
            label="Figure" href="&lt;href/&gt;"
            id="&lt;id/&gt;" title="&lt;title/&gt;">
 <div class="&lt;class/&gt;" id="&lt;id/&gt;">
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
+  <block elt-hid="&lt;elt-hid/&gt;" href="&lt;href/&gt;"/>
+</if>
 </figure>
 
 <warning id="" title="" href="">
-    <block counter-name="warning" class="warning"
+<if href="">
+  <block protect_="title,id" counter-name="warning" class="warning"
            label="Avertissement" href="&lt;href/&gt;"
            id="&lt;id/&gt;" title="&lt;title/&gt;">
 <div class="&lt;class/&gt;" id="&lt;id/&gt;">
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
+  <block elt-hid="&lt;elt-hid/&gt;" href="&lt;href/&gt;"/>
+</if>
 </warning>
 
 <exercice id="" title="" href="">
-    <block counter-name="exercice" class="exercice"
+<if href="">
+  <block protect_="title,id" counter-name="exercice" class="exercice"
            label="Exercice" href="&lt;href/&gt;"
            id="&lt;id/&gt;" title="&lt;title/&gt;">
 <div class="&lt;class/&gt;" id="&lt;id/&gt;">
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
+  <block elt-hid="&lt;elt-hid/&gt;" href="&lt;href/&gt;"/>
+</if>
 </exercice>
+
 <mychapter id="" title="">
 <chapter id="&lt;id/&gt;" title="&lt;title/&gt;">
 <prepare-notes><prepare-toc depth="1"><toc/><contents/></prepare-toc>
@@ -41,6 +51,7 @@
 </prepare-notes>
 </chapter>
 </mychapter>
+
 <stx foo=""><tt><contents/></tt></stx>
 <centerstx id="" foo="">
 <if id=""><pre class="syntax"><contents/></pre><pre id="&lt;id/&gt;"><contents/></pre></if></centerstx>

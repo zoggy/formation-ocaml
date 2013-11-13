@@ -499,7 +499,8 @@ match 'c' with
 ;;
 </ocaml-eval>
 <solution>
-<ocaml-eval defer_="1" toplevel="true"><include file="./words.ml"/></ocaml-eval>
+
+<ocaml-eval defer_="1" toplevel="true"><include raw="true" file="./words.ml"/></ocaml-eval>
 </solution>
 <ocaml-eval defer_="1" toplevel="true"><![CDATA[
 words "maitre corbeau sur un arbre perche ... par l'odeur alleche...";;
@@ -580,7 +581,7 @@ affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
 <ml>words</ml> définie dans l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml id ="countwords" defer_="1"><include file="./count_words.ml"/></ocaml>
+<ocaml id ="countwords" defer_="1"><include raw="true" file="./count_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -619,7 +620,7 @@ flush stdout;;
 Reprendre l'<exercice href="exowordcount"/> en utilisant un dictionnaire.
 </p>
 <solution>
-<ocaml id="countwordsdict" defer_="1"><include file="./count_words_dict.ml"/></ocaml>
+<ocaml id="countwordsdict" defer_="1"><include raw="true" file="./count_words_dict.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -660,7 +661,7 @@ sur la sortie standard. On utilisera encore la fonction <ml>words</ml>
 de l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml id="diffwords" defer_="1"><include file="./diff_words.ml"/></ocaml>
+<ocaml id="diffwords" defer_="1"><include raw="true" file="./diff_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -777,7 +778,7 @@ fichier <icode>fichier.ml</icode> et on l'exécutera par exemple par la commande
 </p>
 <sh>ocaml fichier.ml -prod 1 2</sh>
 <solution>
-<ocaml defer_="1"><include file="./exercice_arg.ml"/></ocaml>
+<ocaml defer_="1"><include raw="true" file="./exercice_arg.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -924,7 +925,7 @@ en utilisant la bibliothèque Unix. On compilera son programme par la commande
 (si votre programme est dans le fichier <icode>lstmp.ml</icode>).
 </p>
 <solution>
-<ocaml-eval defer_="1"><include file="./lstmp.ml"/></ocaml-eval>
+<ocaml-eval defer_="1"><include raw="true" file="./lstmp.ml"/></ocaml-eval>
 </solution>
 </exercice>
 
