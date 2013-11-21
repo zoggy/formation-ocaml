@@ -5,9 +5,9 @@ let make_id =
 ;;
 
 let get_solution_label data env =
-  let (data, s) = Stog_engine.get_in_env data env ("", "solution-label") in
-  let s = match s with  "" -> "Answer" | s -> s in
-  (data, Xtmpl.xml_of_string s)
+  let (data, xmls) = Stog_engine.get_in_env data env ("", "solution-label") in
+  let xmls = match xmls with [] -> [Xtmpl.D "Answer"] | _ -> xmls in
+  (data, xmls)
 ;;
 
 let fun_solution data env atts subs =
@@ -21,12 +21,12 @@ let fun_solution data env atts subs =
       let (data, xml) = get_solution_label data env in
       let xmls =
         [ Xtmpl.E (("", "button"),
-           [ ("", "href"), "#"^id ;
-             ("", "data-toggle"), "collapse" ;
-             ("", "class"), "btn btn-info solution"],
-           [ xml ]) ;
+           [ ("", "href"), [Xtmpl.D ("#"^id)] ;
+             ("", "data-toggle"), [Xtmpl.D "collapse"] ;
+             ("", "class"), [Xtmpl.D "btn btn-info solution"] ],
+           xml) ;
           Xtmpl.E (("", "div"),
-           [("", "id"), id ; ("", "class"), "collapse codeblock"],
+           [("", "id"), [Xtmpl.D id] ; ("", "class"), [Xtmpl.D "collapse codeblock"]],
            subs)
         ]
       in
