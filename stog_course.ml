@@ -21,12 +21,15 @@ let fun_solution data env atts subs =
       let (data, xml) = get_solution_label data env in
       let xmls =
         [ Xtmpl.E (("", "button"),
-           [ ("", "href"), [Xtmpl.D ("#"^id)] ;
-             ("", "data-toggle"), [Xtmpl.D "collapse"] ;
-             ("", "class"), [Xtmpl.D "btn btn-info solution"] ],
+           Xtmpl.atts_of_list
+             [ ("", "href"), [Xtmpl.D ("#"^id)] ;
+               ("", "data-toggle"), [Xtmpl.D "collapse"] ;
+               ("", "class"), [Xtmpl.D "btn btn-info solution"]
+             ],
            xml) ;
           Xtmpl.E (("", "div"),
-           [("", "id"), [Xtmpl.D id] ; ("", "class"), [Xtmpl.D "collapse codeblock"]],
+           Xtmpl.atts_of_list
+             [("", "id"), [Xtmpl.D id] ; ("", "class"), [Xtmpl.D "collapse codeblock"]],
            subs)
         ]
       in
