@@ -15,6 +15,12 @@
 <div class="site-desc"><site-description/></div>
 </div>
 <if elt-type="post"><div class="date"><elt-date/></div></if>
+<if previous-hid="" next-hid=""><main_/>
+  <div class="navbar">
+    <if previous-hid=""><main_/><div class="navleft"><elt href="&lt;previous-hid/&gt;"/></div></if>
+    <if next-hid=""><main_/><div class="navright"><elt href="&lt;next-hid/&gt;"/></div></if>
+  </div>
+</if>
 <if elt-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><elt-title/></div></if>
 <if entete=""><span/><p class="alert alert-info"><entete/></p></if>
 <div id="elt-body"><elt-body/></div>
