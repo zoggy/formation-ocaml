@@ -26,6 +26,7 @@ clean:
 	rm -f $(PLUGIN)
 	rm -f $(BLOG_EXAMPLES)
 	rm -f *.cm? posts/*.cm?
+	rm -fr .stog/cache
 
 style:
 	lessc less/style.less > $(DEST_DIR)/style.css
