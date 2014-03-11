@@ -284,7 +284,7 @@ module Guichet = functor (Q : QueueType) -> struct
       with Q.Empty -> None
     with
     | None -> ()
-    | Some elt -> f elt; handle_all f guichet
+    | Some doc -> f doc; handle_all f guichet
 end;;
 ]]></ocaml-eval>
 <p>

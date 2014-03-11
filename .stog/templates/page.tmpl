@@ -1,6 +1,6 @@
 <html>
 <head>
-<title><site-title/> : <elt-title/></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title><site-title/> : <doc-title/></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" type="text/css" href="&lt;site-url/&gt;/style.css"></link>
 <link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'></link>
 
@@ -14,24 +14,24 @@
 <div id="site-title"><a href="&lt;site-url/&gt;/index.html"><site-title/></a></div>
 <div class="site-desc"><site-description/></div>
 </div>
-<if elt-type="post"><div class="date"><elt-date/></div></if>
+<if doc-type="post"><div class="date"><doc-date/></div></if>
 <if previous-path="" next-path=""><main_/>
   <div class="navbar">
-    <if previous-path=""><main_/><div class="navleft"><elt href="&lt;previous-path/&gt;"/></div></if>
-    <if next-path=""><main_/><div class="navright"><elt href="&lt;next-path/&gt;"/></div></if>
+    <if previous-path=""><main_/><div class="navleft"><doc href="&lt;previous-path/&gt;"/></div></if>
+    <if next-path=""><main_/><div class="navright"><doc href="&lt;next-path/&gt;"/></div></if>
   </div>
 </if>
-<if elt-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><elt-title/></div></if>
+<if doc-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><doc-title/></div></if>
 <if entete=""><span/><p class="alert alert-info"><entete/></p></if>
-<div id="elt-body"><elt-body/></div>
-<if elt-type="post"><div class="comments">
+<div id="doc-body"><doc-body/></div>
+<if doc-type="post"><div class="comments">
 <div>
-<div class="elt-keywords">
+<div class="doc-keywords">
   <div class="bloc-keywords">
-  Thèmes: <div class="keywords"><elt-topics ep=", "/></div>
+  Thèmes: <div class="keywords"><doc-topics ep=", "/></div>
   </div>
   <div class="bloc-keywords">
-  Mots-clés: <div class="keywords"><elt-keywords sep=", "/></div>
+  Mots-clés: <div class="keywords"><doc-keywords sep=", "/></div>
   </div>
 </div>
 </div>

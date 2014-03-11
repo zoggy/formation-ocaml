@@ -41,7 +41,7 @@ unsigned int fact (unsigned int n) {
 <p>
 Le noyau fonctionnel du langage permet d'appliquer des fonctions à des valeurs.
 Les valeurs sont typées et peuvent être de types de base (entier, flottant, ...,
-cf. <elt href="#basetypes"/>), de types plus élaborés construits à partir d'autres
+cf. <doc href="#basetypes"/>), de types plus élaborés construits à partir d'autres
 types, ou bien de type fonction. En effet, en OCaml, les fonctions sont des
 valeurs <em>de premier ordre</em>, c'est-à-dire que le langage permet de les manipuler
 comme d'autres valeurs "simples" comme les entiers. En particulier, on peut définir
@@ -166,7 +166,7 @@ string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
 <ocaml-eval id="code-unit" toplevel="true">();;</ocaml-eval>
 <p>
 <cmp>Cette valeur sera plus particulièrement utilisée dans les programmes impératifs
-(cf. <elt href="#progimperative"/>) pour les fonctions qui effectuent des effets
+(cf. <doc href="#progimperative"/>) pour les fonctions qui effectuent des effets
 de bord. Les fonctions dont le résultat est la valeur <icode>()</icode> simulent la notion
 de procédure qui n'existe pas en OCaml comme le fait le type void dans le langage C.</cmp>
 </p>
@@ -455,7 +455,7 @@ dans le langage R (ce qui aurait donné la valeur <ml>1</ml> à <ml>c</ml> dans 
 Enfin, dans <ml>let (a, b) = (1, 2, 3)</ml>, le compilateur nous indique clairement
 que la construction n'est pas correcte puisque nous avons un n-uplet de taille 3
 à droite alors que nous le <em>filtrons</em> par un n-uplet de taille 2. Nous verrons
-le filtrage en détail dans la section <elt href="#filtrage"/>.
+le filtrage en détail dans la section <doc href="#filtrage"/>.
 </p>
 </subsubsection>
 </subsection>
@@ -743,7 +743,7 @@ Il est possible de forcer le type des valeurs, ce qui est utile dans plusieurs c
 types des paramètres d'une fonction par exemple,</li>
 <li>pour n'autoriser l'utilisation d'une valeur que dans un certain contexte,</li>
 <li>pour indiquer quel type devra prendre une valeur modifiable
- (cf. chapitre <elt href="#progimperative"/>); en effet, lors de leur création certaines valeurs
+ (cf. chapitre <doc href="#progimperative"/>); en effet, lors de leur création certaines valeurs
  ne permettent pas de déterminer leur type (par exemple la liste vide <ml>[]</ml>),
  ce qui pose problème lorsqu'il s'agit de données modifiables: le compilateur doit
  pouvoir vérifier qu'on n'affecte pas une valeur du mauvais type à une donnée modifiable,</li>
@@ -864,7 +864,7 @@ l'<stxid>expression_1</stxid> est évaluée en une valeur qui est la valeur de t
 au motif <stxid>pattern_2</stxid>, et ainsi de suite jusqu'à ce qu'un motif corresponde à la valeur.
 </p>
 <p>
-Si aucun motif ne correspond à la valeur à filtrer, une exception (cf. <elt href="#exceptions"/>)
+Si aucun motif ne correspond à la valeur à filtrer, une exception (cf. <doc href="#exceptions"/>)
 <ml>Match_failure</ml> est levée. Pour se prémunir contre cette erreur de programmation qui correspond
 à un cas non prévu par le programmeur, deux solutions:
 </p>
