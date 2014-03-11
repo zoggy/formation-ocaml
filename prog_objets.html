@@ -1,0 +1,55 @@
+<page title="Programmation Objets en OCaml"
+with-contents="true"
+>
+<oc toplevel="true" error-exc="false">
+<ocaml-eval defer_="1" toplevel="true" error-exc="&lt;error-exc/&gt;"><contents/></ocaml-eval>
+</oc>
+<contents>
+<prepare-toc>
+<toc>Table des matières</toc>
+
+<section counter="false" id="preambule" title="Préambule">
+<p>Ce document n'est <strong>pas</strong> une introduction au
+paradigme de la programmation objets, mais présente la
+programmation objets <strong>en OCaml</strong>. On suppose
+donc que les notions de classes, objets, méthodes, héritage, etc.,
+sont déjà connues.
+</p>
+</section>
+
+<section id="introduction" title="Introduction">
+<p>
+OCaml s'appelait auparavant <i>Objective</i>-Caml, indiquant ainsi
+qu'il comportait la possibilité de programmation objets.
+</p>
+<p>
+Cela signifie que le système de types permet de définir des types
+pour les objets. La définition d'une classe entraîne la création
+d'un type (de même nom). L'instanciation d'une classe crée donc
+une valeur du type de la classe.
+</p>
+<p>
+Comme les autres types, les types de classes peuvent également
+être paramétrés (cf. <elt href="intro_ocaml#fun:decltypes"/>).
+</p>
+<p>
+La notion de type pour les classes s'accompagne de la notion
+de sous-typage. Ainsi, un objet A dont le type est un sous-type
+d'un autre objet B pourra être utilisé en lieu et place de B.
+Une relation de sous-typage est typiquement engendrée par
+héritage, comme dans d'autres langages, mais nous verrons
+qu'elle est indépendante et que c'est un aspect intéressant
+du langage.
+</p>
+<ocaml-eval toplevel="true">
+class foo = object method f x = x + 11 end;;
+</ocaml-eval>
+</section>
+
+<section id="declcl" title="Déclaration de classes">
+<oc>class c = object end ;;</oc>
+</section>
+
+</prepare-toc>
+</contents>
+</page>
