@@ -314,7 +314,7 @@ test (object method m x = x + 1 method m2 = "hello" end)
 <oc error-exc="false"><![CDATA[let test2 (p : < m : int -> int >) = p#m 1;;
 test2 (object method m x = x + 1 method m2 = "hello" end)
 ]]></oc>
-<p>Il faut alors faire un <em>cast</em> pour dépouiller l'objet de sa méthode
+<p>Un <em>cast</em> est alors nécessaire pour dépouiller l'objet de sa méthode
 en trop avant de le passer en paramètre. Le <em>cast</em> est réalisé
 avec l'opérateur <ml>:&gt;</ml>:
 </p>
