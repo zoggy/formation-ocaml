@@ -1,7 +1,12 @@
-<page title="Programmation Objets en OCaml"
+<page title="Programmation Orientée Objets en OCaml"
 with-contents="true"
 >
-<oc toplevel="true" error-exc="false">
+<stx foo=""><tt><contents/></tt></stx>
+<centerstx id="" foo="">
+<if id=""><pre class="syntax"><contents/></pre><pre id="&lt;id/&gt;"><contents/></pre></if></centerstx>
+<stxid foo=""><em><contents/></em></stxid>
+
+<oc toplevel="true" session="objects" error-exc="true">
 <ocaml-eval defer_="1" toplevel="true" error-exc="&lt;error-exc/&gt;"><contents/></ocaml-eval>
 </oc>
 <contents>
@@ -20,7 +25,7 @@ sont déjà connues.
 <section id="introduction" title="Introduction">
 <p>
 OCaml s'appelait auparavant <i>Objective</i>-Caml, indiquant ainsi
-qu'il comportait la possibilité de programmation objets.
+qu'il comporte la possibilité de programmation objets.
 </p>
 <p>
 Cela signifie que le système de types permet de définir des types
@@ -34,20 +39,342 @@ Comme les autres types, les types de classes peuvent également
 </p>
 <p>
 La notion de type pour les classes s'accompagne de la notion
-de sous-typage. Ainsi, un objet A dont le type est un sous-type
+de sous-typage, ou <em>polymorphisme d'inclusion</em>. Ainsi, un objet
+A dont le type est un sous-type
 d'un autre objet B pourra être utilisé en lieu et place de B.
 Une relation de sous-typage est typiquement engendrée par
 héritage, comme dans d'autres langages, mais nous verrons
 qu'elle est indépendante et que c'est un aspect intéressant
 du langage.
 </p>
-<ocaml-eval toplevel="true">
-class foo = object method f x = x + 11 end;;
-</ocaml-eval>
+<p>
+L'une des limites d'OCaml est l'impossibilité de surcharger les
+méthodes d'une classe, pour la même raison qu'il est impossible
+de surcharger les opérateurs: il ne serait alors plus possible
+d'inférer automatiquement le type des expressions.
+</p>
 </section>
 
+<section id="objects" title="Objets">
+<subsection id="creatingobjects" title="Création d'objets">
+<p>
+Nous commençons par voir comment créer et manipuler des objets,
+sans créer de classe. Par la suite, nous verrons comment créer
+des classes et les instancier.
+</p>
+<p>
+La création d'un objet se fait avec la syntaxe suivante:
+</p>
+<centerstx>object <stxid>champs</stxid> end</centerstx>
+<p>
+Les <stxid>champs</stxid> de la définition permettent de définir
+pour l'objet ses héritages, attributs, méthodes, contraintes de types,
+ainsi qu'un éventuel traitement à effectuer à l'initialisation.
+</p>
+<p>Le code suivant déclare un objet "vide", sans attribut ni rien:</p>
+<oc>object end ;;</oc>
+
+<p>Le code suivant crée un objet avec une méthode <ml>add : int -> int</ml>,
+et un attribut non modifiable <ml>foo : int</ml> initialisé à <ml>1</ml>:
+</p>
+<oc>object
+    val foo = 1
+    method add x = x + foo
+  end;;
+</oc>
+<p>Lors de la création de l'objet, les expressions d'initialisation
+des attributs ne peuvent faire appel aux valeurs d'autres attributs
+de l'objet:
+</p>
+<oc error-exc="false">
+object
+    val x = 1
+    val y = x + 1
+  end
+</oc>
+<p>
+Le code à l'intérieur d'un object peut accéder aux attributs en utilisant
+simplement leur identifiant. Ici nous définissons un attribut <ml>foo</ml>
+et une méthode <ml>foo</ml>. Les attributs et méthodes sont dans deux espaces
+de noms différents. La méthode <ml>foo</ml> utilise l'attribut <ml>foo</ml>:
+</p>
+<oc>object
+    val foo = 1
+    method foo = foo
+  end
+</oc>
+<p>
+Pour appeler une méthode de l'objet depuis l'intérieur de l'objet,
+il faut donner un nom à l'objet dans lequel on est; cela se fait en indiquant un
+identifiant entre parenthèses après le mot-clé <ml>object</ml>, ici <ml>self</ml>.
+On peut alors appeler la méthode sur l'objet <ml>self</ml>:
+</p>
+<oc><![CDATA[let o =
+  object(self)
+    method fact n =
+      if n <= 0
+        then 0
+        else if n = 1
+          then 1
+          else n * self#fact (n-1)
+  end;;
+o#fact 5 ;;]]></oc>
+</subsection>
+
+<subsection id="letobject" title="Utilisation d'objets">
+<p>
+L'utilisation d'un objet passe par l'appel de ses méthodes.
+L'appel de méthode (aussi appelé <em>envoi de message</em>)
+ se fait en utilisant l'opérateur <ml>#</ml> avec
+à gauche un objet et à droite le nom de la méthode éventuellement suivi
+des paramètres:
+</p>
+<centerstx><stxid>identifiant</stxid> # <stxid>méthode</stxid> [<stxid>arguments</stxid>]</centerstx>
+<p>Par exemple, nous créons un objet <ml>x</ml> et appelons la méthode
+<ml>as_string</ml> de cet objet:
+</p>
+<oc>let x = object method as_string = "hello world!" end;;
+x#as_string ;;
+</oc>
+<warning id="valsnotaccessible" title="Les attributs ne sont pas accessibles à l'extérieur">
+<p>
+Les attributs d'un objet ne sont pas accessibles depuis l'extérieur de cet objet:
+</p>
+<oc error-exc="false"> let objet = object val x = 3 end;;
+objet#x ;;
+objet.x ;;
+</oc>
+<p>Il est nécessaire de fournir les accesseurs (méthodes d'accès) pour les attributs
+auxquels on permet l'accès depuis l'extérieur de l'objet, c'est-à-dire des
+méthodes se contentant de retourner le contenu d'un attribut. Par convention,
+ces méthodes portent le même nom que l'attribut dont elles renvoient la valeur,
+mais ce n'est pas obligatoire:
+</p>
+<oc error-exc="false"> let objet = object val x = 3 method x = x end;;
+objet#x ;;
+</oc>
+</warning>
+
+</subsection>
+
+<subsection id="initializer" title="Exécution de code à l'initialisation">
+<p>
+Le mot-clé <ml>initializer</ml> permet de spécifier du code
+qui sera exécuté à la création de l'objet.
+Ce code est exécuté après initialisation de tous les attributs; il
+peut donc accéder aux valeurs des attributs et appeler des méthodes
+de l'objet (en donnant un nom à l'objet, ici encore <ml>self</ml>).
+</p>
+<oc>let o =
+  object(self)
+    val message = "hello world!"
+    method hello = print_endline message
+    initializer
+      self#hello
+  end;;
+o#hello;;
+</oc>
+</subsection>
+<subsection id="funobject" title="Compatibilité des objets, sous-typage">
+<p>
+Un objet étant une valeur comme une autre, il peut être passé à ou renvoyé
+par une fonction.
+</p>
+<p>
+Le système de types fera les inférences et vérifications nécessaires pour
+s'assurer qu'un objet n'est pas passé là où son type ne correspond pas à ce qui
+est attendu. De même, une expression ne pourra renvoyé un objet avec un type
+ne correspondant pas aux contraintes locales (par exemple deux objets
+de types incompabibles en résultat des deux branches d'une conditionnelles).
+</p>
+<p>Voyons quelques exemples.</p>
+<p>Commençons par définir une fonction qui retournera un objet comportant
+une unique méthode <ml>print : string -> unit</ml>. Si le paramètre <ml>err</ml>
+de la fonction faut <ml>true</ml>, alors la méthode écrire sur la sortie
+d'erreur, sinon la méthode de l'objet retourné écrira sur la sortie
+standard:
+</p>
+<oc>
+let mk_printer err =
+  if err then
+    object method print msg = prerr_endline ("erreur: "^msg) end
+  else
+    object method print = print_endline end
+;;
+</oc>
+<p>Comme attendu, cette fonction prend un booléen et retourne un objet.</p>
+<p>Si par mégarde les deux objets n'ont pas un type compatible, le compilateur
+me le signale, ici en indiquant que les types des méthodes <ml>print</ml>
+ne sont pas compatibles:
+</p>
+<oc error-exc="false">let mk_printer err =
+  if err then
+    object method print msg = prerr_endline ("erreur: "^msg) end
+  else
+    object method print = print_int end
+;;
+</oc>
+<p>
+Muni de ma fonction <ml>mk_printer</ml>, je peux créer un objet printer:
+</p>
+<oc>let err_printer = mk_printer true ;;</oc>
+<p>Je peux ensuite définir une fonction prenant en paramètre un objet
+dont je ne donne pas le type, mais que j'utilise dans le corps de ma fonction:
+</p>
+<oc>let hello pr =
+  for i = 1 to 3 do pr#print (string_of_int i) done
+;;
+</oc>
+<p>Le type inféré pour le paramètre <ml>pr</ml> est un type objet.
+La seule contrainte est qu'il doit posséder une méthode <ml>print : string -> 'a</ml>.
+Les <ml>..</ml> dans le type du paramètre signifient que l'objet peut avoir
+n'importe quels autres attributs ou méthodes de n'importe quels types, ce
+qui compte est la présence d'une méthode <ml>print</ml> avec le type <ml>string -> 'a</ml>.
+</p>
+<p>
+Je peux donc logiquement appeler cette fonction en lui passant en argument
+mon objet <ml>err_printer</ml> créé plus haut:
+</p>
+<oc>hello err_printer</oc>
+<p>Mais je peux également lui passer un objet anonyme créé juste pour un appel:</p>
+<oc>hello (mk_printer false);;
+hello (object method foo = 1 method print _ = print_endline "coucou" end);;
+</oc>
+<p>Bien sûr, si l'objet passé en paramètre ne vérifie pas les contraintes
+de type, le compilateur signale une erreur:
+</p>
+<oc error-exc="false">hello (object method print n = string_of_int n end);;</oc>
+<p>
+Pour déterminer la compatibilité de deux types objets, la notion de sous-typage
+est utilisée. On pourra utiliser un objet d'un type t en lieu et place d'un
+objet de type t' si t est un sous-type de t'. Un type t est sous-type de t' si
+tous les attributs et méthodes de t' sont présents dans t. De plus, pour chacun
+de ces attributs et méthodes, son type dans t doit être un sous-type de
+l'attribut ou la méthode dans t'.
+</p>
+<p>
+Voyons quelques exemples en définissant une fonction dont nous spécifions
+le type du paramètre pour qu'il requiert une méthode <ml>m : int -> int</ml>.
+</p>
+<oc><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc>
+<p>Voyons maintenant la compatibilité avec différents objets:</p>
+<oc error-exc="false">
+(* objet vide, invalide *)
+test (object end);;
+(* objet valide, exactement le meme type *)
+test (object method m x = x + 1 end);;
+(* objet invalide: m n'a pas le bon type *)
+test (object method m x = float x end);;
+(* objet valide: 'a -> 'a est un sous-type de int -> int *)
+test (object method m x = x end);;
+(* objet valide: m du bon type et une methode
+   supplementaire ne pose pas de probleme *)
+test (object method m x = x + 1 method m2 = "hello" end)
+</oc>
+<p>Ce dernier cas ne passe que parce que le type exigé pour le paramètre
+ de la fonction <ml>test</ml> contient <ml>..</ml>, indiquant que les méthodes
+ supplémentaires sont acceptées. Sans ces <ml>..</ml>, le dernier cas ne passe
+ pas:
+</p>
+<oc error-exc="false"><![CDATA[let test2 (p : < m : int -> int >) = p#m 1;;
+test2 (object method m x = x + 1 method m2 = "hello" end)
+]]></oc>
+<p>Il faut alors faire un <em>cast</em> pour dépouiller l'objet de sa méthode
+en trop avant de le passer en paramètre. Le <em>cast</em> est réalisé
+avec l'opérateur <ml>:&gt;</ml>:
+</p>
+<oc><![CDATA[let o = object method m x = x + 1 method m2 = "hello" end;;
+test2 (o :> < m : int -> int >);;
+]]></oc>
+<p>Evidemment, dépouiller un objet d'un type t vers un type t' si t n'est
+pas un sous-type de t' provoque une erreur:
+</p>
+<oc error-exc="false"><![CDATA[
+let o = object method m = string_of_int end;;
+(o :> < m : int -> int >);;
+]]></oc>
+</subsection>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
 <section id="declcl" title="Déclaration de classes">
-<oc>class c = object end ;;</oc>
+<p>
+La déclaration d'une classe prend la forme suivante:
+</p>
+<centerstx>class <stxid>identifiant</stxid> [<stxid>paramètres</stxid>] = object <stxid>champs</stxid> end</centerstx>
+<p>
+Les définitions de classes peuvent être paramétrées par des variables
+de types:
+</p>
+<centerstx>class ['a] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end
+class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
+<p>
+L'<stxid>identifiant</stxid> se trouve dans le même espace de nom que les types,
+puisque la définition d'une classe introduit un nouveau type.
+</p>
+
+
+<p>
+Le toplevel nous affiche le type de la classe comme étant une fonction
+prenant un entier et retournant un type objet, ce dernier comportant
+un attribut (<ml>val foo : int</ml>) et une méthode (<ml>method add : int -> int</ml>).
+</p>
+<p>Bien sûr, il ne s'agit que d'une définition de classe, nous n'avons encore
+aucune valeur du type associé, i.e. <ml>c1</ml> n'est pas une valeur:
+</p>
+<oc error-exc="false">
+c1;;
+</oc>
+</section>
+
+<section id="instanciate" title="Instanciation de classes">
+<p>
+A partir d'une classe (ici la classe <ml>c1</ml> définie ci-dessus), nous pouvons
+créer des objets, qui sont des instances d'une classe, grâce au mot-clé <ml>new</ml>.
+Nous donnons également chaque fois un paramètre, car la classe en requiert un:
+</p>
+<!--
+<oc>
+let objet1 = new c1 1 ;;
+let objet2 = new c1 2 ;;
+</oc>
+-->
+<p>
+Le toplevel nous indique que les valeurs <ml>objet1</ml> et <ml>objet2</ml> sont
+de type <ml>c1</ml> et sont des objets (<ml>&lt;obj&gt;</ml>).
+</p>
+<p>
+Nous pouvons également ne pas donner de paramètre lors de l'utilisation de <ml>new</ml>.
+Dans ce cas, nous obtenons une valeur fonctionnelle qui, lorsqu'elle sera appliquée
+au paramètre attendu, retournera un objet de la classe instanciée:
+</p>
+<oc>class c2 x y =
+  object
+    val x = x
+    val y = y
+    method string = Printf.sprintf "(%d, %d)" x y
+  end;;
+let maker = new c2 (** maker est une fonction *) ;;
+let c = maker 1 2 (** on applique la fonction pour obtenir un objet *) ;;
+</oc>
+</section>
+
+<section id="methodcall" title="Appel de méthode">
+
+</section>
+
+<section id="inclass" title="A l'intérieur d'une classe">
+
 </section>
 
 </prepare-toc>

@@ -14,6 +14,47 @@ section-counter="false"
 <stog:ml foo=""><icode defer_="1" lang="ocaml"><contents/></icode></stog:ml>
 
 
+<stog:fixme text="hello"><div class="alert alert-error">FIXME: <text/></div></stog:fixme>
+<stog:figure id="" title="" href="">
+  <if href="">
+    <block protect_="title,id" counter-name="figure" class="figure"
+           label="Figure" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
+</if>
+</stog:figure>
+
+<stog:warning id="" title="" href="">
+<if href="">
+  <block protect_="title,id" counter-name="warning" class="warning"
+           label="Avertissement" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
+</if>
+</stog:warning>
+
+<stog:exercice id="" title="" href="">
+<if href="">
+  <block protect_="title,id" counter-name="exercice" class="exercice"
+           label="Exercice" href="&lt;href/&gt;"
+           id="&lt;id/&gt;" title="&lt;title/&gt;">
+<div class="&lt;class/&gt;" id="&lt;id/&gt;">
+  <div class="title"><title/></div>
+  <div class="contents"><contents/></div>
+</div></block>
+  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
+</if>
+</stog:exercice>
+
+
 <contents>
 <section id="presentation" title="Présentation">
 <p>
