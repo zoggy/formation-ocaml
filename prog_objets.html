@@ -175,7 +175,9 @@ de l'objet (en donnant un nom à l'objet, ici encore <ml>self</ml>).
 o#hello;;
 </oc>
 </subsection>
-<subsection id="funobject" title="Compatibilité des objets, sous-typage">
+</section>
+
+<section id="funobject" title="Compatibilité des objets, sous-typage">
 <p>
 Un objet étant une valeur comme une autre, il peut être passé à ou renvoyé
 par une fonction.
@@ -293,7 +295,6 @@ pas un sous-type de t' provoque une erreur:
 let o = object method m = string_of_int end;;
 (o :> < m : int -> int >);;
 ]]></oc>
-</subsection>
 </section>
 
 
