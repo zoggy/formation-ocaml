@@ -68,7 +68,8 @@ La création d'un objet se fait avec la syntaxe suivante:
 <centerstx>object <stxid>champs</stxid> end</centerstx>
 <p>
 Les <stxid>champs</stxid> de la définition permettent de définir
-pour l'objet ses héritages, attributs, méthodes, contraintes de types,
+pour l'objet ses héritages, attributs (ou variables d'instance),
+méthodes, contraintes de types,
 ainsi qu'un éventuel traitement à effectuer à l'initialisation.
 </p>
 <p>Le code suivant déclare un objet "vide", sans attribut ni rien:</p>
@@ -111,6 +112,7 @@ On peut alors appeler la méthode sur l'objet <ml>self</ml>:
 </p>
 <oc><![CDATA[let o =
   object(self)
+    (* Ne faîtes pas ça chez vous :-) *)
     method fact n =
       if n <= 0
         then 0
@@ -175,6 +177,36 @@ de l'objet (en donnant un nom à l'objet, ici encore <ml>self</ml>).
 o#hello;;
 </oc>
 </subsection>
+
+<subsection id="mutablefields" title="Attributs mutables">
+<p>
+Par défaut, un attribut n'est pas modifiable. Mais, de la même façon que
+pour <doc href="intro_ocaml#mutrecords">les types enregistrements</doc>,
+le mot-clé <ml>mutable</ml> permet d'avoir des attributs modifiables par
+le code à l'intérieur de l'objet. La modification d'un attribut
+est réalisée, comme pour les champs d'enregistrements, avec l'opérateur
+<ml>&lt;-</ml>:
+</p>
+<oc><![CDATA[let o =
+  object
+    val mutable cpt = 0
+    method incr = cpt <- cpt + 1
+    method print = print_endline (string_of_int cpt)
+  end;;
+o#incr ;;
+o#incr ;;
+o#print ;;
+]]></oc>
+<p>
+Le compilateur signale une erreur si on tente de modifier un attribut
+non modifiable:
+</p>
+<oc error-exc="false"><![CDATA[object
+  val cpt = 0
+  method incr = cpt <- cpt + 1
+end;;]]></oc>
+</subsection>
+
 </section>
 
 <section id="funobject" title="Compatibilité des objets, sous-typage">
@@ -256,7 +288,8 @@ l'attribut ou la méthode dans t'.
 </p>
 <p>
 Voyons quelques exemples en définissant une fonction dont nous spécifions
-le type du paramètre pour qu'il requiert une méthode <ml>m : int -> int</ml>.
+le type du paramètre pour qu'il requiert une méthode <ml>m : int -> int</ml>
+tout en permettant à l'objet passé d'avoir d'autres méthodes:
 </p>
 <oc><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc>
 <p>Voyons maintenant la compatibilité avec différents objets:</p>
