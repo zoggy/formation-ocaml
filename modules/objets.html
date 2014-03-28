@@ -567,11 +567,58 @@ de l'objet original.
 </subsection>
 
 <subsection id="classexercises" title="Exercices">
-<exercice id="exostack" title="Implémentation d'un pile">
+<exercice id="exostack" title="Implémentation d'un pile d'entiers">
+<p>
+Implémenter une pile d'entiers à l'aide d'une classe. L'état de la pile
+sera naturellement dans un attribut (variable d'instance) modifiable.
+Les méthodes permettront d'effectuer les actions suivantes:
+<ml>push : int -> unit</ml>,
+<ml>pop : int option</ml>,
+<ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
+<ml>is_empty : bool</ml>.
+On n'utilisera pas le module <ml>Stack</ml> ;-)
+</p>
+<p>
+Nous implémentons une pile d'entiers car nous verrons le polymorphisme
+plus loin.
+</p>
+<solution>
+<oc-eval><![CDATA[class stack =
+  object
+    val mutable elements = ([] : int list)
+    method push n = elements <- n :: elements
+    method pop =
+      match elements with
+        [] -> None
+      | h :: q -> elements <- q ; Some h
+    method pick =
+      match elements with [] -> None | h :: _ -> Some h
+    method is_empty = elements = []
+  end;;
+]]></oc-eval>
+</solution>
+<oc-eval>
+let stack = new stack ;;
+List.iter stack#push [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+let rec print stack =
+  match stack#pop with
+    None -> assert stack#is_empty
+  | Some n -> print_endline (string_of_int n); print stack
+;;
+print stack;;
+</oc-eval>
 <todo text="à finir"/>
 </exercice>
 
 <exercice id="exostackfun" title="Implémentation d'un pile fonctionnelle">
+<p>Implémenter un pile d'entiers à l'aide d'une classe "fonctionnelle",
+i.e. dont les méthodes retournent un nouvel objet au lieu de faire
+un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
+<ml>push : int -> stack</ml>,
+<ml>pop : (int * stack) option</ml>,
+<ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
+<ml>is_empty : bool</ml>.
+</p>
 <todo text="à finir"/>
 </exercice>
 
