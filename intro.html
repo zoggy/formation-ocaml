@@ -5,7 +5,7 @@
 >
 
 <contents>
-<section counter="false" title="Préambule">
+<section counter="false">
 <p>
 Cette formation est une introduction au langage OCaml (autrefois aussi appelé
 Objective Caml). Une partie du plan de cette formation est basée sur le plan du livre
@@ -37,10 +37,11 @@ approfondir ensuite selon ses besoins.
 flèches indiquant les dépendances: B &#x2192; A indique qu'il est
 recommandé d'avoir suivi le module A avant le module B.
 </p>
+<div class="center">
 <dot defer_="1">
 digraph g {
   rankdir="BT";
-  node [ shape="box", style="filled", fillcolor="lightgrey", color="blue", fontsize=10.0 ];
+  node [ shape="box", style="rounded,filled", fillcolor="lightcyan", color="blue", fontsize=10.0 ];
   intro [ label="<doc-title doc-path="presentation"/>", href="<doc-url doc-path="presentation"/>"] ;
   fonc [ label="<doc-title doc-path="fonctionnelle"/>", href="<doc-url doc-path="fonctionnelle"/>"] ;
   imper [ label="<doc-title doc-path="imperative"/>", href="<doc-url doc-path="imperative"/>"] ;
@@ -60,6 +61,7 @@ digraph g {
   conclusion -> modules ;
 }
 </dot>
+</div>
 </section>
 
 <section counter="false" id="bibliography" title="Bibliographie">
