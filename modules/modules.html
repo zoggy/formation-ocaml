@@ -1,4 +1,6 @@
-<mychapter id="modules" title="Programmation modulaire">
+<module title="Programmation modulaire"
+ocaml-session="modules"
+>
 <p>
 La programmation modulaire est la séparation d'un programme en différents
 <em>modules</em>, définissant chacun des types de données et des fonctions
@@ -44,14 +46,14 @@ son interface et son implémentation.
 <p>
 Voyons un exemple d'implémentation dans un fichier <icode>m.ml</icode>:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 type pair = int * int;;
 let x = 1;;
 let y = 2;;
 let make_pair x y = (x,y);;
 let first (x,_) = x;;
 let second (_,y) = y;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On peut définir une interface pour ce module dans le fichier <icode>m.mli</icode>:
 </p>
@@ -137,19 +139,19 @@ end;;
 <p>
 et l'implémentation dans le fichier <icode>m.ml</icode>:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module N = struct
   type t = int
   let x = 1
   let y = 2
   let foo x = x + 1
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Cependant, il est déjà possible de restreindre leur signature dans la partie
 implémentation, en imposant une contrainte de type dans l'implémentation:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 module N : sig
   type t
   val x : t
@@ -160,7 +162,7 @@ module N : sig
   let y = 2
   let foo x = x + 1
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Ce type de contrainte permet de s'assurer par exemple que certains éléments
 du module <ml>N</ml> ne sont pas utilisés dans la suite du module conteneur
@@ -189,28 +191,28 @@ val y : t * t;;"
 De façon analogue, il est possible de définir des types de modules, c'est-à-dire
 de donner un nom à une signature:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module type Mon_type = sig
   type t
   val x : t
   val foo : t -> t
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 et utiliser ensuite ce type de module comme signature:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 module N2 : Mon_type = struct
   type t = int
   let x = 1
   let y = 2
   let foo x = x + 1
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 En allant plus loin, on peut définir des vues différentes sur un même module, par exemple:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module type Vue1 = sig
   type t
   val create : int -> t
@@ -219,8 +221,8 @@ module type Vue2 = sig
   type t
   val read : t -> int
 end;;
-]]></ocaml-eval>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+]]></oc-eval>
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 module Base = struct
   type t = string
   let create = string_of_int
@@ -230,7 +232,7 @@ module M1 = (Base : Vue1 with type t = Base.t);;
 module M2 = (Base : Vue2 with type t = Base.t);;
 M2.read (M1.create 42);;
 M1.read (M1.create 63);;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsection>
 </section>
 
@@ -258,7 +260,7 @@ politiques de priorité, de façon transparente pour le code de gestion du guich
 <p>
 Nous commençons donc par définir le type de la file d'attente:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module type QueueType = sig
   type 'a t
   exception Empty
@@ -266,12 +268,12 @@ module type QueueType = sig
   val pop : 'a t -> 'a
   val push : 'a -> 'a t -> unit
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Ensuite, nous définissons notre module de guichet, prenant en paramètre
 une file d'attente:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module Guichet = functor (Q : QueueType) -> struct
   let create = Q.create
   let add = Q.push
@@ -286,13 +288,13 @@ module Guichet = functor (Q : QueueType) -> struct
     | None -> ()
     | Some doc -> f doc; handle_all f guichet
 end;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Nous ne pouvons pas encore utiliser notre module, puisqu'il s'agit d'un foncteur:
 </p>
-<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+<oc-eval error-exc="false" toplevel="true"><![CDATA[
 Guichet.create();;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Nous allons simuler notre guichet en utilisant d'abord une file FIFO. La signature
 demandée pour le module en paramètre est un sous-ensemble de la signature du module
@@ -300,28 +302,28 @@ demandée pour le module en paramètre est un sous-ensemble de la signature du m
 file d'attente. En appliquant ce module à notre foncteur, nous obtenons un
 guichet "premier arrivé, premier servi":
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 module Guichet_FIFO = Guichet(Queue);;
 let fifo = Guichet_FIFO.create ();;
 List.iter (fun n -> Guichet_FIFO.add n fifo) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
 Guichet_FIFO.handle_all (fun n -> print_int n; print_newline ()) fifo;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Nous pouvons également modéliser la file d'attente par une pile; dans ce cas,
 le premier servi est le dernier arrivé:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 module Guichet_pile = Guichet(Stack);;
 let pile = Guichet_pile.create ();;
 List.iter (fun n -> Guichet_pile.add n pile) [ 1 ; 2 ; 3 ; 4 ; 5 ];;
 Guichet_pile.handle_all (fun n -> print_int n; print_newline ()) pile;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Nous pouvons même faire un foncteur permettant de construire et
 tester un module de guichet, car les deux codes de tests ci-dessus
 sont les mêmes à la différence du guichet:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module Test (Q : QueueType) = struct
   module G = Guichet(Q)
   let guichet = G.create ()
@@ -330,20 +332,20 @@ module Test (Q : QueueType) = struct
 end;;
 module Foo = Test(Queue);;
 module Foo = Test(Stack);;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On remarque que le compilateur impose correctement que les fonctions passées en
 paramètres aux fonctions <ml>handle_one</ml> et <ml>handle_all</ml> prennent en paramètres
 des valeurs du type des valeurs de la file d'attente:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 Guichet_FIFO.handle_one print_string fifo;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On aurait pu masquer la représentation interne du guichet en utilisant une signature
 et en ajoutant un type de guichet:
 </p>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 module type GuichetAbstType = sig
   type 'a t
   val create : unit -> 'a t
@@ -351,21 +353,21 @@ module type GuichetAbstType = sig
   val handle_one : ('a -> unit) -> 'a t -> unit
   val handle_all : ('a -> 'b) -> 'a t -> unit
 end;;
-]]></ocaml-eval>
-<ocaml-eval toplevel="true"><![CDATA[
+]]></oc-eval>
+<oc-eval toplevel="true"><![CDATA[
 module GuichetAbst (Q : QueueType) : GuichetAbstType = struct
   type 'a t = 'a Q.t
   include Guichet(Q)
 end;;
 module Foo=GuichetAbst(Stack);;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On ne peut plus maintenant accéder à la représentation de la file depuis l'extérieur de
 la modélisation du guichet:
 </p>
-<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+<oc-eval error-exc="false" toplevel="true"><![CDATA[
 Stack.pop (Foo.create ());;
-]]></ocaml-eval>
+]]></oc-eval>
 </section>
 
 <section id="modother" title="Déclarations locales de modules, modules anonymes">
@@ -373,15 +375,15 @@ Stack.pop (Foo.create ());;
 On peut déclarer localement un module, c'est-à-dire le construire en réduisant sa visibilité
 à une expression:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let module Bar = struct let x = 1 end in Bar.x + 1;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Le module <ml>Bar</ml> n'est accessible que dans l'expression située après le <ml>in</ml>:
 </p>
-<ocaml-eval error-exc="false" toplevel="true"><![CDATA[
+<oc-eval error-exc="false" toplevel="true"><![CDATA[
 Bar.x;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Il est également possible de construire des modules anonymes (sans nom). C'est
 souvent le cas lors de l'application d'un foncteur prenant un petit module en
@@ -389,9 +391,9 @@ paramètre. Dans ce cas, on utilise directement la syntaxe <ml>struct ... end</m
 plutôt que la syntaxe <ml>module M = ...</ml> et l'utilisation de <ml>M</ml> dans
 la suite:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 module IntSet =
   Set.Make (struct type t = int let compare = Pervasives.compare end);;
-]]></ocaml-eval>
+]]></oc-eval>
 </section>
-</mychapter>
+</module>

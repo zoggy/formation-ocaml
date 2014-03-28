@@ -1,4 +1,6 @@
-<mychapter id="progimperative" title="Programmation impérative">
+<module title="Programmation impérative"
+ocaml-session="imperative"
+>
 <p><cmp>À la différence de la programmation fonctionnelle où on calcule une valeur
 par l'application d'une fonction à ses arguments sans se soucier du déroulement
 des opérations, la programmation impérative est plus proche de la représentation
@@ -49,7 +51,7 @@ donc aura plus de chances d'être correct (ou, tout du moins, plus rapidement mi
 physiquement modifiables, des structures de contrôle de l'exécution des programmes et une
 bibliothèque d'entrées-sorties dans un style impératif.</cmp>
 </p>
-<section id="imper:structs" title="Structures de données physiquement modifiables">
+<section id="structs" title="Structures de données physiquement modifiables">
 <p>
 La programmation impérative nécessite des structures de données modifiables. OCaml en
 est pourvu et nous les détaillons ci-dessous.
@@ -68,15 +70,15 @@ que le type <ml>'a list</ml>.
 La construction d'un vecteur se fait en listant, séparées par des '<ml>;</ml>',
 les valeurs du vecteur entre <ml>[|</ml> et <ml>|]</ml>:
 </p>
-<ocaml-eval toplevel="true">let tab = [| 1 ; 2 ; 3 ; 4 |];;</ocaml-eval>
+<oc-eval toplevel="true">let tab = [| 1 ; 2 ; 3 ; 4 |];;</oc-eval>
 <p id="lmkmlskdfmskfml">
 Il est également possible d'utiliser des fonctions du module <moduledoc name="Array"/>
 pour créer des vecteurs:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let tab = Array.create 10 0;;
 let tab = Array.init 10 (fun i -> i * 2);;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Les indices d'un vecteur de longueur n vont de 0 à n-1.
 </p>
@@ -88,30 +90,30 @@ On peut accéder de deux façons équivalentes à un élément d'un vecteur:
 </p>
 <ul>
 <li>soit en utilisant la fonction <ml>Array.get : 'a array -> int -> 'a</ml>:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 Array.get tab 0;;
 Array.get tab 3;;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 <li>soit en utilisant la syntaxe <ml>vecteur.(indice)</ml>:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 tab.(0);;
 tab.(3);;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 </ul>
 <p>
 L'accès à un élément d'un vecteur de longueur n en utilisant un indice en
 dehors de la plage 0..n-1 déclenche la levée d'une exception <ml>Invalid_argument</ml>:
 </p>
-<ocaml-eval toplevel="true" error-exc="false">tab.(42);;</ocaml-eval>
+<oc-eval toplevel="true" error-exc="false">tab.(42);;</oc-eval>
 <p>
 On peut bien sûr également utiliser le filtrage sur les vecteurs:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 match Array.sub tab 0 2 with
   [| _ ; x |] when x > 2 -> false
 | [| 0 ; 2 |] -> true
 | _ -> false;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 
 <subsubsection id="vectors:mod" title="Modification">
@@ -120,17 +122,17 @@ Il existe deux manières équivalentes de modifier un élément d'un vecteur:
 </p>
 <ul>
 <li>soit en utilisant la fonction <ml>Array.set : 'a array -> int -> 'a -> unit</ml>:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 tab.(0);;
 Array.set tab 0 42;;
 tab.(0);;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 <li>soit en utilisant la syntaxe <ml>vecteur.(indice) &lt;- valeur</ml>:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 tab.(1);;
 tab.(1) <- 42;;
 tab.(1);;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 </ul>
 <p>
 Comme pour l'accès, et en général toutes les fonctions agissant sur les vecteurs,
@@ -143,12 +145,12 @@ invalide (en dehors des bornes).
 D'autres opérations sur les vecteurs sont disponibles via des fonctions prédéfinies
 du module <moduledoc name="Array"/>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 Array.length tab (* longueur *) ;;
 Array.sub tab 3 4 (* extraction d'un sous-vecteur de longueur 4 a partir de l'indice 3 *);;
 Array.to_list tab (* creation d'une liste a partir des elements du vecteur *);;
 Array.map string_of_int tab (* map sur les elements du vecteur *) ;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On consultera la documentation du module <moduledoc name="Array"/>.
 </p>
@@ -167,7 +169,7 @@ de caractères (le type <ml>string</ml> n'est pas unifiable au type <ml>char arr
 <p>
 On crée une chaîne de caractères en la mettant entre guillemets <ml>"</ml>:
 </p>
-<ocaml-eval toplevel="true">"hello world !";;</ocaml-eval>
+<oc-eval toplevel="true">"hello world !";;</oc-eval>
 <p>
 Le caractère <ml>\</ml> est utilisé pour indiquer des caractères spéciaux:
 </p>
@@ -178,18 +180,18 @@ fin de la chaîne,</li>
 <li><ml>\r</ml> indique un retour charriot,</li>
 <li><ml>\t</ml> indique une tabulation.</li>
 </ul>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
-]]></ocaml-eval>
+]]></oc-eval>
 <p id="lskdfmldskmgksdmgl">
 Il est également possible d'utiliser des fonctions créant des chaînes:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let chaine = String.make 10 'a';;
 string_of_int 42;;
 string_of_float 84.;;
 Printexc.to_string Not_found (* une chaine à partir d'une exception *);;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 
 <subsubsection id="strings:access" title="Accès">
@@ -199,15 +201,15 @@ de deux manières:
 </p>
 <ul>
 <li>soit en utilisant la fonction <ml>String.get : string -> int -> char</ml>:
-<ocaml-eval toplevel="true">String.get chaine 0;;</ocaml-eval></li>
+<oc-eval toplevel="true">String.get chaine 0;;</oc-eval></li>
 <li>soit en utilisant la syntaxe <ml>chaine.[indice]</ml>:
-<ocaml-eval toplevel="true">chaine.[0];;</ocaml-eval></li>
+<oc-eval toplevel="true">chaine.[0];;</oc-eval></li>
 </ul>
 <p>
 Les indices pour une chaîne de longueur n vont de 0 à n-1. En dehors de ces bornes,
 un accès déclenche là encore une exception <ml>Invalid_argument</ml>:
 </p>
-<ocaml-eval toplevel="true" error-exc="false">chaine.[10];;</ocaml-eval>
+<oc-eval toplevel="true" error-exc="false">chaine.[10];;</oc-eval>
 </subsubsection>
 
 <subsubsection id="strings:mod" title="Modifications">
@@ -216,18 +218,18 @@ Il existe deux manières équivalentes de modifier un caractère d'une chaîne:
 </p>
 <ul>
 <li>soit en utilisant la fonction <ml>String.set : string -> int -> char -> unit</ml>:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 chaine.[0];;
 String.set chaine 0 'b';;
 chaine.[0];;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 <li>soit en utilisant la syntaxe <ml>chaine.[indice] &lt;- valeur</ml> avec <ml>valeur</ml>
 de type <ml>char</ml> (caractère):
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 chaine.[1];;
 chaine.[1] <- 'c';;
 chaine.[1];;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 </ul>
 </subsubsection>
 
@@ -236,12 +238,12 @@ chaine.[1];;
 D'autres opérations sur les chaînes sont offertes par les fonctions du module
 <moduledoc name="String"/>. Par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 String.length chaine (* longeur d'une chaine *);;
 String.sub "hello world" 3 4 (* extraction de sous-chaine, comme pour Array.sub *);;
 let animaux = [ "chat"; "chien"; "perroquet"; "lama"; "renard" ];;
 String.concat ", " animaux (* concatenation d'une liste de chaines en utilisant un separateur *);;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Pour d'autres fonctions, on consultera la documentation du module
 <moduledoc name="String"/>.
@@ -251,29 +253,29 @@ Pour d'autres fonctions, on consultera la documentation du module
 
 <subsection id="mutrecords" title="Champs modifiables des enregistrements">
 <p>
-Nous avons vu précédemment (cf. <doc href="#records"/>) comment définir des types enregistrements.
+Nous avons vu précédemment (cf. <doc href="fonctionnelle#records"/>) comment définir des types enregistrements.
 Il est possible de spécifier un ou plusieurs champs comme étant modifiables, à l'aide du
 mot-clé <ml>mutable</ml>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 type mon_record = {
   champ1 : int ;
   mutable champ2 : int ;
   };;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 La création et le filtrage de valeurs de ce type ne changent pas, mais il est maintenant possible
 de modifier le champ <ml>champ2</ml> de ces valeurs:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let r = { champ1 = 0 ; champ2 = 1 };;
 r.champ2 <- 2;;
 r;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Par contre, tenter de modifier le champ <ml>champ1</ml> provoque une erreur:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[r.champ1 <- 3;;]]></ocaml-eval>
+<oc-eval toplevel="true" error-exc="false"><![CDATA[r.champ1 <- 3;;]]></oc-eval>
 </subsection>
 
 <subsection id="refs" title="Références">
@@ -288,7 +290,7 @@ sur une valeur par la fonction <ml>ref</ml>. La valeur référencée peut être 
 fonction préfixe <ml>(!)</ml>.
 La fonction modifiant le contenu d'une référence est la fonction infixe <ml>(:=)</ml>.</cmp>
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let x = ref 3 (* creation et initialisation *);;
 x ;;
 !x (* dereferencement *);;
@@ -296,7 +298,7 @@ x := 4 ;;
 !x ;;
 x := !x+1 (* affectation *);;
 !x ;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Remarque: Là encore, pour plus de sûrété, il n'est pas syntaxiquement possible de
 créer une référence sans l'initialiser à une valeur, contrairement au langage C.
@@ -332,11 +334,11 @@ Les problèmes rencontrés par ces fonctions sont signalés par une levée d'exc
 <ml>Sys_error</ml> avec un message explicite, par exemple lorsqu'un fichier à ouvrir en lecture
 n'existe pas, quand les droits ne sont pas suffisants, etc.
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 let ic = open_in "/etc/passwd";;
 let oc = open_out "/tmp/foo";;
 let ic = open_in "/bar";;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Pour fermer un fichier en lecture ou en écriture, on utilisera respectivement
 les fonctions <ml>close_in</ml> et <ml>close_out</ml>.
@@ -354,7 +356,7 @@ Voici quelques fonctions de lecture sur un canal de type <ml>in_channel</ml>.
 D'autres fonctions sont disponibles dans la
 <ext-a href="&lt;urldocinputfuns/&gt;">bibliothèque de base</ext-a>.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let first_line = input_line ic (* lecture d'une ligne *);;
 let second_line = input_line ic (* lecture d'une ligne *);;
 seek_in ic 0 (* retour au debut du fichier *);;
@@ -366,7 +368,7 @@ let nb_read = input ic buffer 0 buffer_size
      de l'indice 0 *);;
 String.sub buffer 0 nb_read;;
 close_in ic;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsection>
 
 <subsection id="inout:write" title="Ecriture">
@@ -384,20 +386,20 @@ conserver des performances suffisantes lors de multiples petites écritures, san
 à s'en préoccuper. La fermeture d'un canal provoque la vidange du tampon, de même
 que la fonction <ml>flush</ml>.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 output_string oc second_line (* ecriture d'une chaine sur le canal *);;
 flush oc (* forcer l'ecriture du contenu du tampon dans le fichier *);;
 output oc buffer 0 nb_read (* ecriture d'un certain nombre de caracteres depuis une chaine *);;
 close_out oc;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsection>
 </section>
 
-<section id="imper:control" title="Structures de contrôle">
+<section id="control" title="Structures de contrôle">
 <p>
 Nous présentons ci-dessous la séquence d'instructions et les boucles, structures de contrôles
 de base pour la programmation impérative. La structure conditionnelle a déjà été présentée
-dans le cadre de la programmation fonctionnelle (cf. <doc href="#conditionnelle"/>).
+dans le cadre de la programmation fonctionnelle (cf. <doc href="fonctionnelle#conditionnelle"/>).
 </p>
 <subsection id="sequence" title="Séquence">
 <p>
@@ -412,57 +414,57 @@ que la valeur retournée par l'expression n'est pas utilisée. Le type de la sé
 sa valeur sont ceux de l'<stxid>expression_2</stxid>. Enfin, l'<stxid>expression_1</stxid> est bien sûr
 évaluée avant l'<stxid>expression_2</stxid>.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 print_endline chaine;
 String.sub buffer 0 nb_read;;
 1 + 1 ; print_endline chaine;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On peut bien sûr composer les séquences:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 print_endline chaine ;
 print_endline (String.sub buffer 0 10);
 print_endline (String.sub buffer 10 20);
 1 + 1;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 La fonction <ml>ignore</ml> permet d'indiquer explicitement qu'une valeur
 de retour est volontairement abandonnée:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[ignore(1+1); 42;;]]></ocaml-eval>
+<oc-eval toplevel="true"><![CDATA[ignore(1+1); 42;;]]></oc-eval>
 <p>
 Si la valeur de la première expression est de type fonctionnel, le compilateur émet un
 message d'avertissement différent pour indiquer que la fonction n'a peut-être été que
 partiellement appliquée, par exemple si un paramètre a été oublié:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[let f x y = x + y;;
+<oc-eval toplevel="true"><![CDATA[let f x y = x + y;;
 f 1 ; 42;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Attention aux précédences des constructions !
 </p>
-<ocaml-eval id="iftrue" toplevel="true"><![CDATA[
+<oc-eval id="iftrue" toplevel="true"><![CDATA[
 if true then
   print_endline "c'est vrai";
   print_endline "c'est vrai";;
 if false then
   print_endline "c'est vrai";
   print_endline "c'est vrai";;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Que se passe-t-il donc ? En fait, la branche <ml>then</ml> prend fin après le point virgule
 situé derrière le premier <ml>print_endline "c'est vrai"</ml>. C'est donc équivalent à
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 (if false then print_endline "c'est vrai");
 print_endline "c'est vrai";;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Il faut donc utiliser les parenthèses <ml>(</ml> et <ml>)</ml> ou bien les mots-clés
 <ml>begin</ml> et <ml>end</ml> pour forcer la séquence à être dans la branche <ml>then</ml>:
 </p>
-<ocaml-eval id="iftrue2" toplevel="true"><![CDATA[
+<oc-eval id="iftrue2" toplevel="true"><![CDATA[
 if true then
   (
    print_endline "c'est vrai";
@@ -473,7 +475,7 @@ if false then
    print_endline "c'est vrai";
    print_endline "c'est vrai"
   );;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsection>
 
 <subsection id="loops" title="Boucles">
@@ -508,9 +510,9 @@ L'<stxid>expression_3</stxid> doit être de type <ml>unit</ml> car sa valeur est
 dans la boucle n'a de sens que si elle a un effet de bord. Si l'expression n'est pas de type
 <ml>unit</ml>, le compilateur émet un avertissement.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 for i = 10 downto 1 do print_int i; print_string " " done; flush stdout;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 
 <subsubsection id="loopwhile" title="Boucle while">
@@ -525,18 +527,18 @@ en une valeur de type <ml>unit</ml>.
 Comme pour le corps de la boucle <ml>for</ml>, l'<stxid>expression_2</stxid> doit être de type
 <ml>unit</ml>, sinon le compilateur émet un avertissement.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let compteur = ref 1;;
 while !compteur <= 10 do
   print_int !compteur; print_string " ";
   incr compteur (* equivalent à compteur := !compteur + 1 *)
 done;;
 flush stdout;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 </subsection>
 </section>
-<section id="imper:exos" title="Exercices">
+<section id="exos" title="Exercices">
 <exercice id="printargs" title="Echo">
 <p>
 Ecrire un programme qui affiche ses arguments, à la manière de la commande UNIX <icode>echo</icode>.
@@ -547,12 +549,12 @@ On compilera le programme grâce à la commande
 </p>
 <sh>ocamlc -o myecho myecho.ml</sh>
 <solution>
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 for i = 1 to Array.length Sys.argv - 1 do
   print_string Sys.argv.(i); print_string " "
 done;;
 print_newline();;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
 </exercice>
 
@@ -563,7 +565,7 @@ caractères, la copie et remplace chaque caractère par un blanc, tant qu'elle
 n'a pas rencontré la lettre 's'.
 </p>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let blank str =
   let str = String.copy str in
   let i = ref 0 in
@@ -576,14 +578,14 @@ let blank str =
   done;
   str
 ;;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
 <p>
 Tester ensuite la fonction, par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[let str = "coucous_royal";;
+<oc-eval toplevel="true"><![CDATA[let str = "coucous_royal";;
 blank str;;
-]]></ocaml-eval>
+]]></oc-eval>
 </exercice>
 
 <exercice id="matricesym" title="Test de symétrie de matrice">
@@ -593,19 +595,19 @@ On souhaite écrire une fonction prenant en paramètre une matrice de type
 est symétrique ou non. On suppose que la matrice est carrée. On utilisera les matrices
 <ml>mat1</ml> et <ml>mat2</ml> définies ci-dessous pour tester:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 (* matrice symétrique: *)
 let mat1 = [| [| 0 ; 1 ; 2 |] ; [| 1 ; 5 ; 10 |] ; [| 2 ; 10 ; 8 |] |];;
 let init _ = Random.int 10 ;;
 (* matrice non symétrique *)
 let mat2 = [| Array.init 3 init ; Array.init 3 init ; Array.init 3 init |];;
 mat2.(0).(1) <- - mat2.(1).(0);;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On commence par écrire une fonction <ml>is_sym_imper</ml> impérative.
 </p>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let is_sym_imper mat =
   let len = Array.length mat in
   let res = ref true in
@@ -618,13 +620,13 @@ let is_sym_imper mat =
 ;;
 is_sym_imper mat1;;
 is_sym_imper mat2;;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
 <p>
 On donnera ensuite une version fonctionnelle <ml>is_sym_fun</ml>.
 </p>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let is_sym_fun mat =
   let len = Array.length mat in
   let rec iterj i j =
@@ -639,8 +641,8 @@ let is_sym_fun mat =
 ;;
 is_sym_fun mat1;;
 is_sym_fun mat2;;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
 </exercice>
 </section>
-</mychapter>
+</module>

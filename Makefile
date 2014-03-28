@@ -1,18 +1,18 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-STOG_OPTIONS=--default-lang fr -v -v  -v -v -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing --plugin $(PLUGIN)
+STOG_OPTIONS=--default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.dot --plugin $(PLUGIN)
 MORE_OPTIONS=
 
-EXERCICES=count_words.cmo \
-	count_words_dict.cmo \
-	diff_words.cmo \
-	exercice_arg.cmo \
-	lstmp.cmo \
-	mon_module.cmo \
-	mon_module2.cmo \
-	printenv.cmo \
-	words.cmo
+EXERCICES=codes/count_words.cmo \
+	codes/count_words_dict.cmo \
+	codes/diff_words.cmo \
+	codes/exercice_arg.cmo \
+	codes/lstmp.cmo \
+	codes/mon_module.cmo \
+	codes/mon_module2.cmo \
+	codes/printenv.cmo \
+	codes/words.cmo
 
 PLUGIN=stog_course.cmxs
 
@@ -25,7 +25,8 @@ build: $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 clean:
 	rm -f $(PLUGIN)
 	rm -f $(BLOG_EXAMPLES)
-	rm -f *.cm? posts/*.cm?
+	rm -f *.cm? posts/*.cm? codes/*.cm?
+	rm -f *.o posts/*.o codes/*.o
 	rm -fr .stog/cache
 
 style:
@@ -57,4 +58,4 @@ posts/date_du_jour: posts/date_du_jour.ml
 	ocamlopt -o $@ unix.cmxa $^
 posts/code_morse: posts/code_morse.ml
 	ocamlopt -o $@ $^
-	
+

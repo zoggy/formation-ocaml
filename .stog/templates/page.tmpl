@@ -21,9 +21,20 @@
     <if next-path=""><main_/><div class="navright"><doc href="&lt;next-path/&gt;"/></div></if>
   </div>
 </if>
+<if doc-type="module"><div class="navbar"><doc href="intro"/></div></if>
 <if doc-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><doc-title/></div></if>
 <if entete=""><span/><p class="alert alert-info"><entete/></p></if>
-<div id="doc-body"><doc-body/></div>
+<div id="doc-body">
+<if doc-type="module">
+  <main_>
+    <prepare-notes><prepare-toc depth="2"><toc>Table des matières</toc><doc-body/></prepare-toc>
+    <hr width="100%"/>
+    <notes/>
+    </prepare-notes>
+  </main_>
+  <doc-body/>
+</if>
+</div>
 <if doc-type="post"><div class="comments">
 <div>
 <div class="doc-keywords">

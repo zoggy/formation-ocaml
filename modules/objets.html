@@ -1,18 +1,8 @@
-<page title="Programmation Orientée Objets en OCaml"
+<module title="Programmation Orientée Objets en OCaml"
 with-contents="true"
+ocaml-session="objets"
 >
-<stx foo=""><tt><contents/></tt></stx>
-<centerstx id="" foo="">
-<if id=""><pre class="syntax"><contents/></pre><pre id="&lt;id/&gt;"><contents/></pre></if></centerstx>
-<stxid foo=""><em><contents/></em></stxid>
-
-<oc toplevel="true" session="objects" error-exc="true">
-<ocaml-eval defer_="1" toplevel="true" error-exc="&lt;error-exc/&gt;"><contents/></ocaml-eval>
-</oc>
 <contents>
-<prepare-toc>
-<toc>Table des matières</toc>
-
 <section counter="false" id="preambule" title="Préambule">
 <p>Ce document n'est <strong>pas</strong> une introduction au
 paradigme de la programmation objets, mais présente la
@@ -35,7 +25,7 @@ une valeur du type de la classe.
 </p>
 <p>
 Comme les autres types, les types de classes peuvent également
-être paramétrés (cf. <doc href="intro_ocaml#fun:decltypes"/>).
+être paramétrés (cf. <doc href="fonctionnelle#decltypes"/>).
 </p>
 <p>
 La notion de type pour les classes s'accompagne de la notion
@@ -73,44 +63,44 @@ méthodes, contraintes de types,
 ainsi qu'un éventuel traitement à effectuer à l'initialisation.
 </p>
 <p>Le code suivant déclare un objet "vide", sans attribut ni rien:</p>
-<oc>object end ;;</oc>
+<oc-eval>object end ;;</oc-eval>
 
 <p>Le code suivant crée un objet avec une méthode <ml>add : int -> int</ml>,
 et un attribut non modifiable <ml>foo : int</ml> initialisé à <ml>1</ml>:
 </p>
-<oc>object
+<oc-eval>object
     val foo = 1
     method add x = x + foo
   end;;
-</oc>
+</oc-eval>
 <p>Lors de la création de l'objet, les expressions d'initialisation
 des attributs ne peuvent faire appel aux valeurs d'autres attributs
 de l'objet:
 </p>
-<oc error-exc="false">
+<oc-eval error-exc="false">
 object
     val x = 1
     val y = x + 1
   end
-</oc>
+</oc-eval>
 <p>
 Le code à l'intérieur d'un object peut accéder aux attributs en utilisant
 simplement leur identifiant. Ici nous définissons un attribut <ml>foo</ml>
 et une méthode <ml>foo</ml>. Les attributs et méthodes sont dans deux espaces
 de noms différents. La méthode <ml>foo</ml> utilise l'attribut <ml>foo</ml>:
 </p>
-<oc>object
+<oc-eval>object
     val foo = 1
     method foo = foo
   end
-</oc>
+</oc-eval>
 <p>
 Pour appeler une méthode de l'objet depuis l'intérieur de l'objet,
 il faut donner un nom à l'objet dans lequel on est; cela se fait en indiquant un
 identifiant entre parenthèses après le mot-clé <ml>object</ml>, ici <ml>self</ml>.
 On peut alors appeler la méthode sur l'objet <ml>self</ml>:
 </p>
-<oc><![CDATA[let o =
+<oc-eval><![CDATA[let o =
   object(self)
     (* Ne faîtes pas ça chez vous :-) *)
     method fact n =
@@ -120,7 +110,7 @@ On peut alors appeler la méthode sur l'objet <ml>self</ml>:
           then 1
           else n * self#fact (n-1)
   end;;
-o#fact 5 ;;]]></oc>
+o#fact 5 ;;]]></oc-eval>
 </subsection>
 
 <subsection id="letobject" title="Utilisation d'objets">
@@ -135,26 +125,26 @@ des paramètres:
 <p>Par exemple, nous créons un objet <ml>x</ml> et appelons la méthode
 <ml>as_string</ml> de cet objet:
 </p>
-<oc>let x = object method as_string = "hello world!" end;;
+<oc-eval>let x = object method as_string = "hello world!" end;;
 x#as_string ;;
-</oc>
+</oc-eval>
 <warning id="valsnotaccessible" title="Les attributs ne sont pas accessibles à l'extérieur">
 <p>
 Les attributs d'un objet ne sont pas accessibles depuis l'extérieur de cet objet:
 </p>
-<oc error-exc="false"> let objet = object val x = 3 end;;
+<oc-eval error-exc="false"> let objet = object val x = 3 end;;
 objet#x ;;
 objet.x ;;
-</oc>
+</oc-eval>
 <p>Il est nécessaire de fournir les accesseurs (méthodes d'accès) pour les attributs
 auxquels on permet l'accès depuis l'extérieur de l'objet, c'est-à-dire des
 méthodes se contentant de retourner le contenu d'un attribut. Par convention,
 ces méthodes portent le même nom que l'attribut dont elles renvoient la valeur,
 mais ce n'est pas obligatoire:
 </p>
-<oc error-exc="false"> let objet = object val x = 3 method x = x end;;
+<oc-eval error-exc="false"> let objet = object val x = 3 method x = x end;;
 objet#x ;;
-</oc>
+</oc-eval>
 </warning>
 
 </subsection>
@@ -167,7 +157,7 @@ Ce code est exécuté après initialisation de tous les attributs; il
 peut donc accéder aux valeurs des attributs et appeler des méthodes
 de l'objet (en donnant un nom à l'objet, ici encore <ml>self</ml>).
 </p>
-<oc>let o =
+<oc-eval>let o =
   object(self)
     val message = "hello world!"
     method hello = print_endline message
@@ -175,19 +165,19 @@ de l'objet (en donnant un nom à l'objet, ici encore <ml>self</ml>).
       self#hello
   end;;
 o#hello;;
-</oc>
+</oc-eval>
 </subsection>
 
 <subsection id="mutablefields" title="Attributs mutables">
 <p>
 Par défaut, un attribut n'est pas modifiable. Mais, de la même façon que
-pour <doc href="intro_ocaml#mutrecords">les types enregistrements</doc>,
+pour <doc href="imperative#mutrecords">les types enregistrements</doc>,
 le mot-clé <ml>mutable</ml> permet d'avoir des attributs modifiables par
 le code à l'intérieur de l'objet. La modification d'un attribut
 est réalisée, comme pour les champs d'enregistrements, avec l'opérateur
 <ml>&lt;-</ml>:
 </p>
-<oc><![CDATA[let o =
+<oc-eval><![CDATA[let o =
   object
     val mutable cpt = 0
     method incr = cpt <- cpt + 1
@@ -196,15 +186,15 @@ est réalisée, comme pour les champs d'enregistrements, avec l'opérateur
 o#incr ;;
 o#incr ;;
 o#print ;;
-]]></oc>
+]]></oc-eval>
 <p>
 Le compilateur signale une erreur si on tente de modifier un attribut
 non modifiable:
 </p>
-<oc error-exc="false"><![CDATA[object
+<oc-eval error-exc="false"><![CDATA[object
   val cpt = 0
   method incr = cpt <- cpt + 1
-end;;]]></oc>
+end;;]]></oc-eval>
 </subsection>
 
 </section>
@@ -228,37 +218,37 @@ de la fonction faut <ml>true</ml>, alors la méthode écrire sur la sortie
 d'erreur, sinon la méthode de l'objet retourné écrira sur la sortie
 standard:
 </p>
-<oc>
+<oc-eval>
 let mk_printer err =
   if err then
     object method print msg = prerr_endline ("erreur: "^msg) end
   else
     object method print = print_endline end
 ;;
-</oc>
+</oc-eval>
 <p>Comme attendu, cette fonction prend un booléen et retourne un objet.</p>
 <p>Si par mégarde les deux objets n'ont pas un type compatible, le compilateur
 me le signale, ici en indiquant que les types des méthodes <ml>print</ml>
 ne sont pas compatibles:
 </p>
-<oc error-exc="false">let mk_printer err =
+<oc-eval error-exc="false">let mk_printer err =
   if err then
     object method print msg = prerr_endline ("erreur: "^msg) end
   else
     object method print = print_int end
 ;;
-</oc>
+</oc-eval>
 <p>
 Muni de ma fonction <ml>mk_printer</ml>, je peux créer un objet printer:
 </p>
-<oc>let err_printer = mk_printer true ;;</oc>
+<oc-eval>let err_printer = mk_printer true ;;</oc-eval>
 <p>Je peux ensuite définir une fonction prenant en paramètre un objet
 dont je ne donne pas le type, mais que j'utilise dans le corps de ma fonction:
 </p>
-<oc>let hello pr =
+<oc-eval>let hello pr =
   for i = 1 to 3 do pr#print (string_of_int i) done
 ;;
-</oc>
+</oc-eval>
 <p>Le type inféré pour le paramètre <ml>pr</ml> est un type objet.
 La seule contrainte est qu'il doit posséder une méthode <ml>print : string -> 'a</ml>.
 Les <ml>..</ml> dans le type du paramètre signifient que l'objet peut avoir
@@ -269,15 +259,15 @@ qui compte est la présence d'une méthode <ml>print</ml> avec le type <ml>strin
 Je peux donc logiquement appeler cette fonction en lui passant en argument
 mon objet <ml>err_printer</ml> créé plus haut:
 </p>
-<oc>hello err_printer</oc>
+<oc-eval>hello err_printer</oc-eval>
 <p>Mais je peux également lui passer un objet anonyme créé juste pour un appel:</p>
-<oc>hello (mk_printer false);;
+<oc-eval>hello (mk_printer false);;
 hello (object method foo = 1 method print _ = print_endline "coucou" end);;
-</oc>
+</oc-eval>
 <p>Bien sûr, si l'objet passé en paramètre ne vérifie pas les contraintes
 de type, le compilateur signale une erreur:
 </p>
-<oc error-exc="false">hello (object method print n = string_of_int n end);;</oc>
+<oc-eval error-exc="false">hello (object method print n = string_of_int n end);;</oc-eval>
 <p>
 Pour déterminer la compatibilité de deux types objets, la notion de sous-typage
 est utilisée. On pourra utiliser un objet d'un type t en lieu et place d'un
@@ -291,9 +281,9 @@ Voyons quelques exemples en définissant une fonction dont nous spécifions
 le type du paramètre pour qu'il requiert une méthode <ml>m : int -> int</ml>
 tout en permettant à l'objet passé d'avoir d'autres méthodes:
 </p>
-<oc><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc>
+<oc-eval><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc-eval>
 <p>Voyons maintenant la compatibilité avec différents objets:</p>
-<oc error-exc="false">
+<oc-eval error-exc="false">
 (* objet vide, invalide *)
 test (object end);;
 (* objet valide, exactement le meme type *)
@@ -305,29 +295,33 @@ test (object method m x = x end);;
 (* objet valide: m du bon type et une methode
    supplementaire ne pose pas de probleme *)
 test (object method m x = x + 1 method m2 = "hello" end)
-</oc>
+</oc-eval>
 <p>Ce dernier cas ne passe que parce que le type exigé pour le paramètre
  de la fonction <ml>test</ml> contient <ml>..</ml>, indiquant que les méthodes
  supplémentaires sont acceptées. Sans ces <ml>..</ml>, le dernier cas ne passe
  pas:
 </p>
-<oc error-exc="false"><![CDATA[let test2 (p : < m : int -> int >) = p#m 1;;
+<oc-eval error-exc="false"><![CDATA[let test2 (p : < m : int -> int >) = p#m 1;;
 test2 (object method m x = x + 1 method m2 = "hello" end)
-]]></oc>
+]]></oc-eval>
 <p>Un <em>cast</em> est alors nécessaire pour dépouiller l'objet de sa méthode
 en trop avant de le passer en paramètre. Le <em>cast</em> est réalisé
 avec l'opérateur <ml>:&gt;</ml>:
 </p>
-<oc><![CDATA[let o = object method m x = x + 1 method m2 = "hello" end;;
+<oc-eval><![CDATA[let o = object method m x = x + 1 method m2 = "hello" end;;
 test2 (o :> < m : int -> int >);;
-]]></oc>
+]]></oc-eval>
 <p>Evidemment, dépouiller un objet d'un type t vers un type t' si t n'est
 pas un sous-type de t' provoque une erreur:
 </p>
-<oc error-exc="false"><![CDATA[
+<oc-eval error-exc="false"><![CDATA[
 let o = object method m = string_of_int end;;
 (o :> < m : int -> int >);;
-]]></oc>
+]]></oc-eval>
+</section>
+
+<section id="inheriting" title="Héritage">
+
 </section>
 
 
@@ -339,9 +333,7 @@ let o = object method m = string_of_int end;;
 
 
 
-
-
-<section id="declcl" title="Déclaration de classes">
+<section id="classes" title="Classes">
 <p>
 La déclaration d'une classe prend la forme suivante:
 </p>
@@ -366,9 +358,9 @@ un attribut (<ml>val foo : int</ml>) et une méthode (<ml>method add : int -> in
 <p>Bien sûr, il ne s'agit que d'une définition de classe, nous n'avons encore
 aucune valeur du type associé, i.e. <ml>c1</ml> n'est pas une valeur:
 </p>
-<oc error-exc="false">
+<oc-eval error-exc="false">
 c1;;
-</oc>
+</oc-eval>
 </section>
 
 <section id="instanciate" title="Instanciation de classes">
@@ -378,10 +370,10 @@ créer des objets, qui sont des instances d'une classe, grâce au mot-clé <ml>n
 Nous donnons également chaque fois un paramètre, car la classe en requiert un:
 </p>
 <!--
-<oc>
+<oc-eval>
 let objet1 = new c1 1 ;;
 let objet2 = new c1 2 ;;
-</oc>
+</oc-eval>
 -->
 <p>
 Le toplevel nous indique que les valeurs <ml>objet1</ml> et <ml>objet2</ml> sont
@@ -392,7 +384,7 @@ Nous pouvons également ne pas donner de paramètre lors de l'utilisation de <ml
 Dans ce cas, nous obtenons une valeur fonctionnelle qui, lorsqu'elle sera appliquée
 au paramètre attendu, retournera un objet de la classe instanciée:
 </p>
-<oc>class c2 x y =
+<oc-eval>class c2 x y =
   object
     val x = x
     val y = y
@@ -400,7 +392,7 @@ au paramètre attendu, retournera un objet de la classe instanciée:
   end;;
 let maker = new c2 (** maker est une fonction *) ;;
 let c = maker 1 2 (** on applique la fonction pour obtenir un objet *) ;;
-</oc>
+</oc-eval>
 </section>
 
 <section id="methodcall" title="Appel de méthode">
@@ -411,6 +403,5 @@ let c = maker 1 2 (** on applique la fonction pour obtenir un objet *) ;;
 
 </section>
 
-</prepare-toc>
 </contents>
-</page>
+</module>

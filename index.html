@@ -24,9 +24,8 @@ section-counter="false"
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
-  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
-</if>
-</stog:figure>
+  <block doc-path="&lt;doc-path/&gt;" href="&lt;href/&gt;"/>
+</if></stog:figure>
 
 <stog:warning id="" title="" href="">
 <if href="">
@@ -37,9 +36,8 @@ section-counter="false"
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
-  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
-</if>
-</stog:warning>
+  <block doc-path="&lt;doc-path/&gt;" href="&lt;href/&gt;"/>
+</if></stog:warning>
 
 <stog:exercice id="" title="" href="">
 <if href="">
@@ -50,9 +48,54 @@ section-counter="false"
   <div class="title"><title/></div>
   <div class="contents"><contents/></div>
 </div></block>
-  <block doc-navpath="&lt;doc-navpath/&gt;" href="&lt;href/&gt;"/>
-</if>
-</stog:exercice>
+  <block doc-path="&lt;doc-path/&gt;" href="&lt;href/&gt;"/>
+</if></stog:exercice>
+
+<stog:cmp foo=""><span class="cmp"><contents/></span></stog:cmp>
+
+<stog:stx foo=""><tt><contents/></tt></stog:stx>
+<stog:centerstx id="" foo="">
+<if id=""><pre class="syntax"><contents/></pre><pre id="&lt;id/&gt;"><contents/></pre></if></stog:centerstx>
+<stog:stxid foo=""><em><contents/></em></stog:stxid>
+
+<stog:oc-eval id="" toplevel="true" error-exc="true" session="&lt;ocaml-session/&gt;">
+<ocaml-eval id="&lt;id/&gt;" toplevel="&lt;toplevel/&gt;"
+  error-exc="&lt;error-exc/&gt;" session="&lt;session/&gt;"
+  defer_="1"><contents/></ocaml-eval>
+</stog:oc-eval>
+
+<stog:seemanual href=""><ext-a href="&lt;href/&gt;"><img src="&lt;site-url/&gt;/seemanual.gif" title="Voir le manuel"/></ext-a></stog:seemanual>
+
+<stog:urldoctoplevel>http://caml.inria.fr/pub/docs/manual-ocaml/toplevel.html</stog:urldoctoplevel>
+<stog:urldoctopleveldaocaml>stog:http://www.pps.univ-paris-diderot.fr/Livres/ora/DA-OCAML/book-ora067.html#toc97</stog:urldoctopleveldaocaml>
+<stog:urldococamlc>http://caml.inria.fr/pub/docs/manual-ocaml/comp.html</stog:urldococamlc>
+<stog:urldococamlopt>http://caml.inria.fr/pub/docs/manual-ocaml/native.html</stog:urldococamlopt>
+<stog:urlocamldoc>http://caml.inria.fr/pub/docs/manual-ocaml/ocamldoc.html</stog:urlocamldoc>
+<stog:urlocamlyacc>http://caml.inria.fr/pub/docs/manual-ocaml/lexyacc.html</stog:urlocamlyacc>
+<stog:urlocamlbrowser>http://caml.inria.fr/pub/docs/manual-ocaml/browser.html</stog:urlocamlbrowser>
+<stog:urlocamldep>http://caml.inria.fr/pub/docs/manual-ocaml/depend.html</stog:urlocamldep>
+<stog:urlocamldebug>http://caml.inria.fr/pub/docs/manual-ocaml/debugger.html</stog:urlocamldebug>
+<stog:urlocamlprof>http://caml.inria.fr/pub/docs/manual-ocaml/profil.html</stog:urlocamlprof>
+<stog:urlocamlbuild>http://caml.inria.fr/pub/docs/manual-ocaml-4.00/ocamlbuild.html</stog:urlocamlbuild>
+<stog:urlcamlp5>http://pauillac.inria.fr/~ddr/camlp5</stog:urlcamlp5>
+<stog:urlcamlp4>http://brion.inria.fr/gallium/index.php/Camlp4</stog:urlcamlp4>
+
+<stog:urlrefmanual>http://caml.inria.fr/pub/docs/manual-ocaml/index.html</stog:urlrefmanual>
+<stog:urlcamlsite>http://www.ocaml.org</stog:urlcamlsite>
+<stog:urlcamlsidebar>http://caml.inria.fr/resources/mozilla-sidebar.fr.html</stog:urlcamlsidebar>
+<stog:pervasivesurl><moduledoc name="Pervasives"/></stog:pervasivesurl>
+<stog:urldoccoretypes>http://caml.inria.fr/pub/docs/manual-ocaml/core.html#sec464</stog:urldoccoretypes>
+
+<stog:urldocinputfuns>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#7_Generalinputfunctions</stog:urldocinputfuns>
+<stog:urldocoutputfuns>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#7_Generaloutputfunctions</stog:urldocoutputfuns>
+<stog:urldocindentconseils>http://caml.inria.fr/resources/doc/guides/guidelines.fr.html#indentation</stog:urldocindentconseils>
+<stog:urldoccorecomp>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#6_Comparisons</stog:urldoccorecomp>
+<stog:urldoccoreint>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#6_Integerarithmetic</stog:urldoccoreint>
+<stog:urldoccorebit>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#7_Bitwiseoperations</stog:urldoccorebit>
+<stog:urldoccorefloat>http://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#6_Floatingpointarithmetic</stog:urldoccorefloat>
+
+<stog:solution-label>Réponse</stog:solution-label>
+<stog:sectionning>section,subsection,subsubsection,paragraph</stog:sectionning>
 
 
 <contents>
@@ -87,7 +130,7 @@ compter entre trois et quatre jours.
 
 <section id="supports" title="Accès aux supports">
 <p>
-Le support rédigé est disponible <doc href="intro_ocaml">ici</doc>. La dernière modification date
+Le support rédigé est disponible <doc href="intro">ici</doc>. La dernière modification date
 du 07 octobre 2013.
 </p>
 <p>Des "transparents" sont aussi accessibles:</p>

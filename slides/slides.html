@@ -16,7 +16,7 @@
 <contents
 ><div class="slide" title="&lt;title/&gt;" id="&lt;id/&gt;"
 ><if title=""><dummy_/><if is_section="true"><dummy_/><h1><title/></h1></if></if><contents/>
-<if mapto=""><dummy_/><div class="mapto"><doc href="intro_ocaml#&lt;mapto/&gt;"/></div></if></div>
+<if mapto=""><dummy_/><div class="mapto"><doc href="&lt;mapto/&gt;"/></div></if></div>
 </contents></block>
 </slide>
 
@@ -34,8 +34,8 @@
 </slide>
 </section>
 
-<inc-code id=""><inc href="intro_ocaml#&lt;id/&gt;"/></inc-code>
-<dinc-code id=""><div class="delayed persistent"><inc-code id="&lt;id/&gt;"/></div></dinc-code>
+<inc-code href=""><late-inc href="&lt;href/&gt;"/></inc-code>
+<dinc-code href=""><div class="delayed persistent"><inc-code href="&lt;href/&gt;"/></div></dinc-code>
 
 <ddiv contents="&lt;contents/&gt;"><div class="delayed persistent"><contents/></div></ddiv>
 <dli contents="&lt;contents/&gt;"><li class="delayed persistent"><contents/></li></dli>
@@ -67,7 +67,7 @@
 </ul>
 </section>
 
-<slide id="caracteristiques" title="Caractéristiques" mapto="intro:description">
+<slide id="caracteristiques" title="Caractéristiques" mapto="presentation#description">
 <p>OCaml est:</p>
 <ul>
 <dli>un langage généraliste multi-paradigme: fonctionnel, impératif, objet,</dli>
@@ -83,7 +83,7 @@
 </ul>
 </slide>
 
-<slide id="modes" title="3 modes d'exécution" mapto="intro:eval">
+<slide id="modes" title="3 modes d'exécution" mapto="presentation#eval">
 <ul>
 <dli>interprète: <icode>ocaml</icode>. Comme un shell.
 <sh>$ ocaml</sh>
@@ -101,8 +101,8 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 </ul>
 </slide>
 
-<slide id="extensions_" title="Extensions" mapto="extensions">
-<inc-code id="extensions"/>
+<slide id="extensions_" title="Extensions" mapto="presentation#extensions">
+<inc-code href="presentation#extensions"/>
 </slide>
 
 <section id="progfonc" title="Programmation fonctionnelle">
@@ -116,44 +116,44 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 </ul>
 </section>
 
-<slide id="basetypes" title="Types de base" mapto="basetypes">
+<slide id="basetypes" title="Types de base" mapto="fonctionnelle#basetypes">
 <h2>Entiers</h2>
-<inc-code id="code-ints"/>
+<inc-code href="fonctionnelle#code-ints"/>
 </slide>
 
-<slide id="floats" title="Types de base" mapto="floats">
+<slide id="floats" title="Types de base" mapto="fonctionnelle#floats">
 <h2>Flottants</h2>
-<inc-code id="code-floats"/>
+<inc-code href="fonctionnelle#code-floats"/>
 </slide>
 
-<slide id="booleans" title="Types de base" mapto="booleans">
+<slide id="booleans" title="Types de base" mapto="fonctionnelle#booleans">
 <h2>Booléens</h2>
-<inc-code id="code-booleans"/>
+<inc-code href="fonctionnelle#code-booleans"/>
 </slide>
 
-<slide id="chars" title="Types de base" mapto="chars">
+<slide id="chars" title="Types de base" mapto="fonctionnelle#chars">
 <h2>Caractères</h2>
-<inc-code id="code-chars"/>
+<inc-code href="fonctionnelle#code-chars"/>
 </slide>
 
-<slide id="strings" title="Types de base" mapto="strings">
+<slide id="strings" title="Types de base" mapto="fonctionnelle#strings">
 <h2>Chaînes de caractères</h2>
-<inc-code id="code-strings"/>
+<inc-code href="fonctionnelle#code-strings"/>
 </slide>
 
-<slide id="unit" title="Types de base" mapto="unit">
+<slide id="unit" title="Types de base" mapto="fonctionnelle#unit">
 <h2>Unit</h2>
-<inc-code id="code-unit"/>
+<inc-code href="fonctionnelle#code-unit"/>
 </slide>
 
-<slide id="tuples" title="Types de base" mapto="tuples">
+<slide id="tuples" title="Types de base" mapto="fonctionnelle#tuples">
 <h2>Tuples</h2>
-<inc-code id="code-tuples"/>
+<inc-code href="fonctionnelle#code-tuples"/>
 </slide>
 
-<slide id="lists" title="Types de base" mapto="lists">
+<slide id="lists" title="Types de base" mapto="fonctionnelle#lists">
 <h2>Listes</h2>
-<inc-code id="code-lists"/>
+<inc-code href="fonctionnelle#code-lists"/>
 </slide>
 
 <slide id="noconv" title="Types de base">
@@ -164,131 +164,131 @@ $ ocamlopt -o mon_prog fichier.cmx fichier2.cmx ...</sh>
 </ocaml-eval>
 </slide>
 
-<slide title="Types de base" mapto="fun:comparaisons">
+<slide title="Types de base" mapto="fonctionnelle#comparaisons">
 <h2>Comparaisons</h2>
-<inc-code id="code-comparisons"/>
+<inc-code href="fonctionnelle#code-comparisons"/>
 </slide>
 
-<slide id="conditionnelle" title="Conditionnelle" mapto="conditionnelle">
+<slide id="conditionnelle" title="Conditionnelle" mapto="fonctionnelle#conditionnelle">
 <ocaml>if expression1 then expression2 else expression3
 if expression1 then expression2</ocaml>
-<inc-code id="code-conditionnelle"/>
+<inc-code href="fonctionnelle#code-conditionnelle"/>
 </slide>
 
 
-<slide id="let" title="Déclarations" mapto="fun:decl">
+<slide id="let" title="Déclarations" mapto="fonctionnelle#decl">
 <p>Déclaration globale:</p>
 <ocaml>let ident = expression;;</ocaml>
-<inc-code id="code-declglob"/>
+<inc-code href="fonctionnelle#code-declglob"/>
 
 <ddiv>
 <p>Déclaration locale:</p>
 <ocaml>let ident = expression1 in expression2</ocaml>
-<inc-code id="code-decllocal"/>
+<inc-code href="fonctionnelle#code-decllocal"/>
 </ddiv>
 </slide>
 
-<slide id="letrec" title="Déclarations simultanées" mapto="fun:recdecl">
-<inc-code id="code-declsimul"/>
-<dinc-code id="code-declsimul2"/>
+<slide id="letrec" title="Déclarations simultanées" mapto="fonctionnelle#recdecl">
+<inc-code href="fonctionnelle#code-declsimul"/>
+<dinc-code href="fonctionnelle#code-declsimul2"/>
 </slide>
 
-<slide id="funs" title="Fonctions" mapto="fun:expr">
+<slide id="funs" title="Fonctions" mapto="fonctionnelle#expr">
 <p>Définition:
-<inc-code id="code-funs"/>
+<inc-code href="fonctionnelle#code-funs"/>
 </p>
 <ddiv><p>Application:</p>
-<inc-code id="code-funs2"/>
+<inc-code href="fonctionnelle#code-funs2"/>
 </ddiv>
 <ddiv><p>Application partielle:</p>
-<inc-code id="code-funs3"/>
+<inc-code href="fonctionnelle#code-funs3"/>
 </ddiv>
 </slide>
 
-<slide id="funs2" title="Nommage de fonctions" mapto="fun:expr">
-<inc-code id="code-funs4"/>
+<slide id="funs2" title="Nommage de fonctions" mapto="fonctionnelle#expr">
+<inc-code href="fonctionnelle#code-funs4"/>
 <p>Utilisation:</p>
-<dinc-code id="code-funs5"/>
+<dinc-code href="fonctionnelle#code-funs5"/>
 </slide>
 
 
-<slide id="parenth" title="Place des parenthèses" mapto="fun:parenth">
-<inc-code id="code-parenth"/>
+<slide id="parenth" title="Place des parenthèses" mapto="fonctionnelle#parenth">
+<inc-code href="fonctionnelle#code-parenth"/>
 </slide>
 
-<slide id="closures" title="Fermetures" mapto="fun:closures">
-<inc-code id="code-closures"/>
+<slide id="closures" title="Fermetures" mapto="fonctionnelle#closures">
+<inc-code href="fonctionnelle#code-closures"/>
 </slide>
 
-<slide id="higherorder" title="Fonctions d'ordre supérieur" mapto="fun:higher">
-<inc-code id="code-higher"/>
-<dinc-code id="code-higher2"/>
+<slide id="higherorder" title="Fonctions d'ordre supérieur" mapto="fonctionnelle#higher">
+<inc-code href="fonctionnelle#code-higher"/>
+<dinc-code href="fonctionnelle#code-higher2"/>
 </slide>
 
-<slide id="recur" title="Récursion" mapto="fun:recur">
-<inc-code id="code-recur"/>
-<dinc-code id="code-recur2"/>
-<dinc-code id="code-recur3"/>
+<slide id="recur" title="Récursion" mapto="fonctionnelle#recur">
+<inc-code href="fonctionnelle#code-recur"/>
+<dinc-code href="fonctionnelle#code-recur2"/>
+<dinc-code href="fonctionnelle#code-recur3"/>
 </slide>
 
-<slide id="ex" title="Exercice" mapto="redeflistmap">
-<inc-code id="redeflistmap"/>
+<slide id="ex" title="Exercice" mapto="fonctionnelle#redeflistmap">
+<inc-code href="fonctionnelle#redeflistmap"/>
 </slide>
 
-<slide id="ex2" title="Exercice" mapto="minint">
-<inc-code id="minint"/>
+<slide id="ex2" title="Exercice" mapto="fonctionnelle#minint">
+<inc-code href="fonctionnelle#minint"/>
 </slide>
 
-<slide id="ex3" title="Exercice" mapto="average">
-<inc-code id="average"/>
+<slide id="ex3" title="Exercice" mapto="fonctionnelle#average">
+<inc-code href="fonctionnelle#average"/>
 </slide>
 
-<slide id="patternmatching" title="Filtrage de motif (pattern matching)" mapto="filtrage">
-<inc-code id="patternsyntax"/>
+<slide id="patternmatching" title="Filtrage de motif (pattern matching)" mapto="fonctionnelle#filtrage">
+<inc-code href="fonctionnelle#patternsyntax"/>
 <ddiv><p>Filtrage d'un entier:</p>
-<inc-code id="code-pattern-int"/>
+<inc-code href="fonctionnelle#code-pattern-int"/>
 </ddiv>
 </slide>
 
-<slide id="patternmatching2" title="Filtrage de motif (pattern matching)" mapto="filtrage">
+<slide id="patternmatching2" title="Filtrage de motif (pattern matching)" mapto="fonctionnelle#filtrage">
 <p>Filtrage d'une liste:</p>
-<inc-code id="code-pattern-list"/>
+<inc-code href="fonctionnelle#code-pattern-list"/>
 <ddiv><p>Attention:</p>
-<inc-code id="code-badmatch"/>
+<inc-code href="fonctionnelle#code-badmatch"/>
 </ddiv>
 </slide>
 
-<slide id="patternmatching3" title="Filtrage de motif (pattern matching)" mapto="fun:declfilt">
-<inc-code id="code-declfilt"/>
+<slide id="patternmatching3" title="Filtrage de motif (pattern matching)" mapto="fonctionnelle#declfilt">
+<inc-code href="fonctionnelle#code-declfilt"/>
 </slide>
 
 
-<slide id="ex4" title="Exercice" mapto="palindromlist">
-<inc-code id="palindromlist"/>
+<slide id="ex4" title="Exercice" mapto="fonctionnelle#palindromlist">
+<inc-code href="fonctionnelle#palindromlist"/>
 </slide>
 
-<slide id="types" title="Déclaration de types" mapto="fun:decltypes">
-<inc-code id="code-decltypes"/>
-<dinc-code id="code-decltypes2"/>
-<dinc-code id="code-decltypes3"/>
+<slide id="types" title="Déclaration de types" mapto="fonctionnelle#decltypes">
+<inc-code href="fonctionnelle#code-decltypes"/>
+<dinc-code href="fonctionnelle#code-decltypes2"/>
+<dinc-code href="fonctionnelle#code-decltypes3"/>
 </slide>
 
-<slide id="records" title="Types enregistrements (records)" mapto="records">
-<inc-code id="code-records"/>
+<slide id="records" title="Types enregistrements (records)" mapto="fonctionnelle#records">
+<inc-code href="fonctionnelle#code-records"/>
 </slide>
 
-<slide id="variants" title="Types sommes (variants)" mapto="fun:variants">
-<inc-code id="code-variants"/>
+<slide id="variants" title="Types sommes (variants)" mapto="fonctionnelle#variants">
+<inc-code href="fonctionnelle#code-variants"/>
 <ddiv><p>Création de valeur:</p>
-<inc-code id="code-variants-create"/>
+<inc-code href="fonctionnelle#code-variants-create"/>
 </ddiv>
 <ddiv><p>Filtrage de valeur:</p>
-<inc-code id="code-variants-filt"/>
+<inc-code href="fonctionnelle#code-variants-filt"/>
 </ddiv>
 </slide>
 
-<slide id="ex5" title="Exercice: représentation d'expressions" mapto="fun:variants:exo">
-<inc-code id="exoexpr"/>
+<slide id="ex5" title="Exercice: représentation d'expressions" mapto="fonctionnelle#variants:exo">
+<inc-code href="fonctionnelle#exoexpr"/>
 </slide>
 
 <section id="stdlib" title="Utiliser la bibliothèque standard">
@@ -299,7 +299,7 @@ if expression1 then expression2</ocaml>
 </ul>
 </section>
 
-<slide id="stdlibis" title="La bibliothèque standard" mapto="libs">
+<slide id="stdlibis" title="La bibliothèque standard" mapto="stdlib">
 <p>
 Elle comporte
 </p>
@@ -340,7 +340,7 @@ exceptions de base,</dli>
 <ocaml-eval>open List;; length [ 1 ; 2 ; 3];;</ocaml-eval></dli>
 </ul>
 <ddiv><p>Attention au masquage:</p>
-<inc-code id="code-openwarning"/>
+<inc-code href="stdlib#code-openwarning"/>
 </ddiv>
 </slide>
 
@@ -375,13 +375,13 @@ exception Mon_exception of string * int ;;
 </ocaml-eval></ddiv>
 </slide>
 
-<slide id="tac" title="Exercice" mapto="exotac">
+<slide id="tac" title="Exercice" mapto="stdlib#exotac">
 <ocaml>type 'a option = None | Some of 'a</ocaml>
-<inc-code id="exotac"/>
+<inc-code href="stdlib#exotac"/>
 </slide>
 
-<slide id="words" title="Exercice" mapto="exowords">
-<inc-code id="exowords"/>
+<slide id="words" title="Exercice" mapto="stdlib#exowords">
+<inc-code href="stdlib#exowords"/>
 </slide>
 <!--
 <slide id="next" title="A continuer">
@@ -390,11 +390,11 @@ La suite bientôt...
 -->
 <slide id="missing" title="Ce que nous n'avons pas vu">
 <ul>
-<li><doc href="intro_ocaml#exceptions">Exceptions</doc>,</li>
-<li><doc href="intro_ocaml#fun:polyconst">Polymorphisme et contraintes de type</doc>,</li>
-<li><doc href="intro_ocaml#modules">Modules</doc>,</li>
-<li><doc href="intro_ocaml#progimperative">Programmation impérative</doc>,</li>
-<li><doc href="intro_ocaml#devenv">Les outils de développement</doc>,</li>
+<li><doc href="fonctionnelle#exceptions">Exceptions</doc>,</li>
+<li><doc href="fonctionnelle#polyconst">Polymorphisme et contraintes de type</doc>,</li>
+<li><doc href="modules">Modules</doc>,</li>
+<li><doc href="imperative">Programmation impérative</doc>,</li>
+<li><doc href="env">Les outils de développement</doc>,</li>
 <li>Programmation objet,</li>
 <li>...</li>
 </ul>

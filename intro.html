@@ -1,0 +1,69 @@
+<page title="Introduction à OCaml"
+ bib-files="ocaml.bib"
+ with-contents="true"
+ chapter-counter="false"
+>
+
+<contents>
+<section counter="false" title="Préambule">
+<p>
+Cette formation est une introduction au langage OCaml (autrefois aussi appelé
+Objective Caml). Une partie du plan de cette formation est basée sur le plan du livre
+<cite href="chailloux2000"/>.
+Certains paragraphes sont repris verbatim de cet ouvrage, avec l'accord des auteurs,
+et apparaissent <cmp>ainsi</cmp>.
+</p>
+<p>
+OCaml est un langage très riche offrant de nombreuses possibilités. De plus,
+les différents outils de développement fournis en standard sont très puissants
+et flexibles. Enfin, la bibliothèque standard recouvre beaucoup de domaines
+(interface système, structures de données, parallélisme, interface graphique, ...).
+</p>
+<p>
+Nous nous contenterons de présenter les bases permettant de commencer
+à programmer en OCaml, de façon à nous concenter sur l'essentiel sans
+nous perdre dans les détails. Par exemple, toutes les options de compilation
+ne sont pas explicitées et l'on se reportera au manuel de référence pour
+une utilisation plus poussée. Toutes les bibliothèques ne seront pas
+non plus utilisées dans cette formation.
+</p>
+<p>
+L'objectif de cette formation est
+d'acquérir les bases syntaxiques et sémantiques du langage ainsi que la
+connaissance des bibliothèques et outils de développement disponibles pour
+approfondir ensuite selon ses besoins.
+</p>
+<p>Le graphe suivant montre les modules composant la formation, les
+flèches indiquant les dépendances: B &#x2192; A indique qu'il est
+recommandé d'avoir suivi le module A avant le module B.
+</p>
+<dot defer_="1">
+digraph g {
+  rankdir="BT";
+  node [ shape="box", style="filled", fillcolor="lightgrey", color="blue", fontsize=10.0 ];
+  intro [ label="<doc-title doc-path="presentation"/>", href="<doc-url doc-path="presentation"/>"] ;
+  fonc [ label="<doc-title doc-path="fonctionnelle"/>", href="<doc-url doc-path="fonctionnelle"/>"] ;
+  imper [ label="<doc-title doc-path="imperative"/>", href="<doc-url doc-path="imperative"/>"] ;
+  stdlib [ label="<doc-title doc-path="stdlib"/>", href="<doc-url doc-path="stdlib"/>"] ;
+  modules [ label="<doc-title doc-path="modules"/>", href="<doc-url doc-path="modules"/>"] ;
+  objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
+  env [ label="<doc-title doc-path="env"/>", href="<doc-url doc-path="env"/>"] ;
+  conclusion [ label="<doc-title doc-path="conclusion"/>", href="<doc-url doc-path="conclusion"/>"] ;
+  fonc -> intro ;
+  imper -> fonc ;
+  stdlib -> imper ;
+  modules -> stdlib ;
+  objets -> imper ;
+  env -> intro ;
+  conclusion -> env ;
+  conclusion -> objets ;
+  conclusion -> modules ;
+}
+</dot>
+</section>
+
+<section counter="false" id="bibliography" title="Bibliographie">
+<bibliography/>
+</section>
+</contents>
+</page>

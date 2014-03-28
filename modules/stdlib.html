@@ -1,4 +1,6 @@
-<mychapter id="libs" title="Bibliothèques">
+<module title="Bibliothèques"
+ocaml-session="stdlib"
+>
 <p>
 Comme beaucoup d'autres distributions de compilateurs/langages, OCaml est accompagné
 de bibliothèques. Chaque bibliothèque peut définir de nouveaux types, nouvelles exceptions,
@@ -10,7 +12,7 @@ fonctions d'entrées/sorties à un nombre variable d'arguments (e.g. <ml>printf<
 <p>
 Elles se présentent sous forme de modules incluant éventuellement d'autres modules.
 Nous allons voir ici comment utiliser ces modules, tandis que la définition de nouveaux
-modules est détaillée dans le chapitre <doc href="#modules"/>.
+modules est détaillée dans le chapitre <doc href="modules"/>.
 </p>
 <p>
 Les bibliothèques de la distribution OCaml sont séparées en trois ensembles:
@@ -42,9 +44,9 @@ bibliothèques sur ce système (comme l'interface avec Tcl/Tk).</li>
 Le module <moduledoc name="Pervasives"/> est la bibliothèque préchargée par OCaml lors de la compilation
 ou l'évaluation de programmes, c'est-à-dire que tout se passe comme si en tête de chaque
 fichier de code figurait une instruction
-<ocaml-eval><![CDATA[
+<oc-eval><![CDATA[
 open Pervasives;;
-]]></ocaml-eval>
+]]></oc-eval>
 Les éléments de <moduledoc name="Pervasives"/> sont donc visibles et accessibles sans nécessité
 de les préfixer (on peut faire appel à <ml>compare</ml> au lieu de <ml>Pervasives.compare</ml>).
 La construction <ml>open ...</ml> est présentée dans <doc href="#stdlib"/>.
@@ -109,14 +111,14 @@ Les fonctions entre parenthèses sont utilisables en position infixe.
 <p>
 Quelques exemples:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 "toto" = "tutu";;
 "abc" < "def";;
 10 >= 13 ;;
 compare [1;2] [1;2;3];;
 "toto" = "toto";;
 "toto" == "toto";;
-]]></ocaml-eval>
+]]></oc-eval>
 <seemanual href="&lt;urldoccorecomp/&gt;"/>
 </subsection>
 
@@ -305,12 +307,12 @@ pour rendre tous ses éléments visibles après le <ml>open</ml>.
 Attention, dans ce cas, les éléments du module ouvert masquent les éléments de même nom
 visibles auparavant:
 </p>
-<ocaml-eval id="code-openwarning" toplevel="true" error-exc="false"><![CDATA[
+<oc-eval id="code-openwarning" toplevel="true" error-exc="false"><![CDATA[
 let length x = x + 1;;
 length 10;;
 open List;;
 length 10;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 En général, une bonne pratique est de ne pas ouvrir de module,
 mais de préfixer les éléments par leur nom complet afin de faciliter la lecture du programme.
@@ -359,7 +361,7 @@ de caractères et retournant <ml>true</ml> si c'est un palindrome, <ml>false</ml
 Une chaîne est un palindrome si elle est symétrique (e.g. "radar", "laval").
 </p>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let is_palindrome s =
   let len = String.length s in
   let rec test i =
@@ -370,7 +372,7 @@ let is_palindrome s =
 is_palindrome "nonacecanon";;
 is_palindrome "anna";;
 is_palindrome "baobab";;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
 </exercice>
 
@@ -380,7 +382,7 @@ Ecrire une fonction <ml>tac</ml> qui lit un fichier en paramètre
 et retourne la liste de ses lignes en ordre inverse.
 </p>
 <solution>
-<ocaml-eval toplevel="true">
+<oc-eval toplevel="true">
 let tac file =
   let in_channel = open_in file in
   let rec iter acc =
@@ -396,12 +398,12 @@ let tac file =
    close_in in_channel;
    List.iter print_endline lines
 ;;
-</ocaml-eval>
+</oc-eval>
 </solution>
 <p>Exemple d'appel:</p>
-<ocaml-eval toplevel="true">
+<oc-eval toplevel="true">
 tac "/etc/shells";;
-</ocaml-eval>
+</oc-eval>
 </exercice>
 
 <exercice id="exooptparams" title="Paramètres optionnels">
@@ -419,40 +421,40 @@ et permet de manipuler des valeurs optionnelles.
 On pourra donc utiliser le filtrage pour procéder par cas sur
 la structure de <ml>x</ml>:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let f ?x y = match x with None -> y | Some x -> x + y;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Lors de l'appel d'une telle fonction, on pourra ou non préciser la valeur
 du paramètre optionnel:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 f 4;;
 f ~x: 1 4;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Pour donner une valeur par défaut à un paramètre, on pourrait utiliser la forme
 suivante:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let f ?x =
   let x = match x with None -> 1 | Some x -> x in
   fun y -> x + y;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 On préférera la syntaxe suivante, plus simple et lisible:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let f ?(x=1) y = x + y;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 La façon de préciser la valeur de l'argument lors de l'application de <ml>f</ml> ne change
 pas:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 f 4;;
 f ~x: 2 4;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Ecrire une fonction <ml>list_remove_doubles</ml> prenant en paramètre une liste
 et retournant la même liste mais dans laquelle chaque élément apparaît au plus
@@ -461,7 +463,7 @@ pour savoir si deux éléments sont identiques. Par défaut ce paramètre sera
 la fonction d'égalité polymorphe <ml>(=)</ml>.
 </p>
 <solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let list_remove_doubles ?(pred=(=)) l =
   List.rev
     (List.fold_left
@@ -470,14 +472,14 @@ let list_remove_doubles ?(pred=(=)) l =
       l
     )
 ;;
-]]></ocaml-eval>
+]]></oc-eval>
 </solution>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 list_remove_doubles [ 1 ; 1 ; 3; 2 ; 2; 2 ; 1; 2; 3; 4];;
 let comp_string s1 s2 = String.lowercase s1 = String.lowercase s2;;
 list_remove_doubles ~pred: comp_string
   [ "hello"; "HELlo";"world";"heLLO"; "WorLD"; "!"; "!"; "hello"];;
-]]></ocaml-eval>
+]]></oc-eval>
 </exercice>
 
 <exercice id="exowords" title="Découpage en liste de mots">
@@ -490,21 +492,21 @@ des mots qu'elle contient. Un mot sera composé uniquement des caractères
 Note: Il est possible de filtrer un caractère selon un intervalle de caractères
 donné, grâce à la notation <ml>..</ml>:
 </p>
-<ocaml-eval toplevel="true">
+<oc-eval toplevel="true">
 match 'c' with
   'a'..'z'
 | 'A'..'Z' -> "letter"
 | '0'..'9' -> "number"
 | _ -> "something else"
 ;;
-</ocaml-eval>
+</oc-eval>
 <solution>
 
-<ocaml-eval defer_="1" toplevel="true"><include raw="true" file="./words.ml"/></ocaml-eval>
+<oc-eval defer_="1" toplevel="true"><include raw="true" file="&lt;stog-dir/&gt;/codes/words.ml"/></oc-eval>
 </solution>
-<ocaml-eval defer_="1" toplevel="true"><![CDATA[
+<oc-eval defer_="1" toplevel="true"><![CDATA[
 words "maitre corbeau sur un arbre perche ... par l'odeur alleche...";;
-]]></ocaml-eval>
+]]></oc-eval>
 </exercice>
 
 <subsubsection id="hashtables" title="Tables de hachage">
@@ -537,12 +539,12 @@ contenant les fonctions d'égalité et de hachage et on passe ce module à un
 autre module (<moduledoc name="Hashtbl.Make"/>), afin de construire un nouveau module
 permettant la manipulation de tables de hachage spécialisées par
 les fonctions du module en paramètre. Les modules prenant d'autres modules
-en paramètres sont appelés foncteurs. Ils sont exposés dans la section <doc href="#foncteurs"/>.
+en paramètres sont appelés foncteurs. Ils sont exposés dans la section <doc href="modules#foncteurs"/>.
 </p>
 <p>
 Voici un exemple d'utilisation de table de hachage:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 type person = { name : string ; firstname : string };;
 let users = Hashtbl.create 101;;
 let robert = { name = "Bidochon" ; firstname = "Robert"};;
@@ -555,7 +557,7 @@ Hashtbl.remove users "bidochon" (* robert est demasque *);;
 Hashtbl.find users "bidochon";;
 Hashtbl.remove users "bidochon" (* robert est supprime *);;
 Hashtbl.find users "bidochon";;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Le type de la table <ml>users</ml> à sa création a le type <ml>('_a, '_b) Hashtbl.t</ml>:
 <ml>users</ml> est du type <ml>Hashtbl.t</ml> mais les deux paramètres de type ne sont pas
@@ -563,14 +565,14 @@ encore fixés (on a <ml>`_a</ml> au lieu d'un <ml>`a</ml> qui indiquerait le pol
 ils le seront dès que la suite du programme mettra des contraintes sur ces types.
 On peut d'ailleurs le vérifier maintenant que la table a été utilisée:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 users;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 L'indication <ml>= &lt;abstr&gt;</ml> signifie que le type est abstrait. C'est le cas de beaucoup
 de structures de données prédéfinies: leur représentation interne est masquée et il faut
 donc obligatoirement passer par les fonctions fournies pour manipuler ces structures.
-Cet aspect sera exposé dans la partie sur les modules dans le chapitre <doc href="#modules"/>.
+Cet aspect sera exposé dans la partie sur les modules dans le chapitre <doc href="modules"/>.
 </p>
 
 <exercice id="exowordcount" title="Comptage de mots">
@@ -581,7 +583,7 @@ affiche chaque mot avec son nombre d'apparitions. On pourra utiliser la fonction
 <ml>words</ml> définie dans l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml id ="countwords" defer_="1"><include raw="true" file="./count_words.ml"/></ocaml>
+<ocaml id ="countwords" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/count_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -600,7 +602,7 @@ On peut utiliser la fonction générique
 <ml>Pervasives.compare</ml> comme fonction d'ordre, notamment quand on utilise comme clé
 un type de données prédéfini pour lequel cette fonction a le comportement souhaité:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 module MyKey = struct
   type t = int
   let compare = Pervasives.compare
@@ -614,13 +616,13 @@ MyMap.iter
   (fun key value -> Printf.printf "cle=%d, valeur=%s\n" key value)
   map;;
 flush stdout;;
-]]></ocaml-eval>
+]]></oc-eval>
 <exercice id="exowordcount2" title="Comptage de mots avec un dictionnaire">
 <p>
 Reprendre l'<exercice href="exowordcount"/> en utilisant un dictionnaire.
 </p>
 <solution>
-<ocaml id="countwordsdict" defer_="1"><include raw="true" file="./count_words_dict.ml"/></ocaml>
+<ocaml id="countwordsdict" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/count_words_dict.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -639,7 +641,7 @@ On utilise dans l'exemple ci-dessous le même module <ml>MyKey</ml> que dans
 l'exemple des dictionnaires, pour faire un module de manipulation d'ensembles
 d'entiers:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 Random.self_init();;
 module IntSet = Set.Make(MyKey);;
 let rec f set i =
@@ -652,7 +654,7 @@ Printf.printf "Plus petit element tiré: %d, plus grand: %d\n"
   (IntSet.min_elt set) (IntSet.max_elt set);;
 flush stdout;;
 let sum = IntSet.fold (+) set 0;;
-]]></ocaml-eval>
+]]></oc-eval>
 
 <exercice id="exoset" title="Mots en commun">
 <p id="sfmksdmflkdm">
@@ -661,7 +663,7 @@ sur la sortie standard. On utilisera encore la fonction <ml>words</ml>
 de l'<exercice href="exowords"/>.
 </p>
 <solution>
-<ocaml id="diffwords" defer_="1"><include raw="true" file="./diff_words.ml"/></ocaml>
+<ocaml id="diffwords" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/diff_words.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -697,7 +699,7 @@ bibliothèque standard. Ainsi, les modules définissant un type de données le n
 <p>
 L'ordre des arguments est aussi cohérent. Ces conventions facilitent l'utilisation d'un
 module à la place d'un autre pour changer de structure de données. Nous verrons un exemple
-dans la section sur les foncteurs (section <doc href="#foncteurs"/>).
+dans la section sur les foncteurs (section <doc href="modules#foncteurs"/>).
 </p>
 </subsubsection>
 </subsection>
@@ -724,20 +726,20 @@ des représentations différentes du type <ml>int</ml>:
 Le module <moduledoc name="Printf"/> donne accès aux fonctions équivalentes aux fonctions
 <ml>printf</ml>, <ml>sprintf</ml>, <ml>fprintf</ml>, etc. du langage C. Par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let str = Printf.sprintf "La somme de %d et %d est %d" 1 2 (1+2);;
 let buffer = Buffer.create 256;;
 Printf.bprintf buffer "Le produit de %d et %d donne %d" 4 5 (4*5);;
 Buffer.contents buffer;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Le type des paramètres des fonctions du module <moduledoc name="Printf"/> est
 spécial, pour permettre le passage d'un nombre variable de paramètres en fonctions
 de la chaîne de <em>format</em> donnée:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 Printf.printf;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Comme en C, des fonctions de lecture de valeurs de différents types depuis
 des chaînes sont disponibles, dans le module <moduledoc name="Scanf"/>. Dans l'exemple
@@ -745,10 +747,10 @@ suivant, la fonction en paramètre de <ml>sscanf</ml> prend deux arguments entie
 car la chaîne de format contient deux <ml>%d</ml>. La cohérence de type
 entre la chaîne de format et la fonction données est réalisée par le compilateur:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let str = "1 + 2";;
 let sum = Scanf.sscanf str "%d + %d" (fun a b -> a + b) ;;
-]]></ocaml-eval>
+]]></oc-eval>
 <p>
 Des fonctionnalités de formatage de sortie texte plus élaborées sont disponibles
 dans le module <moduledoc name="Format"/>: définition de marges, retour à la ligne automatique
@@ -778,7 +780,7 @@ fichier <icode>fichier.ml</icode> et on l'exécutera par exemple par la commande
 </p>
 <sh>ocaml fichier.ml -prod 1 2</sh>
 <solution>
-<ocaml defer_="1"><include raw="true" file="./exercice_arg.ml"/></ocaml>
+<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/exercice_arg.ml"/></ocaml>
 </solution>
 </exercice>
 </subsubsection>
@@ -791,13 +793,13 @@ UNIX/Linux/Mac OS X et Windows en fournissant les fonctions
 <ml>current_dir_name</ml>, <ml>parent_dir_name</ml>, <ml>concat</ml>,
 <ml>dirname</ml>, .... Par exemple:
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let file = "/home/foo/file.txt";;
 let dir = Filename.dirname file;;
 let bname = Filename.basename file;;
 Filename.concat dir bname;;
 Filename.check_suffix file "txt";;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 
 <subsubsection id="printexc" title="Gestion des exceptions">
@@ -808,10 +810,10 @@ qui retourne une chaîne pour représenter l'exception ou <ml>Printexc.print</ml
 affiche une exception non rattrapée lors de l'application d'une fonction
 et relève l'exception:
 </p>
-<ocaml-eval toplevel="true" error-exc="false"><![CDATA[
+<oc-eval toplevel="true" error-exc="false"><![CDATA[
 int_of_string "bouh!";;
 Printexc.print int_of_string "bouh!";;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 
 <subsubsection id="gv" title="Contrôle du ramasse-miettes">
@@ -835,14 +837,14 @@ On trouve également dans ce module <ml>Sys.argv</ml> qui est le tableau
 des arguments de la ligne de commande. Comme en C, <ml>Sys.argv.(0)</ml>
 est le nom de la commande lancée.
 </p>
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let old_dir = Sys.getcwd();;
 print_endline old_dir;;
 Sys.chdir "/tmp";;
 print_endline (Sys.getcwd());;
 Sys.command "ls | head -n 3";;
 Sys.chdir old_dir;;
-]]></ocaml-eval>
+]]></oc-eval>
 </subsubsection>
 </subsection>
 
@@ -853,27 +855,27 @@ Quelques autres modules sont indiqués ici à titre informatif:
 <ul>
 <li><moduledoc name="Digest"/> offre des fonctions de calcul de <em>hash</em> utilisant
 l'algorithme MD5:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let md5 = Digest.string (Marshal.to_string robert []);;
 Digest.to_hex md5;;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 <li><moduledoc name="Lazy"/> permet d'utiliser de l'évaluation paresseuse, en
 reportant l'évaluation d'une expression au moment où elle sera nécessaire:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 let f a b () = print_endline "evaluation!"; a + b ;;
 let res = Lazy.lazy_from_fun (f 1 2);;
 Lazy.force res;;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 <li><moduledoc name="Lexing"/> et <moduledoc name="Parsing"/> servent lorsqu'on utilise
-les outils <icode>ocamllex</icode> et <icode>ocamlyacc</icode> (cf. <doc href="#ocamlyacc"/>),</li>
+les outils <icode>ocamllex</icode> et <icode>ocamlyacc</icode> (cf. <doc href="env#ocamlyacc"/>),</li>
 <li><moduledoc name="Random"/> permet la génération pseudo-aléatoire de nombres:
-<ocaml-eval toplevel="true"><![CDATA[
+<oc-eval toplevel="true"><![CDATA[
 Random.self_init()
  (* initialisation en utilisant une source aleatoire de la machine *);;
 Random.int 10000 (* un nombre aleatoire entre 0 et 10000 *) ;;
 Random.int 10000 ;;
 Random.float 1000. ;;
-]]></ocaml-eval></li>
+]]></oc-eval></li>
 </ul>
 </subsection>
 </section>
@@ -925,7 +927,7 @@ en utilisant la bibliothèque Unix. On compilera son programme par la commande
 (si votre programme est dans le fichier <icode>lstmp.ml</icode>).
 </p>
 <solution>
-<ocaml-eval defer_="1"><include raw="true" file="./lstmp.ml"/></ocaml-eval>
+<oc-eval defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lstmp.ml"/></oc-eval>
 </solution>
 </exercice>
 
@@ -937,7 +939,7 @@ Si des arguments sont passés sur la ligne de commande, seul le contenu des vari
 données est affiché. On utilisera la bibliothèque Unix.
 </p>
 <solution>
-<ocaml defer_="1"><include raw="true" file="./printenv.ml"/></ocaml>
+<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/printenv.ml"/></ocaml>
 </solution>
 <p>
 On testera le programme avec les commandes suivantes.
@@ -950,4 +952,4 @@ On testera le programme avec les commandes suivantes.
 </exercice>
 
 </section>
-</mychapter>
+</module>
