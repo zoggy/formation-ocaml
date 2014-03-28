@@ -527,7 +527,7 @@ L'application est totale lorsque le paramètre non optionnel est explicitement d
 </p>
 </subsection>
 
-<subsection id="destructors" title="Desctructeurs">
+<subsection id="destructors" title="Destructeurs">
 <p>
 Il n'y a pas de libération explicite des objets. Ces derniers, comme les
 autres valeurs OCaml, sont désalloués lorsqu'ils deviennent inaccessibles.
@@ -555,7 +555,29 @@ for i = 1 to 3 do
 <p>Nous forçons la récupération des miettes par le <em>garbage collector</em>:</p>
 <oc-eval session="trash">Gc.major ();;</oc-eval>
 </subsection>
+
+<subsection id="funobjects" title="Objets fonctionnels">
+<p>
+On appelle <em>objets fonctionnels</em> les objets qui, plutôt que mettre
+à jour un état interne lors de l'appel d'une méthode, renvoie une copie
+d'eux-mêmes avec éventuellement des modifications des valeurs des attributs
+de l'objet original.
+</p>
+<todo>à finir</todo>
+</subsection>
+
+<subsection id="classexercises" title="Exercices">
+<exercice id="exostack" title="Implémentation d'un pile">
+
+</exercice>
+
+<exercice id="exostackfun" title="Implémentation d'un pile fonctionnelle">
+
+</exercice>
+
+</subsection>
 </section>
+
 
 <section id="classrec" title="Classes mutuellement récursives">
 <p>
@@ -582,7 +604,118 @@ objet_c2#as_string ;;
 
 
 <section id="inheriting" title="Héritage">
-
+<p>
+Une classe ou un objet créé sans classe peuvent hériter d'une classe
+existante. Par contre, il est impossible d'hériter d'un objet créé
+sans classe.
+</p>
+<subsection id="inheritmeca" title="Mécanisme d'héritage">
+<p>
+L'héritage est introduit par le mot-clé <ml>inherit</ml> suivi d'un
+nom de classe et de ses éventuels paramètres. L'exemple suivant,
+d'un classicisme éhonté, définit une classe <ml>point</ml> et,
+héritant de cette dernière, une classe <ml>colored_point</ml>.
+Nous ajoutons des affichages dans les blocs <ml>initializer</ml>
+afin de montrer l'ordre d'initialisation:
+</p>
+<oc-eval><![CDATA[class point ?(x=0) ?(y=0) () =
+  object
+    val mutable x = x
+    val mutable y = y
+    method x = x
+    method y = y
+    method move new_x new_y = x <- new_x ; y <- new_y
+    method as_string = Printf.sprintf "(%d,%d)" x y
+    initializer
+      print_endline (Printf.sprintf "init point with x=%d, y=%d" x y)
+  end;;
+class colored_point ?(color=0x000) ?x ?y () =
+  object(self)
+    inherit point ?x ?y () as super
+    val mutable color = color
+    method color = color
+    method set_color c = color <- c
+    method as_string = Printf.sprintf "%s[%x]" super#as_string color
+    method as_point = (self :> point)
+    initializer
+      print_endline (Printf.sprintf "init colored_point with x=%d, y=%d, color=%x" x y color)
+  end;;
+let origin = new point () ;;
+let colored_origin = new colored_point ~color: 0xa00 () ;;
+origin#as_string ;;
+colored_origin#as_string ;;
+colored_origin#as_point#as_string ;;
+]]></oc-eval>
+<p>
+Le champ <ml>inherit point ?x ?y () as super</ml> indique que la classe
+<ml>colored_point</ml> hérite de la classe <ml>point</ml> et que, lors
+de la création de l'objet de la classe <ml>colored_point</ml>, la partie
+correspondant à l'héritage de <ml>point</ml> sera construite avec les
+paramètres indiqués (<ml>?x ?y ()</ml>).
+</p>
+<p>
+De plus, le mot-clé <ml>as</ml> permet de donner un identifiant pour faire
+appel aux méthodes de la classe héritée. Nous nous en servons dans la redéfinition
+de la méthode <ml>as_string</ml>, en faisant appel à <ml>super#as_string</ml>.
+</p>
+<p>La classe <ml>colored_point</ml> contient également une méthode <ml>as_point</ml>
+renvoyant l'objet dépouillé pour être du type <ml>point</ml> (utilisation de l'opérateur
+de <em>cast</em> <ml>:&gt;</ml>). Attention cependant, les méthodes qu'il porte
+reste celles de la classe <ml>colored_point</ml>.
+</p>
+<warning id="warnoverride" title="Redéfinition d'attributs et de méthodes">
+<p>
+Par défaut, le compilateur n'émet pas d'avertissement lorsqu'une méthode
+héritée est masquée par la redéfinition de la méthode dans la classe héritante.
+</p>
+<p>Un avertissement (le numéro 7) peut être activé pour éviter de redéfinir
+par mégarde une méthode. Idem pour un attribut (numéro 13).
+Pour éviter l'avertissement quand il est activé, on ajoute un <ml>!</ml>
+à <ml>val</ml> ou <ml>method</ml>, signifiant que la redéfinition est volontaire:
+</p>
+<oc-eval>
+#warnings "+7+13";;
+class foo =
+  object
+    inherit point ~x: 0 ~y: 0 ()
+    val! mutable x = 0
+    val mutable y = 0
+    method x = x
+    method! as_string = "foo"
+  end;;
+</oc-eval>
+</warning>
+<p>
+La rédéfinition d'attributs ou de méthodes doit respecter la définition
+de la classe héritée: même type et, pour les attributs, même possibilité de modification
+ou non.
+</p>
+</subsection>
+<subsection id="inheritmulti" title="Héritage multiple">
+<p>
+L'héritage multiple est possible, en utilisant plusieurs fois le mot-clé <ml>inherit</ml>.
+Les attributs et méthodes sont héritées dans l'ordre d'apparition des
+<ml>inherit</ml>, une méthode héritée pouvant être re-définie par une autre méthode
+héritée plus loin. Idem pour les attributs.
+</p>
+<p>
+Là encore, on utilisera le <ml>!</ml> après le mot-clé <ml>inherit</ml> pour indiquer
+que la redéfinition de méthodes et attributs hérités d'une premère classe, par ceux
+d'une seconde classe héritée, est volontaire:
+</p>
+<oc-eval>class t1 = object val value = 1 method p = "class t1" end;;
+class t2 = object method p = "class t2" end;;
+class t3 = object val value = 42 end;;
+class t4 = object
+  inherit t1
+  inherit! t2 (* noter le ! *)
+  inherit t3 (* l'absence de ! provoque un warning *)
+  method value = value
+ end;;
+print_endline (new t4)#p ;;
+(new t4)#value ;;
+</oc-eval>
+</subsection>
 </section>
 
 <section id="classintf" title="Interfaces de classes">
