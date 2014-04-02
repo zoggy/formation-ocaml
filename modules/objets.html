@@ -1,6 +1,7 @@
 <module title="Programmation Orientée Objets"
 with-contents="true"
 ocaml-session="objets"
+draft="true"
 >
 <contents>
 <section counter="false" id="preambule" title="Préambule">
@@ -65,7 +66,7 @@ ainsi qu'un éventuel traitement à effectuer à l'initialisation.
 <p>Le code suivant déclare un objet "vide", sans attribut ni rien:</p>
 <oc-eval>object end ;;</oc-eval>
 
-<p>Créons plutôt un objet avec une méthode <ml>add : int -> int</ml>,
+<p>Créons maintenant un objet un peu plus utile avec une méthode <ml>add : int -> int</ml>,
 et un attribut non modifiable <ml>foo : int</ml> initialisé à <ml>1</ml>:
 </p>
 <oc-eval>object
@@ -76,7 +77,10 @@ et un attribut non modifiable <ml>foo : int</ml> initialisé à <ml>1</ml>:
 <p>
 Le toplevel nous indique que la valeur a un type objet (<ml>&lt;obj&gt;</ml>)
 et liste les méthodes visibles entre <ml>&lt;</ml> et <ml>&gt;</ml>,
-en l'occurrence la méthode <ml>add : int -> int</ml>.
+en l'occurrence la méthode <ml>add : int -> int</ml>. Lorsqu'elle sera
+appelée avec un paramètre <ml>x</ml> entier, la méthode <ml>add</ml> retournera
+la valeur du corps de la méthode, ici l'expression <ml>x + foo</ml>
+(<doc href="fonctionnelle#Lavaleurderetourdunefonc">comme pour les fonctions</doc>).
 </p>
 
 <p>Lors de la création de l'objet, les expressions d'initialisation
@@ -90,7 +94,7 @@ object
   end
 </oc-eval>
 <p>
-Le code à l'intérieur d'un object peut accéder aux attributs en utilisant
+Le code à l'intérieur d'un objet peut accéder aux attributs en utilisant
 simplement leur identifiant. Ici nous définissons un attribut <ml>foo</ml>
 et une méthode <ml>foo</ml>. Les attributs et méthodes sont dans deux espaces
 de noms différents. La méthode <ml>foo</ml> utilise l'attribut <ml>foo</ml>:
@@ -247,7 +251,7 @@ Le système de types fera les inférences et vérifications nécessaires pour
 s'assurer qu'un objet n'est pas passé là où son type ne correspond pas à ce qui
 est attendu. De même, une expression ne pourra renvoyer un objet avec un type
 ne correspondant pas aux contraintes locales (par exemple deux objets
-de types incompabibles en résultat des deux branches d'une conditionnelles).
+de types incompabibles en résultat des deux branches d'une conditionnelle).
 </p>
 <p>Voyons quelques exemples.</p>
 <p>Commençons par définir une fonction qui retournera un objet comportant
@@ -295,7 +299,7 @@ qui compte est la présence d'une méthode <ml>print</ml> avec le type <ml>strin
 </p>
 <p>
 Nous pouvons donc logiquement appeler cette fonction en lui passant en argument
-mon objet <ml>err_printer</ml> créé plus haut:
+notre objet <ml>err_printer</ml> créé plus haut:
 </p>
 <oc-eval>hello err_printer</oc-eval>
 <p>Mais nous pouvons également lui passer un objet anonyme créé juste pour un appel:</p>
@@ -356,6 +360,12 @@ pas un sous-type de t' provoque une erreur:
 let o = object method m = string_of_int end;;
 (o :> < m : int -> int >);;
 ]]></oc-eval>
+<p>
+On constate que le <strong>système de types d'OCaml ne confond pas sous-typage et héritage</strong>,
+puisqu'il n'est pas nécessaire à deux objets d'hériter d'un ancètre commun ou de déclarer
+une interface pour pouvoir être utilisés l'un à la place de l'autre lorsque le contexte
+le permet.
+</p>
 </section>
 
 <section id="classes" title="Classes">
@@ -369,19 +379,14 @@ L'utilisation d'objets créés de cette façon, si elle est pratique dans
 certains cas, est déconseillée à grande échelle, car elle nuit à
 la lisibilité et la maintenabilité du logiciel. Etre capable de nommer
 et catégoriser les objets et les concepts est important pour les comprendre
-et les manipuler.
+et les manipuler<note>"Mal nommer les choses, c'est ajouter de la misère au monde",
+disait Camus.</note>.
 </p>
 <subsection id="classdecl" title="Déclaration">
 <p>
 La déclaration d'une classe prend la forme suivante:
 </p>
 <centerstx>class <stxid>identifiant</stxid> [<stxid>paramètres</stxid>] = object <stxid>champs</stxid> end</centerstx>
-<p>
-Les définitions de classes peuvent être paramétrées par des variables
-de types:
-</p>
-<centerstx>class ['a] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end
-class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
 <p>
 L'<stxid>identifiant</stxid> se trouve dans le même espace de nom que les types,
 car la définition d'une classe introduit un nouveau type du même nom.
@@ -424,7 +429,9 @@ identique à <ml>c2</ml> de la façon suivante:
 ]]></oc-eval>
 <p>
 Cette syntaxe permet d'introduire des calculs intermédiaires avant ou entre les
-paramètres, lors de l'instanciation.
+paramètres, lors de l'instanciation. Elle fait également apparaître qu'une classe,
+en plus d'un type, définit l'équivalent d'une fonction de construction, prenant
+des paramètres et retournant un objet.
 </p>
 </subsection>
 
@@ -488,12 +495,13 @@ let o3 = o2 10 (* y = 10, tous les parametres sont founis, l'objet est cree *);;
 </oc-eval>
 <p>
 La séquence d'instructions (<ml>;</ml>) est interdite avant la partie <ml>object ... end </ml>,
-ce qui nous oblige à utiliser la constrution <ml>let () = ... in</ml>.
+ce qui nous oblige à utiliser la constrution <ml>let () = ... in</ml> pour réaliser
+des effets de bord (affichage).
 </p>
 <p>
 La définition de valeurs entre les paramètres, mais surtout avant le
-<ml>object ... end</ml> permet de faire des calculs et opérations une seule
-fois avant la création de l'objet. Les résultats de ces calculs peuvent être
+<ml>object ... end</ml> permet de faire des calculs et opérations
+avant la création de l'objet. Les résultats de ces calculs peuvent être
 utilisés dans les méthodes et surtout dans les attributs, pour leur fournir
 des valeurs d'initialisation. Souvenons-nous que l'initialisation d'un
 attribut ne peut utiliser la valeur d'un autre attribut lors de la création
@@ -503,7 +511,12 @@ de l'objet.
 
 <subsection id="constructors" title="Constructeurs">
 <p>
-Il n'y a pas de notion de constructeur pour les objets en OCaml, ni de surcharge.
+Il n'y a pas de notion de constructeur pour les objets en OCaml, ou plutôt
+il n'y a qu'un seul constructeur, appelé par <ml>new</ml> suivi du nom de la
+classe.
+</p>
+<p>
+Il n'y a pas non plus de de surcharge.
 Cependant, les paramètres d'une classe peuvent être utilisés pour l'instancier
 avec des valeurs différentes selon le contexte.
 Les <doc href="stdlib#exooptparams">paramètres optionnels</doc>
@@ -535,7 +548,9 @@ autres valeurs OCaml, sont désalloués lorsqu'ils deviennent inaccessibles.
 <p>
 Il est cependant possible, comme pour d'autres valeurs OCaml, d'associer
 une fonction à appeler lors de la désallocation de l'objet, grâce
-à la fonction <ml>finalise</ml> du module <moduledoc name="Gc"/>:
+à la fonction <ml>finalise</ml> du module <moduledoc name="Gc"/>. Dans l'exemple
+ci-dessous, nous créons des objets avec un nom et qui affichent une chaîne
+lorsqu'ils sont sur le point d'être libérés:
 </p>
 <oc-eval session="trash">
 class myclass s =
@@ -559,11 +574,35 @@ for i = 1 to 3 do
 <subsection id="funobjects" title="Objets fonctionnels">
 <p>
 On appelle <em>objets fonctionnels</em> les objets qui, plutôt que mettre
-à jour un état interne lors de l'appel d'une méthode, renvoie une copie
+à jour un état interne lors de l'appel d'une méthode, renvoient une copie
 d'eux-mêmes avec éventuellement des modifications des valeurs des attributs
 de l'objet original.
 </p>
-<todo text="à finir"/>
+<p>
+La syntaxe pour construire une copie de l'objet en cours en en changeant
+certains attributs est la suivante:
+</p>
+<centerstx>{&lt; <stxid>attribut1</stxid> = <stxid>expr1</stxid> ; <stxid>attribut2</stxid> = <stxid>expr2</stxid> ; ... &gt;} </centerstx>
+<p>
+Par exemple, nous pourrions faire une interface objet pour les listes d'entiers
+de la façon suivante (nous verrons <doc href="#clpolym">plus loin</doc>
+pourquoi nous nous restreignons aux listes d'entiers pour l'instant):
+</p>
+<oc-eval><![CDATA[class clist =
+  object
+    val value : int list = []
+    method value = value
+    method cons h = {< value = h :: value >}
+    method hd = List.hd value
+    method tl = List.tl value
+    method map f = {< value = List.map f value >}
+  end;;
+let l = new clist ;;
+let l1 = l#cons 1 ;;
+let l2  = ((l1#cons 2)#cons 3)#cons 4 ;;
+let l3 = l2#map (fun x -> x + 1);;
+l3#value;;
+]]></oc-eval>
 </subsection>
 
 <subsection id="classexercises" title="Exercices">
@@ -576,14 +615,15 @@ Les méthodes permettront d'effectuer les actions suivantes:
 <ml>pop : int option</ml>,
 <ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
 <ml>is_empty : bool</ml>.
-On n'utilisera pas le module <ml>Stack</ml> ;-)
 </p>
 <p>
 Nous implémentons une pile d'entiers car nous verrons le polymorphisme
-plus loin.
+<doc href="#clpolym">plus loin</doc>.
 </p>
 <solution>
-<oc-eval><![CDATA[class stack =
+<oc-eval><![CDATA[
+(* implementation d'une pile d'entiers avec une liste *)
+class stack =
   object
     val mutable elements = ([] : int list)
     method push n = elements <- n :: elements
@@ -607,19 +647,42 @@ let rec print stack =
 ;;
 print stack;;
 </oc-eval>
-<todo text="à finir"/>
 </exercice>
 
-<exercice id="exostackfun" title="Implémentation d'un pile fonctionnelle">
-<p>Implémenter un pile d'entiers à l'aide d'une classe "fonctionnelle",
+<exercice id="exostackfun" title="Implémentation d'un pile avec une classe fonctionnelle">
+<p>Implémenter un pile d'entiers à l'aide d'une classe "fonctionnelle" <ml>fun_stack</ml>,
 i.e. dont les méthodes retournent un nouvel objet au lieu de faire
 un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
-<ml>push : int -> stack</ml>,
-<ml>pop : (int * stack) option</ml>,
+<ml>push : int -> fun_stack</ml>,
+<ml>pop : (int * fun_stack) option</ml>,
 <ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
 <ml>is_empty : bool</ml>.
 </p>
-<todo text="à finir"/>
+<solution>
+<oc-eval><![CDATA[class fun_stack =
+  object
+    val elements = ([] : int list)
+    method push n = {< elements = n :: elements >}
+    method pop =
+      match elements with
+        [] -> None
+      | h :: q -> Some (h, {< elements = q >})
+    method pick =
+      match elements with [] -> None | h :: _ -> Some h
+    method is_empty = elements = []
+  end;;
+]]></oc-eval>
+</solution>
+<oc-eval>
+let stack = new fun_stack ;;
+let stack = List.fold_left (fun st n -> st#push n) stack [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+let rec print stack =
+  match stack#pop with
+    None -> assert stack#is_empty
+  | Some (n, stack) -> print_endline (string_of_int n); print stack
+;;
+print stack;;
+</oc-eval>
 </exercice>
 
 </subsection>
@@ -769,6 +832,14 @@ print_endline (new t4)#p ;;
 
 </section>
 
+<section id="clpolym" title="Polymorphisme">
+<p>
+Les définitions de classes peuvent être paramétrées par des variables
+de types:
+</p>
+<centerstx>class ['a] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end
+class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
+</section>
 
 </contents>
 </module>
