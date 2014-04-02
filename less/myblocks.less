@@ -48,10 +48,11 @@ pre {
 }
 
 span.icode {
-  #font > #family > .monospace;
-  font-size: @baseFontSize - 1;
+  font-family: @codefont-family ;
+  font-size: @codefont-size ;
+  font-weight: @codefont-weight;
   .rounded-box();
-  background-color: #eeeeee;
+  background-color: @precolor ;
   border-width: 0;
   display: inline;
   padding-top: 2px;

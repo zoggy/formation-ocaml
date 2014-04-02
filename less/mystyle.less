@@ -1,5 +1,11 @@
 @bgcolor: white ;
 @fgcolor: #666666 ;
+@precolor: rgba(255, 255, 0, 0.15) ;
+
+@codefont-family: 'Courier New';
+@codefont-bold-weight: bold ;
+@codefont-weight: normal ;
+@codefont-size: 10pt;
 
 @sidebarWidth: 150px;
 @pageWidth: 760px;
@@ -294,12 +300,18 @@ div.legend {
   margin-bottom: 1.5em;
   }
 
+pre {
+  font-family: @codefont-family ;
+  font-size: @codefont-size ;
+  font-weight: @codefont-weight ;
+}
+
 pre.code-ocaml {
   border-width: 0 0 0 2px;
   border-style: solid;
   border-color: #BBBBBB;
   padding-left: 0.7em;
-  background-color: #efefef;
+  /*background-color: #efefef;*/
   padding-top: 2px;
   padding-bottom: 2px;
 }

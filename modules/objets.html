@@ -828,6 +828,77 @@ print_endline (new t4)#p ;;
 </section>
 
 <section id="classintf" title="Interfaces de classes">
+<p>
+Les interfaces de classes sont l'équivalent des signatures pour les modules; on
+parle en anglais de <em>class types</em>, les types de classes, comme on parle
+de types de modules.
+</p>
+<p>
+Une interface de classe liste des attributs et méthodes avec leur type,
+mais pas leur valeur:
+</p>
+<oc-eval>class type ctype =
+  object
+    val mutable foo : int
+    method as_string : string
+  end;;
+</oc-eval>
+<p>
+Nous pouvons nous servir d'une telle interface pour restreindre le type
+d'une classe:
+</p>
+<oc-eval>class ma_classe : ctype =
+  object
+    val mutable foo = 42
+    val gee = "hello"
+    method as_string = string_of_int foo
+  end;;
+let o = new ma_classe;;
+</oc-eval>
+<p>
+Si le type de la classe n'est pas un sous-type de l'interface, le compilateur
+signale une erreur:
+</p>
+<oc-eval error-exc="false">class ma_classe : ctype =
+  object
+    val mutable foo = "hello"
+    val gee = "world"
+    method as_string = foo
+  end;;
+</oc-eval>
+
+<p>
+Lorsqu'on restreint le type d'un objet, seules les méthodes sont contraintes,
+car les attributs de l'objet n'apparaissent pas dans son type:
+</p>
+<oc-eval error-exc="false">(* as_string est de type 'a, sous-type de string, donc ok *)
+let o = object val mutable foo = 42 method as_string = assert false end;;
+let (o2 : ctype) = o;;
+(* l'absence de l'attribut foo n'est pas un probleme *)
+let o3 = object method as_string = "hello" end;;
+let (o4 : ctype) = o3;;
+(* ici, la methode as_string n'est pas du bon type *)
+let o5 = object method as_string = 42 end;;
+let (o6 : ctype) = o5;;
+</oc-eval>
+
+<warning id="hidingmethods" title="Masquage des méthodes publiques ou virtuelles">
+<p>
+Il n'est pas possible de masquer, à l'aide d'une contrainte de type, les méthodes
+publiques et les <doc href="#virtual">méthodes virtuelles</doc>:
+</p>
+
+<oc-eval error-exc="false">class ma_classe : ctype =
+  object
+    val mutable foo = 42
+    method as_string = string_of_int foo
+    method hello = print_endline "hello world!"
+  end;;
+</oc-eval>
+</warning>
+</section>
+
+<section id="virtual" title="Classes et méthodes virtuelles">
 
 </section>
 
@@ -840,5 +911,7 @@ de types:
 class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
 </section>
 
+Copie d'objets
+Méthodes binaires
 </contents>
 </module>
