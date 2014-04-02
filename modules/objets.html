@@ -384,7 +384,7 @@ certains attributs est la suivante:
 Par exemple, nous pourrions faire un objet représentant une liste de la
 façon suivante:
 </p>
-<oc-eval><![CDATA[let l =
+<oc-eval id="exampleobjectlist"><![CDATA[let l =
   object
     val value = []
     method value = value
@@ -899,16 +899,115 @@ publiques et les <doc href="#virtual">méthodes virtuelles</doc>:
 </section>
 
 <section id="virtual" title="Classes et méthodes virtuelles">
-
+<p>
+Il est bien sûr possible de définir des méthodes virtuelles, c'est-à-dire
+des méthodes dont ont donne déjà le type, mais dont l'implémentation
+devra être fourni plus tard, dans une classe héritante. On déclare
+des méthodes virtuelles à l'aide du mot-clé <ml>virtual</ml>, et au lieu
+de donner l'expression du corps de la méthode, on indique son type,
+comme dans une interface de classe.
+</p>
+<p>
+A partir du moment où au moins une méthode requise n'est pas définie
+(donc au moins une méthode est encore virtuelle), la classe doit être
+déclarée comme virtuelle, toujours à l'aide du mot-clé <ml>virtual</ml>.
+</p>
+<p>
+Définissons une classe virtuelle <ml>stringable</ml> contenant une
+méthode virtuelle <ml>as_string</ml>, ainsi qu'une méthode concrète
+(le contraire de virtuelle) <ml>prerr</ml>, qui fait appel à la méthode
+virtuelle pour afficher la représentation en chaîne sur la sortie standard:
+</p>
+<oc-eval>class virtual stringable =
+  object(self)
+    method print = print_endline (self#as_string)
+    method virtual as_string : string
+  end;;
+</oc-eval>
+<p>
+Il est impossible pour l'instant d'instancier cette classe, puisqu'elle
+est virtuelle:
+</p>
+<oc-eval error-exc="false">
+let o = new stringable ;;
+</oc-eval>
+<p>
+Nous pouvons définir une nouvelle classe, héritant de <ml>stringable</ml>
+et implémentant la méthode manquante:
+</p>
+<oc-eval>class my_c x =
+  object
+    inherit stringable
+    method as_string = string_of_int x
+  end;;
+</oc-eval>
+<p>
+Il devient possible d'instancier cette classe:
+</p>
+<oc-eval>let o = new my_c 42 ;;
+o#print ;;
+</oc-eval>
+<p>
+Il n'est évidemment pas possible de créer un objet avec une méthode
+virtuelle:
+</p>
+<oc-eval error-exc="false">
+let o = object method virtual print : unit end ;;
+</oc-eval>
 </section>
 
 <section id="clpolym" title="Polymorphisme">
 <p>
-Les définitions de classes peuvent être paramétrées par des variables
-de types:
+<doc href="fonctionnelle#Lesparamtresdestypespara">Comme les types</doc>,
+les définitions de classes peuvent être paramétrées par des variables de types:
 </p>
 <centerstx>class ['a] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end
 class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
+<p>
+Le type créé lorsqu'une classe est déclarée est lui aussi paramétré par les mêmes
+variables de types.
+</p>
+<p>
+Lorsqu'une classe est paramétrée de cette sorte, il devient possible d'utiliser les
+variables de types dans les annotations de type dans la définition de la classe.
+En reprenant <doc href="#exampleobjectlist">notre exemple d'interface objet pour une liste</doc>,
+nous pouvons maintenant définir une classe représentant une liste d'éléments d'un
+type quelconque:
+</p>
+<oc-eval><![CDATA[class ['a] clist =
+  object
+    val value = ([] : 'a list)
+    method value = value
+    method cons h = {< value = h :: value >}
+    method hd = List.hd value
+    method tl = List.tl value
+    method map f = {< value = List.map f value >}
+  end;;
+]]></oc-eval>
+<p>
+On remarque que le type indiqué pour la classe contient une annotation
+de type <ml>object('b)...</ml> et que ce <ml>'b</ml> est utilisé dans le
+type des méthodes qui retourne une copie de l'objet.
+</p>
+<p>Instancions maintenant cette classe:</p>
+<oc-eval>let l = new clist ;;</oc-eval>
+<p>On constate que l'objet <ml>l</ml> a pour type <ml>_'a clist</ml>, ce qui signifie
+qu'il contiendra des éléments d'un type non encore connu, mais que dès que ce type
+sera connu, il ne sera plus possible d'ajouter des éléments d'un autre type
+à notre liste:
+</p>
+<oc-eval error-exc="false">
+let l1 = l#cons 1 ;;
+let l2  = ((l1#cons 2)#cons 3)#cons 4 ;;
+let l3 = l2#map (fun x -> x + 1);;
+l3#value;;
+let l4 = l#cons "hello" ;;
+</oc-eval>
+<p>
+
+</p>
+
+
 </section>
 
 Copie d'objets
