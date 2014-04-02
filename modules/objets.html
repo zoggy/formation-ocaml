@@ -366,6 +366,40 @@ puisqu'il n'est pas nécessaire à deux objets d'hériter d'un ancètre commun o
 une interface pour pouvoir être utilisés l'un à la place de l'autre lorsque le contexte
 le permet.
 </p>
+
+
+<subsection id="funobjects" title="Objets fonctionnels">
+<p>
+On appelle <em>objets fonctionnels</em> les objets qui, plutôt que mettre
+à jour un état interne lors de l'appel d'une méthode, renvoient une copie
+d'eux-mêmes avec éventuellement des modifications des valeurs des attributs
+de l'objet original.
+</p>
+<p>
+La syntaxe pour construire une copie de l'objet en cours en en changeant
+certains attributs est la suivante:
+</p>
+<centerstx>{&lt; <stxid>attribut1</stxid> = <stxid>expr1</stxid> ; <stxid>attribut2</stxid> = <stxid>expr2</stxid> ; ... &gt;} </centerstx>
+<p>
+Par exemple, nous pourrions faire un objet représentant une liste de la
+façon suivante:
+</p>
+<oc-eval><![CDATA[let l =
+  object
+    val value = []
+    method value = value
+    method cons h = {< value = h :: value >}
+    method hd = List.hd value
+    method tl = List.tl value
+    method map f = {< value = List.map f value >}
+  end;;
+let l1 = l#cons 1 ;;
+let l2  = ((l1#cons 2)#cons 3)#cons 4 ;;
+let l3 = l2#map (fun x -> x + 1);;
+l3#value;;
+]]></oc-eval>
+</subsection>
+
 </section>
 
 <section id="classes" title="Classes">
@@ -379,8 +413,8 @@ L'utilisation d'objets créés de cette façon, si elle est pratique dans
 certains cas, est déconseillée à grande échelle, car elle nuit à
 la lisibilité et la maintenabilité du logiciel. Etre capable de nommer
 et catégoriser les objets et les concepts est important pour les comprendre
-et les manipuler<note>"Mal nommer les choses, c'est ajouter de la misère au monde",
-disait Camus.</note>.
+et les manipuler<note>"Mal nommer les classes, c'est ajouter de la misère au logiciel",
+disait (presque) Camus.</note>.
 </p>
 <subsection id="classdecl" title="Déclaration">
 <p>
@@ -571,39 +605,6 @@ for i = 1 to 3 do
 <oc-eval session="trash">Gc.major ();;</oc-eval>
 </subsection>
 
-<subsection id="funobjects" title="Objets fonctionnels">
-<p>
-On appelle <em>objets fonctionnels</em> les objets qui, plutôt que mettre
-à jour un état interne lors de l'appel d'une méthode, renvoient une copie
-d'eux-mêmes avec éventuellement des modifications des valeurs des attributs
-de l'objet original.
-</p>
-<p>
-La syntaxe pour construire une copie de l'objet en cours en en changeant
-certains attributs est la suivante:
-</p>
-<centerstx>{&lt; <stxid>attribut1</stxid> = <stxid>expr1</stxid> ; <stxid>attribut2</stxid> = <stxid>expr2</stxid> ; ... &gt;} </centerstx>
-<p>
-Par exemple, nous pourrions faire une interface objet pour les listes d'entiers
-de la façon suivante (nous verrons <doc href="#clpolym">plus loin</doc>
-pourquoi nous nous restreignons aux listes d'entiers pour l'instant):
-</p>
-<oc-eval><![CDATA[class clist =
-  object
-    val value : int list = []
-    method value = value
-    method cons h = {< value = h :: value >}
-    method hd = List.hd value
-    method tl = List.tl value
-    method map f = {< value = List.map f value >}
-  end;;
-let l = new clist ;;
-let l1 = l#cons 1 ;;
-let l2  = ((l1#cons 2)#cons 3)#cons 4 ;;
-let l3 = l2#map (fun x -> x + 1);;
-l3#value;;
-]]></oc-eval>
-</subsection>
 
 <subsection id="classexercises" title="Exercices">
 <exercice id="exostack" title="Implémentation d'un pile d'entiers">
@@ -684,7 +685,6 @@ let rec print stack =
 print stack;;
 </oc-eval>
 </exercice>
-
 </subsection>
 </section>
 
@@ -715,9 +715,8 @@ objet_c2#as_string ;;
 
 <section id="inheriting" title="Héritage">
 <p>
-Une classe ou un objet créé sans classe peuvent hériter d'une classe
-existante. Par contre, il est impossible d'hériter d'un objet créé
-sans classe.
+Une classe ou un objet peuvent hériter d'une classe
+existante. Par contre, il est impossible d'hériter d'un objet.
 </p>
 <subsection id="inheritmeca" title="Mécanisme d'héritage">
 <p>
@@ -754,7 +753,6 @@ let origin = new point () ;;
 let colored_origin = new colored_point ~color: 0xa00 () ;;
 origin#as_string ;;
 colored_origin#as_string ;;
-colored_origin#as_point#as_string ;;
 ]]></oc-eval>
 <p>
 Le champ <ml>inherit point ?x ?y () as super</ml> indique que la classe
@@ -771,8 +769,9 @@ de la méthode <ml>as_string</ml>, en faisant appel à <ml>super#as_string</ml>.
 <p>La classe <ml>colored_point</ml> contient également une méthode <ml>as_point</ml>
 renvoyant l'objet dépouillé pour être du type <ml>point</ml> (utilisation de l'opérateur
 de <em>cast</em> <ml>:&gt;</ml>). Attention cependant, les méthodes qu'il porte
-reste celles de la classe <ml>colored_point</ml>.
+reste celles de la classe <ml>colored_point</ml>:
 </p>
+<oc-eval>colored_origin#as_point#as_string ;;</oc-eval>
 <warning id="warnoverride" title="Redéfinition d'attributs et de méthodes">
 <p>
 Par défaut, le compilateur n'émet pas d'avertissement lorsqu'une méthode
