@@ -956,7 +956,7 @@ let o = object method virtual print : unit end ;;
 </oc-eval>
 </section>
 
-<section id="clpolym" title="Polymorphisme">
+<section id="clpolym" title="Polymorphisme de classe">
 <p>
 <doc href="fonctionnelle#Lesparamtresdestypespara">Comme les types</doc>,
 les définitions de classes peuvent être paramétrées par des variables de types:
@@ -1004,11 +1004,76 @@ l3#value;;
 let l4 = l#cons "hello" ;;
 </oc-eval>
 <p>
+Il est possible de définir une classe paramétrée par un ou plusieurs types,
+tout en posant des contraintes sur ces types. Ainsi, nous pouvons paramétrer
+notre classe par un type <ml>'a</ml>, et imposer que ce type soit
+un sous-type de <ml>point</ml>, grâce au mot clé <ml>constraint</ml>.
+La notation <ml>constraint 'a = #point</ml> dénote cette contrainte, le
+<ml>#</ml> signifiant "tout type sous-type de <ml>point</ml>, avec
+éventuellement des méthodes supplémentaires":
+</p>
+<oc-eval><![CDATA[class ['a] circle c radius =
+  object
+    constraint 'a = #point
+    val center = (c : 'a)
+    method radius = (radius : float)
+    method as_string = Printf.sprintf "%s--%.2f" center#as_string radius
+  end;;
+let circ = new circle origin 2.0;;
+circ#as_string;;
+let circ2 = new circle colored_origin 3.0 ;;
+circ2#as_string;;
+]]></oc-eval>
+<p>Si la contrainte de type n'est pas respectée lorsqu'on passe le
+centre à la création de l'objet <ml>circle</ml>, une erreur est signalée:
+</p>
+<oc-eval error-exc="false">
+let p = object
+    method x = 1
+    method y = 2
+    method as_string = "(1,2)"
+  end;;
+let circ = new circle p 2.0;;
+</oc-eval>
+<p>
+Avec les classes paramétrées par des variables de types, on obtient
+des constructeurs polymorphes d'objets, mais pas des objets polymorphes,
+c'est-à-dire que le type des objets instanciés ne contiennent pas de variables
+de types libres. Nous allons maintenant voir comment définir des objets
+dont certaines méthodes sont polymorphes.
+</p>
+</section>
+
+<section id="polymeths" title="Méthodes polymorphes">
+
+<p>
 
 </p>
 
+<exercice id="clistmap" title="Map d'un type vers un autre">
+<p>
+Modifier la définition de la classe <ml>clist</ml> pour qu'elle
+prenne en paramètre une valeur (liste) initiale et faire en
+sorte que la méthode <ml>map</ml> soit du type
+<ml>('a -> 'b) -> 'b clist</ml>.
+</p>
+<solution>
+<oc-eval><![CDATA[
+class ['a] clist init =
+  object
+    val value = (init : 'a list)
+    method value = value
+    method cons h = {< value = h :: value >}
+    method hd = List.hd value
+    method tl = List.tl value
+(*    method map : 'b. ('a -> 'b) -> 'b clist = fun f -> (new clist (List.map f value) : 'b clist)*)
+  end;;
+]]></oc-eval>
+</solution>
+</exercice>
 
 </section>
+
 
 Copie d'objets
 Méthodes binaires
