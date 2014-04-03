@@ -47,17 +47,17 @@ digraph g {
   imper [ label="<doc-title doc-path="imperative"/>", href="<doc-url doc-path="imperative"/>"] ;
   stdlib [ label="<doc-title doc-path="stdlib"/>", href="<doc-url doc-path="stdlib"/>"] ;
   modules [ label="<doc-title doc-path="modules"/>", href="<doc-url doc-path="modules"/>"] ;
-  objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
+  //objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
   env [ label="<doc-title doc-path="env"/>", href="<doc-url doc-path="env"/>"] ;
   conclusion [ label="<doc-title doc-path="conclusion"/>", href="<doc-url doc-path="conclusion"/>"] ;
   fonc -> intro ;
   imper -> fonc ;
   stdlib -> imper ;
   modules -> stdlib ;
-  objets -> imper ;
+  //objets -> imper ;
   env -> intro ;
   conclusion -> env ;
-  conclusion -> objets ;
+  //conclusion -> objets ;
   conclusion -> modules ;
 }
 </dot>
