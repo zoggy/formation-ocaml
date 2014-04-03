@@ -7,7 +7,7 @@ draft="true"
 <section counter="false" id="preambule" title="Préambule">
 <p>Ce document n'est <strong>pas</strong> une introduction au
 paradigme de la programmation objets, mais présente la
-programmation objets <strong>en OCaml</strong>. On suppose
+programmation orientée objets <strong>en OCaml</strong>. On suppose
 donc que les notions de classes, objets, méthodes, héritage, etc.,
 sont déjà connues.
 </p>
@@ -16,17 +16,17 @@ sont déjà connues.
 <section id="introduction" title="Introduction">
 <p>
 OCaml s'appelait auparavant <i>Objective</i>-Caml, indiquant ainsi
-qu'il comporte la possibilité de programmation objets.
+qu'il comporte la possibilité de programmation orientée objets.
 </p>
 <p>
 Cela signifie que le système de types permet de définir des types
 pour les objets. La définition d'une classe entraîne la création
 d'un type (de même nom). L'instanciation d'une classe crée donc
-une valeur du type de la classe.
+une valeur du type correspondant à la classe.
 </p>
 <p>
 Comme les autres types, les types de classes peuvent également
-être paramétrés (cf. <doc href="fonctionnelle#decltypes"/>).
+être paramétrés (cf. <doc href="fonctionnelle#decltypes">cette section</doc>).
 </p>
 <p>
 La notion de type pour les classes s'accompagne de la notion
@@ -63,7 +63,7 @@ pour l'objet ses héritages, attributs (ou variables d'instance),
 méthodes, contraintes de types,
 ainsi qu'un éventuel traitement à effectuer à l'initialisation.
 </p>
-<p>Le code suivant déclare un objet "vide", sans attribut ni rien:</p>
+<p>Le code suivant déclare un objet "vide", sans attribut ni méthode:</p>
 <oc-eval>object end ;;</oc-eval>
 
 <p>Créons maintenant un objet un peu plus utile avec une méthode <ml>add : int -> int</ml>,
@@ -295,7 +295,8 @@ dont nous ne donnons pas le type, mais que nous utilisons dans le corps de notre
 La seule contrainte est qu'il doit posséder une méthode <ml>print : string -> 'a</ml>.
 Les <ml>..</ml> dans le type du paramètre signifient que l'objet peut avoir
 n'importe quelles autres méthodes de n'importe quels types, ce
-qui compte est la présence d'une méthode <ml>print</ml> avec le type <ml>string -> 'a</ml>.
+qui compte est la présence d'une méthode <ml>print</ml> avec un type
+compatible avec <ml>string -> 'a</ml>.
 </p>
 <p>
 Nous pouvons donc logiquement appeler cette fonction en lui passant en argument
@@ -375,7 +376,7 @@ On appelle <em>objets fonctionnels</em> les objets qui, plutôt que mettre
 d'eux-mêmes avec éventuellement des modifications des valeurs des attributs
 de l'objet original.
 </p>
-<p>
+<p id="selfcopy">
 La syntaxe pour construire une copie de l'objet en cours en en changeant
 certains attributs est la suivante:
 </p>
@@ -463,7 +464,7 @@ identique à <ml>c2</ml> de la façon suivante:
 ]]></oc-eval>
 <p>
 Cette syntaxe permet d'introduire des calculs intermédiaires avant ou entre les
-paramètres, lors de l'instanciation. Elle fait également apparaître qu'une classe,
+paramètres, lors de l'instanciation. Elle rappelle qu'une classe,
 en plus d'un type, définit l'équivalent d'une fonction de construction, prenant
 des paramètres et retournant un objet.
 </p>
@@ -511,6 +512,7 @@ des affichages:
   fun x ->
     let () = print_endline (Printf.sprintf "got x=%d" x) in
     let z = -x in
+    let () = print_endline (Printf.sprintf "defined z=%d" z) in
     fun y ->
       let () = print_endline (Printf.sprintf "got y=%d" y) in
       object
@@ -607,7 +609,7 @@ for i = 1 to 3 do
 
 
 <subsection id="classexercises" title="Exercices">
-<exercice id="exostack" title="Implémentation d'un pile d'entiers">
+<exercice id="exostack" title="Implémentation d'une pile d'entiers">
 <p>
 Implémenter une pile d'entiers à l'aide d'une classe. L'état de la pile
 sera naturellement dans un attribut (variable d'instance) modifiable.
@@ -650,7 +652,7 @@ print stack;;
 </oc-eval>
 </exercice>
 
-<exercice id="exostackfun" title="Implémentation d'un pile avec une classe fonctionnelle">
+<exercice id="exostackfun" title="Implémentation d'une pile avec une classe fonctionnelle">
 <p>Implémenter un pile d'entiers à l'aide d'une classe "fonctionnelle" <ml>fun_stack</ml>,
 i.e. dont les méthodes retournent un nouvel objet au lieu de faire
 un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
@@ -676,7 +678,8 @@ un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
 </solution>
 <oc-eval>
 let stack = new fun_stack ;;
-let stack = List.fold_left (fun st n -> st#push n) stack [ 1 ; 2 ; 3 ; 4 ; 5 ];;
+let stack =
+  List.fold_left (fun st n -> st#push n) stack [ 1 ; 2 ; 3 ; 4 ; 5 ];;
 let rec print stack =
   match stack#pop with
     None -> assert stack#is_empty
@@ -795,7 +798,7 @@ class foo =
 </oc-eval>
 </warning>
 <p>
-La rédéfinition d'attributs ou de méthodes doit respecter la définition
+La redéfinition d'attributs ou de méthodes doit respecter la définition
 de la classe héritée: même type et, pour les attributs, même possibilité de modification
 ou non.
 </p>
@@ -827,7 +830,66 @@ print_endline (new t4)#p ;;
 </subsection>
 </section>
 
-<section id="classintf" title="Interfaces de classes">
+<section id="virtual" title="Classes et méthodes virtuelles">
+<p>
+Il est bien sûr possible de définir des méthodes virtuelles, c'est-à-dire
+des méthodes dont ont donne déjà le type, mais dont l'implémentation
+devra être fournie plus tard, dans une classe héritante. On déclare
+des méthodes virtuelles à l'aide du mot-clé <ml>virtual</ml>, et au lieu
+de donner l'expression du corps de la méthode, on indique son type,
+comme dans une <doc href="#classintf">interface de classe</doc>.
+</p>
+<p>
+A partir du moment où au moins une méthode requise n'est pas définie
+(donc au moins une méthode est encore virtuelle), la classe doit être
+déclarée comme virtuelle, toujours à l'aide du mot-clé <ml>virtual</ml>.
+</p>
+<p>
+Définissons une classe virtuelle <ml>stringable</ml> contenant une
+méthode virtuelle <ml>as_string</ml>, ainsi qu'une méthode concrète
+(le contraire de virtuelle) <ml>prerr</ml>, qui fait appel à la méthode
+virtuelle pour afficher la représentation en chaîne sur la sortie standard:
+</p>
+<oc-eval>class virtual stringable =
+  object(self)
+    method print = print_endline (self#as_string)
+    method virtual as_string : string
+  end;;
+</oc-eval>
+<p>
+Il est impossible pour l'instant d'instancier cette classe, puisqu'elle
+est virtuelle:
+</p>
+<oc-eval error-exc="false">
+let o = new stringable ;;
+</oc-eval>
+<p>
+Nous pouvons définir une nouvelle classe, héritant de <ml>stringable</ml>
+et implémentant la méthode manquante:
+</p>
+<oc-eval>class my_c x =
+  object
+    inherit stringable
+    method as_string = string_of_int x
+  end;;
+</oc-eval>
+<p>
+Il devient possible d'instancier cette classe:
+</p>
+<oc-eval>let o = new my_c 42 ;;
+o#print ;;
+</oc-eval>
+<p>
+Il n'est évidemment pas possible de créer un objet avec une méthode
+virtuelle:
+</p>
+<oc-eval error-exc="false">
+let o = object method virtual print : unit end ;;
+</oc-eval>
+</section>
+
+<section id="cltypes" title="Types, polymorphismes">
+<subsection id="classintf" title="Interfaces de classes">
 <p>
 Les interfaces de classes sont l'équivalent des signatures pour les modules; on
 parle en anglais de <em>class types</em>, les types de classes, comme on parle
@@ -896,80 +958,22 @@ publiques et les <doc href="#virtual">méthodes virtuelles</doc>:
   end;;
 </oc-eval>
 </warning>
-</section>
+</subsection>
 
-<section id="virtual" title="Classes et méthodes virtuelles">
-<p>
-Il est bien sûr possible de définir des méthodes virtuelles, c'est-à-dire
-des méthodes dont ont donne déjà le type, mais dont l'implémentation
-devra être fourni plus tard, dans une classe héritante. On déclare
-des méthodes virtuelles à l'aide du mot-clé <ml>virtual</ml>, et au lieu
-de donner l'expression du corps de la méthode, on indique son type,
-comme dans une interface de classe.
-</p>
-<p>
-A partir du moment où au moins une méthode requise n'est pas définie
-(donc au moins une méthode est encore virtuelle), la classe doit être
-déclarée comme virtuelle, toujours à l'aide du mot-clé <ml>virtual</ml>.
-</p>
-<p>
-Définissons une classe virtuelle <ml>stringable</ml> contenant une
-méthode virtuelle <ml>as_string</ml>, ainsi qu'une méthode concrète
-(le contraire de virtuelle) <ml>prerr</ml>, qui fait appel à la méthode
-virtuelle pour afficher la représentation en chaîne sur la sortie standard:
-</p>
-<oc-eval>class virtual stringable =
-  object(self)
-    method print = print_endline (self#as_string)
-    method virtual as_string : string
-  end;;
-</oc-eval>
-<p>
-Il est impossible pour l'instant d'instancier cette classe, puisqu'elle
-est virtuelle:
-</p>
-<oc-eval error-exc="false">
-let o = new stringable ;;
-</oc-eval>
-<p>
-Nous pouvons définir une nouvelle classe, héritant de <ml>stringable</ml>
-et implémentant la méthode manquante:
-</p>
-<oc-eval>class my_c x =
-  object
-    inherit stringable
-    method as_string = string_of_int x
-  end;;
-</oc-eval>
-<p>
-Il devient possible d'instancier cette classe:
-</p>
-<oc-eval>let o = new my_c 42 ;;
-o#print ;;
-</oc-eval>
-<p>
-Il n'est évidemment pas possible de créer un objet avec une méthode
-virtuelle:
-</p>
-<oc-eval error-exc="false">
-let o = object method virtual print : unit end ;;
-</oc-eval>
-</section>
-
-<section id="clpolym" title="Polymorphisme de classe">
+<subsection id="clpolym" title="Polymorphisme de classe">
 <p>
 <doc href="fonctionnelle#Lesparamtresdestypespara">Comme les types</doc>,
-les définitions de classes peuvent être paramétrées par des variables de types:
+les définitions de classes peuvent être paramétrées par des variables de type:
 </p>
 <centerstx>class ['a] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end
 class ['a, 'b, ...] <stxid>identifiant</stxid> ... = object <stxid>champs</stxid> end</centerstx>
 <p>
 Le type créé lorsqu'une classe est déclarée est lui aussi paramétré par les mêmes
-variables de types.
+variables de type.
 </p>
 <p>
 Lorsqu'une classe est paramétrée de cette sorte, il devient possible d'utiliser les
-variables de types dans les annotations de type dans la définition de la classe.
+variables de type dans les annotations de type dans la définition de la classe.
 En reprenant <doc href="#exampleobjectlist">notre exemple d'interface objet pour une liste</doc>,
 nous pouvons maintenant définir une classe représentant une liste d'éléments d'un
 type quelconque:
@@ -1007,7 +1011,7 @@ let l4 = l#cons "hello" ;;
 Il est possible de définir une classe paramétrée par un ou plusieurs types,
 tout en posant des contraintes sur ces types. Ainsi, nous pouvons paramétrer
 notre classe par un type <ml>'a</ml>, et imposer que ce type soit
-un sous-type de <ml>point</ml>, grâce au mot clé <ml>constraint</ml>.
+un sous-type de <ml>point</ml>, grâce au mot-clé <ml>constraint</ml>.
 La notation <ml>constraint 'a = #point</ml> dénote cette contrainte, le
 <ml>#</ml> signifiant "tout type sous-type de <ml>point</ml>, avec
 éventuellement des méthodes supplémentaires":
@@ -1028,54 +1032,194 @@ circ2#as_string;;
 centre à la création de l'objet <ml>circle</ml>, une erreur est signalée:
 </p>
 <oc-eval error-exc="false">
-let p = object
-    method x = 1
-    method y = 2
-    method as_string = "(1,2)"
-  end;;
+let p = object method x = 1  method y = 2  method as_string = "(1,2)" end;;
 let circ = new circle p 2.0;;
 </oc-eval>
 <p>
-Avec les classes paramétrées par des variables de types, on obtient
-des constructeurs polymorphes d'objets, mais pas des objets polymorphes,
-c'est-à-dire que le type des objets instanciés ne contiennent pas de variables
-de types libres. Nous allons maintenant voir comment définir des objets
-dont certaines méthodes sont polymorphes.
+Lorsqu'on hérite d'une classe paramétrée par des variables de type,
+il faut indiquer une valeur pour ces variables de type à la suite du
+mot-clé <ml>inherit</ml>:
 </p>
-</section>
-
-<section id="polymeths" title="Méthodes polymorphes">
-
+<oc-eval>class string_list =
+  object
+    inherit [string] clist
+  end;;
+</oc-eval>
+<p>On peut bien sûr utiliser des variables de type de la classe en
+cours de définition:
+</p>
+<oc-eval>class ['a] clist2 =
+  object
+    inherit ['a] clist
+    method length = List.length value
+  end;;
+</oc-eval>
 <p>
-
+Avec les classes paramétrées par des variables de type, on obtient
+des constructeurs polymorphes d'objets, mais pas des objets polymorphes,
+c'est-à-dire que les types des objets instanciés (notamment les types des méthodes)
+ne contiennent pas de variables de type libres. Nous allons maintenant voir
+comment définir des objets dont certaines méthodes sont polymorphes.
 </p>
+</subsection>
 
-<exercice id="clistmap" title="Map d'un type vers un autre">
+<subsection id="polymeths" title="Méthodes polymorphes">
+<p>
+Lorsqu'on définit un objet, le type de ses méthodes est le plus général
+possible, tout comme lors de la définition d'une fonction:
+</p>
+<oc-eval>
+let f x y = [ x ; y ];;
+let o = object method f x y = [x ; y] end;;
+o#f 1 2;;
+o#f "hello" "world";;
+</oc-eval>
+<p>
+A contrario, comme la définition d'une classe donne lieu à la création
+d'un type, il n'est pas possible de laisser des variables de type libres
+dans le type de la classe, de la même façon qu'il ne peut y avoir de
+variable de type libre dans la définition d'un type:
+</p>
+<oc-eval error-exc="false">
+type t = 'a -> 'a -> 'a list;;
+class c = object method f x y = [x ; y] end;;
+</oc-eval>
+<p>
+Introduire des paramètres de types ne suffit pas à rendre une
+méthode polymorphe, car son type sera instancié lors de l'instanciation
+de la classe. Avec un paramètre de type à notre classe, on a donc un
+constructeur polymorphe d'objets, mais pas des objets avec des méthodes
+polymorphes:
+</p>
+<oc-eval error-exc="false">class ['a] c = object method f (x:'a) (y:'a) = [x ; y] end;;
+let o = new c;;
+o#f 1 2 ;;
+(* le type de o est completement connu, il n'est plus polymorphe *)
+o#f "hello" "world";;
+</oc-eval>
+<p>
+Pour définir une méthode polymorphe, il faut explicitement indiquer sur quelles
+variables de son type porte le polymorphisme, en introduisant des quantificateurs
+dans son type, suivis d'un <ml>.</ml>. Reprenons la définition de notre classe,
+qui n'a plus besoin en l'occurrence d'être paramétrée par un type, et utilisons
+un quantificateur en explicitant le type de la méthode <ml>f</ml>:
+</p>
+<oc-eval>class c = object
+    method f : 'a. 'a -> 'a -> 'a list = fun x y -> [x ; y]
+  end;;
+(* le type de la classe montre maitenant bien une methode polymorphe, avec des
+  variables de type libres *)
+let o = new c;;
+o#f 1 2 ;;
+o#f "hello" "world";;
+</oc-eval>
+<p>
+On peut évidemment quantifier sur plusieurs variables, et mixer paramètres
+de types de la classe et méthodes polymorphes:
+</p>
+<oc-eval>class ['a] triple (x:'a) =
+  object
+    method mk :'b 'c . 'b -> 'c -> 'a * 'b * 'c  = fun y z -> (x, y, z)
+  end;;
+let mk1 = new triple 1 ;;
+mk1#mk "hello" 42 ;;
+mk1#mk 42 "hello";;
+</oc-eval>
+
+<exercice id="clistmap" title="Ajout d'une méthode polymorphe">
 <p>
 Modifier la définition de la classe <ml>clist</ml> pour qu'elle
-prenne en paramètre une valeur (liste) initiale et faire en
-sorte que la méthode <ml>map</ml> soit du type
-<ml>('a -> 'b) -> 'b clist</ml>.
+prenne en paramètre la valeur initiale de la liste et
+lui ajouter une méthode <ml>fold_left : ('b -> 'a -> 'b) -> 'b -> 'b</ml>,
+utilisant <ml>List.fold_left</ml>.
 </p>
 <solution>
 <oc-eval><![CDATA[
-class ['a] clist init =
+class ['a] clist (init : 'a list)=
   object
-    val value = (init : 'a list)
+    val value = init
     method value = value
     method cons h = {< value = h :: value >}
     method hd = List.hd value
     method tl = List.tl value
-(*    method map : 'b. ('a -> 'b) -> 'b clist = fun f -> (new clist (List.map f value) : 'b clist)*)
+    method fold_left : 'b. ('b -> 'a -> 'b) -> 'b -> 'b =
+      fun f acc -> List.fold_left f acc value
   end;;
 ]]></oc-eval>
 </solution>
+<oc-eval>let ma_liste = new clist [1 ; 2 ; 3 ; 4];;
+let sum = ma_liste#fold_left (+) 0;;
+let concat = ma_liste#fold_left (fun s x -> s^(string_of_int x)) "";;
+</oc-eval>
 </exercice>
-
+</subsection>
 </section>
 
-
-Copie d'objets
-Méthodes binaires
+<section id="cloningcomp" title="Copie d'objets, comparaison">
+<subsection id="cloning" title="Copie">
+<p>
+Le module <moduledoc name="Oo"/> contient des fonctions relatives aux objets.
+La fonction <ml>Oo.copy</ml> copie un objet en copiant ses attributs et méthodes.
+Comme son type l'indique, elle prend n'importe quelle objet et retourne un objet
+du même type (une copie, en l'occurrence):
+</p>
+<oc-eval>Oo.copy;;</oc-eval>
+<p>
+Pour les attributs, il s'agit d'une copie "peu profonde" (<em>shallow copy</em>,
+tout comme <ml>Array.copy</ml>): Les valeurs des attributs sont partagés, et
+la mise à jour d'un attribut dans un objet ne modifie pas l'attribut dans l'objet
+copié. Par contre, la copie ne descend pas dans les références, donc si un attribut
+contient une référence, modifier la valeur référencée par l'attribut dans un
+objet revient à modifier la valeur référencée dans l'objet copié.
+</p>
+<p>
+<oc-eval><![CDATA[
+let o = object
+    val mutable x = 0
+    val y = ref 0
+    method set_x x2 = x <- x2
+    method x = x
+    method set_y y2 = y := y2
+    method y = !y
+  end;;
+let o2 = Oo.copy o;;
+o#set_x 42 ; o#set_y 1984 ;;
+(* x dans o2 n'a pas ete modifie *)
+o2#x ;;
+(* la valeur pointee par y a change dans les deux objets, mais
+  pas la reference *)
+o2#y ;;
+]]></oc-eval>
+</p>
+<p>
+Pour copier un objet depuis l'intérieur de lui-même, nous avons vu
+l'utilisation de la construction <doc href="#selfcopy"><ml>{&lt; ... &gt;}</ml></doc>.
+Si aucun attribut n'est spécifié dans cette construction, cela revient à faire
+une copie de l'objet. Cela signifie que les deux méthodes
+<ml>copy1</ml> et <ml>copy2</ml> dans le code suivant sont équivalentes:
+</p>
+<oc-eval><![CDATA[object(self) method copy1 = {< >}  method copy2 = Oo.copy self end;;]]></oc-eval>
+</subsection>
+<subsection id="comparison" title="Comparaison">
+<p>
+Il est possible d'utiliser les fonctions de comparaison génériques <ml>Pervasives.compare</ml>,
+<ml>(=)</ml>, <ml>(&lt;)</ml>, <ml>(&lt;=)</ml>, ...,
+pour comparer deux objets. Le résultat ne sera cependant pas celui espéré:
+</p>
+<oc-eval><![CDATA[let o = object val x = 42 end;;
+let o2 = object val x = 42 end;;
+let o3 = Oo.copy o2 ;;
+o = o2 ;;
+o2 = o3 ;;
+o = o;;
+]]></oc-eval>
+<p>En effet, deux objets sont égaux s'ils ont la même adresse physique.</p>
+<p>
+Il convient donc d'implémenter la fonction de comparaison adaptée, en accédant
+aux attributs des objets à comparer. On implémente parfois ces comparaisons
+dans des méthodes binaires.
+</p>
+</subsection>
+</section>
 </contents>
 </module>
