@@ -689,10 +689,8 @@ print stack;;
 </oc-eval>
 </exercice>
 </subsection>
-</section>
 
-
-<section id="classrec" title="Classes mutuellement récursives">
+<subsection id="classrec" title="Classes mutuellement récursives">
 <p>
 Il peut parfois être utile de définir des classes se connaissant les unes
 les autres, de façon à ce que chacune puisse instancier les autres.
@@ -713,7 +711,11 @@ let objet_c1 = new class1 42 ;;
 let objet_c2 = objet_c1#make_c2;;
 objet_c2#as_string ;;
 </oc-eval>
+</subsection>
+
 </section>
+
+
 
 
 <section id="inheriting" title="Héritage">
