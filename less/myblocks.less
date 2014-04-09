@@ -35,11 +35,43 @@ div.figure {
 
 div.ocaml-toplevel {
   color: #666666;
-  font-style: italic;
+  .stdout {
+    .rounded-box();
+    background-color: rgba(0, 0, 255, 0.08) ;
+    padding: 2px;
+    padding-left: 4px;
+    border-width: 0 0 0 2px;
+    border-style: solid ;
+    border-color: #999999;
+  }
+  .stderr {
+    font-style: italic;
+  }
+  .toplevel-out {
+    font-style: italic;
+  }
 }
 
 div.ocaml-exc {
-  color: @red;
+  div.toplevel-out {
+    color: @red;
+  }
+}
+
+div.ocaml-exc {
+
+}
+
+.error-loc {
+  text-decoration: none;
+  border-bottom: 2px solid red;
+  /*background-color: @errorBackground ;*/
+}
+
+.warning-loc {
+  text-decoration: none;
+  border-bottom: 2px solid orange;
+  /*background-color: @errorBackground ;*/
 }
 
 pre {
