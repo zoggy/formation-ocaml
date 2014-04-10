@@ -1,7 +1,8 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-STOG_OPTIONS=--default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.dot --plugin $(PLUGIN)
+OCAML_SESSION=./my-ocaml-session `ocamlfind query -i-format inspect`
+STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.dot --plugin $(PLUGIN)
 MORE_OPTIONS=
 
 EXERCICES=codes/count_words.cmo \
@@ -16,14 +17,17 @@ EXERCICES=codes/count_words.cmo \
 
 PLUGIN=stog_course.cmxs
 
-build: $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
+build: my-ocaml-session $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
 	$(STOG) $(STOG_OPTIONS) $(MORE_OPTIONS) .  # --only slides/slides
 	cp -f slide_arbre*.png $(DEST_DIR)/slides/
 	$(MAKE) style
 
+my-ocaml-session:
+	mk-stog-ocaml-session -package inspect -linkall -o $@
+
 clean:
-	rm -f $(PLUGIN)
+	rm -f $(PLUGIN) my-ocaml-session
 	rm -f $(BLOG_EXAMPLES)
 	rm -f *.cm? posts/*.cm? codes/*.cm?
 	rm -f *.o posts/*.o codes/*.o

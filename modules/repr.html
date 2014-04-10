@@ -1,0 +1,38 @@
+<module title="Représentation interne des valeurs"
+with-contents="true"
+ocaml-session="repr"
+>
+<ocaml-repr pref="" session="&lt;ocaml-session/&gt;" >
+<dot defer_="3" prefix-svg-ids="&lt;pref/&gt;">
+  <ocaml-printf session="&lt;session/&gt;" defer_="1">
+    (let s =
+      Inspect.Dot.dump_list_with_formatter Format.str_formatter <contents/>
+    in
+    Format.flush_str_formatter ())
+  </ocaml-printf>
+</dot>
+
+</ocaml-repr>
+<contents>
+<section id="preambule" title="Préambule">
+<p>
+Les informations de typage incluent notamment les informations relatives aux
+structures des données manipulées (listes, enregistrements, constructeurs, entiers, chaînes, ...).
+Elles servent à générer le code qui créera et accèdera à de telles structures.
+Cette information de typage n'est pas conservée dans le code final
+(code-octet ou code natif).
+</p>
+<p>
+Ce module a pour objectif de montrer comment sont représentées les valeurs OCaml
+en interne, notamment pour illustrer le partage de structures, la copie de
+valeurs et les références.
+</p>
+</section>
+
+<section>
+<oc-eval>let list = [ 1 ; 2 ; 3];;</oc-eval>
+<ocaml-repr>["list", list]</ocaml-repr>
+</section>
+
+</contents>
+</module>
