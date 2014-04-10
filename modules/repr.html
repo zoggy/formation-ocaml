@@ -33,6 +33,15 @@ Nous ne décrivons pas tous les détails de la représentation interne, seulemen
 principes. Pour le reste, on pourra se référer à la partie du manuel OCaml
 sur l'<ext-a href="http://caml.inria.fr/pub/docs/manual-ocaml/intfc.html">interfaçage avec C</ext-a>.
 </p>
+<p>Les illustrations de la représentation des valeurs en mémoire sont
+réalisées à l'aide de
+<ext-a href="http://krohrer.github.io/caml-inspect/">Caml-inspect</ext-a>, une bibliothèque
+permettant notamment de générer des graphes au format Graphviz, pour montrer les blocs
+et leur chaînage. La règle <icode lang="xml">&lt;ocaml-printf&gt;</icode> et le
+plugin <ext-a href="http://zoggy.github.io/stog/plugins/dot.html">Dot</ext-a> de
+<ext-a href="http://zoggy.github.io/stog/">Stog</ext-a> font le reste pour
+la rédaction de ce document.
+</p>
 </section>
 
 <section id="representation" title="Représentation des valeurs">
@@ -55,27 +64,190 @@ ramasse-miettes) ou bien un objet hors du tas (cas des allocations faites en C).
 <p>
 Chaque bloc du tas a un en-tête, composé de la longueur du bloc (en nombre de mots)
 et d'un <em>tag</em>. Ce tag indique la nature du bloc, donc la façon dont le bloc
-est structuré.
+est structuré. On trouvera donc des tags pour distinguer notamment les blocs contenant
+une chaîne de caractère, une fermeture de fonction, un objet, ...
 </p>
+<p>
+Les flottants sont représentés dans un bloc (<em>boxed</em>) sauf dans certains
+cas où il est possible d'optimiser la représentation en les mettant directement
+(<em>unboxed</em>).
+</p>
+<p>
+Pour les types sommes (<em>variants</em>), chaque constructeur sera représenté
+selon qu'il possède ou non des arguments:
+</p>
+<ul>
+<li>le constructeur sans argument sera représenté par l'entier 0, le second
+  par 1, ..., le n-ième par l'entier (n-1),</li>
+<li>le premier constructeur avec argument sera représenté par un bloc dans le
+tas avec le tag 0, le second avec le tag 1, ..., le n-ième avec le tag (n-1). Les
+champs du bloc contiennent les valeurs des arguments du constructeur. Il y a
+une limite au nombre de tags disponibles, ce qui limite le nombre de constructeurs
+possibles.
+</li>
+</ul>
+<p>Les tuples et les enregistrements sont représentés par des blocs avec le tag 0.
+Les membres du tuple ou de l'enregistrement se trouvent successivement dans
+les champs du bloc (sauf pour les enregistrements où tous les champs sont des flottants,
+qui sont représentés comme un tableau de flottants). Dans le code généré, il n'y a
+donc pas de différence entre accéder à un élément d'un tuple et un champ d'un
+enregistrement.
+</p>
+<p>
+Les tableaux d'entiers ou de pointeurs sont représentés par un bloc de tag 0, les tableaux
+de flottants par un bloc avec un tag spécial, permettant de mettre
+les flottants dans les champs du bloc, sans interpréter le contenu de ces champs
+comme étant "entier" ou "pointeur", ceci afin d'optimiser l'espace et les temps d'accès.
+</p>
+<p>
+Parmi les constructeurs usuels,
+</p>
+<ul>
+<li><ml>()</ml>, <ml>false</ml> et <ml>[]</ml> sont représentés par l'entier 0,
+donc bien comme les premiers contructeurs constants de leurs types respectifs,</li>
+<li><ml>true</ml> est représenté par l'entier 1 (comme un deuxième constructeur
+constant du type <ml>bool</ml>),</li>
+<li><ml>h::t</ml> est représenté par un bloc avec le tag 0 et contenant deux champs,
+l'un pour la valeur de la tête <ml>h</ml>, l'autre avec la valeur de la queue <ml>t</ml>.
+</li>
+</ul>
 </subsection>
 </section>
 
-<section>
+<section id="examples" title="Exemples">
+<subsection id="intliststr" title="Entiers, listes, chaînes">
+<p>
+Commençons par associer à <ml>x</ml> la valeur <ml>1</ml> et à <ml>list</ml>
+une liste:
+</p>
 <oc-eval>let x = 1 ;;
 let list = [ x ; 2 ; 3];;</oc-eval>
 <ocaml-repr>["list", list; "x", Obj.magic x]</ocaml-repr>
-
+<p>
+Dans la représentation, nous constatons que la constante <ml>1</ml> n'est pas dans un bloc.
+La liste est bien représentée, comme décrit plus haut, par un chaînage de bloc avec
+le tag 0 et comportant chacun deux champs: la tête et la queue. Comme les valeurs de
+la liste sont des entiers, ils apparaissent directement dans le premier champ du
+bloc de chaque maillon. Le numéro sur la flèche entre deux blocs indique le numéro du champ
+du premier bloc qui pointe le second bloc (en commençant à 0).
+On constante que le dernier maillon de la liste comporte <ml>0</ml> dans son dernier champs,
+ce qui représente le constructeur <ml>[]</ml>.
+</p>
+<p>
+Utilisons maintenant des chaînes de caractères:
+</p>
 <oc-eval>let x = "hello" ;;
 let list = [ x ; "world" ; "!"];;
-let y = "hello";;
 </oc-eval>
-<ocaml-repr>["list", list; "x", Obj.magic x ; "y", Obj.magic y]</ocaml-repr>
+<ocaml-repr>["list", list; "x", Obj.magic x ]</ocaml-repr>
+<p>
+Les chaînes étant représentées dans un bloc avec un tag spécial, on constate que
+<ml>x</ml> et la premier maillon de <ml>list</ml> pointent tous les deux vers le
+bloc contenant la chaîne. En effet, lorsqu'on met <ml>x</ml> dans la définition de
+la liste, c'est bien la valeur associée à <ml>x</ml>, donc ici l'adresse du bloc,
+qui est utilisée, ce qui aboutit au partage que l'on voit sur l'illustration.
+</p>
+<p>Définisson également <ml>y</ml> avec la même chaîne, et <ml>z</ml> en reprenant
+la tête de <ml>list</ml>:</p>
+<oc-eval>let y = "hello";;
+let z = List.hd list ;;</oc-eval>
+<ocaml-repr>["list", list; "x", Obj.magic x ; "y", Obj.magic y; "z", Obj.magic z]</ocaml-repr>
+<p>Cette fois, la chaîne n'est pas partagée, puisque la définition de y ne fait
+pas appel à <ml>x</ml> ni à la tête de <ml>list</ml>. Au contraire de <ml>z</ml> qui,
+en utilisant cette dernière, se retrouve à pointer sur le même bloc. En conséquence,
+une modification de la chaîne pointée par <ml>y</ml> n'aura pas de conséquence sur
+l'autre chaîne pointée par <ml>x</ml>, <ml>z</ml> et la tête de <ml>list</ml>.
+</p>
+</subsection>
 
-<oc-eval>let x = 1.5 ;;
-let list = [ x ; 2.34 ; 3.14159];;</oc-eval>
-<ocaml-repr>["list", list; "x", Obj.magic x]</ocaml-repr>
+<subsection id="variants" title="Types sommes">
+<p>
+Définissons un type d'arbre de la façon suivante:
+</p>
+<oc-eval>type 'a tree =
+  | Leaf of 'a
+  | Node of 'a tree * 'a tree ;;
+</oc-eval>
+<p>
+Nous avons deux constructeurs possédant chacun des arguments. Les valeurs
+construites avec ces deux constructeurs seront donc représentées par des blocs
+ayant respectivement les tags 0 et 1. Les valeurs <ml>Leaf _</ml> seront dans
+un bloc avec un champ, pour l'unique argument, et les valeurs <ml>Node _</ml>
+nécessiteront deux champs pour représenter les deux arguments.
+</p>
+<p>
+S'il s'agit d'arbres d'entiers <ml>int tree</ml>, la valeur des feuilles sera
+stockée comme un entier directement dans l'unique champ d'un bloc de tag 0 (<ml>Leaf</ml>).
+Si c'est par exemple un <ml>string tree</ml>, ce premier champ contiendra un pointeur
+vers un bloc contenant la chaîne. Vérifions cela:
+</p>
+<oc-eval>let t = Node (Leaf 1, Leaf 2);;</oc-eval>
+<ocaml-repr>["t",t]</ocaml-repr>
+<p>Définissons un autre arbre, utilisant le premier pour mettre en évidence
+le partage des représentations:</p>
+<oc-eval>let t2 = Node (t, Node (Node (Leaf 3, Leaf 4), Leaf 5));;</oc-eval>
+<ocaml-repr>["t",t ; "t2", t2]</ocaml-repr>
+</subsection>
 
+<subsection id="sharing" title="Exemple de partage: les ensembles">
+<p>
+Le module <moduledoc name="Set">Set</moduledoc> est utilisé pour manipuler des ensembles
+dans un style fonctionnel, c'est-à-dire qu'un ajout renvoie un nouvel ensemble.
+Construisons des ensembles par ajout successifs et voyons ce qui reste partagé:
+</p>
+<oc-eval toplevel="false">module S = Set.Make(String);;</oc-eval>
+<oc-eval>let set1 = S.empty ;;
+let set2 = S.add "hello" set1;;
+let set3 = S.add "world" set2;;
+let set4 = S.add "!" set3;;
+</oc-eval>
+<ocaml-repr>["set1", set1; "set2", set2; "set3", set3; "set4", set4]</ocaml-repr>
+<p>Il apparaît qu'à ce moment, <ml>set3</ml> et <ml>set4</ml> partagent un noeud
+de l'arbre utilisé pour représenter un ensemble.
+</p>
+</subsection>
 
+<subsection id="refs" title="Modifications">
+<p>
+Le type <ml>'a ref</ml> est un type enregistrement contenant un seul champ
+mutable. C'est ce que nous voyons par exemple avec le code suivant:
+</p>
+<oc-eval>let x = ref "ma chaine" ;;</oc-eval>
+<ocaml-repr>["x", x]</ocaml-repr>
+<p>
+Le fait qu'un champ puisse être modifié fait partie du typage, et cela n'apparaît
+donc plus dans la représentation. Il serait donc tout à fait possible de modifier
+n'importe quelle valeur, par exemple avec un bout de code en C appelé depuis OCaml.
+</p>
+<p>Définissons maintenant <ml>y</ml> pour pointer sur la même valeur que <ml>x</ml>
+(un enregistrement avec un champ mutable, donc) et z qui pointe sur la valeur
+pointée par le champ de l'enregistrement <ml>x</ml>:
+</p>
+<oc-eval>let y = x ;;
+let z = !x ;;</oc-eval>
+<ocaml-repr>["x", x ; "y", y ; "z", Obj.magic z]</ocaml-repr>
+<p>Modifions la chaîne pointée par <ml>x</ml>, puis modifions <ml>x</ml> pour
+le faire pointer sur une autre chaine:</p>
+<oc-eval><![CDATA[!x.[0] <- 'T';;
+x := "coucou";;]]></oc-eval>
+<ocaml-repr>["x", x ; "y", y ; "z", Obj.magic z]</ocaml-repr>
+<p>Nous constatons que la chaîne associée à la variable <ml>z</ml> a bien été modifiée,
+puis que le champ de l'enregistrement pointe maintenant une autre chaîne dans un
+nouveau bloc.
+</p>
+</subsection>
+<subsection id="arrays" title="Tableaux">
+<p>
+Lorsqu'on copie un tableau avec <ml>Array.copy</ml>, ou un objet avec <ml>Oo.copy</ml>,
+il s'agit d'une copie "peu profonde" (<em>shallow copy</em>): les valeurs contenues dans
+les cases du tableau sont copiées dans un nouveau tableau. Ces valeurs sont soit des
+entiers soit des pointeurs, ce qui signifie que les valeurs pointées ne sont pas dupliquées
+mais partagées entre les deux tableaux.
+</p>
+<oc-eval>let t = Array.init 3 (fun i -> string_of_int i);;
+let t2 = Array.copy t;; </oc-eval>
+<ocaml-repr>["t", t ; "t2", t2]</ocaml-repr>
+</subsection>
 </section>
 
 </contents>
