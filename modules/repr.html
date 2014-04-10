@@ -2,8 +2,9 @@
 with-contents="true"
 ocaml-session="repr"
 >
-<ocaml-repr pref="" session="&lt;ocaml-session/&gt;" >
-<dot defer_="3" prefix-svg-ids="&lt;pref/&gt;">
+<ocaml-repr pref="" session="&lt;ocaml-session/&gt;" size="-Gsize=7,7" args="">
+<div class="center">
+<dot defer_="3" prefix-svg-ids="&lt;pref/&gt;" args="&lt;size/&gt; &lt;args/&gt;">
   <ocaml-printf session="&lt;session/&gt;" defer_="1">
     (let s =
       Inspect.Dot.dump_list_with_formatter Format.str_formatter <contents/>
@@ -11,7 +12,7 @@ ocaml-session="repr"
     Format.flush_str_formatter ())
   </ocaml-printf>
 </dot>
-
+</div>
 </ocaml-repr>
 <contents>
 <section id="preambule" title="Préambule">
@@ -24,14 +25,57 @@ Cette information de typage n'est pas conservée dans le code final
 </p>
 <p>
 Ce module a pour objectif de montrer comment sont représentées les valeurs OCaml
-en interne, notamment pour illustrer le partage de structures, la copie de
+en interne, surtout pour illustrer le partage de structures, la copie de
 valeurs et les références.
+</p>
+<p>
+Nous ne décrivons pas tous les détails de la représentation interne, seulement quelques
+principes. Pour le reste, on pourra se référer à la partie du manuel OCaml
+sur l'<ext-a href="http://caml.inria.fr/pub/docs/manual-ocaml/intfc.html">interfaçage avec C</ext-a>.
 </p>
 </section>
 
+<section id="representation" title="Représentation des valeurs">
+<subsection id="values" title="Entiers et pointeurs">
+<p>
+Une valeur OCaml est représentée par un mot, de 32 ou 64 bits selon l'architecture
+matérielle sous-jacente.
+</p>
+<p>Une valeur peut être soit un entier (<em>unboxed integer</em>),
+soit un pointeur. Cette distinction est faite avec le bit de plus faible poids: 1 pour
+un entier, 0 pour un pointeur. C'est la raison pour laquelle les entiers OCaml sont codés
+sur 31 ou 63 bits.
+</p>
+<p>
+Un pointeur peut pointer un bloc dans le tas (<em>heap</em>, géré par le
+ramasse-miettes) ou bien un objet hors du tas (cas des allocations faites en C).
+</p>
+</subsection>
+<subsection id="heapblocks" title="Blocs dans le tas">
+<p>
+Chaque bloc du tas a un en-tête, composé de la longueur du bloc (en nombre de mots)
+et d'un <em>tag</em>. Ce tag indique la nature du bloc, donc la façon dont le bloc
+est structuré.
+</p>
+</subsection>
+</section>
+
 <section>
-<oc-eval>let list = [ 1 ; 2 ; 3];;</oc-eval>
-<ocaml-repr>["list", list]</ocaml-repr>
+<oc-eval>let x = 1 ;;
+let list = [ x ; 2 ; 3];;</oc-eval>
+<ocaml-repr>["list", list; "x", Obj.magic x]</ocaml-repr>
+
+<oc-eval>let x = "hello" ;;
+let list = [ x ; "world" ; "!"];;
+let y = "hello";;
+</oc-eval>
+<ocaml-repr>["list", list; "x", Obj.magic x ; "y", Obj.magic y]</ocaml-repr>
+
+<oc-eval>let x = 1.5 ;;
+let list = [ x ; 2.34 ; 3.14159];;</oc-eval>
+<ocaml-repr>["list", list; "x", Obj.magic x]</ocaml-repr>
+
+
 </section>
 
 </contents>
