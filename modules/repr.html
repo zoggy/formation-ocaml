@@ -77,7 +77,7 @@ Pour les types sommes (<em>variants</em>), chaque constructeur sera représenté
 selon qu'il possède ou non des arguments:
 </p>
 <ul>
-<li>le constructeur sans argument sera représenté par l'entier 0, le second
+<li>le premier constructeur sans argument sera représenté par l'entier 0, le second
   par 1, ..., le n-ième par l'entier (n-1),</li>
 <li>le premier constructeur avec argument sera représenté par un bloc dans le
 tas avec le tag 0, le second avec le tag 1, ..., le n-ième avec le tag (n-1). Les
@@ -125,12 +125,12 @@ let list = [ x ; 2 ; 3];;</oc-eval>
 <ocaml-repr>["list", list; "x", Obj.magic x]</ocaml-repr>
 <p>
 Dans la représentation, nous constatons que la constante <ml>1</ml> n'est pas dans un bloc.
-La liste est bien représentée, comme décrit plus haut, par un chaînage de bloc avec
+La liste est bien représentée, comme décrit plus haut, par un chaînage de blocs avec
 le tag 0 et comportant chacun deux champs: la tête et la queue. Comme les valeurs de
 la liste sont des entiers, ils apparaissent directement dans le premier champ du
 bloc de chaque maillon. Le numéro sur la flèche entre deux blocs indique le numéro du champ
 du premier bloc qui pointe le second bloc (en commençant à 0).
-On constante que le dernier maillon de la liste comporte <ml>0</ml> dans son dernier champs,
+On constate que le dernier maillon de la liste contient <ml>0</ml> dans son dernier champs,
 ce qui représente le constructeur <ml>[]</ml>.
 </p>
 <p>
@@ -142,7 +142,7 @@ let list = [ x ; "world" ; "!"];;
 <ocaml-repr>["list", list; "x", Obj.magic x ]</ocaml-repr>
 <p>
 Les chaînes étant représentées dans un bloc avec un tag spécial, on constate que
-<ml>x</ml> et la premier maillon de <ml>list</ml> pointent tous les deux vers le
+<ml>x</ml> et le premier maillon de <ml>list</ml> pointent tous les deux vers le
 bloc contenant la chaîne. En effet, lorsqu'on met <ml>x</ml> dans la définition de
 la liste, c'est bien la valeur associée à <ml>x</ml>, donc ici l'adresse du bloc,
 qui est utilisée, ce qui aboutit au partage que l'on voit sur l'illustration.
@@ -152,7 +152,7 @@ la tête de <ml>list</ml>:</p>
 <oc-eval>let y = "hello";;
 let z = List.hd list ;;</oc-eval>
 <ocaml-repr>["list", list; "x", Obj.magic x ; "y", Obj.magic y; "z", Obj.magic z]</ocaml-repr>
-<p>Cette fois, la chaîne n'est pas partagée, puisque la définition de y ne fait
+<p>Cette fois, la chaîne n'est pas partagée, puisque la définition de <ml>y</ml> ne fait
 pas appel à <ml>x</ml> ni à la tête de <ml>list</ml>. Au contraire de <ml>z</ml> qui,
 en utilisant cette dernière, se retrouve à pointer sur le même bloc. En conséquence,
 une modification de la chaîne pointée par <ml>y</ml> n'aura pas de conséquence sur
@@ -173,7 +173,7 @@ Nous avons deux constructeurs possédant chacun des arguments. Les valeurs
 construites avec ces deux constructeurs seront donc représentées par des blocs
 ayant respectivement les tags 0 et 1. Les valeurs <ml>Leaf _</ml> seront dans
 un bloc avec un champ, pour l'unique argument, et les valeurs <ml>Node _</ml>
-nécessiteront deux champs pour représenter les deux arguments.
+nécessiteront des blocs à deux champs pour représenter les deux arguments.
 </p>
 <p>
 S'il s'agit d'arbres d'entiers <ml>int tree</ml>, la valeur des feuilles sera
@@ -181,10 +181,11 @@ stockée comme un entier directement dans l'unique champ d'un bloc de tag 0 (<ml
 Si c'est par exemple un <ml>string tree</ml>, ce premier champ contiendra un pointeur
 vers un bloc contenant la chaîne. Vérifions cela:
 </p>
-<oc-eval>let t = Node (Leaf 1, Leaf 2);;</oc-eval>
-<ocaml-repr>["t",t]</ocaml-repr>
-<p>Définissons un autre arbre, utilisant le premier pour mettre en évidence
-le partage des représentations:</p>
+<oc-eval>let t = Node (Leaf 1, Leaf 2);;
+let string_tree = Node (Leaf "hello", Leaf "world!");;</oc-eval>
+<ocaml-repr>["t",t ; "string_tree", Obj.magic string_tree]</ocaml-repr>
+<p>Définissons un autre arbre, utilisant le premier arbre d'entiers <ml>t</ml>
+pour mettre en évidence le partage des représentations:</p>
 <oc-eval>let t2 = Node (t, Node (Node (Leaf 3, Leaf 4), Leaf 5));;</oc-eval>
 <ocaml-repr>["t",t ; "t2", t2]</ocaml-repr>
 </subsection>
@@ -202,7 +203,7 @@ let set3 = S.add "world" set2;;
 let set4 = S.add "!" set3;;
 </oc-eval>
 <ocaml-repr>["set1", set1; "set2", set2; "set3", set3; "set4", set4]</ocaml-repr>
-<p>Il apparaît qu'à ce moment, <ml>set3</ml> et <ml>set4</ml> partagent un noeud
+<p>Il apparaît qu'à ce moment, <ml>set3</ml> et <ml>set4</ml> partagent notamment un noeud
 de l'arbre utilisé pour représenter un ensemble.
 </p>
 </subsection>
