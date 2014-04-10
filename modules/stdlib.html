@@ -12,7 +12,7 @@ fonctions d'entrées/sorties à un nombre variable d'arguments (e.g. <ml>printf<
 <p>
 Elles se présentent sous forme de modules incluant éventuellement d'autres modules.
 Nous allons voir ici comment utiliser ces modules, tandis que la définition de nouveaux
-modules est détaillée dans le chapitre <doc href="modules"/>.
+modules est détaillée dans le chapitre <doc href="modules/modules"/>.
 </p>
 <p>
 Les bibliothèques de la distribution OCaml sont séparées en trois ensembles:
@@ -539,7 +539,7 @@ contenant les fonctions d'égalité et de hachage et on passe ce module à un
 autre module (<moduledoc name="Hashtbl.Make"/>), afin de construire un nouveau module
 permettant la manipulation de tables de hachage spécialisées par
 les fonctions du module en paramètre. Les modules prenant d'autres modules
-en paramètres sont appelés foncteurs. Ils sont exposés dans la section <doc href="modules#foncteurs"/>.
+en paramètres sont appelés foncteurs. Ils sont exposés dans la section <doc href="modules/modules#foncteurs"/>.
 </p>
 <p>
 Voici un exemple d'utilisation de table de hachage:
@@ -572,7 +572,7 @@ users;;
 L'indication <ml>= &lt;abstr&gt;</ml> signifie que le type est abstrait. C'est le cas de beaucoup
 de structures de données prédéfinies: leur représentation interne est masquée et il faut
 donc obligatoirement passer par les fonctions fournies pour manipuler ces structures.
-Cet aspect sera exposé dans la partie sur les modules dans le chapitre <doc href="modules"/>.
+Cet aspect sera exposé dans la partie sur les modules dans le chapitre <doc href="modules/modules"/>.
 </p>
 
 <exercice id="exowordcount" title="Comptage de mots">
@@ -699,7 +699,7 @@ bibliothèque standard. Ainsi, les modules définissant un type de données le n
 <p>
 L'ordre des arguments est aussi cohérent. Ces conventions facilitent l'utilisation d'un
 module à la place d'un autre pour changer de structure de données. Nous verrons un exemple
-dans la section sur les foncteurs (section <doc href="modules#foncteurs"/>).
+dans la section sur les foncteurs (section <doc href="modules/modules#foncteurs"/>).
 </p>
 </subsubsection>
 </subsection>
