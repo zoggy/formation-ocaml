@@ -65,7 +65,7 @@ ramasse-miettes) ou bien un objet hors du tas (cas des allocations faites en C).
 Chaque bloc du tas a un en-tête, composé de la longueur du bloc (en nombre de mots)
 et d'un <em>tag</em>. Ce tag indique la nature du bloc, donc la façon dont le bloc
 est structuré. On trouvera donc des tags pour distinguer notamment les blocs contenant
-une chaîne de caractère, une fermeture de fonction, un objet, ...
+une chaîne de caractères, une fermeture de fonction, un objet, ...
 </p>
 <p>
 Les flottants sont représentés dans un bloc (<em>boxed</em>) sauf dans certains
@@ -147,7 +147,7 @@ bloc contenant la chaîne. En effet, lorsqu'on met <ml>x</ml> dans la définitio
 la liste, c'est bien la valeur associée à <ml>x</ml>, donc ici l'adresse du bloc,
 qui est utilisée, ce qui aboutit au partage que l'on voit sur l'illustration.
 </p>
-<p>Définisson également <ml>y</ml> avec la même chaîne, et <ml>z</ml> en reprenant
+<p>Définissons également <ml>y</ml> avec la même chaîne, et <ml>z</ml> en reprenant
 la tête de <ml>list</ml>:</p>
 <oc-eval>let y = "hello";;
 let z = List.hd list ;;</oc-eval>
@@ -194,7 +194,7 @@ pour mettre en évidence le partage des représentations:</p>
 <p>
 Le module <moduledoc name="Set">Set</moduledoc> est utilisé pour manipuler des ensembles
 dans un style fonctionnel, c'est-à-dire qu'un ajout renvoie un nouvel ensemble.
-Construisons des ensembles par ajout successifs et voyons ce qui reste partagé:
+Construisons des ensembles par ajouts successifs et voyons ce qui reste partagé:
 </p>
 <oc-eval toplevel="false">module S = Set.Make(String);;</oc-eval>
 <oc-eval>let set1 = S.empty ;;
