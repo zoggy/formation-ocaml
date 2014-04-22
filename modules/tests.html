@@ -1,0 +1,165 @@
+<module title="Test de code OCaml"
+with-contents="true"
+ocaml-session="kaputt"
+draft="true"
+>
+<cl prompt="$&#xa0;"><sh defer_="1"><prompt/><contents/></sh></cl>
+<contents>
+<section counter="false" id="preambule" title="Préambule">
+<p>Ce document est une introduction, <strong>non pas aux tests en général</strong>,
+mais aux tests de code OCaml à l'aide du logiciel
+<ext-a href="http://kaputt.x9c.fr">Kaputt</ext-a>.
+</p>
+</section>
+
+<section id="introduction" title="Introduction">
+<p>
+La mise en place de tests lors du développement d'un logiciel gagne à être
+pensée dès le début du développement, afin de développer conjointement
+les tests et le code de test<note>Sans pour autant forcément tomber
+dans le <em>Test Driven Development</em>.</note>. Les tests doivent être
+automatisés pour pouvoir être relancés régulièrement, par exemple
+après chaque modification du code.
+</p>
+<p>
+L'environnement de test n'est pas à négliger. Sa facilité d'utilisation
+et l'aisance avec laquelle on peut rapidement ajouter un test sont nécessaires
+pour que l'ajout de tests ne soit pas rebutant. Dans le cas contraire,
+lorsque l'ajout de tests supplémentaires est pénible, le développeur
+aura tendance à retarder cette activité.
+</p>
+<p>
+L'environnement de test doit également être flexible pour pouvoir
+tester une partie seulement du code, sous différentes conditions
+(version bytecode ou code natif, ...). Enfin, il doit pouvoir
+s'inscrire facilement dans l'environnement de développement en général,
+notamment permettre une exploitation de ses résultats par des outils
+en aval.
+</p>
+<p>
+Kaputt fournit une bibliothèque de modules facilitant la définition
+et l'exécution de tests, ainsi que des fonctions pour afficher les
+résultats dans divers formats (texte, XML, ...).
+</p>
+<p>
+Les tests seront donc définis en écrivant du code OCaml, appelant
+des fonctions de la bibliothèque; de même pour la sortie des résultats.
+</p>
+<p>
+Cette approche offre une grande expressivité et une grande flexibilité,
+comme nous allons le voir plus loin.
+</p>
+<p>
+Kaputt est installable avec <ext-a href="http://opam.ocaml.org">Opam</ext-a>
+ou depuis ses sources.
+</p>
+</section>
+
+<section id="setup" title="Mise en place de l'environnemet de test">
+<p>
+Kaputt offre plusieurs possibilités pour définir et exécuter des tests.
+</p>
+<p>La première est l'exécution de code dans le toplevel <code>ocaml</code>:</p>
+<oc-eval>#directory "+kaputt";;
+#load "kaputt.cma";;
+open Kaputt.Abbreviations;;
+check Gen.int succ [Spec.is_odd_int ==> Spec.is_even_int]; flush stdout;;
+</oc-eval>
+
+<p>Pour des tests à lancer régulièrement, on préférera mettre leur code
+dans des fichiers <code>.ml</code>. On souhaitera souvent
+définir des tests pour des fonctions d'un module <ml>M</ml>
+qui ne sont pas visibles à l'extérieur du module <ml>M</ml>: Ces
+fonctions sont présentes dans le fichier <code>.ml</code> mais pas
+dans le fichier d'interface <code>.mli</code> (cf.
+<doc href="modules/modules#intfimpl" long="true"/>).
+</p>
+<p>Le code de test doit donc pouvoir accéder à tout le contenu
+du module <ml>M</ml>, donc être inclus dans le fichier <code>.ml</code>.
+Cependant, on ne souhaite évidemment pas que les tests soient exécutés
+dès qu'un module développé est utilisé. A vrai dire, on ne souhaite même
+pas que le code de test soit présent dans le code du logiciel ou
+de la bibliothèque lorsqu'ils sont compilés pour être installés.
+</p>
+<p>
+Kaputt offre deux possibilités pour résoudre ce problème. La première
+consiste en l'utilisation de l'extension de syntaxe Camlp4 <code>camlp4oof</code>,
+utilisée comme préprocesseur. Cette extension autorise la syntaxe suivante:
+</p>
+<ocaml>let () =
+  IFDEF TEST THEN
+    print_endline "test mode on"
+  ELSE
+    print_endline "test mode off"
+  ENDIF;;
+</ocaml>
+<p>
+Il suffit alors de compiler le code en indiquant sur la ligne de
+commande la commande de préprocesseur à utiliser, définissant ou non
+<ml>TEST</ml>:
+</p>
+<cl>ocaml{c,opt} -pp ’camlp4oof -DTEST’ code.ml</cl>
+<p>pour le mode <ml>TEST</ml> ou bien </p>
+<cl>ocaml{c,opt} -pp ’camlp4oof’ code.ml</cl>
+<p>pour compiler sans mode TEST.</p>
+<p>Cette solution permet de mettre le code de test au plus près du code testé.
+Cependant, si les tests sont nombreux, leur présence diminue la lisibilité du code.
+</p>
+<p>Kaputt propose une solution alternative, consistant à placer le code
+des tests du module <ml>M</ml> dans le fichier <code>m.mlt</code>. Kaputt
+fournit un préprocesseur, <code>kaputt_pp.byte</code>, permettant, à la
+compilation d'un fichier <code>.ml</code>,
+d'ajouter à la fin le contenu du fichier <ml>.mlt</ml> correspondant.
+Si nous voulons définir des tests pour des fonctions du fichier <code>foo.ml</code>,
+nous plaçons notre code de test dans le fichier <code>foo.mlt</code>. Il suffit
+ensuite que le process de compilation utilise le préprocesseur fourni par
+Kaputt lorsqu'on souhaite compiler les tests:
+</p>
+<cl>ocamlc -c -pp 'kaputt_pp.byte on camlp4o' foo.ml</cl>
+<p>L'argument <code>on</code> indique d'ajouter le contenu du fichier
+<code>.mlt</code> correspondant pour fournir le tout au compilateur.
+Si on ne souhaite pas intégrer le code de test, on remplacera <code>on</code>
+par <code>off</code>.
+</p>
+<warning title="Chemin de kaputt_pp.byte">
+<p>
+Il est probable que <code>kaputt_pp.byte</code> ne soit pas dans notre <code>PATH</code>.
+Il est par défaut installé dans le même répertoire que les bibliothèques de Kaputt.
+On pourra donc utiliser la commande suivante, s'appuyant sur <code>ocamlfind</code>
+pour obtenir le chemin complet:
+</p>
+<cl>ocamlc -c -pp `ocamlfind query kaputt`'/kaputt_pp.byte on camlp4o' foo.ml</cl>
+</warning>
+
+</section>
+
+<section id="assertions" title="Tests d'assertions">
+<oc-eval><![CDATA[let strip_string s =
+  let len = String.length s in
+  let rec iter_first n =
+    if n >= len then
+      None
+    else
+      match s.[n] with
+        ' ' | '\t' | '\n' | '\r' -> iter_first (n+1)
+      | _ -> Some n
+  in
+  match iter_first 0 with
+    None -> ""
+  | Some first ->
+      let rec iter_last n =
+        if n <= first then
+          None
+        else
+          match s.[n] with
+            ' ' | '\t' | '\n' | '\r' -> iter_last (n-1)
+          |	_ -> Some n
+      in
+      match iter_last (len-1) with
+        None -> String.sub s first 1
+      |	Some last -> String.sub s first ((last-first)+1)
+]]></oc-eval>
+</section>
+
+</contents>
+</module>

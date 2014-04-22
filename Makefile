@@ -1,7 +1,7 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-OCAML_SESSION=./my-ocaml-session `ocamlfind query -i-format inspect`
+OCAML_SESSION=./my-ocaml-session `echo \`ocamlfind query -i-format inspect kaputt\``
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.dot --plugin $(PLUGIN)
 MORE_OPTIONS=
 
@@ -24,7 +24,7 @@ build: my-ocaml-session $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 	$(MAKE) style
 
 my-ocaml-session:
-	mk-stog-ocaml-session -package inspect -linkall -o $@
+	mk-stog-ocaml-session -package inspect,kaputt -linkall -o $@
 
 clean:
 	rm -f $(PLUGIN) my-ocaml-session
