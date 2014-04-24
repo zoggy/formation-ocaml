@@ -3,6 +3,9 @@ with-contents="true"
 ocaml-session="kaputt"
 draft="true"
 >
+<kmodurl mod="">http://kaputt.x9c.fr/distrib/api/<mod/>.html</kmodurl>
+<kmod name=""><ext-a href="&lt;kmodurl mod=&quot;&amp;lt;name/&amp;gt;&quot;/&gt;"><ml defer_="1"><name/></ml></ext-a></kmod>
+<kval mod="" val=""><ext-a href="&lt;kmodurl mod=&quot;&amp;lt;mod/&amp;gt;&quot;/&gt;#VAL&lt;val/&gt;"><ml defer_="1"><mod/>.<val/></ml></ext-a></kval>
 <cl prompt="$&#xa0;"><sh defer_="1"><prompt/><contents/></sh></cl>
 <contents>
 <section counter="false" id="preambule" title="Préambule">
@@ -134,31 +137,131 @@ pour obtenir le chemin complet:
 </section>
 
 <section id="assertions" title="Tests d'assertions">
-<oc-eval><![CDATA[let strip_string s =
-  let len = String.length s in
-  let rec iter_first n =
-    if n >= len then
-      None
-    else
-      match s.[n] with
-        ' ' | '\t' | '\n' | '\r' -> iter_first (n+1)
-      | _ -> Some n
-  in
-  match iter_first 0 with
-    None -> ""
-  | Some first ->
-      let rec iter_last n =
-        if n <= first then
-          None
-        else
-          match s.[n] with
-            ' ' | '\t' | '\n' | '\r' -> iter_last (n-1)
-          |	_ -> Some n
-      in
-      match iter_last (len-1) with
-        None -> String.sub s first 1
-      |	Some last -> String.sub s first ((last-first)+1)
+<p>
+Un test d'assertion consiste à vérifier qu'une condition est
+remplie, c'est-à-dire qu'une expression booléenne vaut <ml>true</ml>.
+C'est le cas notamment quand on teste que le retour d'un appel de fonction
+est bien égal à une valeur de référence.
+</p>
+<p>
+Le module <kmod name="Assertion"/> de Kaputt fournit des fonctions facilitant
+l'écriture de tels tests, avec notamment des fonctions et modules
+pour comparer des structures de données usuelles (piles, tables de hachages,
+ensembles, ...), pouvant prendre en paramètre une fonction de comparaison.
+De plus, les messages d'erreur peuvent être assez précis, indiquant la valeur
+attendue, la valeur testée et un message explicatif.
+</p>
+<p>
+Ainsi, on trouve par exemple une fonction pour créer une fonction
+de comparaison de deux piles de valeurs:
+</p>
+<oc-eval>Kaputt.Assertion.make_equal_stack;;</oc-eval>
+<p>
+Utilisons cette fonction pour créer une fonction de comparaison
+de piles de valeurs d'un type <ml>point</ml> que nous définissons également.
+</p>
+<p>
+Auparavant, nous ouvrons le module <ml>Kaputt.Assertion</ml> pour rendre
+visible tout son contenu dans l'environnement:
+</p>
+<oc-eval>open Kaputt.Assertion;;</oc-eval>
+<oc-eval><![CDATA[
+type point = { x : int ; y : int };;
+let string_of_point { x ; y } = Printf.sprintf "(%d, %d)" x y ;;
+let equal_point p1 p2 = p1.x = p2.x && p1.y = p2. y ;;
+let equal_stack_point = make_equal_stack equal_point string_of_point ;;
 ]]></oc-eval>
+<p>
+A l'aide de cette fonction, nous pouvons comparer deux piles de points.
+Nous définissons une pile "de référence" et une autre pile, différente.
+Nous utilisons notre fonction de comparaison avec un message pour qu'en cas
+d'inégalité l'exception levée comporte, en plus des valeurs qui diffèrent,
+le message explicatif:
+</p>
+<oc-eval>let add_point stack x = Stack.push { x ; y = 0} stack;;
+let pile_ref = Stack.create ();;
+List.iter (add_point pile_ref) [ 1 ; 2 ; 3 ; 4 ];;
+let pile_2 = Stack.create ();;
+List.iter (add_point pile_2) [ 1 ; 2 ; 42 ; 4 ];;
+equal_stack_point ~msg: "premier test" pile_ref pile_ref;;
+try equal_stack_point ~msg: "deuxieme test" pile_ref pile_2
+  with Failed f ->
+    print_endline
+      (Printf.sprintf "Failed: %s\nexpected value: %s\nactual_value: %s"
+        f.message f.expected_value f.actual_value
+      );;
+</oc-eval>
+<p>
+Constatons au passage qu'en cas d'erreur, la fonction créée par
+<ml>make_equal_stack</ml> ajoute la position dans la pile où
+les valeurs ont différé.
+</p>
+<p>En pratique, nous n'écrirons pas le code qui rattrapera les exceptions
+levées lors des comparaisons des tests d'assertions. Nous utiliserons
+les fonctions du module <kmod name="Test"/> pour définir des tests
+de différentes sortes (tests d'assertions, comme ci-dessus, ou tests
+d'autres types, voir plus bas), et les fonctions de ce même module
+pour exécuter les tests. Ces fonctions se chargeront de collecter
+les résultats des tests pour ensuite en faire un rapport.
+</p>
+<p>
+Voyons un exemple de définition et d'exécution de tests sur la fonction
+<ml>is_prefix</ml> ci-dessous, qui prend deux chaînes de caractères
+et renvoie <ml>true</ml>
+si la première chaîne est un préfixe de la seconde (i.e. la seconde
+chaîne commence par exactement la première chaîne) ou <ml>false</ml> sinon.
+</p>
+<p>
+Pour les besoins de la cause, nous introduisons un bug, consistant
+à vérifier un caractère de moins (nous ignorons le dernier caractère de
+la première chaîne):
+</p>
+<oc-eval><![CDATA[let is_prefix s1 s2 =
+  (* required bug here: ignore last char of s1 *)
+  let s1 = String.sub s1 0 (max 0 (String.length s1 - 1)) in
+  (* /bug *)
+  let len1 = String.length s1 in
+  let len2 = String.length s2 in
+  (len1 <= len2) &&
+    (String.sub s2 0 len1) = s1;;
+]]></oc-eval>
+<p>
+Nous commençons par écrire une fonction qui crée un test à partir
+de deux chaînes et du résultat attendu, en utilisant la fonction
+de test <kval mod="Assertion" val="is_true"/> et la fonction
+de création de test d'assertion <kval mod="Test" val="make_simple_test"/>:
+</p>
+<oc-eval><![CDATA[let mk_test title s1 s2 res =
+  let f () = is_true ~msg: "duh!" (is_prefix s1 s2 = res) in
+  Kaputt.Test.make_simple_test ~title f;;
+]]></oc-eval>
+<p>
+Nous pouvons définir nos tests et les exécuter à l'aide de la fonction
+<kval mod="Test" val="run_tests"/>:
+</p>
+<oc-eval>let tests =
+  [
+    mk_test "empty prefix" "" "foo" true ;
+    mk_test "empty strings" "" "" true ;
+    mk_test "empty second string" "foo" "" false ;
+    mk_test "empty second string and one-char prefix" "x" "" false ;
+    mk_test "different strings" "abc" "xyz" false ;
+    mk_test "almost prefix" "abc" "abd" false ;
+  ];;
+Test.run_tests tests;;
+flush stdout;;
+</oc-eval>
+<p>L'affichage par défaut est en mode texte. Nous pouvons passer un paramètre
+à <kval mod="Test" val="run_tests"/> pour obtenir par exemple du XML
+sur la sortie d'erreur:
+</p>
+<oc-eval>Test.run_tests ~output: (Test.Xml_output stderr) tests;;
+flush stderr;;</oc-eval>
+<p>
+Il est possible d'avoir une structure de données en retour de l'exécution
+des tests, en utilisant par exemple <kval mod="Test" val="exec_tests"/>:
+</p>
+<oc-eval>Test.exec_tests tests;;</oc-eval>
 </section>
 
 </contents>
