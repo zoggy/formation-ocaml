@@ -39,7 +39,14 @@ qu'elle est indépendante et que c'est un aspect intéressant
 du langage.
 </p>
 <p>
-L'une des limites d'OCaml est l'impossibilité de surcharger les
+L'une des limites d'OCaml est l'impossibilité de surcharger<note>Par surcharge,
+nous entendons la définition d'une nouvelle méthode avec le
+même nom qu'une autre méthode, mais avec un type différent.
+Nous employons le terme <em>surcharge</em> comme traduction du terme
+<em>overload</em> et nous parlerons de <em>redéfinition</em>
+pour traduire <em>override</em>, qui est la définition d'une méthode
+dans une classe héritant d'une autre classe où la même méthode avec
+le même type est déjà définie.</note> les
 méthodes d'une classe, pour la même raison qu'il est impossible
 de surcharger les opérateurs: il ne serait alors plus possible
 d'inférer automatiquement le type des expressions.
@@ -320,7 +327,7 @@ son type dans t doit être un sous-type du type de la même la méthode dans t'.
 </p>
 <p>
 Voyons quelques exemples en définissant une fonction dont nous spécifions
-le type du paramètre pour qu'il requiert une méthode <ml>m : int -> int</ml>
+le type du paramètre pour qu'il requière une méthode <ml>m : int -> int</ml>
 tout en permettant à l'objet passé d'avoir d'autres méthodes (grâce aux <ml>..</ml>):
 </p>
 <oc-eval><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc-eval>
@@ -616,7 +623,7 @@ sera naturellement dans un attribut (variable d'instance) modifiable.
 Les méthodes permettront d'effectuer les actions suivantes:
 <ml>push : int -> unit</ml>,
 <ml>pop : int option</ml>,
-<ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
+<ml>peek : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
 <ml>is_empty : bool</ml>.
 </p>
 <p>
@@ -634,7 +641,7 @@ class stack =
       match elements with
         [] -> None
       | h :: q -> elements <- q ; Some h
-    method pick =
+    method peek =
       match elements with [] -> None | h :: _ -> Some h
     method is_empty = elements = []
   end;;
@@ -658,7 +665,7 @@ i.e. dont les méthodes retournent un nouvel objet au lieu de faire
 un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
 <ml>push : int -> fun_stack</ml>,
 <ml>pop : (int * fun_stack) option</ml>,
-<ml>pick : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
+<ml>peek : int option</ml> (retourne l'élément en haut de la pile mais sans la modifier),
 <ml>is_empty : bool</ml>.
 </p>
 <solution>
@@ -670,7 +677,7 @@ un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
       match elements with
         [] -> None
       | h :: q -> Some (h, {< elements = q >})
-    method pick =
+    method peek =
       match elements with [] -> None | h :: _ -> Some h
     method is_empty = elements = []
   end;;
@@ -808,13 +815,13 @@ ou non.
 <subsection id="inheritmulti" title="Héritage multiple">
 <p>
 L'héritage multiple est possible, en utilisant plusieurs fois le mot-clé <ml>inherit</ml>.
-Les attributs et méthodes sont héritées dans l'ordre d'apparition des
+Les attributs et méthodes sont hérités dans l'ordre d'apparition des
 <ml>inherit</ml>, une méthode héritée pouvant être re-définie par une autre méthode
 héritée plus loin. Idem pour les attributs.
 </p>
 <p>
 Là encore, on utilisera le <ml>!</ml> après le mot-clé <ml>inherit</ml> pour indiquer
-que la redéfinition de méthodes et attributs hérités d'une premère classe, par ceux
+que la redéfinition de méthodes et attributs hérités d'une première classe, par ceux
 d'une seconde classe héritée, est volontaire:
 </p>
 <oc-eval>class t1 = object val value = 1 method p = "class t1" end;;
@@ -835,7 +842,7 @@ print_endline (new t4)#p ;;
 <section id="virtual" title="Classes et méthodes virtuelles">
 <p>
 Il est bien sûr possible de définir des méthodes virtuelles, c'est-à-dire
-des méthodes dont ont donne déjà le type, mais dont l'implémentation
+des méthodes dont on donne déjà le type, mais dont l'implémentation
 devra être fournie plus tard, dans une classe héritante. On déclare
 des méthodes virtuelles à l'aide du mot-clé <ml>virtual</ml>, et au lieu
 de donner l'expression du corps de la méthode, on indique son type,
@@ -993,7 +1000,7 @@ type quelconque:
 <p>
 On remarque que le type indiqué pour la classe contient une annotation
 de type <ml>object('b)...</ml> et que ce <ml>'b</ml> est utilisé dans le
-type des méthodes qui retourne une copie de l'objet.
+type des méthodes qui retournent une copie de l'objet.
 </p>
 <p>Instancions maintenant cette classe:</p>
 <oc-eval>let l = new clist ;;</oc-eval>
