@@ -251,5 +251,17 @@ let t2 = Array.copy t;; </oc-eval>
 </subsection>
 </section>
 
+<!--
+<section id="objets" title="Représentation des objets">
+<oc-eval>let o = object val mutable x = 1 method x = x end;;
+let o2 = object val mutable x = 1 method x = x + 1 end;;
+class c = object val mutable y = 2 method t = y + 1 method x = y end;;
+let o3 = new c ;;
+class c2 = object(self) inherit c val mutable t = 42 method! t = ignore(self); t + y end;;
+let o4 = new c2;;
+</oc-eval>
+<ocaml-repr>["o", o; "o2", o2; "o3", Obj.magic o3; "o4", Obj.magic o4]</ocaml-repr>
+</section>
+-->
 </contents>
 </module>
