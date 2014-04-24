@@ -251,7 +251,8 @@ Nous pouvons définir nos tests et les exécuter à l'aide de la fonction
 Test.run_tests tests;;
 flush stdout;;
 </oc-eval>
-<p>L'affichage par défaut est en mode texte. Nous pouvons passer un paramètre
+<p>L'affichage par défaut est en mode texte sur la sortie standard.
+Nous pouvons passer un paramètre
 à <kval mod="Test" val="run_tests"/> pour obtenir par exemple du XML
 sur la sortie d'erreur:
 </p>
@@ -264,5 +265,10 @@ des tests, en utilisant par exemple <kval mod="Test" val="exec_tests"/>:
 <oc-eval>Test.exec_tests tests;;</oc-eval>
 </section>
 
+<section id="specs" title="Tests de spécifications">
+<oc-eval toplevel="false" show-code="false" defer_="1"><include file="../codes/roman_numbers.ml" raw="true"/></oc-eval>
+<oc-eval defer_="1">to_roman 142;;</oc-eval>
+
+</section>
 </contents>
 </module>
