@@ -266,9 +266,143 @@ des tests, en utilisant par exemple <kval mod="Test" val="exec_tests"/>:
 </section>
 
 <section id="specs" title="Tests de spécifications">
+<p>
+Un test de spécification est défini par une pré-condition et une
+post-condition. Ces types de tests utilisent des générateurs de valeurs
+aléatoires à tester. Quand une valeur vérifie une pré-condition, la post-condition
+associée doit être vérifiée, sinon le test échoue pour cette valeur et cette
+spécification.
+</p>
+<p>
+Les spécifications sont exprimées à l'aide du module
+<kmod name="Specification"/>, qui offre également des facilités pour
+construire des prédicats (pré- et post-conditions) sur différentes
+structures de données (piles, listes, ...).
+</p>
+<p>
+Les générateurs de valeurs aléatoires sont définis à l'aide du module
+<kmod name="Generator"/>, qui contient également des générateurs
+pour les types de base et les structures de données courantes.
+</p>
+<p>
+La fonction <kval mod="Test" val="run_random_test"/> permet de créer
+un test de spécification, en prenant un générateur, la fonction
+à tester et une spécification.
+</p>
+<p>Plutôt que décrire toutes les possibilités offertes par Kaputt, prenons
+comme exemple le test d'une fonction <ml>to_roman</ml>
+convertissant un entier en sa représentation en chiffres romains
+(le code est <a href="../codes/roman_numbers.ml">ici</a> mais il n'est
+pas utile de le voir pour la suite).
+</p>
 <oc-eval toplevel="false" show-code="false"><include file="../codes/roman_numbers.ml" raw="true"/></oc-eval>
-<oc-eval>to_roman 142;;</oc-eval>
+<oc-eval>to_roman;; to_roman 142;; to_roman 4999;;</oc-eval>
+<p>
+Nous pouvons bien sûr utiliser des tests d'assertions pour tester
+la réprésentation retournée pour certaines valeurs. Comme il n'est
+pas possible de tester la fonction pour toutes les valeurs possibles
+en entrée, nous allons utiliser des tests de spécifications.
+</p>
+<p>Le générateur éléatoire à utiliser devra générer des valeurs entières
+strictement supérieures à 0 et inférieures à 6000 (valeur choisie pour
+éviter d'allouer des méga-octets de chaînes de caractères, car il est
+peu probable que nous souhaitions convertir de tels nombres).
+Nous le créons en utilisant la fonction
+<kval mod="Generator" val="make_int"/>:
+</p>
+<oc-eval>let generator = Kaputt.Generator.make_int 1 6_000;;</oc-eval>
+<p>
+L'opérateur infixe <ml>(==>)</ml> permet de définir une spécification à partir de deux
+prédicats, l'un sur les valeurs d'entrée de la fonction, l'autre sur
+les valeurs de sorties:
+</p>
+<oc-eval>open Kaputt.Specification;;
+(==>);;
+</oc-eval>
+<p>Nous définissons maintenant quelques spécifications:</p>
+<ul>
+<li>Quand une valeur se termine par un 9, alors la représentation
+en chiffres romains se termine par "IX":
+<oc-eval><![CDATA[let end_by_9 =
+  (fun x -> x mod 10 = 9) ==>
+  (fun s ->
+    let len = String.length s in
+    String.sub s (len - 2) 2 = "IX");;
+]]></oc-eval>
+</li>
+<li>Quand un valeur est un multiple de 5, sa représentation en chiffres romains
+ne peut se termine par 'I' ni avoir 'I' en avant dernière position:
+<oc-eval><![CDATA[let mult_of_5 =
+  (fun x -> x mod 5 = 0) ==>
+  (fun s ->
+    let len = String.length s in
+    String.get s (len-1) <> 'I' &&
+    (len < 2 || String.get s (len - 2) <> 'I')
+  );;
+]]></oc-eval>
+</li>
+<li>Quand un valeur est un multiple de 10, sa représentation en chiffres romains
+ne peut pas comporter les caractères 'I' et 'V':
+<oc-eval><![CDATA[let mult_of_10 =
+  (fun x -> x mod 10 = 0) ==>
+  (Kaputt.Specification.for_all_string (fun c -> c <> 'I' && c <> 'V')) ;;
+]]></oc-eval>
+</li>
+</ul>
+<p>
+Nous pouvons maintenant utiliser ces spécifications pour créer un test
+de notre fonction. Un test peut utiliser plusieurs spécifications,
+chaque valeur générée étant utilisée pour toutes les spécifications
+dont elle vérifie la pré-condition:
+</p>
+<oc-eval>
+let test_to_roman = Kaputt.Test.make_random_test
+  ~title: "Test de la conversion en chiffres romains"
+  generator to_roman
+  [ end_by_9 ; mult_of_5 ; mult_of_10 ] ;;
+</oc-eval>
+<p>
+Finalement, il nous reste à lancer le test
+</p>
+<oc-eval><![CDATA[Kaputt.Test.run_test test_to_roman;;
+flush stdout ;;
+]]></oc-eval>
+<p>
+Le nombre de valeurs générées et le nombre d'essais de génération pour
+trouver une spécification dont la pré-condition est vérifiée peuvent être
+passés en paramètre à <kval mod="Test" val="make_random_test"/>:
+</p>
+<oc-eval>
+let test_to_roman = Kaputt.Test.make_random_test
+  ~title: "Test de la conversion en chiffres romains"
+  ~nb_runs: 1000 ~nb_tries: 2
+  generator to_roman
+  [ end_by_9 ; mult_of_5 ; mult_of_10 ] ;;
+Kaputt.Test.run_test test_to_roman;;
+flush stdout ;;
+</oc-eval>
+</section>
 
+<section id="conclusion" title="Conclusion">
+<p>
+Nous avons vu comment utiliser Kaputt et la souplesse qu'il permet pour
+s'insérer dans l'environnement de compilation d'un logiciel OCaml.
+</p>
+<p>
+Quelques exemples d'utilisation ont donné un aperçu des possibilités de
+Kaputt, qui en offre bien d'autres (possibilités de classfication
+des tests de spécifications selon la valeur d'entrée, choix de la source aléatoire, ...)
+que nous n'avons pas explorées ici mais qui sont indiquées dans le
+<ext-a href="http://kaputt.x9c.fr/distrib/kaputt.html">manuel de Kaputt</ext-a> et dans
+la <ext-a href="kaputt.x9c.fr/distrib/api/index.html">documentation des modules</ext-a>.
+</p>
+<p>
+Kaputt n'est pas le seul cadriciel pour effectuer des tests de code en OCaml.
+Il existe également <ext-a href="http://ounit.forge.ocamlcore.org/index.html">OUnit</ext-a>,
+mais ce dernier est moins bien documenté et offre moins de souplesse que Kaputt quant
+aux possibilités d'articuler le code de test et le code testé. Il ne semble pas non plus
+offrir la richesse des facilités de Kaputt pour effectuer des tests de spécifications.
+</p>
 </section>
 </contents>
 </module>
