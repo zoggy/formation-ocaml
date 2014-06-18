@@ -1,0 +1,24 @@
+<page title="Question fréquemment posées"
+sectionning="q"
+q-counter="false"
+>
+<prepare-toc>
+<toc/>
+<q id="doxygen" title="Existe-t-il un outil équivalent à Doxygen, Javadoc ou pydoc ?">
+<p>
+Oui, c'est l'outil OCamldoc qui <doc href="env.html#doc">fait partie de la
+distribution OCaml</doc>.
+La documentation est <ext-a href="&lt;urlocamldoc/&gt;">ici</ext-a>.
+</p>
+</q>
+<q id="sources" title="Y a-t-il une organisation des fichiers sources propre à OCaml ?">
+<p>Non, chacu est libre d'organiser son code comme il veut. En particulier, il n'y
+as pas de lien entre arborescences de fichiers et noms des unités de compilation.
+La seule contraite est que le nom d'un module dépend du nom du fichier source:
+le code qui se trouve dans un fichier <code>foo.ml</code> ou <code>Foo.ml</code>
+correspond à un module <ml>Foo</ml>.
+Plus de détails <doc href="presentation.html#ocamlc">ici</doc>.
+</p>
+</q>
+</prepare-toc>
+</page>
