@@ -1230,5 +1230,71 @@ dans des méthodes binaires.
 </p>
 </subsection>
 </section>
+
+<section id="binarymethods" title="Méthodes binaires">
+<p>
+Une méthode binaire est une méthode prenant en paramètre un objet du
+même type que celui auquel elle est appliquée.
+</p>
+<p>
+Dans l'exemple ci-dessous, nous définisson une classe <ml>integer</ml>
+dont deux méthodes sont binaires, en indiquant que leur paramètre est
+un objet du même type que la classe:
+</p>
+<oc-eval><![CDATA[class integer (n : int) =
+  object (_ : 'a)
+     val value = n
+     method value = n
+     method add (o : 'a) = {< value = n + o#value >}
+     method compare (o : 'a) = n - o#value
+  end;;
+]]></oc-eval>
+<p>
+Nous pouvons ensuite instancier cette classe et utiliser la méthode binaire
+<ml>add</ml> qui renvoie ici un nouvel objet <ml>integer</ml>:
+</p>
+<oc-eval>
+let n1 = new integer 1 ;;
+let n2 = new integer 2 ;;
+let n3 = n1#add n2;;
+n3#value ;;
+</oc-eval>
+<p>
+Définisson maintenant une classe <ml>integer2</ml> héritant de notre classe
+<ml>integer</ml>. Nous lui ajoutons une méthode <ml>add_int</ml>.
+Ce faisant, deux objets instanciés par ces deux classes n'ont pas le
+même type, on ne peut donc utiliser un objet de type <ml>integer</ml>
+en paramètre de la méthode <ml>add</ml> d'un objet de type <ml>integer2</ml>.
+</p>
+<oc-eval error-exc="false"><![CDATA[class integer2 n =
+  object
+    inherit integer n
+    method add_int i = {< value = n + i >}
+  end;;
+let c1 = new integer2 1 ;;
+c1#add n2 ;;
+]]></oc-eval>
+<p>Par contre, nous pouvons passer en paramètre un objet de type
+<ml>integer2</ml>:
+</p>
+<oc-eval>
+let c2 = new integer2 2 ;;
+c2#add c2 ;;
+</oc-eval>
+</section>
+
+<section id="conclusion" title="Conclusion">
+<p>
+Comme nous l'avons vu, la programmation orientée objets en OCaml
+</p>
+<ul>
+<li>est <strong>très souple</strong>, grâce à la possibilité de créer des objets sans
+classe et au fait que la relation de sous-typage ne dépend pas de l'héritage,</li>
+<li>est <strong>sûre</strong>, car la partie objets est totalement intégrée au système
+de type, sans pour autant être lourde grâce à l'inférence de types,</li>
+<li>offre toujours une <strong>grande généricité</strong>, grâce aux différents
+polyorphismes.</li>
+</ul>
+</section>
 </contents>
 </module>
