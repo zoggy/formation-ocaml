@@ -13,7 +13,8 @@ EXERCICES=codes/count_words.cmo \
 	codes/mon_module.cmo \
 	codes/mon_module2.cmo \
 	codes/printenv.cmo \
-	codes/words.cmo
+	codes/thread_print \
+	codes/words.cmo \
 
 PLUGIN=stog_course.cmxs
 
@@ -45,7 +46,7 @@ nocache:
 .SUFFIXES: .ml .cmo
 
 %.cmo: %.ml
-	ocamlfind ocamlc -package stog -rectypes -c $<
+	ocamlfind ocamlc -package threads,stog -thread -rectypes -c $<
 
 %.cmxs: %.ml
 	ocamlfind ocamlopt -shared -package stog -rectypes -o $@  $<
@@ -62,4 +63,6 @@ posts/date_du_jour: posts/date_du_jour.ml
 	ocamlopt -o $@ unix.cmxa $^
 posts/code_morse: posts/code_morse.ml
 	ocamlopt -o $@ $^
+codes/thread_print: codes/thread_print.ml
+	ocamlopt -thread -o $@ unix.cmxa threads.cmxa $^
 

@@ -1,0 +1,93 @@
+<module title="Programmation parallèle"
+with-contents="true"
+ocaml-session="para"
+draft="true"
+>
+<contents>
+<section id="introduction" title="Introduction">
+<p>
+OCaml permet différentes sortes de parallèlisme/concurrence:
+</p>
+<ul>
+<li>par l'utilisation de threads (ou processus légers),</li>
+<li>via des processus lourds et de la communication inter-processus,</li>
+<li>ou en utilisant des bibliothèques permettant d'utiliser des monades
+  pour ne pas bloquer le programme sur des opérations potentiellement bloquantes
+  (lectures/écritures de fichiers, entrées/sorties réseau, attente d'événements
+   d'interface graphiques, ...).</li>
+</ul>
+<p>
+Parallèlisme et
+concurrence sont deux choses différentes<note>On pourra lire à ce sujet
+<ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note> Il est tout à fait possible d'avoir
+des calculs en parallèle sans concurrence, de même que les problèmes de concurrence
+peuvent être traités avec un pseudo-parallèlisme, comme c'est le cas avec
+les bibliothèques <ext-a href="http://janestreet.github.io/">Async</ext-a>
+et <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>.
+</p>
+<p>
+Le problème d'OCaml vis-à-vis du parallèlisme/de la concurrence est que le
+glaneur de cellules (<em>garbage collector</em>, ou GC) n'est pas concurrent
+et que lorsqu'il entre en action, il bloque tout le processus en cours,
+y compris les éventuels threads (processus légers).
+Des travaux de recherche sont en cours pour fournir un GC concurrent à OCaml.
+</p>
+<p>
+Ceci étant dit, nous allons maintenant explorer les différentes solutions
+pour effectuer des calculs en parallèle et/ou en concurrence, selon les
+trois approches listées plus haut. Chaque fois, nous listerons les
+bibliothèques utilisables mais nous contenterons d'exemples sur seulement
+une ou plusieurs d'entre elles.
+</p>
+</section>
+
+<section id="threads" title="Processus légers">
+<p>Le but de cette introduction n'est pas de présenter ce que
+sont les processus légers. On pourra se référer par exemple
+à <cite href="sysocaml"/>.
+</p>
+<p>
+Les processus légers sont gérés à l'aide du module
+<moduledoc name="Thread"/>. Ils sont disponibles sur plateformes
+Posix 1003.1c et Win32.
+</p>
+<p>
+La compilation de modules utilisant les threads nécessite de passer
+l'option <code>-thread</code> aux compilateurs <code>ocamlc</code>
+et <code>ocamlopt</code>, ainsi que de lier avec la bibliothèque
+<code>threads.cma</code> (pour le code-octet) ou <code>threads.cmxa</code>
+(pour le code natif). Comme cette bibliothèque nécessite également
+la biblitothèque Unix, on liera le programme final avec aussi
+<code>unix.cma</code> ou <code>unix.cmxa</code>.
+</p>
+<warning id="nativethreads" title="Threads natifs ou émulés">
+<p>
+Si le système pour lequel est compilé le code utilisant des threads
+ne supporte pas les threads, il faut remplacer l'option <code>-thread</code>
+par l'option <code>-vmthread</code>. Tous les threads sont alors exécutés
+dans le même processus. Cette option n'est cependant disponible que pour
+la compilation en code-octet.
+</p>
+</warning>
+<exercice id="thr1" title="Affichages en parallèle">
+<p>Un exercice classique d'utilisation des threads est l'affichage
+de messages en parallèle.
+Ecrire un programme créant 3 threads, qui affiche chacun 10 lignes
+de la forme "Je suis le thread X et c'est mon affichage N.".
+</p>
+<solution>
+<ocaml id ="thrprint" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/thread_print.ml"/></ocaml>
+</solution>
+</exercice>
+
+</section>
+
+<section id="process" title="Processus lourds">
+
+</section>
+
+<section id="monads" title="Monades et concurrence">
+
+</section>
+</contents>
+</module>
