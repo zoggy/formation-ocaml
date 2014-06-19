@@ -37,7 +37,7 @@ Ceci étant dit, nous allons maintenant explorer les différentes solutions
 pour effectuer des calculs en parallèle et/ou en concurrence, selon les
 trois approches listées plus haut. Chaque fois, nous listerons les
 bibliothèques utilisables mais nous contenterons d'exemples sur seulement
-une ou plusieurs d'entre elles.
+certaines d'entre elles.
 </p>
 </section>
 
@@ -75,15 +75,172 @@ de messages en parallèle.
 Ecrire un programme créant 3 threads, qui affiche chacun 10 lignes
 de la forme "Je suis le thread X et c'est mon affichage N.".
 </p>
+<p>Attention à bien attendre la fin des threads, sinon le programme
+principal termine, terminant également les threads avant qu'ils aient
+fini leur travail.
+</p>
+<p>
+Si le code se trouve dans un fichier <code>thread_print.ml</code>,
+on pourra le compiler par la commande suivante:
+</p>
+<sh>ocamlopt -o thread_print -thread unix.cmxa threads.cmxa thread_print.ml</sh>
 <solution>
 <ocaml id ="thrprint" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/thread_print.ml"/></ocaml>
 </solution>
 </exercice>
-
+<p>
+Différents modules sont également disponibles pour la communication
+entre threads:
+</p>
+<ul>
+<li><moduledoc name="Mutex"/> pour la gestion des section critiques (exclusion mutuelle),</li>
+<li><moduledoc name="Condition"/> pour attendre ou signaler une condition,</li>
+<li><moduledoc name="Event"/> pour une programmation basée sur des événements envoyés
+sur des canaux.</li>
+</ul>
 </section>
 
 <section id="process" title="Processus lourds">
+<p>
+La majorité des bibliothèques permettant la parallélisation utilise des processus
+lourds, exécutés soit en local, soit à distance en se connectant à d'autres machines
+pour y créer des processus.
+</p>
+<p>
+OCaml, via le module <moduledoc name="Unix"/>, offre l'accès aux appels systèmes
+permettant la création de processus (<em>fork</em>), la communication via des
+<em>pipes</em> et des <em>sockets</em>, etc.
+</p>
+<p>
+Il existe cependant plusieurs bibliothèques offrant des abstractions pour faciliter
+ces modèles de calcul parallèle et/ou distribué:
+</p>
+<ul>
+<li><ext-a href="https://github.com/janestreet/async_parallel">Async-parallel</ext-a>,
+une extension d'Async pour l'exécution de code en parallèle sur des machines distantes,</li>
+<li><ext-a href="http://rdicosmo.github.io/parmap/">Parmap</ext-a> permet l'exécution
+de fonctions sur plusieurs <em>cœurs</em>,</li>
+<li><ext-a href="http://projects.camlcity.org/projects/ocamlnet.html">OCamlnet</ext-a>,
+une bibliothèque offrant beaucoup de fonctions pour développer des applications utilisant
+le réseau, contient plusieurs modules pour la programmation parallèle ainsi que
+pour le partage de structures de données et le passage de messages,</li>
+<li><ext-a href="http://forge.ocamlcore.org/projects/ocamlmpi/">OCamlMPI</ext-a> est
+une interface avec la bibliothèque de passage de messages MPI,</li>
+<li><ext-a href="http://functory.lri.fr/">Functory</ext-a> est une bibliothèque permettant
+d'effectuer des calculs séquentiellement ou en parallèle, soit sur la même machine,
+soit sur des machines distantes.</li>
+</ul>
+<subsection id="functory" title="Functory">
+<p>
+<ext-a href="http://functory.lri.fr/">Functory</ext-a> présente l'avantage d'avoir
+une interface commune pour les différentes façons de distribuer les calculs
+à effectuer, ainsi qu'un module pour l'exécution séquentielle, facilitant le
+débogage et/ou l'obtention d'un comportement de référence.
+</p>
+<p>
+En guise d'exemple, nous allons écrire un programme qui compte le nombre de caractères
+de chaque fichier du répertoire courant, la première fois de façon séquentielle,
+la seconde en utilisant plusieurs processus locaux.
+</p>
+<p>
+Nous définissons tout d'abord une fonction retournant la liste des fichiers
+d'un répertoire en paramètre:
+</p>
+<oc-eval>let ls_dir dir =
+  try
+    let handle = Unix.opendir dir in
+    let rec read acc =
+       match
+         try Some(Unix.readdir handle)
+         with End_of_file -> None
+       with
+         None -> acc
+       | Some file ->
+           let f = Filename.concat dir file in
+           match (Unix.stat f).Unix.st_kind with
+             Unix.S_REG -> read (file :: acc)
+           | _ -> read acc
+     in
+     read []
+  with
+    Unix.Unix_error (e, s1, s2) ->
+      failwith (Printf.sprintf "%s: %s %s" (Unix.error_message e) s1 s2)
+;;
+</oc-eval>
+<p>Nous définissons également une fonction retournant la taille du fichier
+en paramètre:
+</p>
+<oc-eval>let file_size file =
+  try (Unix.stat file).Unix.st_size
+  with Unix.Unix_error (e, s1, s2) ->
+    failwith (Printf.sprintf "%s: %s %s" (Unix.error_message e) s1 s2)
+;;
+</oc-eval>
+<p>
+Enfin, nous utilisons le module de la bibliothèque Functory effectuer
+les opérations séquentiellement, pour appliquer la fonction <ml>file_size</ml>
+sur chaque fichier du répertoire courant:
+</p>
+<oc-eval>Functory.Sequential.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
+</oc-eval>
+<p>
+Si nous souhaitons effectuer le même traitement, mais en utilisant plusieurs
+cœurs de notre machine, il nous suffit d'indiquer le nombre maximum de cœurs
+à utiliser et d'appeler la fonction <ml>map</ml> du module <ml>Functory.Cores</ml>:
+</p>
+<oc-eval>Functory.Cores.set_number_of_cores 4;;
+Functory.Cores.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
+</oc-eval>
+<p>On peut ainsi, en changeant par exemple un <ml>open</ml>, utiliser
+soit le <ml>map</ml> séquentiel, soit le <ml>map</ml> parallèle local.
+</p>
+<p>
+De la même façon, il est possible de lancer les calculs sur des machines
+distantes, préalablement déclarées, à l'aide du module <ml>Functory.Network</ml>.
+Il y a plusieurs modules, selon que le programme distant sera le même,
+ou bien qu'il sera différent mais compilé avec la même version d'OCaml,
+ou encore différent et compilé avec une autre version d'OCaml. Dans
+l'exemple ci-dessous, nous utilisons le module <ml>Same</ml> car le programme
+distant est le même que celui local.
+</p>
+<ocaml eval="false">Functory.Network.declare_workers ~n: 4 "machine1";;
+Functory.Network.declare_workers ~n: 8 "machine2";;
+Functory.Network.Same.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
+</ocaml>
+<p>
+Les programmes sur les machines distantes doivent être lancés et
+attendre les instructions du maître avec le code suivant:
+</p>
+<ocaml>Functory.Network.Same.Worker.compute ();;</ocaml>
+<p>
+Bien sûr, dans le cas d'utilisation de machines distantes, notre
+exemple sur des fichiers se fonctionne que si le maître et
+les esclaves partagent le même système de fichiers. De plus, les
+calculs à répartir sont en général un peu plus gourmands en temps
+et/ou en mémoire...
+</p>
+<p>
+La bibliothèque offre d'autres fonctions que <ml>map</ml> pour effectuer
+des calculs (différentes variantes de <em>fold</em>), la possibilité
+de paramétrer le port par lequel maître et esclaves communiquent, ...
+On consultera la documentation pour en savoir davantage.
+</p>
+</subsection>
 
+<subsection id="parmap" title="Parmap">
+<p>
+<ext-a href="http://rdicosmo.github.io/parmap/">Parmap</ext-a>
+offre seulement la possibilité d'utiliser plusieurs cœurs de la machine,
+mais offre davantage de fonctions, traitant à la fois les listes et
+les tableaux.
+</p>
+<p>Avec nos fonctions <ml>ls_dir</ml> et <ml>file_size</ml> précédentes,
+nous pouvons obtenir les tailles des fichiers du répertoire courant
+de la façon suivante, en utilisant 6 cœurs:
+</p>
+<oc-eval>Parmap.parmap ~ncores: 6 (fun f -> (f, file_size f)) (Parmap.L (ls_dir "."));;
+</oc-eval>
+</subsection>
 </section>
 
 <section id="monads" title="Monades et concurrence">
