@@ -1,20 +1,6 @@
 open Lwt;;
 
 let rec count =
-  let on_entry dir name =
-    if name = Filename.current_dir_name
-      || name = Filename.parent_dir_name
-    then
-      Lwt.return 0
-    else
-      let file = Filename.concat dir name in
-      Lwt_unix.lstat file
-        >>= fun stats ->
-          match stats.Unix.st_kind with
-          | Unix.S_REG -> Lwt.return 1
-          | Unix.S_DIR -> count file
-          | _ -> Lwt.return 0
-  in
   let rec iter dir h acc n =
     Lwt.try_bind
       (fun () -> Lwt_unix.readdir h)
