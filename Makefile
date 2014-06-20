@@ -1,7 +1,7 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-OCAML_SESSION=./my-ocaml-session `echo \`ocamlfind query -i-format inspect kaputt functory parmap\``
+OCAML_SESSION=./my-ocaml-session `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.multi-doc,stog.dot --plugin $(PLUGIN)
 MORE_OPTIONS=
 
@@ -9,6 +9,8 @@ EXERCICES=codes/count_words.cmo \
 	codes/count_words_dict.cmo \
 	codes/diff_words.cmo \
 	codes/exercice_arg.cmo \
+	codes/findpar \
+	codes/findseq \
 	codes/lstmp.cmo \
 	codes/mon_module.cmo \
 	codes/mon_module2.cmo \
@@ -25,7 +27,7 @@ build: my-ocaml-session $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 	$(MAKE) style
 
 my-ocaml-session:
-	mk-stog-ocaml-session -package inspect,kaputt,functory,parmap -linkall -o $@
+	mk-stog-ocaml-session -package inspect,kaputt,functory,parmap,lwt.unix -linkall -o $@
 
 clean:
 	rm -f $(PLUGIN) my-ocaml-session
@@ -61,8 +63,16 @@ BLOG_EXAMPLES= \
 
 posts/date_du_jour: posts/date_du_jour.ml
 	ocamlopt -o $@ unix.cmxa $^
+
 posts/code_morse: posts/code_morse.ml
 	ocamlopt -o $@ $^
-codes/thread_print: codes/thread_print.ml
-	ocamlopt -thread -o $@ unix.cmxa threads.cmxa $^
 
+codes/thread_print: codes/thread_print.ml
+	ocamlopt -thread -o $@ unix.cmxa th
+	reads.cmxa $^
+
+codes/findseq: codes/findseq.ml
+	ocamlopt -thread -o $@ unix.cmxa $^
+
+codes/findpar: codes/findpar.ml
+	ocamlfind ocamlopt -o $@ -package lwt.unix -linkpkg $^

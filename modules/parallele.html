@@ -22,8 +22,7 @@ concurrence sont deux choses différentes<note>On pourra lire à ce sujet
 <ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note> Il est tout à fait possible d'avoir
 des calculs en parallèle sans concurrence, de même que les problèmes de concurrence
 peuvent être traités avec un pseudo-parallèlisme, comme c'est le cas avec
-les bibliothèques <ext-a href="http://janestreet.github.io/">Async</ext-a>
-et <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>.
+la bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>.
 </p>
 <p>
 Le problème d'OCaml vis-à-vis du parallèlisme/de la concurrence est que le
@@ -46,6 +45,7 @@ certaines d'entre elles.
 sont les processus légers. On pourra se référer par exemple
 à <cite href="sysocaml"/>.
 </p>
+<subsection id="ocamlthreads" title="Threads en OCaml">
 <p>
 Les processus légers sont gérés à l'aide du module
 <moduledoc name="Thread"/>. Ils sont disponibles sur plateformes
@@ -98,6 +98,16 @@ entre threads:
 <li><moduledoc name="Event"/> pour une programmation basée sur des événements envoyés
 sur des canaux.</li>
 </ul>
+</subsection>
+
+<subsection id="async" title="Async">
+<p>
+La bibliothèque <ext-a href="http://janestreet.github.io/">Async</ext-a> facilite
+l'utilisation de threads ...
+</p>
+Comment Async fonctionne: http://alan.petitepomme.net/cwn/2014.06.10.html#2
+
+</subsection>
 </section>
 
 <section id="process" title="Processus lourds">
@@ -247,8 +257,269 @@ pour découvrir les fonctions offertes pour paralléliser des calculs.
 </subsection>
 </section>
 
-<section id="monads" title="Monades et concurrence">
+<section id="lwt" title="Lwt: Monades et concurrence">
+<p>
+La bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a> (pour
+<em>Lightweight threads</em>, ou processus légers légers) permet de simuler
+l'utilisation de threads en profitant du fait que certaines opérations
+sont bloquantes (les entrées sorties ou l'attente d'autres événements)
+et qu'en attendant il est possible d'exécuter d'autres parties du code.
+</p>
+<subsection id="lwt-principes" title="Principes">
+<p>
+La bibliothèque Lwt utilise une monade<note>Si on ne connaît pas les monades, on
+pourra lire les trois billets d'introduction par Bartosz Milewski:
+<ext-a href="http://bartoszmilewski.com/2011/01/09/monads-for-the-curious-programmer-part-1/">1</ext-a>,
+<ext-a href="http://bartoszmilewski.com/2011/03/14/monads-for-the-curious-programmer-part-2/">2</ext-a>,
+<ext-a href="http://bartoszmilewski.com/2011/03/17/monads-for-the-curious-programmer-part-3/">3</ext-a>.</note> basée sur un type représentant les "threads" Lwt, <ml>Lwt.t</ml>, et les deux opérations
+<ml>Lwt.bind</ml> et <ml>Lwt.return</ml>.
+</p>
+<p>
+Au lieu d'utiliser les fonctions d'entrée/sortie habituelles comme <ml>Pervasives.input_line</ml>,
+on utilisera les variantes fournies par Lwt, comme <ml>Lwt_io.read_line</ml>. Regardons leurs
+type respectifs:
+</p>
+<oc-eval>Pervasives.input_line;;
+Lwt_io.read_line;;
+</oc-eval>
+<p>
+Hormis le fait que <ml>Lwt_io</ml> définit un nouveau type pour les canaux de lecture,
+ce qui différencie les deux fonctions est le type de retour. Dans le cas de
+<ml>Lwt_io.read_line</ml>, c'est un thread Lwt qui est retourné. Ce thread Lwt sera
+en attente de pouvoir lire sur le canal indiqué, et la fonction <ml>Lwt_io.read_channel</ml>
+retournera immédiatement sans bloquer.
+</p>
+<p>
+Pour utiliser la ligne lue par la fonction, on utilisera la fonction <ml>Lwt.bind</ml>,
+qui prend en paramètre un thread Lwt et une fonction. Cette fonction sera appelée quand
+le thread Lwt aura terminé, avec en paramètre la valeur retournée par le thread Lwt:
+</p>
+<oc-eval>Lwt.bind;;</oc-eval>
+<p>La fonction en paramèter de <ml>Lwt.bind</ml> retourne elle aussi un thread Lwt,
+ceci afin de pouvoir composer les appels de fonctions.
+</p>
+<p>
+Pour créer un thread Lwt retournant une valeur, il suffit d'utiliser la deuxième opération
+de la monade, <ml>Lwt.return</ml>, qui prend une valeur et en fait un thread Lwt qui
+est déjà terminé:
+</p>
+<oc-eval>Lwt.return;;
+Lwt.return "hello";;</oc-eval>
+<p>
+A ce point, on peut se rendre compte qu'il n'y a pas de réel parallélisme, puisque
+les threads Lwt ne sont pas créés pour exécuter une fonction en parallèle, comme le
+permettent les threads systèmes (avec <ml>Thread.create</ml> évoqué plus haut), mais
+pour empaqueter une valeur dans un type (le type de la monade).
+</p>
+<p>Le "parallélisme" vient du fait que Lwt fournit des fonctions non bloquantes pour les
+entrées/sorties, et son moteur s'occupe de créer les threads Lwt représentant les
+attentes correspondant à ces entrées/sorties, et de signaler ces threads comme
+terminés lorque l'attente est terminée<note>En utilisant des sélecteurs sur les
+descripteurs de fichiers concernés. Voir la documentation pour plus de détails.</note>.
+Cela signifie que tout ce qui n'est pas en attente d'une entrée/sortie pourra
+s'exécuter, ce qui fournit une forme de parallélisme entre ce qui attend et ce qui
+n'a pas besoin d'attendre.
+</p>
+<p>Il n'y a cependant pas de parallélisme entre les parties du code qui n'ont pas besoin
+d'attendre. Si une partie met potentiellement du temps à s'exécuter ou si,
+pour une raison ou une autre, elle fait appel à une fonction bloquante,
+il convient de la faire s'exécuter dans un thread léger séparer. Lwt offre pour
+cela la fonction <ml>Lwt_preemptive.detach</ml>.
+</p>
+<p>Ce modèle évite bien des problèmes de concurrence que l'on rencontre
+lorsqu'on est en présence de codes s'exécutant effectivement en parallèle.
+</p>
+<p>
+De plus, Lwt inclut des bibliothèques additionnelles pour faire par exemple
+de la programmation événementielle, permettant de créer des threads Lwt représentant
+l'attente d'un événement.
+</p>
+<p>
+Enfin, aucun thread en attente ne sera débloqué si l'ordonnanceur (<em>scheduler</em>)
+n'est pas lancé, par la fonction <ml>Lwt_main.run</ml>, sur le "thread principal":
+</p>
+<oc-eval>Lwt_main.run;;</oc-eval>
+</subsection>
+<subsection id="lwt-syntaxe" title="Syntaxe">
+<p>Pour faciliter l'écriture de code utilisant Lwt, la bibliothèque fournit
+quelques opérateurs et une extension de syntaxe.
+</p>
+<p>Plutôt que la fonction <ml>Lwt.bind</ml>, on pourra utiliser deux opérateurs
+infixes prenant les mêmes paramètres dans un sens ou dans l'autre:
+</p>
+<oc-eval><![CDATA[open Lwt;;
+(>>=);;
+(=<<);;
+]]></oc-eval>
+<p>Ainsi, les deux codes suivants sont équivalents pour créer un thread Lwt qui,
+lorsqu'une ligne aura été saisie sur l'entrée standard, retournera cette ligne
+mise en majuscules:
+</p>
+<oc-eval>Lwt.bind (Lwt_io.read_line Lwt_io.stdin) (fun s -> Lwt.return (String.uppercase s));;
+Lwt_io.read_line Lwt_io.stdin >>= fun s -> Lwt.return (String.uppercase s);;
+</oc-eval>
+<p>La fonction <ml>Lwt.map</ml> permet de ne pas avoir à utiliser <ml>Lwt.return</ml>,
+qu'elle utilise pour créer une thread Lwt à partir du résulat d'une fonction:
+</p>
+<oc-eval>Lwt.map;;</oc-eval>
+<p>
+Les opérateurs <ml>(>|=)</ml> et <ml>(&lt;|=)</ml> sont équivalents à <ml>Lwt.map</ml>
+avec deux façons d'ordonner les paramètres. Ainsi, notre code précédent devient:
+</p>
+<oc-eval><![CDATA[Lwt.map String.uppercase (Lwt_io.read_line Lwt_io.stdin) ;;
+Lwt_io.read_line Lwt_io.stdin >|= String.uppercase;;
+String.uppercase =|< Lwt_io.read_line Lwt_io.stdin;;
+]]></oc-eval>
+<p>
+Lwt fournit également une extension de syntaxe Camlp4 facilitant
+encore l'écritude de code.
+</p>
+<!--<p>
+Ainsi les deux constructions suivantes sont équivalentes:
+</p>
+<oc-eval toplevel="false" show-code="false">#use "topfind";;
+#require "lwt.simple-top";;
+#camlp4o;;
+#require "lwt.syntax";;
+</oc-eval>
+<oc-eval>
+let t = Lwt_io.read_line Lwt_io.stdin in
+  Lwt.bind t (fun s -> Lwt.return (String.uppercase s));;
+lwt s = Lwt_io.read_line Lwt_io.stdin in
+  Lwt.return (String.uppercase s);;
+</oc-eval>
+-->
+</subsection>
 
+<subsection id="lwt-threads" title="Manipulation des threads">
+<p>
+Les threads Lwt sont des valeurs OCaml comme les autres, et peuvent
+donc être passées à des fonctions. Lwt offre la possibilité d'effectuer
+plusieurs opérations sur ses threads. On peut par exemple demander
+l'état d'un thread, qui peut être endormi (en attente, <ml>Sleep</ml>),
+terminé avec une valeur de retour (<ml>Return of 'a</ml>) ou terminé en
+échec (<ml>Fail of exn</ml>).
+</p>
+<warning id="lwt-run" title="Utilisation de Lwt_main.run">
+<p>
+Dans les exemples de code qui suivent, <ml>Lwt_main.run</ml> est utilisé
+pour "évaluer" le thread en paramètre, c'est-à-dire faire reprendre les
+threads en attente d'un événement (comme une entrée/sortie). En pratique,
+dans un programme, on n'utilisera cette fonction que sur le thread "principal"
+du programme, qui crée les autres.
+</p>
+</warning>
+<p>
+Dans l'exemple suivant, nous créons un pipe dont nous obtenons
+le canal de lecture <ml>ic</ml> et le canal d'écriture <ml>oc</ml>.
+Ensuite, nous créons un thread Lwt <ml>reader</ml> qui lit un caractère dans le
+pipe (et donc attend qu'un caractère soit disponible sur le canal
+de lecture). Nous affichons ensuite son état avec <ml>Lwt.State</ml>.
+Puis nous écrivons un caractère dans le pipe, et redemandons
+l'état du thread <ml>reader</ml>. Nous mettons le tout dans une
+fonction que nous passons à <ml>Lwt_main.run</ml>, sinon aucun
+thread en attente ne serait débloqué:
+</p>
+<!--
+<oc-eval toplevel="false" show-code="false">#use "topfind";;
+#require "lwt.simple-top";;
+</oc-eval>
+-->
+<oc-eval>let state_as_string thr =
+  match Lwt.state thr with
+  Lwt.Return c -> Printf.sprintf "Return with '%c'" c
+| Lwt.Fail _ -> "Fail"
+| Lwt.Sleep -> "Sleep"
+;;
+let run () =
+  let ic, oc = Lwt_io.pipe () in
+  let reader = Lwt_io.read_char ic in
+  Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
+  (* afficher l'etat et attendre la fin de l'affichage avec >>= *)
+  >>= fun _ ->
+    (* ecrire dans le canal et ne pas attendre *)
+    ignore(Lwt_io.write_char oc 'a');
+    (* bloquer en attendant la terminaison de la lecture dans le canal *)
+    reader >>= fun _ ->
+      (* afficher le nouvel etat du lecteur *)
+      Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
+;;
+Lwt_main.run (run ());;
+</oc-eval>
+<!--
+<p>Notre <ml>reader</ml> est donc en attente. Ecrivons un caractère
+dans le pipe et interrogeons à nouveau l'état:
+</p>
+<oc-eval>
+let ic, oc = Lwt_io.pipe () ;;
+let reader = Lwt_io.read_char ic ;;
+print_endline (state_as_string reader) ;;
+Lwt_main.run (Lwt_io.write_char oc 'a');;
+print_endline (state_as_string reader) ;;
+</oc-eval>
+-->
+<p>
+En pratique, on n'utilisera que rarement la possibilité de connaître l'état
+d'un thread Lwt. Par contre, on utilisera des fonctions agissant en fonction
+de l'état de threads Lwt, comme la fonction <ml>Lwt.join</ml> permet d'attendre
+la fin de plusieurs threads Lwt ou <ml>Lwt.choose</ml> qui retourne le même
+résultat que le thread Lwt qui termine en premier parmi une liste:
+</p>
+<oc-eval>let t = Lwt.join
+  [ Lwt_io.write_line Lwt_io.stdout "message 1" ;
+    Lwt_io.write_line Lwt_io.stdout "message 2" ;
+  ] >>= fun _ -> Lwt_io.flush Lwt_io.stdout
+  in
+  Lwt_main.run t ;;
+Lwt_main.run (Lwt.choose  [ Lwt.return 0 ; Lwt.return 42 ; Lwt.return 56 ]) ;;
+</oc-eval>
+<p>
+</p>
+</subsection>
+
+<subsection id="lwt-exemple" title="Un exemple complet">
+<p>
+Nous allons utiliser Lwt pour comparer deux versions d'un même algorithme
+qui compte le nombre de fichiers dans une arborescence de répertoires.
+La première version, utilisant la bibliothèque Unix, se contente de parcourir
+séquentiellement l'arborescence en comptant les fichiers. La seconde
+version, objet d'un exercice, utilise Lwt pour "paralléliser" ce
+comptage en bloquant le moins possible sur les entrées/sorties.
+</p>
+<p>
+Le programme prendra en paramètre le nom du répertoire à partir duquel
+commencer la recherche et le comptage et affichera le nombre de fichier
+trouvés sur la sortie standard.
+</p>
+<p>
+Le code de la première version est le suivant:
+</p>
+<ocaml id ="findseq" defer_="1">
+<include raw="true" file="&lt;stog-dir/&gt;/codes/findseq.ml"/></ocaml>
+<p>
+Nous pouvons le compiler par la commande suivante:
+</p>
+<sh>ocamlfind ocamlopt -o findseq -package unix -linkpkg findseq.ml</sh>
+<exercice id="lwt-exo-findpar" title="Paralléliser le comptage des fichiers">
+
+<p>On pourra compiler ce programme par la commande suivante:</p>
+<sh>ocamlfind ocamlopt -o findpar -package lwt.unix -linkpkg findpar.ml</sh>
+</exercice>
+
+</subsection>
+<oc-eval>let t = Lwt.choose
+ [ Lwt.return 42 >|= (+) 1 >|= (+) 1 ;
+   Lwt.return 0 >|= (+) 1 >|= (+) 1 ;
+ ];;
+match Lwt.state t with Lwt.Sleep -> "sleep" | Return n -> string_of_int n | _ -> "fail";;</oc-eval>
+<subsection id="lwt-conclusion" title="Conclusion">
+<p>
+Nous n'avons qu'un ensemble restreint des possibilités offertes par Lwt. En particulier,
+nous n'avons pas évoqué la possibilité d'annuler un thread Lwt, la gestion des exceptions,
+les variables locales à un thread Lwt.
+</p>
+<todo>Contagion</todo>
+</subsection>
 </section>
 </contents>
 </module>
