@@ -58,7 +58,7 @@ ou depuis ses sources.
 </p>
 </section>
 
-<section id="setup" title="Mise en place de l'environnemet de test">
+<section id="setup" title="Mise en place de l'environnement de test">
 <p>
 Kaputt offre plusieurs possibilités pour définir et exécuter des tests.
 </p>
@@ -85,7 +85,7 @@ pas que le code de test soit présent dans le code du logiciel ou
 de la bibliothèque lorsqu'ils sont compilés pour être installés.
 </p>
 <p>
-Kaputt offre deux possibilités pour résoudre ce problème. La première
+Il y a deux possibilités pour résoudre ce problème. La première
 consiste en l'utilisation de l'extension de syntaxe Camlp4 <code>camlp4oof</code>,
 utilisée comme préprocesseur. Cette extension autorise la syntaxe suivante:
 </p>
@@ -259,6 +259,12 @@ sur la sortie d'erreur:
 <oc-eval>Test.run_tests ~output: (Test.Xml_output stderr) tests;;
 flush stderr;;</oc-eval>
 <p>
+Ce format de sortie est surtout utile pour alimenter d'autres outils,
+notamment d'intégration continue. La variante <ml>Test.Xml_junit_output</ml>
+permet la sortie dans un format compatible JUnit, pour s'interfacer
+avec <ext-a href="http://jenkins-ci.org/">Jenkins</ext-a>.
+</p>
+<p>
 Il est possible d'avoir une structure de données en retour de l'exécution
 des tests, en utilisant par exemple <kval mod="Test" val="exec_tests"/>:
 </p>
@@ -277,7 +283,8 @@ spécification.
 Les spécifications sont exprimées à l'aide du module
 <kmod name="Specification"/>, qui offre également des facilités pour
 construire des prédicats (pré- et post-conditions) sur différentes
-structures de données (piles, listes, ...).
+structures de données (piles, listes, ...) ainsi que des combinateurs
+de prédicats.
 </p>
 <p>
 Les générateurs de valeurs aléatoires sont définis à l'aide du module
@@ -330,7 +337,7 @@ en chiffres romains se termine par "IX":
     String.sub s (len - 2) 2 = "IX");;
 ]]></oc-eval>
 </li>
-<li>Quand un valeur est un multiple de 5, sa représentation en chiffres romains
+<li>Quand une valeur est un multiple de 5, sa représentation en chiffres romains
 ne peut se termine par 'I' ni avoir 'I' en avant dernière position:
 <oc-eval><![CDATA[let mult_of_5 =
   (fun x -> x mod 5 = 0) ==>
@@ -341,7 +348,7 @@ ne peut se termine par 'I' ni avoir 'I' en avant dernière position:
   );;
 ]]></oc-eval>
 </li>
-<li>Quand un valeur est un multiple de 10, sa représentation en chiffres romains
+<li>Quand une valeur est un multiple de 10, sa représentation en chiffres romains
 ne peut pas comporter les caractères 'I' et 'V':
 <oc-eval><![CDATA[let mult_of_10 =
   (fun x -> x mod 10 = 0) ==>
@@ -352,8 +359,8 @@ ne peut pas comporter les caractères 'I' et 'V':
 <p>
 Nous pouvons maintenant utiliser ces spécifications pour créer un test
 de notre fonction. Un test peut utiliser plusieurs spécifications,
-chaque valeur générée étant utilisée pour toutes les spécifications
-dont elle vérifie la pré-condition:
+chaque valeur générée étant utilisée par la première spécification
+de la liste dont elle vérifie la pré-condition:
 </p>
 <oc-eval>
 let test_to_roman = Kaputt.Test.make_random_test
@@ -391,7 +398,8 @@ s'insérer dans l'environnement de compilation d'un logiciel OCaml.
 <p>
 Quelques exemples d'utilisation ont donné un aperçu des possibilités de
 Kaputt, qui en offre bien d'autres (possibilités de classfication
-des tests de spécifications selon la valeur d'entrée, choix de la source aléatoire, ...)
+des tests de spécifications selon la valeur d'entrée, choix de la source aléatoire,
+réduction des contre-exemples à des valeurs plus petites, ...)
 que nous n'avons pas explorées ici mais qui sont indiquées dans le
 <ext-a href="http://kaputt.x9c.fr/distrib/kaputt.html">manuel de Kaputt</ext-a> et dans
 la <ext-a href="kaputt.x9c.fr/distrib/api/index.html">documentation des modules</ext-a>.
