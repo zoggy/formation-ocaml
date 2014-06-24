@@ -353,8 +353,8 @@ test (object method m x = x + 1 method m2 = "hello" end)
 <oc-eval error-exc="false"><![CDATA[let test2 (p : < m : int -> int >) = p#m 1;;
 test2 (object method m x = x + 1 method m2 = "hello" end)
 ]]></oc-eval>
-<p>Un <em>cast</em> est alors nécessaire pour dépouiller l'objet de sa méthode
-en trop avant de le passer en paramètre. Le <em>cast</em> est réalisé
+<p>Un transtypage (<em>cast</em>) est alors nécessaire pour dépouiller l'objet de sa méthode
+en trop avant de le passer en paramètre. Le transtypage est réalisé
 avec l'opérateur <ml>:&gt;</ml>, qui prend un objet à gauche et un type à droite,
 le tout entre parenthèses:
 </p>
@@ -517,14 +517,14 @@ des affichages:
 <oc-eval>class c4 =
   let () = print_endline "this message is printed at the class declaration time" in
   fun x ->
-    let () = print_endline (Printf.sprintf "got x=%d" x) in
+    let () = Printf.printf "got x=%d\n%!" x in
     let z = -x in
-    let () = print_endline (Printf.sprintf "defined z=%d" z) in
+    let () = Printf.printf "defined z=%d\n%!" z in
     fun y ->
-      let () = print_endline (Printf.sprintf "got y=%d" y) in
+      let () = Printf.printf "got y=%d\n%!" y in
       object
         initializer
-          print_endline (Printf.sprintf "initializer: x=%d, y=%d, z=%d" x y z)
+          Printf.printf "initializer: x=%d, y=%d, z=%d\n%!" x y z
       end;;
 </oc-eval>
 <p>
@@ -748,7 +748,7 @@ afin de montrer l'ordre d'initialisation:
     method move new_x new_y = x <- new_x ; y <- new_y
     method as_string = Printf.sprintf "(%d,%d)" x y
     initializer
-      print_endline (Printf.sprintf "init point with x=%d, y=%d" x y)
+      Printf.printf "init point with x=%d, y=%d\n%!" x y
   end;;
 class colored_point ?(color=0x000) ?x ?y () =
   object(self)
@@ -759,7 +759,7 @@ class colored_point ?(color=0x000) ?x ?y () =
     method as_string = Printf.sprintf "%s[%x]" super#as_string color
     method as_point = (self :> point)
     initializer
-      print_endline (Printf.sprintf "init colored_point with x=%d, y=%d, color=%x" x y color)
+      Printf.printf "init colored_point with x=%d, y=%d, color=%x\n%!" x y color
   end;;
 let origin = new point () ;;
 let colored_origin = new colored_point ~color: 0xa00 () ;;
@@ -780,7 +780,7 @@ de la méthode <ml>as_string</ml>, en faisant appel à <ml>super#as_string</ml>.
 </p>
 <p>La classe <ml>colored_point</ml> contient également une méthode <ml>as_point</ml>
 renvoyant l'objet dépouillé pour être du type <ml>point</ml> (utilisation de l'opérateur
-de <em>cast</em> <ml>:&gt;</ml>). Attention cependant, les méthodes qu'il porte
+de transtypage <ml>:&gt;</ml>). Attention cependant, les méthodes qu'il porte
 reste celles de la classe <ml>colored_point</ml>:
 </p>
 <oc-eval>colored_origin#as_point#as_string ;;</oc-eval>
@@ -856,7 +856,7 @@ déclarée comme virtuelle, toujours à l'aide du mot-clé <ml>virtual</ml>.
 <p>
 Définissons une classe virtuelle <ml>stringable</ml> contenant une
 méthode virtuelle <ml>as_string</ml>, ainsi qu'une méthode concrète
-(le contraire de virtuelle) <ml>prerr</ml>, qui fait appel à la méthode
+(le contraire de virtuelle) <ml>print</ml>, qui fait appel à la méthode
 virtuelle pour afficher la représentation en chaîne sur la sortie standard:
 </p>
 <oc-eval>class virtual stringable =
@@ -1224,9 +1224,26 @@ o = o;;
 ]]></oc-eval>
 <p>En effet, deux objets sont égaux s'ils ont la même adresse physique.</p>
 <p>
+La relation d'ordre générique est basée sur l'identifiant interne de l'objet
+(son numéro dans l'ordre de création des objets),
+que l'on obtient grâce à la fonction <ext-a href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/Oo.html#VALid"><ml>Oo.id</ml></ext-a>:
+</p>
+<oc-eval>let obj1 = object val y = "hello" end;;
+let obj2 = object val y = "abc" end;;
+obj1 &lt; obj2;;
+Oo.id obj1 ;;
+Oo.id obj2 ;;
+</oc-eval>
+<p>
 Il convient donc d'implémenter la fonction de comparaison adaptée, en accédant
 aux attributs des objets à comparer. On implémente parfois ces comparaisons
 dans des méthodes binaires.
+</p>
+<p>
+Par ailleurs, les identifiants des objets ne sont pas conservés lors
+de la sérialisation; de nouveaux identifiants sont regénérés lors de
+la re-création des objets. Il conviendra donc de s'appuyer sur ces
+identifiants ave parcimonie.
 </p>
 </subsection>
 </section>
