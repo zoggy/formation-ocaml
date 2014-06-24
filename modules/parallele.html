@@ -83,7 +83,7 @@ fini leur travail.
 Si le code se trouve dans un fichier <code>thread_print.ml</code>,
 on pourra le compiler par la commande suivante:
 </p>
-<sh>ocamlopt -o thread_print -thread unix.cmxa threads.cmxa thread_print.ml</sh>
+<sh>$ ocamlopt -o thread_print -thread unix.cmxa threads.cmxa thread_print.ml</sh>
 <solution>
 <ocaml id ="thrprint" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/thread_print.ml"/></ocaml>
 </solution>
@@ -475,50 +475,98 @@ Lwt_main.run (Lwt.choose  [ Lwt.return 0 ; Lwt.return 42 ; Lwt.return 56 ]) ;;
 </oc-eval>
 <p>
 </p>
-</subsection>
 
-<subsection id="lwt-exemple" title="Un exemple complet">
+<exercice id="lwt-commands" title="Exécution de commandes dépendantes">
 <p>
-Nous allons utiliser Lwt pour comparer deux versions d'un même algorithme
-qui compte le nombre de fichiers dans une arborescence de répertoires.
-La première version, utilisant la bibliothèque Unix, se contente de parcourir
-séquentiellement l'arborescence en comptant les fichiers. La seconde
-version, objet d'un exercice, utilise Lwt pour "paralléliser" ce
-comptage en bloquant le moins possible sur les entrées/sorties.
+Lwt permet de paralléliser les attentes non seulement sur les entrées
+sorties mais également sur d'autres processus, comme l'illustre cet exercice.
 </p>
 <p>
-Le programme prendra en paramètre le nom du répertoire à partir duquel
-commencer la recherche et le comptage et affichera le nombre de fichier
-trouvés sur la sortie standard.
+Nous souhaitons exécuter des commandes shell, dont certaines sont
+dépendantes d'autres commandes et ne peuvent donc être exécutées
+qu'après ces dernières.
 </p>
 <p>
-Le code de la première version est le suivant:
+Plutôt qu'exécuter une à une les commandes après les avoir triées
+selon leurs dépendances, nous allons utiliser Lwt pour exécuter
+ces commandes le plus possible en parallèle.
 </p>
-<ocaml id ="findseq" defer_="1">
-<include raw="true" file="&lt;stog-dir/&gt;/codes/findseq.ml"/></ocaml>
 <p>
-Nous pouvons le compiler par la commande suivante:
+Ecrire un module <ml>Lwt_commands</ml> offrant l'interface suivante:
 </p>
-<sh>ocamlfind ocamlopt -o findseq -package unix -linkpkg findseq.ml</sh>
-<exercice id="lwt-exo-findpar" title="Paralléliser le comptage des fichiers">
+<ocaml defer_="1"><include file="&lt;stog-dir/&gt;/codes/lwt_commands.mli" raw="true"/></ocaml>
+<p>
+On utilisera notamment des fonctions des modules
+<ext-a href="http://ocsigen.org/lwt/api/Lwt_process"><ml>Lwt_process</ml></ext-a>
+et <ext-a href="http://ocsigen.org/lwt/api/Lwt_list"><ml>Lwt_list</ml></ext-a>,
+ainsi que <ext-a href="http://ocsigen.org/lwt/api/Lwt#VALfail"><ml>Lwt.fail</ml></ext-a>
+ pour signaler une erreur.
+</p>
+<p>
+Ce module pourra être compilé par les commandes suivantes:
+</p>
+<sh>$ ocamlfind ocamlopt -c -package lwt.unix lwt_commands.mli
+$ ocamlfind ocamlopt -c -package lwt.unix lwt_commands.ml
+</sh>
+<p>
+On pourra tester le module avec le code suivant. Ce dernier
+crée plusieurs commandes. <ml>clean</ml> permet de s'assurer
+que les fichiers <code>file1.txt</code>, <code>file2.txt</code> et <code>file3.txt</code>
+sont supprimés. La commande principale lance un <ml>ls -l</ml> sur ces
+fichiers et échouera donc s'ils n'existent pas. Elle dépend donc
+de trois autres commandes, chacune dormant une seconde avant de
+créer un fichier vide. Ces trois commandes dépendent également chacun
+de la commande <ml>clean</ml>:
+</p>
+<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands_test.ml"/></ocaml>
+<p>
+En compilant le tout dans un programme <code>lwt-commands</code> avec la
+commande suivante:
+</p>
+<sh>$ ocamlfind ocamlopt -o lwt-commands -package lwt.unix -linkpkg \
+  lwt_commands.cmx lwt_command_test.ml</sh>
+<p>
+nous pouvons vérifier que l'exécution de notre programme parallélise bien
+les trois commandes qui créent les trois fichiers, puisque le temps d'exécution
+total est d'à peine plus d'une seconde, et non trois si les commandes de création
+avaient été exécutées séquentiellement:
+</p>
+<sh>$ time ./lwt-commands
+file1.txt  file2.txt  file3.txt
 
-<p>On pourra compiler ce programme par la commande suivante:</p>
-<sh>ocamlfind ocamlopt -o findpar -package lwt.unix -linkpkg findpar.ml</sh>
+real  0m1.017s
+user  0m0.011s
+sys   0m0.015s
+</sh>
+<solution>
+<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands.ml"/></ocaml>
+</solution>
 </exercice>
 
 </subsection>
-<oc-eval>let t = Lwt.choose
- [ Lwt.return 42 >|= (+) 1 >|= (+) 1 ;
-   Lwt.return 0 >|= (+) 1 >|= (+) 1 ;
- ];;
-match Lwt.state t with Lwt.Sleep -> "sleep" | Return n -> string_of_int n | _ -> "fail";;</oc-eval>
+
 <subsection id="lwt-conclusion" title="Conclusion">
 <p>
-Nous n'avons qu'un ensemble restreint des possibilités offertes par Lwt. En particulier,
+Nous n'avons vu qu'un ensemble restreint des possibilités offertes par Lwt. En particulier,
 nous n'avons pas évoqué la possibilité d'annuler un thread Lwt, la gestion des exceptions,
 les variables locales à un thread Lwt.
 </p>
-<todo>Contagion</todo>
+<p>Si l'usage de Lwt présente d'incontestables facilités pour écrire du code fortement
+soumis à des attentes longues<note>Lwt est notamment utilisé par
+<ext-a href="http://ocsigen.org/">Ocsigen</ext-a>, un serveur web en OCaml qui par nature
+passe du temps à attendre et envoyer des messages sur le réseau.</note>, il présente
+un inconvénient: les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
+à être "contaminé", les résultats fournis par la bibliothèque en question étant
+empaquetés dans les threads Lwt, ce qui a tendance à propager la logique de parallélisation
+des attentes.
+</p>
+<p>Symétriquement, dans un code s'appuyant sur Lwt mais souhaitant interagir avec d'autres
+bibliothèques n'utilisant pas Lwt, il conviendra de s'assurer qu'aucune opération longue
+de ces bibliothèques ne vient bloquer la parallélisation des attentes offertes par Lwt.
+Si c'est le cas, on exécutera les parties potentiellement longues ou bloquantes dans
+un thread système séparés grâce à la fonction <ml>Lwt_preemptive.detach</ml>
+(et on compilera en utilisant en plus le paquet <code>lwt.preemptive</code>).
+</p>
 </subsection>
 </section>
 </contents>

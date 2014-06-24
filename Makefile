@@ -12,6 +12,7 @@ EXERCICES=codes/count_words.cmo \
 	codes/findpar \
 	codes/findseq \
 	codes/lstmp.cmo \
+	codes/lwt_commands \
 	codes/mon_module.cmo \
 	codes/mon_module2.cmo \
 	codes/printenv.cmo \
@@ -76,3 +77,8 @@ codes/findseq: codes/findseq.ml
 
 codes/findpar: codes/findpar.ml
 	ocamlfind ocamlopt -o $@ -package lwt.unix -linkpkg $^
+
+codes/lwt_commands: codes/lwt_commands.mli codes/lwt_commands.ml codes/lwt_commands_test.ml
+	ocamlfind ocamlopt -c -package lwt.unix codes/lwt_commands.mli
+	ocamlfind ocamlopt -o $@ -I codes -package lwt.unix -linkpkg codes/lwt_commands.ml codes/lwt_commands_test.ml
+
