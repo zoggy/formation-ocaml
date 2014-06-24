@@ -660,7 +660,7 @@ print stack;;
 </exercice>
 
 <exercice id="exostackfun" title="Implémentation d'une pile avec une classe fonctionnelle">
-<p>Implémenter un pile d'entiers à l'aide d'une classe "fonctionnelle" <ml>fun_stack</ml>,
+<p>Implémenter une pile d'entiers à l'aide d'une classe "fonctionnelle" <ml>fun_stack</ml>,
 i.e. dont les méthodes retournent un nouvel objet au lieu de faire
 un effet de bord sur l'état interne. La classe aura les méthodes suivantes:
 <ml>push : int -> fun_stack</ml>,
@@ -781,7 +781,7 @@ de la méthode <ml>as_string</ml>, en faisant appel à <ml>super#as_string</ml>.
 <p>La classe <ml>colored_point</ml> contient également une méthode <ml>as_point</ml>
 renvoyant l'objet dépouillé pour être du type <ml>point</ml> (utilisation de l'opérateur
 de transtypage <ml>:&gt;</ml>). Attention cependant, les méthodes qu'il porte
-reste celles de la classe <ml>colored_point</ml>:
+restent celles de la classe <ml>colored_point</ml>:
 </p>
 <oc-eval>colored_origin#as_point#as_string ;;</oc-eval>
 <warning id="warnoverride" title="Redéfinition d'attributs et de méthodes">
@@ -1175,7 +1175,7 @@ du même type (une copie, en l'occurrence):
 <oc-eval>Oo.copy;;</oc-eval>
 <p>
 Pour les attributs, il s'agit d'une copie "peu profonde" (<em>shallow copy</em>,
-tout comme <ml>Array.copy</ml>): Les valeurs des attributs sont partagés, et
+tout comme <ml>Array.copy</ml>): Les valeurs des attributs sont partagées, et
 la mise à jour d'un attribut dans un objet ne modifie pas l'attribut dans l'objet
 copié. Par contre, la copie ne descend pas dans les références, donc si un attribut
 contient une référence, modifier la valeur référencée par l'attribut dans un
@@ -1277,7 +1277,7 @@ let n3 = n1#add n2;;
 n3#value ;;
 </oc-eval>
 <p>
-Définisson maintenant une classe <ml>integer2</ml> héritant de notre classe
+Définissons maintenant une classe <ml>integer2</ml> héritant de notre classe
 <ml>integer</ml>. Nous lui ajoutons une méthode <ml>add_int</ml>.
 Ce faisant, deux objets instanciés par ces deux classes n'ont pas le
 même type, on ne peut donc utiliser un objet de type <ml>integer</ml>
