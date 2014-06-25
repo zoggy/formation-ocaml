@@ -9,4 +9,6 @@ my-ocaml-session
 *annot
 .chamo*
 .stog/cache
-codes/thread_print
+codes/thread-print
+codes/lwt-grep
+codes/lwt-commands
