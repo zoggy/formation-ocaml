@@ -148,58 +148,37 @@ une interface commune pour les différentes façons de distribuer les calculs
 débogage et/ou l'obtention d'un comportement de référence.
 </p>
 <p>
-En guise d'exemple, nous allons écrire un programme qui compte le nombre de caractères
-de chaque fichier du répertoire courant, la première fois de façon séquentielle,
+En guise d'exemple, nous allons écrire un programme qui applique une fonction
+à différentes listes d'entiers, la première fois de façon séquentielle,
 la seconde en utilisant plusieurs processus locaux.
 </p>
 <p>
-Nous définissons tout d'abord une fonction retournant la liste des fichiers
-d'un répertoire en paramètre:
+Nous définissons tout d'abord nos listes d'entiers:
 </p>
-<oc-eval>let ls_dir dir =
-  try
-    let handle = Unix.opendir dir in
-    let rec read acc =
-       match
-         try Some(Unix.readdir handle)
-         with End_of_file -> None
-       with
-         None -> acc
-       | Some file ->
-           let f = Filename.concat dir file in
-           match (Unix.stat f).Unix.st_kind with
-             Unix.S_REG -> read (file :: acc)
-           | _ -> read acc
-     in
-     read []
-  with
-    Unix.Unix_error (e, s1, s2) ->
-      failwith (Printf.sprintf "%s: %s %s" (Unix.error_message e) s1 s2)
-;;
-</oc-eval>
-<p>Nous définissons également une fonction retournant la taille du fichier
+<oc-eval>let input =
+  [
+    [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ] ;
+    [ 2 ; 4 ; 6 ; 8 ; 10 ] ;
+    [ -1 ; -7 ; -9 ; -42 ] ;
+  ]
+;;</oc-eval>
+<p>Nous définissons également une fonction sommant une liste d'entiers
 en paramètre:
 </p>
-<oc-eval>let file_size file =
-  try (Unix.stat file).Unix.st_size
-  with Unix.Unix_error (e, s1, s2) ->
-    failwith (Printf.sprintf "%s: %s %s" (Unix.error_message e) s1 s2)
-;;
-</oc-eval>
+<oc-eval>let sum = List.fold_left (+) 0;;</oc-eval>
 <p>
-Enfin, nous utilisons le module de la bibliothèque Functory effectuer
-les opérations séquentiellement, pour appliquer la fonction <ml>file_size</ml>
-sur chaque fichier du répertoire courant:
+Enfin, nous utilisons le module de la bibliothèque Functory pour effectuer
+les opérations séquentiellement, afin d'appliquer la fonction <ml>sum</ml>
+sur chacune de nos listes:
 </p>
-<oc-eval>Functory.Sequential.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
-</oc-eval>
+<oc-eval>Functory.Sequential.map sum input ;;</oc-eval>
 <p>
 Si nous souhaitons effectuer le même traitement, mais en utilisant plusieurs
 cœurs de notre machine, il nous suffit d'indiquer le nombre maximum de cœurs
 à utiliser et d'appeler la fonction <ml>map</ml> du module <ml>Functory.Cores</ml>:
 </p>
 <oc-eval>Functory.Cores.set_number_of_cores 4;;
-Functory.Cores.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
+Functory.Cores.map sum input ;;
 </oc-eval>
 <p>On peut ainsi, en changeant par exemple un <ml>open</ml>, utiliser
 soit le <ml>map</ml> séquentiel, soit le <ml>map</ml> parallèle local.
@@ -215,7 +194,7 @@ distant est le même que celui local.
 </p>
 <ocaml eval="false">Functory.Network.declare_workers ~n: 4 "machine1";;
 Functory.Network.declare_workers ~n: 8 "machine2";;
-Functory.Network.Same.map (fun f -> (f, file_size f)) (ls_dir ".") ;;
+Functory.Network.Same.map sum input ;;
 </ocaml>
 <p>
 Les programmes sur les machines distantes doivent être lancés et
@@ -223,11 +202,8 @@ attendre les instructions du maître avec le code suivant:
 </p>
 <ocaml>Functory.Network.Same.Worker.compute ();;</ocaml>
 <p>
-Bien sûr, dans le cas d'utilisation de machines distantes, notre
-exemple sur des fichiers se fonctionne que si le maître et
-les esclaves partagent le même système de fichiers. De plus, les
-calculs à répartir sont en général un peu plus gourmands en temps
-et/ou en mémoire...
+Bien sûr, les calculs à répartir sont en général un peu plus gourmands
+en temps et/ou en mémoire...
 </p>
 <p>
 La bibliothèque offre d'autres fonctions que <ml>map</ml> pour effectuer
@@ -244,12 +220,11 @@ offre seulement la possibilité d'utiliser plusieurs cœurs de la machine,
 mais offre davantage de fonctions, traitant à la fois les listes et
 les tableaux.
 </p>
-<p>Avec nos fonctions <ml>ls_dir</ml> et <ml>file_size</ml> précédentes,
-nous pouvons obtenir les tailles des fichiers du répertoire courant
-de la façon suivante, en utilisant 6 cœurs:
+<p>Avec notre liste de listes <ml>input</ml> et notre fonction <ml>sum</ml> précédentes,
+nous pouvons appliquer <ml>sum</ml> à chacune des listes de la façon suivante,
+en utilisant 6 cœurs:
 </p>
-<oc-eval>Parmap.parmap ~ncores: 6 (fun f -> (f, file_size f)) (Parmap.L (ls_dir "."));;
-</oc-eval>
+<oc-eval>Parmap.parmap ~ncores: 6 sum (Parmap.L input);;</oc-eval>
 <p>On consultera avantageusement la
 <ext-a href="http://rdicosmo.github.io/parmap/doc/Parmap.html">documentation de Parmap</ext-a>
 pour découvrir les fonctions offertes pour paralléliser des calculs.
@@ -257,7 +232,7 @@ pour découvrir les fonctions offertes pour paralléliser des calculs.
 </subsection>
 </section>
 
-<section id="lwt" title="Lwt: Monades et concurrence">
+<section id="lwt" title="Lwt: Monades et (non-)concurrence">
 <p>
 La bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a> (pour
 <em>Lightweight threads</em>, ou processus légers légers) permet de simuler
@@ -295,7 +270,7 @@ qui prend en paramètre un thread Lwt et une fonction. Cette fonction sera appel
 le thread Lwt aura terminé, avec en paramètre la valeur retournée par le thread Lwt:
 </p>
 <oc-eval>Lwt.bind;;</oc-eval>
-<p>La fonction en paramèter de <ml>Lwt.bind</ml> retourne elle aussi un thread Lwt,
+<p>La fonction en paramètre de <ml>Lwt.bind</ml> retourne elle aussi un thread Lwt,
 ceci afin de pouvoir composer les appels de fonctions.
 </p>
 <p>
@@ -323,7 +298,7 @@ n'a pas besoin d'attendre.
 <p>Il n'y a cependant pas de parallélisme entre les parties du code qui n'ont pas besoin
 d'attendre. Si une partie met potentiellement du temps à s'exécuter ou si,
 pour une raison ou une autre, elle fait appel à une fonction bloquante,
-il convient de la faire s'exécuter dans un thread léger séparer. Lwt offre pour
+il convient de la faire s'exécuter dans un thread léger séparé. Lwt offre pour
 cela la fonction <ml>Lwt_preemptive.detach</ml>.
 </p>
 <p>Ce modèle évite bien des problèmes de concurrence que l'on rencontre
@@ -410,7 +385,7 @@ du programme, qui crée les autres.
 </p>
 </warning>
 <p>
-Dans l'exemple suivant, nous créons un pipe dont nous obtenons
+Dans l'exemple suivant, nous créons un tuyau (<em>pipe</em>) dont nous obtenons
 le canal de lecture <ml>ic</ml> et le canal d'écriture <ml>oc</ml>.
 Ensuite, nous créons un thread Lwt <ml>reader</ml> qui lit un caractère dans le
 pipe (et donc attend qu'un caractère soit disponible sur le canal
@@ -461,7 +436,7 @@ print_endline (state_as_string reader) ;;
 <p>
 En pratique, on n'utilisera que rarement la possibilité de connaître l'état
 d'un thread Lwt. Par contre, on utilisera des fonctions agissant en fonction
-de l'état de threads Lwt, comme la fonction <ml>Lwt.join</ml> permet d'attendre
+de l'état de threads Lwt, comme la fonction <ml>Lwt.join</ml> qui permet d'attendre
 la fin de plusieurs threads Lwt ou <ml>Lwt.choose</ml> qui retourne le même
 résultat que le thread Lwt qui termine en premier parmi une liste:
 </p>
@@ -473,8 +448,33 @@ résultat que le thread Lwt qui termine en premier parmi une liste:
   Lwt_main.run t ;;
 Lwt_main.run (Lwt.choose  [ Lwt.return 0 ; Lwt.return 42 ; Lwt.return 56 ]) ;;
 </oc-eval>
+</subsection>
+
+<subsection id="exercices" title="Exercices">
+
+<exercice id="lwt-grep" title="Grep simplifié et multiplexé">
 <p>
+Nous souhaitons écrire une version simplifiée mais multiplexée de <code>grep</code>.
+Le programme prendra en paramètre une chaîne et une liste de fichiers. Si la liste
+de fichiers est vide, l'entrée standard sera utilisée.
 </p>
+<p>A l'aide des <ext-a href="http://ocsigen.org/lwt/api/Lwt_stream">flux Lwt</ext-a>,
+on lira en parallèle les lignes des fichiers donnés et, pour chaque ligne, si
+elle contient la chaîne recherchée (utilisation du module <moduledoc name="Str"/>,
+par exemple), on affichera la ligne sur la sortie standard.
+</p>
+<p>Si plusieurs fichiers sont donnés, le nom de chaque fichier suivi de ':' sera
+affiché en tête de chaque ligne conservée.
+</p>
+<p>
+Si le code est placé dans un fichier <code>lwt_grep.ml</code>, on pourra compiler
+le programme avec la commande suivante:
+</p>
+<sh>$ ocamlfind ocamlopt -o lwt-grep -package lwt.unix,str -linkpkg lwt_grep.ml</sh>
+<solution>
+<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_grep.ml"/></ocaml>
+</solution>
+</exercice>
 
 <exercice id="lwt-commands" title="Exécution de commandes dépendantes">
 <p>
@@ -520,11 +520,12 @@ de la commande <ml>clean</ml>:
 </p>
 <ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands_test.ml"/></ocaml>
 <p>
-En compilant le tout dans un programme <code>lwt-commands</code> avec la
+En plaçant le code ci-dessus dans un fichier <code>lwt_commands_test.ml</code>
+et en compilant le tout dans un programme <code>lwt-commands</code> avec la
 commande suivante:
 </p>
 <sh>$ ocamlfind ocamlopt -o lwt-commands -package lwt.unix -linkpkg \
-  lwt_commands.cmx lwt_command_test.ml</sh>
+  lwt_commands.cmx lwt_commands_test.ml</sh>
 <p>
 nous pouvons vérifier que l'exécution de notre programme parallélise bien
 les trois commandes qui créent les trois fichiers, puisque le temps d'exécution
@@ -532,7 +533,9 @@ total est d'à peine plus d'une seconde, et non trois si les commandes de créat
 avaient été exécutées séquentiellement:
 </p>
 <sh>$ time ./lwt-commands
-file1.txt  file2.txt  file3.txt
+-rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file1.txt
+-rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file2.txt
+-rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file3.txt
 
 real  0m1.017s
 user  0m0.011s
@@ -540,6 +543,15 @@ sys   0m0.015s
 </sh>
 <solution>
 <ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands.ml"/></ocaml>
+<p>
+Dans la solution proposée, le changement du champ <ml>thread</ml> des
+commandes n'est pas protégé, car c'est inutile. En effet, une seule
+structure <ml>command</ml> est gérée à la fois par notre fonction
+<ml>run</ml>, il n'y a pas de parallélisme, donc pas de concurrence,
+car rien n'interrompt notre fonction avant qu'elle ne place le
+thread crée (et en attente de la terminaison de la commande lancée)
+dans le champ <ml>thread</ml>.
+</p>
 </solution>
 </exercice>
 
@@ -556,7 +568,7 @@ soumis à des attentes longues<note>Lwt est notamment utilisé par
 <ext-a href="http://ocsigen.org/">Ocsigen</ext-a>, un serveur web en OCaml qui par nature
 passe du temps à attendre et envoyer des messages sur le réseau.</note>, il présente
 un inconvénient: les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
-à être "contaminé", les résultats fournis par la bibliothèque en question étant
+à être "contaminés", les résultats fournis par la bibliothèque en question étant
 empaquetés dans les threads Lwt, ce qui a tendance à propager la logique de parallélisation
 des attentes.
 </p>
@@ -564,8 +576,14 @@ des attentes.
 bibliothèques n'utilisant pas Lwt, il conviendra de s'assurer qu'aucune opération longue
 de ces bibliothèques ne vient bloquer la parallélisation des attentes offertes par Lwt.
 Si c'est le cas, on exécutera les parties potentiellement longues ou bloquantes dans
-un thread système séparés grâce à la fonction <ml>Lwt_preemptive.detach</ml>
+un thread système séparé grâce à la fonction <ml>Lwt_preemptive.detach</ml>
 (et on compilera en utilisant en plus le paquet <code>lwt.preemptive</code>).
+</p>
+<p>Plusieurs bibliothèques OCaml utilisent Lwt ou offrent une partie de leur
+interface "en Lwt", notamment pour faciliter l'implémentation de communication
+via le réseau, par exemple
+<ext-a href="https://github.com/mirage/ocaml-cohttp">cohttp</ext-a> ou
+<ext-a href="http://ocurl.forge.ocamlcore.org/">ocurl</ext-a>.
 </p>
 </subsection>
 </section>

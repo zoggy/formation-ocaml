@@ -14,17 +14,21 @@ type command =
 let mk_command command deps = { command ; deps ; thread = None }
 
 let rec run com =
- match com.thread with
-   Some t ->
-     (* si un thread attend dejà la fin de la commande, le renvoyer *)
-     t
- | None ->
-     (* sinon, il faut creer ce thread;
-        cela est fait en creant un nouveau thread qui est compose de
-        l'execution des dependances, puis de l'execution de la commande *)
-     Lwt_list.iter_p run com.deps >>=
-       fun _ ->
-         let t =
+  (* on execute les dependances; si elles sont deja terminees,
+     par exemple parce qu'elles ont deja ete lancees parce que
+     dans les dependances d'une autre commande, elles ne sont
+     pas relancees, les threads correspondants etant toujours
+     en etat "termine".
+  *)
+  Lwt_list.iter_p run com.deps >>=
+    fun _ ->
+      match com.thread with
+        Some t ->
+          (* si un thread attend dejà la fin de la commande, le renvoyer *)
+          t
+      | None ->
+          (* sinon, il faut creer ce thread pour l'execution de la commande *)
+          let t =
             Lwt_process.exec (Lwt_process.shell com.command) >>=
               function
               | Unix.WEXITED 0 -> Lwt.return_unit
