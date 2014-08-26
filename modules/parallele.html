@@ -6,7 +6,7 @@ draft="true"
 <contents>
 <section id="introduction" title="Introduction">
 <p>
-OCaml permet différentes sortes de parallèlisme/concurrence:
+OCaml permet différentes sortes de parallélisme/concurrence:
 </p>
 <ul>
 <li>par l'utilisation de threads (ou processus légers),</li>
@@ -20,14 +20,14 @@ OCaml permet différentes sortes de parallèlisme/concurrence:
 <p>
 Parallèlisme et
 concurrence sont deux choses différentes<note>On pourra lire à ce sujet
-<ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note> Il est tout à fait possible d'avoir
+<ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note>. Il est tout à fait possible d'avoir
 des calculs en parallèle sans concurrence, de même que les problèmes de concurrence
-peuvent être traités avec un pseudo-parallèlisme, comme c'est le cas avec
+peuvent être traités avec un pseudo-parallélisme, comme c'est le cas avec
 les bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>
 et  <ext-a href="http://janestreet.github.io/">Async</ext-a>.
 </p>
 <p>
-Le problème d'OCaml vis-à-vis du parallèlisme/de la concurrence est que le
+Le problème d'OCaml vis-à-vis du parallélisme/de la concurrence est que le
 glaneur de cellules (<em>garbage collector</em>, ou GC) n'est pas concurrent
 et que lorsqu'il entre en action, il bloque tout le processus en cours,
 y compris les éventuels threads (processus légers).
@@ -47,7 +47,7 @@ certaines d'entre elles.
 La bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a> (pour
 <em>Lightweight threads</em>, ou processus légers légers) permet de simuler
 l'utilisation de threads en profitant du fait que certaines opérations
-sont bloquantes (les entrées sorties ou l'attente d'autres événements)
+sont bloquantes (les entrées/sorties ou l'attente d'autres événements)
 et qu'en attendant il est possible d'exécuter d'autres parties du code.
 </p>
 <subsection id="lwt-principes" title="Principes">
@@ -93,7 +93,7 @@ Lwt.return "hello";;</oc-eval>
 <p>
 A ce point, on peut se rendre compte qu'il n'y a pas de réel parallélisme, puisque
 les threads Lwt ne sont pas créés pour exécuter une fonction en parallèle, comme le
-permettent les threads systèmes (avec <ml>Thread.create</ml> évoqué plus haut), mais
+permettent les threads systèmes (avec <ml>Thread.create</ml> évoqué plus loin), mais
 pour empaqueter une valeur dans un type (le type de la monade).
 </p>
 <p>Le "parallélisme" vient du fait que Lwt fournit des fonctions non bloquantes pour les
@@ -144,7 +144,7 @@ mise en majuscules:
 Lwt_io.read_line Lwt_io.stdin >>= fun s -> Lwt.return (String.uppercase s);;
 </oc-eval>
 <p>La fonction <ml>Lwt.map</ml> permet de ne pas avoir à utiliser <ml>Lwt.return</ml>,
-qu'elle utilise pour créer une thread Lwt à partir du résulat d'une fonction:
+qu'elle utilise pour créer un thread Lwt à partir du résulat d'une fonction:
 </p>
 <oc-eval>Lwt.map;;</oc-eval>
 <p>
@@ -219,8 +219,8 @@ thread en attente ne serait débloqué:
 let run () =
   let ic, oc = Lwt_io.pipe () in
   let reader = Lwt_io.read_char ic in
-  Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
   (* afficher l'etat et attendre la fin de l'affichage avec >>= *)
+  Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
   >>= fun _ ->
     (* ecrire dans le canal et ne pas attendre *)
     ignore(Lwt_io.write_char oc 'a');
@@ -288,8 +288,8 @@ le programme avec la commande suivante:
 
 <exercice id="lwt-commands" title="Exécution de commandes dépendantes">
 <p>
-Lwt permet de paralléliser les attentes non seulement sur les entrées
-sorties mais également sur d'autres processus, comme l'illustre cet exercice.
+Lwt permet de paralléliser les attentes non seulement sur les entrées/sorties
+mais également sur d'autres processus, comme l'illustre cet exercice.
 </p>
 <p>
 Nous souhaitons exécuter des commandes shell, dont certaines sont
@@ -325,7 +325,7 @@ que les fichiers <code>file1.txt</code>, <code>file2.txt</code> et <code>file3.t
 sont supprimés. La commande principale lance un <ml>ls -l</ml> sur ces
 fichiers et échouera donc s'ils n'existent pas. Elle dépend donc
 de trois autres commandes, chacune dormant une seconde avant de
-créer un fichier vide. Ces trois commandes dépendent également chacun
+créer un fichier vide. Ces trois commandes dépendent également chacune
 de la commande <ml>clean</ml>:
 </p>
 <ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands_test.ml"/></ocaml>

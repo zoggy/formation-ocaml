@@ -3,7 +3,7 @@ open Lwt;;
 type command =
   { command : string ; (**  la commande a lancer *)
 
-    deps : command list ; (** la commande qui doivent etre terminees avant *)
+    deps : command list ; (** les commandes qui doivent etre terminees avant *)
 
     mutable thread : unit Lwt.t option ;
       (** le thread Lwt qui traite la commande *)
