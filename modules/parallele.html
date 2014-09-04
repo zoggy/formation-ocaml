@@ -15,26 +15,46 @@ OCaml permet différentes sortes de parallélisme/concurrence:
    ou <doc href="#lwt">Lwt</doc> permettant ne pas bloquer le programme
   sur des opérations potentiellement bloquantes
   (lectures/écritures de fichiers, entrées/sorties réseau, attente d'événements
-   d'interface graphiques, ...).</li>
+   d'interfaces graphiques, ...).</li>
 </ul>
 <p>
-Parallèlisme et
+Parallélisme et
 concurrence sont deux choses différentes<note>On pourra lire à ce sujet
-<ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note>. Il est tout à fait possible d'avoir
-des calculs en parallèle sans concurrence, de même que les problèmes de concurrence
-peuvent être traités avec un pseudo-parallélisme, comme c'est le cas avec
-les bibliothèque <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>
+<ext-a href="http://existentialtype.wordpress.com/2014/04/09/parallelism-and-concurrency-revisited/">ce billet de Robert Harper</ext-a>.</note>.
+</p>
+<p>
+La concurrence est l'accès simultané par plusieurs processus à une même ressource.
+Il convient en général de protéger ces accès afin de s'assurer qu'un seul processus
+à la fois accède à la ressource, de façon à ce qu'il ne soit pas interrompu
+pendant l'opération qui concerne cette ressource. Un exercice classique
+est la gestion d'un compteur pour obtenir des identifiants uniques.
+</p>
+<p>
+Un algorithme de type <ext-a href="http://fr.wikipedia.org/wiki/MapReduce">MapReduce</ext-a>
+utilise le parallélisme pour effectuer de nombreux calculs simultanément, mais
+sans concurrence entre eux à priori, chacun utilisant ses propres ressources. Les
+résultats de ces calculs sont ensuite agrégés.
+</p>
+<p>
+Il est donc tout à fait possible d'avoir des calculs en parallèle sans concurrence,
+de même que les problèmes de concurrence peuvent être traités avec un pseudo-parallélisme,
+comme c'est le cas avec les bibliothèques <ext-a href="http://ocsigen.org/lwt/">Lwt</ext-a>
 et  <ext-a href="http://janestreet.github.io/">Async</ext-a>.
 </p>
 <p>
-Le problème d'OCaml vis-à-vis du parallélisme/de la concurrence est que le
+Un<note>Un autre problème est
+que pour l'instant certaines parties du runtime ne sont pas réentrantes.</note>
+problème d'OCaml vis-à-vis du parallélisme/de la concurrence est que le
 glaneur de cellules (<em>garbage collector</em>, ou GC) n'est pas concurrent
 et que lorsqu'il entre en action, il bloque tout le processus en cours,
 y compris les éventuels threads (processus légers).
 Des travaux de recherche sont en cours pour fournir un GC concurrent à OCaml.
 </p>
 <p>
-Ceci étant dit, nous allons maintenant explorer les différentes solutions
+Nous allons maintenant explorer les différentes
+solutions<note>Il existe également
+<ext-a href="http://jocaml.inria.fr/">Jocaml</ext-a> que nous
+ne présenterons pas ici car il s'agit d'une extension d'OCaml.</note>
 pour effectuer des calculs en parallèle et/ou en concurrence, selon les
 trois approches listées plus haut. Chaque fois, nous listerons les
 bibliothèques utilisables mais nous contenterons d'exemples sur seulement
@@ -159,21 +179,68 @@ String.uppercase =|< Lwt_io.read_line Lwt_io.stdin;;
 Lwt fournit également une extension de syntaxe Camlp4 facilitant
 encore l'écritude de code.
 </p>
-<!--<p>
-Ainsi les deux constructions suivantes sont équivalentes:
-</p>
 <oc-eval toplevel="false" show-code="false">#use "topfind";;
-#require "lwt.simple-top";;
 #camlp4o;;
 #require "lwt.syntax";;
 </oc-eval>
+<p>
+La construction
+</p>
+<ocaml><![CDATA[
+lwt x = e1
+and y = e2 in
+code]]></ocaml>
+<p>
+peut être utilisée à la place de
+</p>
+<ocaml><![CDATA[
+let t = e1
+and t2 = e2 in
+Lwt.bind t (fun x -> Lwt.bind t2 (fun y -> code)]]></ocaml>
+<p>
+Ainsi les deux constructions suivantes sont équivalentes:
+</p>
 <oc-eval>
-let t = Lwt_io.read_line Lwt_io.stdin in
+let p =
+  let t = Lwt_io.read_line Lwt_io.stdin in
   Lwt.bind t (fun s -> Lwt.return (String.uppercase s));;
-lwt s = Lwt_io.read_line Lwt_io.stdin in
+let p =
+  lwt s = Lwt_io.read_line Lwt_io.stdin in
   Lwt.return (String.uppercase s);;
 </oc-eval>
--->
+<p>
+On peut enchaîner des traitements en utilisant l'opérateur <ml>&gt;&gt;</ml>
+permettant d'écrire:
+</p>
+<oc-eval>
+Lwt_main.run
+  (Lwt_io.(write stdout "hello, " >> write stdout "world!\n" >> flush stdout));;
+</oc-eval>
+<p>Au lieu de</p>
+<oc-eval>
+Lwt_main.run
+  (Lwt_io.(write stdout "hello, "
+           >>= fun _ -> write stdout "world!\n"
+           >>= fun _ -> flush stdout));;
+</oc-eval>
+<p>
+Il existe également une syntaxe facilitant la gestion des exceptions.
+Pour plus de détails, on consultera
+<ext-a href="http://ocsigen.org/lwt/2.4.3/api/Pa_lwt">la documentation</ext-a>.
+</p>
+<p>
+Pour compiler un programme utilisant l'extension de syntaxe, on utilisera une
+commande de la forme
+</p>
+<sh>$ ocamlfind ocamlc -syntax camlp4o -package lwt.syntax -linkpkg -o foo foo.ml</sh>
+<p>La syntaxe est également disponible dans le toplevel, en utilisant les directives
+suivantes pour la charger:
+</p>
+<ocaml>
+#use "topfind";;
+#camlp4o;;
+#require "lwt.syntax";;
+</ocaml>
 </subsection>
 
 <subsection id="lwt-threads" title="Manipulation des threads">
@@ -205,11 +272,6 @@ l'état du thread <ml>reader</ml>. Nous mettons le tout dans une
 fonction que nous passons à <ml>Lwt_main.run</ml>, sinon aucun
 thread en attente ne serait débloqué:
 </p>
-<!--
-<oc-eval toplevel="false" show-code="false">#use "topfind";;
-#require "lwt.simple-top";;
-</oc-eval>
--->
 <oc-eval>let state_as_string thr =
   match Lwt.state thr with
   Lwt.Return c -> Printf.sprintf "Return with '%c'" c
@@ -377,7 +439,7 @@ les variables locales à un thread Lwt.
 soumis à des attentes longues<note>Lwt est notamment utilisé par
 <ext-a href="http://ocsigen.org/">Ocsigen</ext-a>, un serveur web en OCaml qui par nature
 passe du temps à attendre et envoyer des messages sur le réseau.</note>, il présente
-un inconvénient: les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
+un inconvénient: Les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
 à être "contaminés", les résultats fournis par la bibliothèque en question étant
 empaquetés dans les threads Lwt, ce qui a tendance à propager la logique de parallélisation
 des attentes.
@@ -465,6 +527,10 @@ on pourra le compiler par la commande suivante:
 <solution>
 <ocaml id ="thrprint" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/thread_print.ml"/></ocaml>
 </solution>
+<p>
+En exercice supplémentaire, on pourra utiliser un mutex pour s'assurer
+du non entrelacement des sorties.
+</p>
 </exercice>
 <p>
 Différents modules sont également disponibles pour la communication
@@ -484,12 +550,13 @@ sur des canaux.</li>
 <p>
 La majorité des bibliothèques permettant la parallélisation utilise des processus
 lourds, exécutés soit en local, soit à distance en se connectant à d'autres machines
-pour y créer des processus.
+pour y créer des processus. Cette organisation des calculs nécessite donc des
+copies de données.
 </p>
 <p>
 OCaml, via le module <moduledoc name="Unix"/>, offre l'accès aux appels systèmes
 permettant la création de processus (<em>fork</em>), la communication via des
-<em>pipes</em> et des <em>sockets</em>, etc.
+<em>pipes</em> et des <em>sockets</em>, etc. On lira utilement <cite href="sysocaml"/>.
 </p>
 <p>
 Il existe cependant plusieurs bibliothèques offrant des abstractions pour faciliter
@@ -573,13 +640,15 @@ attendre les instructions du maître avec le code suivant:
 <ocaml>Functory.Network.Same.Worker.compute ();;</ocaml>
 <p>
 Bien sûr, les calculs à répartir sont en général un peu plus gourmands
-en temps et/ou en mémoire...
+en temps et/ou en mémoire que notre fonction jouet...
 </p>
 <p>
 La bibliothèque offre d'autres fonctions que <ml>map</ml> pour effectuer
 des calculs (différentes variantes de <em>fold</em>), la possibilité
 de paramétrer le port par lequel maître et esclaves communiquent, ...
-On consultera la documentation pour en savoir davantage.
+On consultera
+<ext-a href="https://www.lri.fr/~filliatr/functory/doc/Functory.html">la documentation</ext-a>
+pour en savoir davantage.
 </p>
 </subsection>
 
@@ -601,6 +670,30 @@ pour découvrir les fonctions offertes pour paralléliser des calculs.
 </p>
 </subsection>
 </section>
-
+<section id="conclusion" title="Conclusion">
+<p>
+Il existe plusieurs façons de paralléliser des calculs et gérer la concurrence,
+chacune pouvant être basée sur des bibliothèques variées.
+</p>
+<p>
+Pour des développements basés sur le modèle à monades évoqué ci-dessus et
+utilisant peu d'autres bibliothèques, le choix reste assez
+ouvert. Cependant, lorsqu'il s'agit de composer plusieurs bibliothèques existantes,
+on s'assurera de leur compatibilité entre elles. En effet, plusieurs bibliothèques
+utilisent Lwt, tandis que d'autres se basent sur Async, d'autres n'utilisent ni
+l'une ni l'autre et d'autres enfin fournissent des implémentations pour les deux.
+</p>
+<p>
+Le choix du modèle de parallélisme sort du cadre de cette introduction. On signalera
+simplement qu'il est orienté par certaines contraintes comme la taille des données
+manipulées (en cas de copie, transfert, ...), la disponibilité ou non de noeuds
+de calculs, distribués ou non.
+</p>
+<p>
+La programmation purement fonctionnelle facilite le développement de codes de
+calcul parallèle. OCaml est donc naturellement un bon choix pour ce style
+de programmation.
+</p>
+</section>
 </contents>
 </module>
