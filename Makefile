@@ -31,6 +31,9 @@ build: my-ocaml-session $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 my-ocaml-session:
 	mk-stog-ocaml-session -package inspect,kaputt,functory,parmap,lwt.unix -linkall -o $@
 
+run-server:
+	stog-server $(STOG_OPTIONS) .
+
 clean:
 	rm -f $(PLUGIN) my-ocaml-session
 	rm -f $(BLOG_EXAMPLES)
