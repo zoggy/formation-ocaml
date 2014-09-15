@@ -51,6 +51,7 @@ digraph g {
   objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
   tests [ label="<doc-title doc-path="tests"/>", href="<doc-url doc-path="tests"/>"] ;
   env [ label="<doc-title doc-path="env"/>", href="<doc-url doc-path="env"/>"] ;
+  para [ label="<doc-title doc-path="parallele"/>", href="<doc-url doc-path="parallele"/>"] ;
   conclusion [ label="<doc-title doc-path="conclusion"/>", href="<doc-url doc-path="conclusion"/>"] ;
   fonc -> intro ;
   imper -> fonc ;
@@ -60,11 +61,13 @@ digraph g {
   modules -> stdlib ;
   objets -> imper ;
   tests -> stdlib ;
+  para -> stdlib ;
   env -> intro ;
   conclusion -> env ;
   conclusion -> objets ;
   conclusion -> modules ;
   conclusion -> tests ;
+  conclusion -> para ;
 }
 </dot>
 </div>
