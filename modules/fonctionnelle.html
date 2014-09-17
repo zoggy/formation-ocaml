@@ -27,7 +27,7 @@ on notera la ressemblance de syntaxe entre les deux définitions.
 <ocaml><![CDATA[
 let rec fact = function
   0 -> 1
-| n -> n * fact (n-1);;"
+| n -> n * fact (n-1);;
 ]]></ocaml>
 <p>
 En C, cette fonction pourrait s'écrire:
@@ -1327,7 +1327,7 @@ x = y;;
 <p>
 Le même phénomène de masquage est possible sur les noms des champs des types enregistrements.
 Cependant, depuis la version 4.01 d'OCaml, les informations de typage sont utilisées pour
-lever les possibles ambigüités. Ainsi, dans l'exemple ci-dessous, lors de la définition
+lever les possibles ambiguïtés. Ainsi, dans l'exemple ci-dessous, lors de la définition
 de <ml>y</ml>, le type de <ml>x</ml> est déjà connu comme étant <ml>rec1</ml>, ce qui
 permet au système de type de comprendre <ml>champ = 3</ml> comme le champ <ml>champ</ml>
 du type <ml>rec1</ml> et non du type <ml>rec2</ml>:
@@ -1354,7 +1354,7 @@ match x with
 | Foo -> 0;;
 ]]></oc-eval>
 <p>
-Même avec ce système de désambigüation, il est souvent utile de choisir des noms "à préfixe"
+Même avec ce système de désambiguation, il est souvent utile de choisir des noms "à préfixe"
 pour les champs et les constructeurs, par exemple:
 </p>
 <oc-eval toplevel="true"><![CDATA[
@@ -1770,12 +1770,11 @@ Cependant, c'est l'appel récursif et non la fonction qui est ou non
 terminal. Dans l'exemple suivant
 </p>
 <oc-eval toplevel="true" session="stack"><![CDATA[
-let f x = x + 1;;
-let rec foo x =
+let rec f x =
   if x < 1 then f (x + 1) else 1 + f (x - 1);;
 ]]></oc-eval>
 <p>
-la fonction <ml>foo</ml> est récursive et s'appelle à deux endroits.
+la fonction <ml>f</ml> est récursive et s'appelle à deux endroits.
 Le premier appel récursif (<ml>f (x + 1)</ml>) est bien terminal. Par
 contre, le second (<ml>f (x - 1)</ml>) ne l'est pas, car la valeur de
 retour de cet appel sera additionnée à 1. On ne peut donc pas parler

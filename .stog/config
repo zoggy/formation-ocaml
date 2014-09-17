@@ -2,6 +2,7 @@
 ignored =
   [".*less"; ".*\\.cm.*"; ".*\\.o"; ".*intro_ocaml_.*"; ".*/\\.chamo.*"; ".*\\.git.*";
    ".*Makefile"; ".*tmpl$"; ".*\\.stog"; ".*env/.*"; ".*ocaml\\.bib";
+   ".*/server$" ;
    ".*stog_course\\.ml"; ".*slides/sample-slideshow\\.html" ; ".*/my-ocaml-session" ; ".*/t\\..*" ;
    ".*/codes/lwt-.*" ; ".*/codes/findpar" ;
    ".*/codes/findseq" ; ".*/codes/thread-print" ;
