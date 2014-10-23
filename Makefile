@@ -1,7 +1,7 @@
 STOG=stog
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-OCAML_SESSION=./my-ocaml-session `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
+OCAML_SESSION=./my-ocaml-session -w -3 `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION) --package stog-writing,stog.multi-doc,stog.dot --plugin $(PLUGIN)
 MORE_OPTIONS=
 

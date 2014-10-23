@@ -863,7 +863,7 @@ Digest.to_hex md5;;
 reportant l'évaluation d'une expression au moment où elle sera nécessaire:
 <oc-eval toplevel="true"><![CDATA[
 let f a b () = print_endline "evaluation!"; a + b ;;
-let res = Lazy.lazy_from_fun (f 1 2);;
+let res = Lazy.from_fun (f 1 2);;
 Lazy.force res;;
 ]]></oc-eval></li>
 <li><moduledoc name="Lexing"/> et <moduledoc name="Parsing"/> servent lorsqu'on utilise
