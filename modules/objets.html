@@ -1263,7 +1263,7 @@ un objet du même type que la classe:
 <oc-eval><![CDATA[class integer (n : int) =
   object (_ : 'a)
      val value = n
-     method value = n
+     method value = value
      method add (o : 'a) = {< value = n + o#value >}
      method compare (o : 'a) = n - o#value
   end;;
