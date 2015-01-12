@@ -53,7 +53,9 @@ digraph g {
   env [ label="<doc-title doc-path="env"/>", href="<doc-url doc-path="env"/>"] ;
   para [ label="<doc-title doc-path="parallele"/>", href="<doc-url doc-path="parallele"/>"] ;
   conclusion [ label="<doc-title doc-path="conclusion"/>", href="<doc-url doc-path="conclusion"/>"] ;
+  typesext [ label="<doc-title doc-path="types-ext"/>", href="<doc-url doc-path="types-ext"/>"] ;
   fonc -> intro ;
+  typesext -> fonc ;
   imper -> fonc ;
   repr -> fonc ;
   repr -> imper ;

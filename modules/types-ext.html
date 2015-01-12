@@ -1,0 +1,126 @@
+<module title="Types sommes extensibles"
+with-contents="true"
+ocaml-session="types-ext"
+>
+<contents>
+<section id="intro" title="Introduction">
+<p>
+Les types sommes (ou variants) extensibles permettent de définir des types
+sommes dont on peut enrichir la liste des constructeurs. Ils ont été introduits
+dans la verson 4.02 d'OCaml.
+</p>
+<p>
+Le type <ml>exn</ml> représentant les exceptions était déjà un tel type,
+puisque la définition d'une exception ajoutait un constructeur à ce type.
+Cependant, il s'agissait d'un traitement spécifique à ce type dans le
+compilateur.
+</p>
+<p>
+Le type <ml>exn</ml> est maintenant un type somme extensible "comme un autre".
+</p>
+</section>
+
+<section id="def" title="Définition">
+<p>
+Un type somme extensible est d'abord défini sans constructeur, en indiquant
+sa nature extensible, de la façon suivante:
+</p>
+<oc-eval toplevel="true">
+type t = ..
+</oc-eval>
+<p>On ajoute ensuite des constructeurs à l'aide de <ml>+=</ml>:</p>
+<oc-eval toplevel="true">
+type t += A of int | B of string
+</oc-eval>
+<p>
+Il est bien sûr possible d'avoir des types paramétrés; dans ce cas, les
+paramètres de types doivent être rappelés à chaque enrichissement:
+</p>
+<oc-eval toplevel="true">
+type 'a expr = .. ;;
+type 'a expr += Val of 'a ;;
+type 'a expr += Plus of 'a expr * 'a expr ;;
+</oc-eval>
+<p>
+Il est possible d'enrichir un type qui n'est pas dans le même module, en indiquant
+le chemin du type au lieu du simple identifiant utilisé dans une nouvelle définition:
+</p>
+<oc-eval>module M = struct type 'a expr = ..end ;;
+type 'a M.expr +=
+  | Plus of 'a expr * 'a expr
+  | Moins of 'a expr * 'a expr ;;
+</oc-eval>
+<p>
+Lorsqu'un constructeur est ajouté, sa portée est la même que les constructeurs
+d'un type somme non extensible ou un champ de type enregistrement (cf. <doc href="#usage"/>).
+</p>
+<p>
+Enfin, il est possible de redéfinir un constructeur déjà présent dans le type, afin
+de lui donner une portée supplémentaire, comme s'il était défini ici:
+</p>
+<oc-eval toplevel="true">
+module M = struct
+  type 'a expr = ..
+  type 'a expr +=
+    | Val of 'a
+    | Plus of 'a expr * 'a expr
+end;;
+module N = struct
+  type 'a M.expr +=
+    | Plus = M.Plus
+    | Moins of 'a M.expr * 'a M.expr
+  end
+</oc-eval>
+</section>
+
+<section id="usage" title="Usage">
+<p>
+La référence aux constructeurs d'un type somme extensible est faite de la même façon
+que pour les types sommes, que cela soit pour la construction ou le filtrage le valeurs.
+</p>
+<oc-eval toplevel="true">
+let v = M.Val 3;;
+let op = M.Plus (v, v);;
+let op2 = M.Plus (v, v);;
+let op3 = N.Moins (v, v);;
+</oc-eval>
+<p>
+Attention, puisque le constructeur <ml>Moins</ml> n'est déclaré que
+dans le module <ml>N</ml>, on ne peut y faire référence en l'appelant
+<ml>M.Moins</ml>, bien que le type <ml>expr</ml> est bien défini dans
+<ml>M</ml>. La portée d'un constructeur dépend de l'endroit où il est
+défini:
+</p>
+<oc-eval error-exc="false">
+let op4 = M.Moins (v, v);;
+</oc-eval>
+<p>Si nous pouvons faire référence à <ml>N.Plus</ml>, c'est parce que
+ce constructeur a été redéclaré dans <ml>N</ml> en utilisant la notation
+<ocaml>type 'a M.expr +=
+  | Plus = M.Plus
+</ocaml>
+</p>
+<p>
+Comme ces types sont susceptibles d'être enrichis de nouveaux constructeurs,
+le filtrage des valeurs de tels types doit comporter un cas "attrape-tout", sinon le
+compilateur émet un avertissement indiquant le filtrage n'est pas exhaustif:
+</p>
+<oc-eval toplevel="true">
+let rec to_int = function
+  M.Val n -> n
+| M.Plus (v1, v2) -> (to_int v1) + (to_int v2)
+| N.Moins (v1, v2) -> (to_int v1) - (to_int v2)
+</oc-eval>
+<p>
+En effet, si nous enrichissons notre type d'un constructeur supplémentaire,
+et que nous passons à notre fonction <ml>to_int</ml> une valeur construite avec
+ce constructeur, nous obtenons une erreur de filtrage:
+</p>
+<oc-eval error-exc="false" toplevel="true">
+type 'a M.expr += Mult of 'a M.expr * 'a M.expr ;;
+to_int (Mult (v, v)) ;;
+</oc-eval>
+</section>
+</contents>
+
+</module>
