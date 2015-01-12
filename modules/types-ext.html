@@ -103,11 +103,11 @@ ce constructeur a été redéclaré dans <ml>N</ml> en utilisant la notation
 <p>
 Comme ces types sont susceptibles d'être enrichis de nouveaux constructeurs,
 le filtrage des valeurs de tels types doit comporter un cas "attrape-tout", sinon le
-compilateur émet un avertissement indiquant le filtrage n'est pas exhaustif:
+compilateur émet un avertissement indiquant que le filtrage n'est pas exhaustif:
 </p>
 <oc-eval toplevel="true">
 let rec to_int = function
-  M.Val n -> n
+| M.Val n -> n
 | M.Plus (v1, v2) -> (to_int v1) + (to_int v2)
 | N.Moins (v1, v2) -> (to_int v1) - (to_int v2)
 </oc-eval>
