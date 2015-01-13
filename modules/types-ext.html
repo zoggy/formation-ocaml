@@ -5,8 +5,9 @@ ocaml-session="types-ext"
 <contents>
 <section id="intro" title="Introduction">
 <p>
-Les types sommes (ou variants) extensibles permettent de définir des types
-sommes dont on peut enrichir la liste des constructeurs. Ils ont été introduits
+Les types sommes (ou variants) extensibles permettent de définir des
+<doc href="fonctionnelle#variants">types sommes</doc>
+ dont on peut enrichir la liste des constructeurs. Ils ont été introduits
 dans la verson 4.02 d'OCaml.
 </p>
 <p>
@@ -14,8 +15,6 @@ Le type <ml>exn</ml> représentant les exceptions était déjà un tel type,
 puisque la définition d'une exception ajoutait un constructeur à ce type.
 Cependant, il s'agissait d'un traitement spécifique à ce type dans le
 compilateur.
-</p>
-<p>
 Le type <ml>exn</ml> est maintenant un type somme extensible "comme un autre".
 </p>
 </section>
@@ -34,7 +33,7 @@ type t += A of int | B of string
 </oc-eval>
 <p>
 Il est bien sûr possible d'avoir des types paramétrés; dans ce cas, les
-paramètres de types doivent être rappelés à chaque enrichissement:
+paramètres de types doivent être rappelés à chaque extension:
 </p>
 <oc-eval toplevel="true">
 type 'a expr = .. ;;
@@ -42,11 +41,11 @@ type 'a expr += Val of 'a ;;
 type 'a expr += Plus of 'a expr * 'a expr ;;
 </oc-eval>
 <p>
-Il est possible d'enrichir un type qui n'est pas dans le même module, en indiquant
+Il est possible d'étendre un type qui n'est pas dans le même module, en indiquant
 le chemin du type au lieu du simple identifiant utilisé dans une nouvelle définition:
 </p>
 <oc-eval>module M = struct type 'a expr = ..end ;;
-type 'a M.expr +=
+type 'a M.expr += (* noter le chemin du type etendu *)
   | Plus of 'a expr * 'a expr
   | Moins of 'a expr * 'a expr ;;
 </oc-eval>
@@ -73,7 +72,7 @@ module N = struct
 </oc-eval>
 <warning id="conflitdenom" title="Constructeurs de même noms">
 <p>
-Il est possible d'enrichir un type extensible avec deux constructeurs
+Il est possible d'étendre un type extensible avec deux constructeurs
 portant le même nom:
 </p>
 <oc-eval session="typesextfoo" toplevel="true">
@@ -83,7 +82,7 @@ type t += A of float ;;
 </oc-eval>
 <p>Bien sûr, cela ne facilite pas la lecture du code. De plus, le premier constructeur
 <ml>A</ml> dans l'exemple ci-dessus n'est plus utilisable après la définition du second.
-On peut cependant enrichir un type avec des constructeurs identiques dans deux modules
+On peut cependant étendre un type avec des constructeurs identiques dans deux modules
 différents, chacun ayant une signification dans le module qui le définit:
 </p>
 <oc-eval session="typesextfoo" toplevel="true">
@@ -134,7 +133,7 @@ let rec to_int = function
 | N.Moins (v1, v2) -> (to_int v1) - (to_int v2)
 </oc-eval>
 <p>
-En effet, si nous enrichissons notre type d'un constructeur supplémentaire,
+En effet, si nous étendons notre type avec un constructeur supplémentaire,
 et que nous passons à notre fonction <ml>to_int</ml> une valeur construite avec
 ce constructeur, nous obtenons une erreur de filtrage:
 </p>
@@ -146,7 +145,7 @@ to_int (Mult (v, v)) ;;
 <section id="exemple" title="Exemple">
 <p>
 Un cas d'utilisation des types sommes extensibles est la manipulation de valeurs
-d'un certain type, dont les possibilités de constructions dépendent des modules
+d'un type dont les possibilités de constructions dépendent des modules
 présents à la compilation, ou pour composer (multiplexer/démultiplexer) des valeurs
 dont une partie du traitement est commun.
 </p>
@@ -202,7 +201,7 @@ $ ocamlc -c m2.ml
 $ ocamlc -o load.x dynlink.cma common.cmo load.ml
 </command-line>
 <p>A l'exécution de <code>load.x</code>, les modules <ml>M1</ml> et <ml>M2</ml>
-sont chargés dynamiquement, enrichissent le type <ml>msg</ml>, étendent la fonction
+sont chargés dynamiquement, étendent le type <ml>msg</ml>, étendent la fonction
 de traitement des messages et ajoutent chacun des messages dans la file, qui sont
 ensuite traités après le chargement dynamique:
 </p>
