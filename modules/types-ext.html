@@ -67,10 +67,32 @@ module M = struct
 end;;
 module N = struct
   type 'a M.expr +=
-    | Plus = M.Plus
+    | Plus = M.Plus (* Redeclaration du constructeur M.Plus *)
     | Moins of 'a M.expr * 'a M.expr
   end
 </oc-eval>
+<warning id="conflitdenom" title="Constructeurs de même noms">
+<p>
+Il est possible d'enrichir un type extensible avec deux constructeurs
+portant le même nom:
+</p>
+<oc-eval session="typesextfoo" toplevel="true">
+type t = .. ;;
+type t += A of int ;;
+type t += A of float ;;
+</oc-eval>
+<p>Bien sûr, cela ne facilite pas la lecture du code. De plus, le premier constructeur
+<ml>A</ml> dans l'exemple ci-dessus n'est plus utilisable après la définition du second.
+On peut cependant enrichir un type avec des constructeurs identiques dans deux modules
+différents, chacun ayant une signification dans le module qui le définit:
+</p>
+<oc-eval session="typesextfoo" toplevel="true">
+type t = .. ;;
+module M1 = struct type t += A of int end  ;;
+module M2 = struct type t += A of string end ;;
+</oc-eval>
+
+</warning>
 </section>
 
 <section id="usage" title="Usage">
@@ -121,6 +143,40 @@ type 'a M.expr += Mult of 'a M.expr * 'a M.expr ;;
 to_int (Mult (v, v)) ;;
 </oc-eval>
 </section>
+<section id="exemple" title="Exemple">
+<p>
+Un cas d'utilisation des types sommes extensibles est la manipulation de valeurs
+d'un certain type, dont les possibilités de constructions dépendent des modules
+présents à la compilation, ou pour composer (multiplexer/démultiplexer) des valeurs
+dont une partie du traitement est commun.
+</p>
+<p>Prenons l'exemple de messages dans une file. Bien que le traitement de la file
+soit commun, les messages présents dans la file pourront varier selon qu'on lie
+avec certains modules ou non.
+</p>
+<p>
+Voici la partie commune de traitement de la file, avec la définition du type
+extensible ainsi qu'une fonction permettant d'enrichir le traitement des valeurs
+de ce type pour supporter les nouveaux constructeurs:
+</p>
+<oc-eval defer_="1" toplevel="false"><include file="./types-ext/common.ml"/>
+</oc-eval>
+<p>Nous pouvons ensuite définir deux modules, chacun ajoutant des constructeurs
+de messages et utilisant la fonction <ml>extend</ml> pour permettre à
+<ml>handle_queue_messages</ml> de traiter ces nouveaux messages. De plus,
+ces modules mettent eux-mêmes des messages dans la file. Il serait bien sûr possible
+de créer des messages à l'extérieur de ces modules, en référençant leurs constructeurs
+par <ml>M1.Reload</ml> par exemple. Mais dans le cas de modules chargés dynamiquement
+ou liés ou non à la compilation selon la configuration, on peut imaginer que
+ces modules fassent des traitements opaques, tout en s'inscrivant dans la
+gestion de messages de la file.
+</p>
+<oc-eval defer_="1" toplevel="false"><include file="./types-ext/modules.ml"/>
+</oc-eval>
+<p>Le traitement des messages se fait ensuite naturellement:
+</p>
+<oc-eval defer_="1" toplevel="false"><include file="./types-ext/use.ml"/>
+</oc-eval>
+</section>
 </contents>
-
 </module>
