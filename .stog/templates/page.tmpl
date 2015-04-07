@@ -2,6 +2,7 @@
 <head>
 <title><doc-title/> -- <site-title/></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" type="text/css" href="&lt;site-url/&gt;/style.css"></link>
+<link rel="meta" type="application/rdf+xml" href="&lt;site-url/&gt;/graph.rdf"/>
 <include file="fonts.tmpl"/>
 <!--<script src="less.js" type="text/javascript">foo</script>-->
 <link href="/favicon.png" rel="shortcut icon" type="image/png" />
@@ -23,9 +24,17 @@
 <if doc-type="module"><div class="navbar"><doc href="intro"/></div></if>
 <if doc-title="&lt;site-title/&gt;"><span> </span><div id="page-title"><doc-title/></div></if>
 <if entete=""><span/><p class="alert alert-info"><entete/></p></if>
+
+<rdf subject="&lt;doc-url/&gt;" pred="dc:title"><doc-title/></rdf>
+<rdf subject="&lt;doc-url/&gt;" pred="dc:creator" obj="http://pauillac.inria.fr/~guesdon"/>
+<rdf subject="&lt;doc-url/&gt;" pred="dc:license" obj="&lt;site-url/&gt;#license"/>
+<rdf subject="&lt;doc-url/&gt;" pred="dc:language">fr</rdf>
+
+
 <div id="doc-body" class="&lt;if draft=&quot;true&quot;&gt;&lt;main_&gt;draft&lt;/main_&gt;&lt;/if&gt;">
 <if doc-type="module">
   <main_>
+    <rdf subject="&lt;site-url/&gt;" pred="dc:hasPart" obj="&lt;doc-url/&gt;"/>
     <prepare-notes><prepare-toc depth="2"><toc>Table des matières</toc><doc-body/></prepare-toc>
     <hr width="100%"/>
     <notes/>

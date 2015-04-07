@@ -11,7 +11,7 @@ let get_solution_label data env =
 ;;
 
 let fun_solution data env atts subs =
-  match Xtmpl.get_arg atts ("", "id") with
+  match Xtmpl.get_att atts ("", "id") with
     Some s ->
       (* id already present, return same node *)
       raise Xtmpl.No_change

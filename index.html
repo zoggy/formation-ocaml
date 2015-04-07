@@ -101,7 +101,18 @@ section-counter="false"
 <stog:sectionning>section,subsection,subsubsection,paragraph</stog:sectionning>
 
 <contents>
+<rdf subject="&lt;site-url/&gt;" pred="dc:title"><site-title/></rdf>
+<rdf subject="&lt;site-url/&gt;" pred="dc:creator" obj="http://pauillac.inria.fr/~guesdon"/>
+<rdf subject="&lt;site-url/&gt;" pred="dc:description" obj="#intro"/>
+<rdf subject="&lt;site-url/&gt;" pred="dc:license" obj="#license"/>
+<rdf subject="&lt;site-url/&gt;" pred="dc:language">fr</rdf>
+<rdf subject="&lt;site-url/&gt;" pred="dc:subject">ocaml</rdf>
+<rdf subject="&lt;site-url/&gt;" pred="dc:subject">programmation</rdf>
+<rdf subject="&lt;site-url/&gt;" pred="dc:subject">formation</rdf>
+<rdf subject="&lt;site-url/&gt;" pred="dc:subject">cours</rdf>
+
 <prepare-toc>
+<section counter="false" id="intro">
 <div class="img-float-right"><toc/></div>
 <p>
 Ce site héberge un support de cours que j'ai écrit pour une introduction au langage OCaml
@@ -133,6 +144,7 @@ faire tous les exercices, compter entre deux et cinq jours.
 Merci à ceux ayant déjà suivi cette formation pour leurs retours, ainsi qu'à
 Xavier Clerc pour ses relectures attentives.
 </p>
+</section>
 <section id="supports" title="Accès aux supports">
 <p>
 <doc href="intro">Le support rédigé est disponible ici</doc>. La dernière modification date

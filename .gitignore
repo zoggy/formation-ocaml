@@ -12,3 +12,6 @@ my-ocaml-session
 codes/thread-print
 codes/lwt-grep
 codes/lwt-commands
+my-stog
+my-stog-server
+
