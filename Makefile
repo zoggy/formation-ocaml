@@ -39,9 +39,9 @@ $(STOG):$(PLUGIN:.cmxs=.cmx)
 	mk-stog -o $@ -package $(PACKAGES) $^
 
 $(STOG_SERVER):$(PLUGIN:.cmxs=.cmx)
-	mk-stog -o $@ -package $(PACKAGES),stog-server $^
+	mk-stog -o $@ -package $(PACKAGES),stog.server -thread $^
 
-run-server:
+run-server: $(STOG_SERVER)
 	$(STOG_SERVER) $(STOG_OPTIONS) .
 
 clean:
