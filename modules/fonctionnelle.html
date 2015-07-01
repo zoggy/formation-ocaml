@@ -144,15 +144,61 @@ D'autres fonctions sont disponibles dans le module <moduledoc name="Char"/>.
 </p>
 </paragraph>
 <paragraph id="strings" title="Les chaînes de caractères (type string)">
-<oc-eval id="code-strings" toplevel="true"><![CDATA[
-"hello world!";;
+<p>
+On crée une chaîne de caractères en la mettant entre guillemets <ml>"</ml>:
+</p>
+<oc-eval toplevel="true">"hello world !";;</oc-eval>
+<p>
+Le caractère <ml>\</ml> est utilisé pour indiquer des caractères spéciaux:
+</p>
+<ul>
+<li><ml>\"</ml> permet d'insérer le caractère " au lieu de signaler la
+fin de la chaîne,</li>
+<li><ml>\n</ml> indique une fin de ligne,</li>
+<li><ml>\r</ml> indique un retour charriot,</li>
+<li><ml>\t</ml> indique une tabulation.</li>
+</ul>
+<oc-eval toplevel="true"><![CDATA[
+print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
+]]></oc-eval>
+<since-version v="4.02">
+<p>Une syntaxe alternative peut être utilisée pour éviter de devoir
+ «échapper» les caractères spéciaux, en utilisant <ml>{|...|}</ml>
+ ou <ml>{id|...|id}</ml>, <ml>id</ml> pouvant être <ml>_</ml> ou
+ n'importe quelle suite de lettres en minuscules:
+</p>
+<oc-eval toplevel="true"><![CDATA[
+String.length {|\"|} (* pas d'echappement *);;
+{foo||}|foo} (* utilisation d'un delimiteur *);;
+{xml|<a href="http://....">bla bla bla</a>|xml};;]]>
+</oc-eval>
+</since-version>
+<p id="lskdfmldskmgksdmgl">
+Il est également possible d'utiliser des fonctions créant des chaînes:
+</p>
+<oc-eval toplevel="true"><![CDATA[
+let chaine = String.make 10 'a';;
+string_of_int 42;;
+string_of_float 84.;;
+Printexc.to_string Not_found (* une chaine à partir d'une exception *);;
 "hello " ^ "world!" (* concatenation *);;
-String.length "hello world!" (* longueur de chaine *);;
-"hello world!".[4] (* acces à un caractere, indice commencant a zero *) ;;
 ]]></oc-eval>
 <p id="aopopapop">
-Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="String"/>.
+Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="String"/>:
 </p>
+<oc-eval id="code-strings" toplevel="true"><![CDATA[
+String.length "hello world!" (* longueur de chaine *);;
+String.sub "hello world!" 0 5 ;;
+]]></oc-eval>
+<p>
+L'accès à un caractère d'une chaîne est possible de deux façons, soit en utilisant
+la fonction <ml>String.get</ml>, soit en utilisant une syntaxe spéciale,
+<ml>chaine.[indice]</ml>. Les indices de caractères commencent à zéro.
+</p>
+<oc-eval toplevel="true">
+String.get "hello world!" 4 (* acces au 5eme caractere *);;
+"hello world!".[4]
+</oc-eval>
 <warning id="noautoconv" title="Pas de conversion automatique">
 <p>Il n'existe pas de conversion automatique d'un type vers un autre comme dans
 beaucoup d'autres langages interprétés. Ainsi:
@@ -161,6 +207,28 @@ beaucoup d'autres langages interprétés. Ainsi:
 string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
 3 + "25";;
 </oc-eval>
+</warning>
+<warning id="safe-string" title="Transition vers des chaînes de caractères non mutables">
+<before-version-tag v="4.02"/>
+<p>
+Une transition, engagée depuis la version 4.02 d'OCaml, aboutira à des chaînes
+de caractères non mutables. Dans la version 4.02, un nouveau module
+<moduledoc name="Bytes"/> et un type <ml>bytes</ml> apparaissent. Ce type
+permet de représenter des tableaux d'octets, mutables. Le module fournit
+des fonctions similaires aux fonctions du module <moduledoc name="String"/>
+et des fonctions de conversion depuis et vers le type <ml>string</ml>.
+</p>
+<p>En OCaml 4.02, les chaînes sont encore mutables, mais une option
+<icode>-safe-string</icode> permet de rendre le type <ml>string</ml> non mutable
+et les types <ml>bytes</ml> et <ml>string</ml> incompatibles (non unifiables).
+Les utilisateurs sont fortement incités à utiliser cette option pour commencer
+cette transition. A terme, ce comportement sera celui par défaut.
+</p>
+<p>Dans cette formation, nous utilisons déjà ce mode, avec des chaînes non
+modifiables. Le module <ml>Bytes</ml>, qui concerne une structure de donnée
+mutable, est <doc href="imperative#bytes">abordé</doc> dans la partie
+relative à la programmation impérative.
+</p>
 </warning>
 </paragraph>
 
@@ -1665,7 +1733,8 @@ with
     raise e;;
 ]]></oc-eval>
 <since-version v="4.02">
-<p>La construction <ml>match ... with</ml> permet également de rattraper des exceptions
+<p id="matchwithexception">La construction <ml>match ... with</ml>
+permet également de rattraper des exceptions
 en utilisant mot-clé <ml>exception</ml> dans les motifs. Si une exception est levée
 lors de l'évaluation de l'expression entre le <ml>match</ml> et le
 <ml>with</ml>, alors elle pourra être rattrapée par un motif d'<ml>exception</ml>.
@@ -1688,7 +1757,8 @@ correspond à l'exception levée attrape l'exception et l'expression associée
 est évaluée. Si aucun motif <ml>exception</ml> n'attrape l'exception, alors
 cette dernière est propagée dans l'expression englobante.
 </p>
-<warning>
+<warning id="matchexceptionbranches"
+ title="Branches normales et branches &lt;ml&gt;exception&lt;/ml&gt;">
 <p>
 On ne peut pas "mettre en commun" une expression sous
 un motif <ml>exception</ml> et un autre motif, que cela soit un autre motif

@@ -157,96 +157,75 @@ On consultera la documentation du module <moduledoc name="Array"/>.
 </subsubsection>
 </subsection>
 
-<subsection id="strings_imper" title="Chaînes de caractères">
+<subsection id="bytes" title="Tableaux d'octets">
 <p>
-Les chaînes de caractères sont les valeurs de type <ml>string</ml>, comme nous en avons
-déjà croisées plus haut. En OCaml, les chaînes sont mutables, à la façon des
-vecteurs. Cependant, les chaînes ont leur type propre et ne sont pas des vecteurs
-de caractères (le type <ml>string</ml> n'est pas unifiable au type <ml>char array</ml>).
+Les tableaux d'octets sont les valeurs de type <ml>bytes</ml> remplaçant les
+chaînes de caractères mutables depuis la version 4.02 d'OCaml, lorsque l'option
+<icode>-safe-string</icode> est passée au compilateur.
+Ces tableaux d'octets sont mutables, à la façon des vecteurs. Cependant, ils ont
+leur type propre et ne sont pas des vecteurs d'octets (le type <ml>bytes</ml> n'est
+pas unifiable au type <ml>char array</ml>), mais les éléments d'un tableau
+d'octets sont de type <ml>char</ml>.
 </p>
 
-<subsubsection id="strings:create" title="Création de valeurs">
+<subsubsection id="bytes:create" title="Création de valeurs">
 <p>
-On crée une chaîne de caractères en la mettant entre guillemets <ml>"</ml>:
+La création de valeurs du type <ml>byte</ml> se fait par des fonctions
+du module <moduledoc name="Bytes"/>. Il n'y a pas de syntaxe spécifique
+comme pour les <doc href="fonctionnelle#strings">chaînes de caractères</doc>.
 </p>
-<oc-eval toplevel="true">"hello world !";;</oc-eval>
-<p>
-Le caractère <ml>\</ml> est utilisé pour indiquer des caractères spéciaux:
-</p>
-<ul>
-<li><ml>\"</ml> permet d'insérer le caractère " au lieu de signaler la
-fin de la chaîne,</li>
-<li><ml>\n</ml> indique une fin de ligne,</li>
-<li><ml>\r</ml> indique un retour charriot,</li>
-<li><ml>\t</ml> indique une tabulation.</li>
-</ul>
-<oc-eval toplevel="true"><![CDATA[
-print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
-]]></oc-eval>
-<p id="lskdfmldskmgksdmgl">
-Il est également possible d'utiliser des fonctions créant des chaînes:
-</p>
-<oc-eval toplevel="true"><![CDATA[
-let chaine = String.make 10 'a';;
-string_of_int 42;;
-string_of_float 84.;;
-Printexc.to_string Not_found (* une chaine à partir d'une exception *);;
-]]></oc-eval>
+<p>On pourra créer des tableaux d'octets de différentes façons:</p>
+<oc-eval toplevel="true">
+Bytes.make 10 'a' (* n fois le meme caractere *) ;;
+Bytes.init 10 (fun i -> Char.chr (0x42 + i))
+  (* initialisation via une fonction pour chaque case *) ;;
+let chars = Bytes.of_string "hello!" (* a partir d'une chaine *);;
+</oc-eval>
 </subsubsection>
 
 <subsubsection id="strings:access" title="Accès">
 <p>
-Comme pour les valeurs, on peut accéder à l'un des caractères d'une chaîne
-de deux manières:
+L'accès à un octet (ou caractère) est fait via la fonction
+<ml>Bytes.get: bytes -> int -> char</ml>:
 </p>
-<ul>
-<li>soit en utilisant la fonction <ml>String.get : string -> int -> char</ml>:
-<oc-eval toplevel="true">String.get chaine 0;;</oc-eval></li>
-<li>soit en utilisant la syntaxe <ml>chaine.[indice]</ml>:
-<oc-eval toplevel="true">chaine.[0];;</oc-eval></li>
-</ul>
+<oc-eval toplevel="true">Bytes.get chars 0;;</oc-eval>
 <p>
-Les indices pour une chaîne de longueur n vont de 0 à n-1. En dehors de ces bornes,
+Les indices pour un tableau de longueur n vont de 0 à n-1. En dehors de ces bornes,
 un accès déclenche là encore une exception <ml>Invalid_argument</ml>:
 </p>
-<oc-eval toplevel="true" error-exc="false">chaine.[10];;</oc-eval>
+<oc-eval toplevel="true" error-exc="false">Bytes.get chars 10;;</oc-eval>
 </subsubsection>
 
-<subsubsection id="strings:mod" title="Modifications">
-<p id="ooiopiaioi">
-Il existe deux manières équivalentes de modifier un caractère d'une chaîne:
-</p>
-<ul>
-<li>soit en utilisant la fonction <ml>String.set : string -> int -> char -> unit</ml>:
-<oc-eval toplevel="true"><![CDATA[
-chaine.[0];;
-String.set chaine 0 'b';;
-chaine.[0];;
-]]></oc-eval></li>
-<li>soit en utilisant la syntaxe <ml>chaine.[indice] &lt;- valeur</ml> avec <ml>valeur</ml>
-de type <ml>char</ml> (caractère):
-<oc-eval toplevel="true"><![CDATA[
-chaine.[1];;
-chaine.[1] <- 'c';;
-chaine.[1];;
-]]></oc-eval></li>
-</ul>
-</subsubsection>
-
-<subsubsection id="strings:other" title="Autres opérations">
+<subsubsection id="bytes:mod" title="Modifications">
 <p>
-D'autres opérations sur les chaînes sont offertes par les fonctions du module
-<moduledoc name="String"/>. Par exemple:
+La modification d'une case d'un tableau est faite grâce à la fonction
+<ml>Bytes.set : bytes -> int -> char -> unit</ml>:
 </p>
 <oc-eval toplevel="true"><![CDATA[
-String.length chaine (* longeur d'une chaine *);;
-String.sub "hello world" 3 4 (* extraction de sous-chaine, comme pour Array.sub *);;
-let animaux = [ "chat"; "chien"; "perroquet"; "lama"; "renard" ];;
-String.concat ", " animaux (* concatenation d'une liste de chaines en utilisant un separateur *);;
+Bytes.get chars 0;;
+Bytes.set chars 0 'b';;
+Bytes.get chars 0;;
+]]></oc-eval>
+<p>
+Il est également possible de modifier une plage d'un tableau d'octets
+avec des fonctions comme <ml>Bytes.fill</ml> ou <ml>Bytes.blit</ml>, entre autres.
+</p>
+</subsubsection>
+
+<subsubsection id="bytes:other" title="Autres opérations">
+<p>
+D'autres opérations sur les tableaux d'octets sont offertes par les fonctions du module
+<moduledoc name="Bytes"/>. Par exemple:
+</p>
+<oc-eval toplevel="true"><![CDATA[
+Bytes.length chars (* longeur d'un tableau *);;
+let animaux = List.map Bytes.of_string
+  [ "chat"; "chien"; "perroquet"; "lama"; "renard" ];;
+Bytes.to_string (Bytes.concat (Bytes.of_string ", ") animaux) ;;
 ]]></oc-eval>
 <p>
 Pour d'autres fonctions, on consultera la documentation du module
-<moduledoc name="String"/>.
+<moduledoc name="Bytes"/>.
 </p>
 </subsubsection>
 </subsection>
@@ -362,11 +341,11 @@ let second_line = input_line ic (* lecture d'une ligne *);;
 seek_in ic 0 (* retour au debut du fichier *);;
 let line = input_line ic (* re-lecture de la premiere ligne, suite au deplacement *);;
 let buffer_size = 40 ;;
-let buffer = String.make buffer_size 'x';;
+let buffer = Bytes.make buffer_size 'x';;
 let nb_read = input ic buffer 0 buffer_size
  (* lecture de maximum buffer_size caracteres dans ic, a stocker dans buffer a partir
      de l'indice 0 *);;
-String.sub buffer 0 nb_read;;
+Bytes.sub buffer 0 nb_read;;
 close_in ic;;
 ]]></oc-eval>
 </subsection>
@@ -415,17 +394,18 @@ sa valeur sont ceux de l'<stxid>expression_2</stxid>. Enfin, l'<stxid>expression
 évaluée avant l'<stxid>expression_2</stxid>.
 </p>
 <oc-eval toplevel="true"><![CDATA[
-print_endline chaine;
-String.sub buffer 0 nb_read;;
-1 + 1 ; print_endline chaine;;
+let chaine = "hello!";;
+print_endline chaine ;
+Bytes.sub buffer 0 nb_read;;
+1 + 1 ; print_endline chaine ;;
 ]]></oc-eval>
 <p>
 On peut bien sûr composer les séquences:
 </p>
 <oc-eval toplevel="true"><![CDATA[
 print_endline chaine ;
-print_endline (String.sub buffer 0 10);
-print_endline (String.sub buffer 10 20);
+print_endline (Bytes.to_string (Bytes.sub buffer 0 10));
+print_endline (Bytes.to_string (Bytes.sub buffer 10 20));
 1 + 1;;
 ]]></oc-eval>
 <p>
@@ -567,16 +547,16 @@ n'a pas rencontré la lettre 's'.
 <solution>
 <oc-eval toplevel="true"><![CDATA[
 let blank str =
-  let str = String.copy str in
+  let bytes = Bytes.of_string str in
   let i = ref 0 in
-  let len = String.length str in
+  let len = Bytes.length bytes in
   while !i < len do
-    if str.[!i] = 's' then
+    if Bytes.get bytes !i = 's' then
       i := len
     else
-     ( str.[!i] <- ' ' ; incr i )
+     ( Bytes.set bytes !i ' ' ; incr i )
   done;
-  str
+  Bytes.to_string bytes
 ;;
 ]]></oc-eval>
 </solution>

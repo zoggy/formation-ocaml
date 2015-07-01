@@ -213,7 +213,7 @@ de l'arbre utilisé pour représenter un ensemble.
 Le type <ml>'a ref</ml> est un type enregistrement contenant un seul champ
 mutable. C'est ce que nous voyons par exemple avec le code suivant:
 </p>
-<oc-eval>let x = ref "ma chaine" ;;</oc-eval>
+<oc-eval>let x = ref (Bytes.of_string "ma chaine") ;;</oc-eval>
 <ocaml-repr>["x", x]</ocaml-repr>
 <p>
 Le fait qu'un champ puisse être modifié fait partie du typage, et cela n'apparaît
@@ -227,14 +227,14 @@ pointée par le champ de l'enregistrement <ml>x</ml>:
 <oc-eval>let y = x ;;
 let z = !x ;;</oc-eval>
 <ocaml-repr>["x", x ; "y", y ; "z", Obj.magic z]</ocaml-repr>
-<p>Modifions la chaîne pointée par <ml>x</ml>, puis modifions <ml>x</ml> pour
-le faire pointer sur une autre chaine:</p>
-<oc-eval><![CDATA[!x.[0] <- 'T';;
-x := "coucou";;]]></oc-eval>
+<p>Modifions le tableau d'octets pointé par <ml>x</ml>, puis modifions <ml>x</ml> pour
+le faire pointer sur un autre tableau:</p>
+<oc-eval><![CDATA[Bytes.set !x 0 'T';;
+x := Bytes.of_string "coucou";;]]></oc-eval>
 <ocaml-repr>["x", x ; "y", y ; "z", Obj.magic z]</ocaml-repr>
-<p>Nous constatons que la chaîne associée à la variable <ml>z</ml> a bien été modifiée,
-puis que le champ de l'enregistrement pointe maintenant une autre chaîne dans un
-nouveau bloc.
+<p>Nous constatons que le tableau d'octets associé à la variable <ml>z</ml> a bien
+été modifié, puis que le champ de l'enregistrement pointe maintenant un autre tableau
+dans un nouveau bloc.
 </p>
 </subsection>
 <subsection id="arrays" title="Tableaux">

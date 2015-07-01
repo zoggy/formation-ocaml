@@ -3,7 +3,7 @@ STOG_SERVER=./my-stog-server
 PACKAGES=stog-writing,stog.disqus,stog.multi-doc,stog.dot,stog-rdf
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-OCAML_SESSION=./my-ocaml-session -w -3 `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
+OCAML_SESSION=./my-ocaml-session -w -3 -safe-string `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION)
 MORE_OPTIONS=
 
@@ -33,13 +33,13 @@ build: my-ocaml-session $(STOG) $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 	$(MAKE) style
 
 my-ocaml-session:
-	mk-stog-ocaml-session -package inspect,kaputt,functory,parmap,lwt.unix -linkall -o $@
+	mk-stog-ocaml-session -package inspect,kaputt,functory,parmap,lwt.unix,unix -linkall -o $@
 
 $(STOG):$(PLUGIN:.cmxs=.cmx)
 	mk-stog -o $@ -package $(PACKAGES) $^
 
 $(STOG_SERVER):$(PLUGIN:.cmxs=.cmx)
-	mk-stog -o $@ -package $(PACKAGES),stog.server -thread $^
+	mk-stog -o $@ -package $(PACKAGES),stog.server -linkall -thread $^
 
 run-server: $(STOG_SERVER)
 	$(STOG_SERVER) $(STOG_OPTIONS) .
