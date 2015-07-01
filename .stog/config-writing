@@ -1,6 +1,7 @@
-automatic_ids = {
-  default = true
-  (* pairs (type, bool) specifying whether to use automatic ids on element
-     types *)
-  by_type = [(slideshow, false)]
+{
+automatic_ids:
+  {
+    default: true,
+    by_type: [("slideshow", false)]
+  }
 }

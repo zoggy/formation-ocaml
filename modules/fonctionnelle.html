@@ -917,7 +917,7 @@ match List.map string_of_int [ 1 ; 2 ; 3 ] with
 Dans cet exemple, nous filtrons une valeur de type <ml>string list</ml>. Les premier
 (<ml>[]</ml>) et deuxième (<ml>_::[]</ml>) motifs filtrent respectivement
 la liste vide et n'importe quelle liste à un élément, et
-partagent le même traitement associé (<ml>assert false</ml><note>la fonction assert prend
+partagent le même traitement associé (<ml>assert false</ml><note>La fonction <ml>assert</ml> prend
 en paramètre une expression de type <ml>bool</ml> et lève une exception
 <ml>Assertion_failed</ml> si l'expression est évaluée à <ml>false</ml>.</note>).
 Le troisième motif <ml>[s1 ; s2]</ml> filtre les listes à deux éléments, en liant le
@@ -1664,6 +1664,54 @@ with
     (* relancons l'exception *)
     raise e;;
 ]]></oc-eval>
+<since-version v="4.02">
+<p>La construction <ml>match ... with</ml> permet également de rattraper des exceptions
+en utilisant mot-clé <ml>exception</ml> dans les motifs. Si une exception est levée
+lors de l'évaluation de l'expression entre le <ml>match</ml> et le
+<ml>with</ml>, alors elle pourra être rattrapée par un motif d'<ml>exception</ml>.
+L'expression associée à un tel motif doit bien sûr être du même type que les
+autres branches pour que l'expression <ml>match ... with</ml> soit correctement typée.
+Voyons un exemple:
+</p>
+<oc-eval toplevel="true">
+match List.assoc "z" [ "x", 1 ; "y", 2 ] with
+| exception Failure msg ->
+    assert false (* cette exception n'est pas cense etre levee par List.assoc *)
+| exception Not_found ->
+    None (* aucune valeur n'est associee a "z" *)
+| n -> Some n;;
+</oc-eval>
+<p>On peut ajouter plusieurs motifs pour rattraper des exceptions, et on peut
+les mettre à n'importe quelle position dans la liste des motifs. Si une exception
+est levée, alors le premier motif <ml>exception</ml> dans la liste et qui
+correspond à l'exception levée attrape l'exception et l'expression associée
+est évaluée. Si aucun motif <ml>exception</ml> n'attrape l'exception, alors
+cette dernière est propagée dans l'expression englobante.
+</p>
+<warning>
+<p>
+On ne peut pas "mettre en commun" une expression sous
+un motif <ml>exception</ml> et un autre motif, que cela soit un autre motif
+<ml>exception</ml> ou un motif filtrant
+la valeur retournée par l'expression entre le <ml>match</ml> et le
+<ml>with</ml>:
+</p>
+<oc-eval toplevel="true" error-exc="false">
+match String.sub "hello" 0 12 with
+  | exception Invalid_argument str
+  | exception Failure str -> str
+  | str -> str;;
+match String.sub "hello" 0 12 with
+  | exception Invalid_argument str
+  | str -> str;;
+match String.sub "hello" 0 12 with
+  | exception Invalid_argument str -> str
+  | exception Failure str -> str
+  | str -> str;;
+</oc-eval>
+</warning>
+</since-version>
+
 </subsection>
 <subsection id="exc:exos" title="Exercice">
 <exercice id="exc:exercice" title="try_finalize">

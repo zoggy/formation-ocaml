@@ -1,10 +1,9 @@
-(* pairs (uri, name) specifying namespaces *)
-namespaces =
-  [("http://purl.org/dc/terms/", dc); ("http://xmlns.com/foaf/0.1/", foaf)]
-(* name of main graph output file *)
-graph_file = "graph.rdf"
-(* pairs (uri, options) specifying graphs to load and associate to uris.
-   Options is a list of pair (name, value). To load a load, use ["file",
-   "myfile.ttl"]. Other options can be given to access graphs from a database
-   (see OCaml-RDF's Rdf_graph documentation) *)
-sources = []
+{
+namespaces:
+  [("http://purl.org/dc/terms/", "dc"),
+   ("http://xmlns.com/foaf/0.1/", "foaf")],
+
+graph_file: "graph.rdf",
+
+sources: []
+}

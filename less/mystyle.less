@@ -536,6 +536,34 @@ pre:hover a.paragraph-url {
   color: red ;
 }
 
+div.since-version {
+  .rounded-box ;
+  background-color: transparent ;
+  border-color: @infoBorder ;
+  border-style: solid ;
+  border-width: 0 3px 0 0 ;
+}
+
+div.since-version-number {
+  .rounded-box ;
+  border-color: @infoBorder transparent @infoBorder @infoBorder ;
+  background-color: @infoBackground ;
+  color: @infoText ;
+  float: right ;
+  margin-left: 1em;
+  margin-right: -4px;
+  padding-right: 2 * 3px;
+  padding-left: 2 * 3px;
+  font-size: 0.9em;
+}
+
+div.since-version-number-bottom {
+  &:extend(div.since-version-number);
+  margin-right: -4px;
+  margin-top: 0 - @baseLineHeight;
+}
+
+
 @media print {
 div.sidebar {
   display: none ;
