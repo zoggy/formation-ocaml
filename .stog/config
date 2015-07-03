@@ -10,5 +10,5 @@ ignored:
 
 documents: [".*\\.xml$", ".*\\.html$"],
 
-"not-documents": []
+not_documents: []
 }
