@@ -300,6 +300,45 @@ div.legend {
   margin-bottom: 1.5em;
   }
 
+
+div.module-files {
+  border-width: 0;
+  vertical-align: top ;
+  div.ml, div.mli {
+    vertical-align: top ;
+    padding: 0;
+    width: 50% ;
+    display: inline-block;
+  }
+}
+
+div.module-file {
+  .rounded-box ;
+  background-color: transparent ;
+  padding-left: 0;
+  padding-right: 0.5em;
+  padding-bottom: 0;
+  margin-bottom: 0.75em;
+  border-width: 0 0 0 2px;
+  border-style: solid;
+  border-color: #BBBBBB;
+  pre.code-ocaml {
+    border-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+div.module-filename {
+  background-color: @infoBackground ;
+  color: @infoText ;
+  margin: 0;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+
+
 pre {
   font-family: @codefont-family ;
   font-size: @codefont-size ;

@@ -36,9 +36,49 @@ let fun_solution data env atts subs =
       (data, xmls)
 ;;
 
+let find_sub_contents loc xmls tag =
+  let pred = function
+    Xtmpl.D _ -> false
+  | Xtmpl.E (tag2, _, _) -> tag2 = tag
+  in
+  try
+    match List.find pred xmls with
+    | Xtmpl.E(_,_,xmls) -> xmls
+    | _ -> assert false
+  with Not_found ->
+      Stog_plug.error
+        (Printf.sprintf "Missing <%s> tag in %s" (Xtmpl.string_of_name tag) loc);
+      []
 
-let () = Stog_plug.register_html_base_rule
-  ("", "solution") fun_solution ;;
+let fun_mlmli data env atts subs =
+  let file = Xtmpl.opt_att atts ~def: [ Xtmpl.D ""] ("", "file") in
+  let id = Xtmpl.get_att atts ("", "id") in
+  let ml = find_sub_contents "<mlmli>" subs ("","ml") in
+  let mli = find_sub_contents "<mlmli>" subs ("","mli") in
+  let atts = match id with
+    | None -> Xtmpl.atts_empty
+    | Some id -> Xtmpl.atts_one ("","id") id
+  in
+  let code ext contents =
+  Xtmpl_xhtml.div ~classes: [ext]
+      [
+        Xtmpl_xhtml.div ~classes: ["module-file"]
+          (
+           (Xtmpl_xhtml.div ~classes: ["module-filename"]
+            (file @ [Xtmpl.D ("."^ext)])
+           ) :: contents
+          )
+      ]
+  in
+  let xml =
+    Xtmpl_xhtml.div ~classes: ["module-files"]
+     [ code "mli" mli ; code "ml" ml ]
+  in
+  (data, [xml])
+
+let () = Stog_plug.register_html_base_rule ("", "mlmli") fun_mlmli ;;
+let () = Stog_plug.register_html_base_rule ("", "solution") fun_solution ;;
+
 (*
 This must be added at the end of each page:
 <script type="text/javascript" src="jquery.js"></script>
