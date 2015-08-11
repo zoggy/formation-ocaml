@@ -165,5 +165,25 @@ l'utilisation de <ml>M1.read</ml>.
 M1.read (M1.create 63);;
 </oc-eval>
 </section>
+
+<section id="local" title="Modules locaux">
+<p>
+On peut déclarer localement un module, c'est-à-dire le construire en réduisant sa visibilité
+à une expression:
+</p>
+<oc-eval toplevel="true"><![CDATA[
+let module Bar = struct let x = 1 end in Bar.x + 1;;
+]]></oc-eval>
+<p>
+Le module <ml>Bar</ml> n'est accessible que dans l'expression située après le <ml>in</ml>:
+</p>
+<oc-eval error-exc="false" toplevel="true"><![CDATA[
+Bar.x;;
+]]></oc-eval>
+<p>
+les modules construits localement le sont souvent par application de
+<doc href="foncteurs">foncteurs</doc>.
+</p>
+</section>
 </contents>
 </module>

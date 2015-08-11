@@ -201,5 +201,84 @@ Stack.pop (Foo.create ());;
 ]]></oc-eval>
 </section>
 
+<section id="anonymous" title="Modules anonymes">
+<p>
+Il est possible de construire des modules anonymes (sans nom). C'est
+souvent le cas lors de l'application d'un foncteur prenant un petit module en
+paramètre. Dans ce cas, on utilise directement la syntaxe <ml>struct ... end</ml>
+plutôt que la syntaxe <ml>module M = ...</ml> et l'utilisation de <ml>M</ml> dans
+la suite:
+</p>
+<oc-eval toplevel="false"><![CDATA[
+module Int_set =
+  Set.Make (struct type t = int let compare = Pervasives.compare end);;
+]]></oc-eval>
+</section>
+
+<section id="generative" title="Foncteurs génératifs">
+<since-version v="4.02">
+<p>
+Les foncteurs en OCaml sont dits <em>applicatifs</em>, c'est-à-dire qu'appliquer
+deux fois le même foncteur au même paramètre retournera deux modules dont les types
+sont identiques. Dans l'exemple ci-dessous, nous créons deux modules
+<ml>M1</ml> et <ml>M2</ml> en appliquant le même foncteur au même module en paramètre.
+Bien que la signature du module résultat indique que le type <ml>t</ml> est abstrait,
+<ml>M1.t</ml> et <ml>M2.t</ml> sont identiques: nous pouvons utiliser <ml>M2.compare</ml>
+pour comparer les deux valeurs créées avec <ml>M1.create()</ml>.
+</p>
+<oc-eval>module type I = sig
+  type t
+  val create : unit -> t
+  val compare : t -> t -> int
+end;;
+module F (P: I) : I = struct
+  type t = P.t
+  let create = P.create
+  let compare = P.compare
+end;;
+module Int : I = struct
+  type t = int
+  let create () = 12
+  let compare = Pervasives.compare
+end;;
+module M1 = F(Int);;
+module M2 = F(Int);;
+let v1 = M1.create();;
+let v2 = M1.create();;
+M2.compare v1 v2 ;;
+</oc-eval>
+<p>
+Il est possible de créer des foncteurs dits <em>génératifs</em>, c'est-à-dire
+qui créent de nouveaux types lorsqu'ils sont appliqués. Ces foncteurs prennent
+un argument <ml>()</ml> en paramètre. En reprenant l'exemple ci-dessus, nous
+créons un noueau foncteur <ml>F2</ml> prenant aussi <ml>()</ml> en paramètre.
+</p>
+<oc-eval error-exc="false">module F2 (P:I) () : I = struct
+  type t = P.t
+  let create = P.create
+  let compare = P.compare
+end;;
+module M1 = F2(Int) ();;
+module M2 = F2(Int) ();;
+</oc-eval>
+<p>
+Les nouveaux modules <ml>M1</ml> et <ml>M2</ml>, construits en appliquant
+<ml>F2</ml> à <ml>Int</ml> et <ml>()</ml> ont maintenant des types <ml>t</ml>
+incompatibles:
+</p>
+<oc-eval error-exc="false">
+let v1 = M1.create();;
+let v2 = M1.create();;
+M2.compare v1 v2 ;;
+</oc-eval>
+<p>
+Ce type de foncteur est utile notamment lorsqu'on souhaite utiliser
+une même structure de données à base d'indices ou de clés mais qu'on
+veut que le typage nous garantisse que l'on n'utilise pas une clé
+d'une structure de données pour une autre structure.
+</p>
+</since-version>
+</section>
+
 </contents>
 </module>
