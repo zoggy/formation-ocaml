@@ -7,6 +7,15 @@ stog:rss-length="10"
 with-contents="true"
 section-counter="false"
 >
+<stog:nbsp>&#160;</stog:nbsp>
+<stog:command-prompt>$<nbsp/></stog:command-prompt>
+
+<stog:run list="" directory="&lt;ocaml-session-directory/&gt;" stop-on-error="true">
+<exec list="&lt;list/&gt;"
+      stop-on-error="&lt;stop-on-error/&gt;" prompt="&lt;command-prompt/&gt;"
+      directory="&lt;directory/&gt;" defer_="1"><contents/></exec>
+</stog:run>
+
 <stog:todo text=""><div class="todo">TODO: <if text=""><contents/><text/></if></div></stog:todo>
 <stog:cite-format>[<bib-entry-rank/>]</stog:cite-format>
 
@@ -59,10 +68,12 @@ section-counter="false"
 <if id=""><pre class="syntax"><contents/></pre><pre id="&lt;id/&gt;"><contents/></pre></if></stog:centerstx>
 <stog:stxid foo=""><em><contents/></em></stog:stxid>
 
-<stog:oc-eval id="" show-code="true" show-stdout="true" toplevel="true" error-exc="true" print-locs="false" highlight-locs="" session="&lt;ocaml-session/&gt;">
+<stog:ocaml-session-directory></stog:ocaml-session-directory>
+<stog:oc-eval id="" show-code="true" show-stdout="true" toplevel="true" error-exc="true" print-locs="false" highlight-locs="" session="&lt;ocaml-session/&gt;" directory="&lt;ocaml-session-directory/&gt;">
 <ocaml-eval id="&lt;id/&gt;" toplevel="&lt;toplevel/&gt;"
   show-code="&lt;show-code/&gt;" show-stdout="&lt;show-stdout/&gt;"
   error-exc="&lt;error-exc/&gt;" session="&lt;session/&gt;"
+  directory="&lt;directory/&gt;"
   print-locs="&lt;print-locs/&gt;" highlight-locs="&lt;highlight-locs/&gt;"
   defer_="1"><contents/></ocaml-eval>
 </stog:oc-eval>

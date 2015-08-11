@@ -3,7 +3,8 @@ STOG_SERVER=./my-stog-server
 PACKAGES=stog-writing,stog.disqus,stog.multi-doc,stog.dot,stog-rdf
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
-OCAML_SESSION=./my-ocaml-session -w -3 -safe-string `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
+ROOT:=`pwd`
+OCAML_SESSION=$(ROOT)/my-ocaml-session -w -3 -safe-string `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION)
 MORE_OPTIONS=
 
@@ -48,8 +49,8 @@ clean:
 	rm -f $(STOG) $(STOG_SERVER)
 	rm -f $(PLUGIN) my-ocaml-session
 	rm -f $(BLOG_EXAMPLES)
-	rm -f *.cm? posts/*.cm? codes/*.cm? *.cmxs
-	rm -f *.o posts/*.o codes/*.o
+	rm -f *.cm? posts/*.cm? codes/*.cm? *.cmxs codes/*/*.cm*
+	rm -f *.o posts/*.o codes/*.o codes/*/*.o
 	rm -fr .stog/cache
 
 style:
