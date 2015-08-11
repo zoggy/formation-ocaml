@@ -3,7 +3,9 @@
 <modulenode name="progmod"/>
 <modulenode name="submod"/>
 <modulenode name="foncteurs"/>
+<modulenode name="fstclassmod"/>
 progmod -> submod ;
 submod -> foncteurs ;
+submod -> fstclassmod ;
 </env_>
 </dummy_>

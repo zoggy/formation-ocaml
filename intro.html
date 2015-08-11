@@ -48,12 +48,12 @@ digraph g {
   repr [ label="<doc-title doc-path="repr"/>", href="<doc-url doc-path="repr"/>"];
   stdlib [ label="<doc-title doc-path="stdlib"/>", href="<doc-url doc-path="stdlib"/>"] ;
   graph [ style = "rounded" ] ;
-  subgraph cluster_mod {
+/*  subgraph cluster_mod {*/
     <include file="./modules/modcluster.xml"/>
-    graph [shape = box, label = "Modules", fontcolor = "grey16",
+/*    graph [shape = box, label = "Modules", fontcolor = "grey16",
            labeljust = l, style = rounded,
            style = filled, color = white, fillcolor="lightcyan3" ];
-  } ;
+  } ;*/
   objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
   tests [ label="<doc-title doc-path="tests"/>", href="<doc-url doc-path="tests"/>"] ;
   env [ label="<doc-title doc-path="env"/>", href="<doc-url doc-path="env"/>"] ;
@@ -73,12 +73,12 @@ digraph g {
   foncteurs -> tests [style="invis"];
   foncteurs -> para [style="invis"];
   repr -> env [ style="invis" ] ;
-  tests -> env [ style="invis" ] ;
   intro -> env ;
   tests -> foncteurs [ style="invis" ] ;
-  env -> objets [ style="invis" ] ;
+  tests -> para [ style="invis" ] ;
+  env -> submod  [ style="invis" ] ;
   objets -> conclusion ;
-  foncteurs -> conclusion ;
+  fstclassmod -> conclusion ;
   para -> conclusion ;
 }
 </dot>
