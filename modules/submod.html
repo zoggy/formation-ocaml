@@ -166,6 +166,17 @@ M1.read (M1.create 63);;
 </oc-eval>
 </section>
 
+<section id="moduletypeof" title="Construction &lt;ml&gt;module type of&lt;/ml&gt;">
+<since-version v="3.12">
+<p>
+Il est possible de définir un type de module à partir d'un module existant,
+grâce à la construction <ml>module type of</ml>:
+</p>
+<oc-eval>
+module type T = module type of M1;;
+</oc-eval>
+</since-version>
+</section>
 <section id="local" title="Modules locaux">
 <p>
 On peut déclarer localement un module, c'est-à-dire le construire en réduisant sa visibilité
