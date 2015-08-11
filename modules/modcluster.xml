@@ -1,0 +1,9 @@
+<dummy_>
+<env_ url="&lt;doc-url/&gt;">
+<modulenode name="progmod"/>
+<modulenode name="submod"/>
+<modulenode name="foncteurs"/>
+progmod -> submod ;
+submod -> foncteurs ;
+</env_>
+</dummy_>

@@ -34,21 +34,25 @@ connaissance des bibliothèques et outils de développement disponibles pour
 approfondir ensuite selon ses besoins.
 </p>
 <p>Le graphe suivant montre les modules composant la formation, les
-flèches indiquant les dépendances: B &#x2192; A indique qu'il est
+flèches indiquant les dépendances: A &#x2192; B indique qu'il est
 recommandé d'avoir suivi le module A avant le module B.
 </p>
 <div id="deps" class="center">
 <dot defer_="3">
 digraph g {
-  rankdir="BT";
+  rankdir="TB";
   node [ shape="box", style="rounded,filled", fillcolor="lightcyan", color="blue", fontsize=10.0 ];
   intro [ label="<doc-title doc-path="presentation"/>", href="<doc-url doc-path="presentation"/>"] ;
   fonc [ label="<doc-title doc-path="fonctionnelle"/>", href="<doc-url doc-path="fonctionnelle"/>"] ;
   imper [ label="<doc-title doc-path="imperative"/>", href="<doc-url doc-path="imperative"/>"] ;
   repr [ label="<doc-title doc-path="repr"/>", href="<doc-url doc-path="repr"/>"];
   stdlib [ label="<doc-title doc-path="stdlib"/>", href="<doc-url doc-path="stdlib"/>"] ;
+  graph [ style = "rounded" ] ;
   subgraph cluster_mod {
     <include file="./modules/modcluster.xml"/>
+    graph [shape = box, label = "Modules", fontcolor = "grey16",
+           labeljust = l, style = rounded,
+           style = filled, color = white, fillcolor="lightcyan3" ];
   } ;
   objets [ label="<doc-title doc-path="objets"/>", href="<doc-url doc-path="objets"/>"] ;
   tests [ label="<doc-title doc-path="tests"/>", href="<doc-url doc-path="tests"/>"] ;
@@ -56,22 +60,26 @@ digraph g {
   para [ label="<doc-title doc-path="parallele"/>", href="<doc-url doc-path="parallele"/>"] ;
   conclusion [ label="<doc-title doc-path="conclusion"/>", href="<doc-url doc-path="conclusion"/>"] ;
   typesext [ label="<doc-title doc-path="types-ext"/>", href="<doc-url doc-path="types-ext"/>"] ;
-  fonc -> intro ;
-  typesext -> fonc ;
-  imper -> fonc ;
-  repr -> fonc ;
-  repr -> imper ;
-  stdlib -> imper ;
-  progmod -> stdlib ;
-  objets -> imper ;
-  tests -> stdlib ;
-  para -> stdlib ;
-  env -> intro ;
-  conclusion -> env ;
-  conclusion -> objets ;
-  conclusion -> progmod ;
-  conclusion -> tests ;
-  conclusion -> para ;
+  intro -> fonc ;
+  fonc -> typesext ;
+  fonc -> imper ;
+  fonc -> repr ;
+  imper -> repr ;
+  imper -> stdlib ;
+  stdlib -> progmod ;
+  imper -> objets ;
+  stdlib -> tests ;
+  stdlib -> para ;
+  foncteurs -> tests [style="invis"];
+  foncteurs -> para [style="invis"];
+  repr -> env [ style="invis" ] ;
+  tests -> env [ style="invis" ] ;
+  intro -> env ;
+  tests -> foncteurs [ style="invis" ] ;
+  env -> objets [ style="invis" ] ;
+  objets -> conclusion ;
+  foncteurs -> conclusion ;
+  para -> conclusion ;
 }
 </dot>
 </div>
