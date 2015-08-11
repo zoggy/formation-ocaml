@@ -16,6 +16,14 @@ section-counter="false"
       directory="&lt;directory/&gt;" defer_="1"><contents/></exec>
 </stog:run>
 
+<stog:modulenode name="">
+<env_ nameurl="&lt;doc-url doc-path=&quot;modules/&amp;lt;name/&amp;gt;&quot;/&gt;">
+<name/> [ fillcolor="<if url="&lt;nameurl/&gt;"><dummy_>yellow</dummy_><dummy_>lightcyan</dummy_></if>"
+          label="<doc-title doc-path="modules/&lt;name/&gt;"/>"
+          <if url="&lt;nameurl/&gt;"><dummy_/><dummy_>, href="<nameurl/>"</dummy_></if>] ;
+</env_>
+</stog:modulenode>
+
 <stog:todo text=""><div class="todo">TODO: <if text=""><contents/><text/></if></div></stog:todo>
 <stog:cite-format>[<bib-entry-rank/>]</stog:cite-format>
 

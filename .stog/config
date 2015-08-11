@@ -5,7 +5,8 @@ ignored:
    ".*/server$" ,
    ".*stog_course\\.ml", ".*slides/sample-slideshow\\.html" , ".*/my-ocaml-session" , ".*/my-stog.*" , ".*/t\\..*" ,
    ".*/codes/lwt-.*" , ".*/codes/findpar" ,
-   ".*/codes/findseq" , ".*/codes/thread-print"
+   ".*/codes/findseq" , ".*/codes/thread-print",
+   "./modules/mod.*\\.xml"
    ],
 
 documents: [".*\\.xml$", ".*\\.html$"],
