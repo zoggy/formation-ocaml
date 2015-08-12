@@ -10,8 +10,7 @@ MORE_OPTIONS=
 
 EXERCICES=\
 	codes/findpar \
-	codes/findseq \
-	codes/thread-print
+	codes/findseq
 
 
 PLUGIN=stog_course.cmxs
