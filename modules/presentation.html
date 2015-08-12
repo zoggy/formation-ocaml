@@ -1,4 +1,5 @@
-<module title="Introduction">
+<module title="Introduction"
+module-name="presentation">
 <p>
 <cmp>Objective Caml est un langage récent qui se place dans
 l'histoire des langages de programmation comme un lointain descendant de
@@ -98,20 +99,24 @@ Le toplevel est lancé par la commande <icode>ocaml</icode>. L'utilisateur peut 
 <em>phrases</em> OCaml terminées par "<icode>;;</icode>" qui sont évaluées immédiatement. Le toplevel
 affiche les types et valeurs des expressions évaluées avant de réafficher le prompt:
 </p>
-<ocaml-eval toplevel="true">"Hello World !" (* code saisi par l'utilisateur *);;
-42.0;;</ocaml-eval>
+<oc-eval toplevel="true">"Hello World !" (* code saisi par l'utilisateur *);;
+42.0;;</oc-eval>
 
 <p>
 Il est possible de charger des modules additionnels compilés
 (cf. chapitre <doc href="modules/modules"/>) soit en donnant ces modules sur la ligne de commande:
 </p>
-<sh>ocaml mon_module.cmo mon_module2.cmo</sh>
+<run show-stdout="false" show-code="false" list="true">
+<x>ocamlc -c mon_module.ml</x>
+<x>ocamlc -c mon_module2.ml</x>
+</run>
+<sh>$ ocaml mon_module.cmo mon_module2.cmo</sh>
 <p>
 soit en utilisant des directives de chargement <icode>#load</icode> à l'invite du toplevel:
 </p>
-<ocaml-eval toplevel="true">#load "mon_module.cmo";;
+<oc-eval toplevel="true">#load "mon_module.cmo";;
 #load "mon_module2.cmo";;
-</ocaml-eval>
+</oc-eval>
 <p>
 Le contenu des modules chargés est alors accessible depuis le code saisi dans le toplevel.
 </p>
@@ -119,7 +124,7 @@ Le contenu des modules chargés est alors accessible depuis le code saisi dans l
 Il est également possible de lancer le toplevel sur un fichier de code OCaml, ce dernier
 sera évalué comme si son contenu était saisi à l'invite du toplevel:
 </p>
-<command-line>ocaml mon_module.ml</command-line>
+<run>ocaml mon_module.ml</run>
 <p>
 Pour faciliter la saisie de code dans le toplevel, on pourra utiliser l'outil
 <ext-a href="http://pauillac.inria.fr/~ddr/ledit/"><icode>ledit</icode></ext-a>
@@ -135,7 +140,7 @@ Il existe également un éditeur graphique dédié à l'apprentissage d'OCaml:
 Pour la suite de la formation, nous utiliserons un éditeur et ferons exécuter notre code
 par la commande
 </p>
-<command-line>ocaml notre_fichier.ml</command-line>
+<sh>$ ocaml notre_fichier.ml</sh>
 <p>
 Pour en savoir plus sur le toplevel, consulter le manuel
 <ext-a href="&lt;urldoctoplevel/&gt;">ici</ext-a> ou
@@ -314,8 +319,7 @@ Les documentations de base pour développer en OCaml sont les suivantes:
 <icode>ocamlopt</icode>, <icode>ocamldoc</icode>, ...)
 et chaque module de la bibliothèque standard possède sa propre page de manuel.
 Ainsi, on accédera à la page <icode>man</icode> du module <mod>List</mod>
- par la commande
-<command-line>man List</command-line>
+ par la commande <icode>man List</icode>.
 </li>
 <li>Pour les utilisateurs de Firefox, la <ext-a href="&lt;urlcamlsidebar/&gt;">Caml Side Bar</ext-a>
 offre un accès rapide aux documentations, au manuel et à la liste des contributions,

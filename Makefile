@@ -13,8 +13,6 @@ EXERCICES=\
 	codes/findseq \
 	codes/lwt-commands \
 	codes/lwt-grep \
-	codes/mon_module.cmo \
-	codes/mon_module2.cmo \
 	codes/thread-print
 
 
@@ -22,8 +20,6 @@ PLUGIN=stog_course.cmxs
 
 build: my-ocaml-session $(STOG) $(EXERCICES) $(BLOG_EXAMPLES) $(PLUGIN)
 #	rm -fr $(DEST_DIR)
-	ln -sf codes/mon_module.cmo
-	ln -sf codes/mon_module2.cmo
 	$(STOG) $(STOG_OPTIONS) $(MORE_OPTIONS) .  # --only slides/slides
 	cp -f slide_arbre*.png $(DEST_DIR)/slides/
 	$(MAKE) style

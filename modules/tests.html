@@ -299,10 +299,12 @@ un test de spécification, en prenant un générateur, la fonction
 <p>Plutôt que décrire toutes les possibilités offertes par Kaputt, prenons
 comme exemple le test d'une fonction <ml>to_roman</ml>
 convertissant un entier en sa représentation en chiffres romains
-(le code est <a href="../codes/roman_numbers.ml">ici</a> mais il n'est
+(le code est <a href="../codes/tests/roman_numbers.ml">ici</a> mais il n'est
 pas utile de le voir pour la suite).
 </p>
-<oc-eval toplevel="false" show-code="false"><include file="../codes/roman_numbers.ml" raw="true"/></oc-eval>
+<oc-eval toplevel="false" show-code="false" show-stdout="false">
+<codefile file="roman_numbers.ml"/>
+</oc-eval>
 <oc-eval>to_roman;; to_roman 142;; to_roman 4999;;</oc-eval>
 <p>
 Nous pouvons bien sûr utiliser des tests d'assertions pour tester
@@ -310,7 +312,7 @@ la réprésentation retournée pour certaines valeurs. Comme il n'est
 pas possible de tester la fonction pour toutes les valeurs possibles
 en entrée, nous allons utiliser des tests de spécifications.
 </p>
-<p>Le générateur éléatoire à utiliser devra générer des valeurs entières
+<p>Le générateur aléatoire à utiliser devra générer des valeurs entières
 strictement supérieures à 0 et inférieures à 6000 (valeur choisie pour
 éviter d'allouer des méga-octets de chaînes de caractères, car il est
 peu probable que nous souhaitions convertir de tels nombres).
@@ -397,7 +399,7 @@ s'insérer dans l'environnement de compilation d'un logiciel OCaml.
 </p>
 <p>
 Quelques exemples d'utilisation ont donné un aperçu des possibilités de
-Kaputt, qui en offre bien d'autres (possibilités de classfication
+Kaputt, qui en offre bien d'autres (possibilités de classification
 des tests de spécifications selon la valeur d'entrée, choix de la source aléatoire,
 réduction des contre-exemples à des valeurs plus petites, ...)
 que nous n'avons pas explorées ici mais qui sont indiquées dans le
