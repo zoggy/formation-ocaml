@@ -51,6 +51,9 @@ clean:
 	rm -f $(BLOG_EXAMPLES)
 	rm -f *.cm? posts/*.cm? codes/*.cm? *.cmxs codes/*/*.cm*
 	rm -f *.o posts/*.o codes/*.o codes/*/*.o
+	(cd codes && rm -f \
+		fstclassmod/exemple \
+		progmod/mon_programme)
 	rm -fr .stog/cache
 
 style:

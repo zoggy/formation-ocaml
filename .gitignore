@@ -12,6 +12,8 @@ my-ocaml-session
 codes/thread-print
 codes/lwt-grep
 codes/lwt-commands
+codes/fstclassmod/exemple
+codes/progmod/mon_programme
 my-stog
 my-stog-server
 
