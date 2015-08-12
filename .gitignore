@@ -18,6 +18,10 @@ codes/types-ext/load.x
 codes/imperative/myecho
 codes/stdlib/myprintenv
 codes/stdlib/lstmp
+codes/para/lwt-commands
+codes/para/lwt-grep
+codes/para/thread-print
+codes/para/file*.txt
 my-stog
 my-stog-server
 

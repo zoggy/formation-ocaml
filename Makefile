@@ -11,8 +11,6 @@ MORE_OPTIONS=
 EXERCICES=\
 	codes/findpar \
 	codes/findseq \
-	codes/lwt-commands \
-	codes/lwt-grep \
 	codes/thread-print
 
 
@@ -46,6 +44,10 @@ clean:
 		imperative/myecho \
 		stdlib/myprintenv \
 		stdlib/lstmp \
+		para/lwt-commands \
+		para/lwt-grep \
+		para/thread-print \
+		para/file*.txt \
 		fstclassmod/exemple \
 		progmod/mon_programme)
 	rm -fr .stog/cache
@@ -84,20 +86,9 @@ posts/date_du_jour: posts/date_du_jour.ml
 posts/code_morse: posts/code_morse.ml
 	ocamlopt -o $@ $^
 
-codes/thread-print: codes/thread_print.ml
-	ocamlopt -thread -o $@ unix.cmxa threads.cmxa $^
-
 codes/findseq: codes/findseq.ml
 	ocamlopt -thread -o $@ unix.cmxa $^
 
 codes/findpar: codes/findpar.ml
 	ocamlfind ocamlopt -o $@ -package lwt.unix -linkpkg $^
-
-codes/lwt-commands: codes/lwt_commands.mli codes/lwt_commands.ml codes/lwt_commands_test.ml
-	ocamlfind ocamlopt -c -package lwt.unix codes/lwt_commands.mli
-	ocamlfind ocamlopt -o $@ -I codes -package lwt.unix -linkpkg codes/lwt_commands.ml codes/lwt_commands_test.ml
-
-
-codes/lwt-grep: codes/lwt_grep.ml
-	ocamlfind ocamlopt -rectypes -o $@ -I codes -package lwt.unix,str -linkpkg codes/lwt_grep.ml
 

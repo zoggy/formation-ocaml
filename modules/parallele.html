@@ -342,9 +342,9 @@ affiché en tête de chaque ligne conservée.
 Si le code est placé dans un fichier <code>lwt_grep.ml</code>, on pourra compiler
 le programme avec la commande suivante:
 </p>
-<sh>$ ocamlfind ocamlopt -o lwt-grep -package lwt.unix,str -linkpkg lwt_grep.ml</sh>
+<run>ocamlfind ocamlopt -o lwt-grep -package lwt.unix,str -linkpkg lwt_grep.ml</run>
 <solution>
-<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_grep.ml"/></ocaml>
+<ocaml defer_="1"><codefile file="lwt_grep.ml"/></ocaml>
 </solution>
 </exercice>
 
@@ -366,7 +366,7 @@ ces commandes le plus possible en parallèle.
 <p>
 Ecrire un module <ml>Lwt_commands</ml> offrant l'interface suivante:
 </p>
-<ocaml defer_="1"><include file="&lt;stog-dir/&gt;/codes/lwt_commands.mli" raw="true"/></ocaml>
+<ocaml defer_="1"><codefile file="lwt_commands.mli"/></ocaml>
 <p>
 On utilisera notamment des fonctions des modules
 <ext-a href="http://ocsigen.org/lwt/api/Lwt_process"><ml>Lwt_process</ml></ext-a>
@@ -377,9 +377,10 @@ ainsi que <ext-a href="http://ocsigen.org/lwt/api/Lwt#VALfail"><ml>Lwt.fail</ml>
 <p>
 Ce module pourra être compilé par les commandes suivantes:
 </p>
-<sh>$ ocamlfind ocamlopt -c -package lwt.unix lwt_commands.mli
-$ ocamlfind ocamlopt -c -package lwt.unix lwt_commands.ml
-</sh>
+<run list="true">
+<x>ocamlfind ocamlopt -c -package lwt.unix lwt_commands.mli</x>
+<x>ocamlfind ocamlopt -c -package lwt.unix lwt_commands.ml</x>
+</run>
 <p>
 On pourra tester le module avec le code suivant. Ce dernier
 crée plusieurs commandes. <ml>clean</ml> permet de s'assurer
@@ -390,31 +391,23 @@ de trois autres commandes, chacune dormant une seconde avant de
 créer un fichier vide. Ces trois commandes dépendent également chacune
 de la commande <ml>clean</ml>:
 </p>
-<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands_test.ml"/></ocaml>
+<ocaml defer_="1"><codefile file="lwt_commands_test.ml"/></ocaml>
 <p>
 En plaçant le code ci-dessus dans un fichier <code>lwt_commands_test.ml</code>
 et en compilant le tout dans un programme <code>lwt-commands</code> avec la
 commande suivante:
 </p>
-<sh>$ ocamlfind ocamlopt -o lwt-commands -package lwt.unix -linkpkg \
-  lwt_commands.cmx lwt_commands_test.ml</sh>
+<run>ocamlfind ocamlopt -o lwt-commands -package lwt.unix -linkpkg \
+  lwt_commands.cmx lwt_commands_test.ml</run>
 <p>
 nous pouvons vérifier que l'exécution de notre programme parallélise bien
 les trois commandes qui créent les trois fichiers, puisque le temps d'exécution
 total est d'à peine plus d'une seconde, et non trois si les commandes de création
 avaient été exécutées séquentiellement:
 </p>
-<sh>$ time ./lwt-commands
--rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file1.txt
--rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file2.txt
--rw-r--r-- 1 guesdon guesdon 0 Jun 25 14:05 file3.txt
-
-real  0m1.017s
-user  0m0.011s
-sys   0m0.015s
-</sh>
+<run>/usr/bin/time -f %E ./lwt-commands</run>
 <solution>
-<ocaml defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/lwt_commands.ml"/></ocaml>
+<ocaml defer_="1"><codefile file="lwt_commands.ml"/></ocaml>
 <p>
 Dans la solution proposée, le changement du champ <ml>thread</ml> des
 commandes n'est pas protégé, car c'est inutile. En effet, une seule
@@ -525,7 +518,7 @@ on pourra le compiler par la commande suivante:
 </p>
 <sh>$ ocamlopt -o thread_print -thread unix.cmxa threads.cmxa thread_print.ml</sh>
 <solution>
-<ocaml id ="thrprint" defer_="1"><include raw="true" file="&lt;stog-dir/&gt;/codes/thread_print.ml"/></ocaml>
+<ocaml id ="thrprint" defer_="1"><codefile file="thread_print.ml"/></ocaml>
 </solution>
 <p>
 En exercice supplémentaire, on pourra utiliser un mutex pour s'assurer
