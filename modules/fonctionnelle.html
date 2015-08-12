@@ -161,7 +161,7 @@ fin de la chaîne,</li>
 <oc-eval toplevel="true"><![CDATA[
 print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
 ]]></oc-eval>
-<since-version v="4.02">
+<since-version v="4.02.0">
 <p>Une syntaxe alternative peut être utilisée pour éviter de devoir
  «échapper» les caractères spéciaux, en utilisant <ml>{|...|}</ml>
  ou <ml>{id|...|id}</ml>, <ml>id</ml> pouvant être <ml>_</ml> ou
@@ -209,16 +209,16 @@ string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
 </oc-eval>
 </warning>
 <warning id="safe-string" title="Transition vers des chaînes de caractères non mutables">
-<before-version-tag v="4.02"/>
+<before-version-tag v="4.02.0"/>
 <p>
-Une transition, engagée depuis la version 4.02 d'OCaml, aboutira à des chaînes
-de caractères non mutables. Dans la version 4.02, un nouveau module
+Une transition, engagée depuis la version 4.02.0 d'OCaml, aboutira à des chaînes
+de caractères non mutables. Dans la version 4.02.0, un nouveau module
 <moduledoc name="Bytes"/> et un type <ml>bytes</ml> apparaissent. Ce type
 permet de représenter des tableaux d'octets, mutables. Le module fournit
 des fonctions similaires aux fonctions du module <moduledoc name="String"/>
 et des fonctions de conversion depuis et vers le type <ml>string</ml>.
 </p>
-<p>En OCaml 4.02, les chaînes sont encore mutables, mais une option
+<p>En OCaml 4.02.0, les chaînes sont encore mutables, mais une option
 <icode>-safe-string</icode> permet de rendre le type <ml>string</ml> non mutable
 et les types <ml>bytes</ml> et <ml>string</ml> incompatibles (non unifiables).
 Les utilisateurs sont fortement incités à utiliser cette option pour commencer
@@ -1395,7 +1395,7 @@ x = y;;
 ]]></oc-eval>
 <p>
 Le même phénomène de masquage est possible sur les noms des champs des types enregistrements.
-Cependant, depuis la version 4.01 d'OCaml, les informations de typage sont utilisées pour
+Cependant, depuis la version 4.01.0 d'OCaml, les informations de typage sont utilisées pour
 lever les possibles ambiguïtés. Ainsi, dans l'exemple ci-dessous, lors de la définition
 de <ml>y</ml>, le type de <ml>x</ml> est déjà connu comme étant <ml>rec1</ml>, ce qui
 permet au système de type de comprendre <ml>champ = 3</ml> comme le champ <ml>champ</ml>
@@ -1732,7 +1732,7 @@ with
     (* relancons l'exception *)
     raise e;;
 ]]></oc-eval>
-<since-version v="4.02">
+<since-version v="4.02.0">
 <p id="matchwithexception">La construction <ml>match ... with</ml>
 permet également de rattraper des exceptions
 en utilisant mot-clé <ml>exception</ml> dans les motifs. Si une exception est levée
