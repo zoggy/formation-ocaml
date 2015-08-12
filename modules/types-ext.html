@@ -161,7 +161,7 @@ de ce type pour supporter les nouveaux constructeurs:
 </p>
 <oc-eval defer_="1" toplevel="false">
 module Common = struct
-<include file="./types-ext/common.ml"/>
+<codefile file="common.ml"/>
 end
 </oc-eval>
 <p>Nous pouvons ensuite définir deux modules, chacun ajoutant des constructeurs
@@ -176,41 +176,38 @@ gestion de messages de la file.
 </p>
 <oc-eval defer_="1" toplevel="false">
 module M1 = struct
-<include file="./types-ext/m1.ml"/>
+<codefile file="m1.ml"/>
 end
 module M2 = struct
-<include file="./types-ext/m2.ml"/>
+<codefile file="m2.ml"/>
 end
 </oc-eval>
 <p>Le traitement des messages se fait ensuite naturellement:
 </p>
-<oc-eval defer_="1" toplevel="false"><include file="./types-ext/use.ml"/>
+<oc-eval defer_="1" toplevel="false"><codefile file="use.ml"/>
 </oc-eval>
 <p>
-Si l'on souhaitait charger dynamiquement les modules <ml>M1</ml> et <ml>M2</ml>,
-comme des greffons ajoutant des fonctionnalités via des messages, on pourrait placer
+Si l'on souhaite charger dynamiquement les modules <ml>M1</ml> et <ml>M2</ml>,
+comme des greffons ajoutant des fonctionnalités via des messages, on peut placer
 le contenu des modules <ml>Common</ml>, <ml>M1</ml> et <ml>M2</ml> respectivement
 dans les fichiers <code>common.ml</code>, <code>m1.ml</code> et <code>m2.ml</code>,
 et ajouter par exemple un fichier <ml>load.ml</ml> avec le contenu suivant:
 </p>
-<ocaml defer_="1"><include file="./types-ext/load.ml"/></ocaml>
-<p>Ensuite, on compilerait les modules et on les lierait ensemble dans un exécutable <code>load.x</code>:
+<ocaml defer_="1"><codefile file="load.ml"/></ocaml>
+<p>Ensuite, on compile les modules et on les lie ensemble dans un exécutable <code>load.x</code>:
 </p>
-<command-line>$ ocamlc -c common.ml
-$ ocamlc -c m1.ml
-$ ocamlc -c m2.ml
-$ ocamlc -o load.x dynlink.cma common.cmo load.ml
-</command-line>
+<run list="true">
+<x>ocamlc -c common.ml</x>
+<x>ocamlc -c m1.ml</x>
+<x>ocamlc -c m2.ml</x>
+<x>ocamlc -o load.x dynlink.cma common.cmo load.ml</x>
+</run>
 <p>A l'exécution de <code>load.x</code>, les modules <ml>M1</ml> et <ml>M2</ml>
 sont chargés dynamiquement, étendent le type <ml>msg</ml>, étendent la fonction
 de traitement des messages et ajoutent chacun des messages dans la file, qui sont
 ensuite traités après le chargement dynamique:
 </p>
-<command-line>$ ./load.x
-Send (client, config reloaded)
-Reload config.file
-Alert Initialisation done
-</command-line>
+<run>./load.x</run>
 </section>
 </contents>
 </module>
