@@ -10,10 +10,13 @@ section-counter="false"
 <stog:nbsp>&#160;</stog:nbsp>
 <stog:command-prompt>$<nbsp/></stog:command-prompt>
 
-<stog:run list="" directory="&lt;ocaml-session-directory/&gt;" stop-on-error="true">
+<stog:run
+   show-code="true" show-stdout="true" list=""
+  directory="&lt;ocaml-session-directory/&gt;" stop-on-error="true">
 <exec list="&lt;list/&gt;"
-      stop-on-error="&lt;stop-on-error/&gt;" prompt="&lt;command-prompt/&gt;"
-      directory="&lt;directory/&gt;" defer_="1"><contents/></exec>
+   show-code="&lt;show-code/&gt;" show-stdout="&lt;show-stdout/&gt;"
+   stop-on-error="&lt;stop-on-error/&gt;" prompt="&lt;command-prompt/&gt;"
+   directory="&lt;directory/&gt;" defer_="1"><contents/></exec>
 </stog:run>
 
 <stog:modulenode name="">

@@ -527,14 +527,11 @@ ainsi que le module <moduledoc name="Array"/> pour les accès aux tableaux. Le p
 sera réalisé à l'aide d'une boucle.
 On compilera le programme grâce à la commande
 </p>
-<sh>ocamlc -o myecho myecho.ml</sh>
+<run>ocamlc -o myecho myecho.ml</run>
+<p>Exemple d'exécution:</p>
+<run>./myecho bonjour le monde</run>
 <solution>
-<oc-eval><![CDATA[
-for i = 1 to Array.length Sys.argv - 1 do
-  print_string Sys.argv.(i); print_string " "
-done;;
-print_newline();;
-]]></oc-eval>
+<ocaml defer_="1"><codefile file="myecho.ml"/></ocaml>
 </solution>
 </exercice>
 

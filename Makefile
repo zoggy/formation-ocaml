@@ -8,20 +8,15 @@ OCAML_SESSION=$(ROOT)/my-ocaml-session -w -3 -safe-string `echo \`ocamlfind quer
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION)
 MORE_OPTIONS=
 
-EXERCICES=codes/count_words.cmo \
-	codes/count_words_dict.cmo \
-	codes/diff_words.cmo \
-	codes/exercice_arg.cmo \
+EXERCICES=\
 	codes/findpar \
 	codes/findseq \
-	codes/lstmp.cmo \
 	codes/lwt-commands \
 	codes/lwt-grep \
 	codes/mon_module.cmo \
 	codes/mon_module2.cmo \
-	codes/printenv.cmo \
-	codes/thread-print \
-	codes/words.cmo \
+	codes/thread-print
+
 
 PLUGIN=stog_course.cmxs
 
@@ -52,6 +47,9 @@ clean:
 	rm -f *.cm? posts/*.cm? codes/*.cm? *.cmxs codes/*/*.cm*
 	rm -f *.o posts/*.o codes/*.o codes/*/*.o
 	(cd codes && rm -f \
+		imperative/myecho \
+		stdlib/myprintenv \
+		stdlib/lstmp \
 		fstclassmod/exemple \
 		progmod/mon_programme)
 	rm -fr .stog/cache
