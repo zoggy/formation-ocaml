@@ -585,6 +585,10 @@ div.since-version {
   border-width: 0 3px 0 0 ;
 }
 
+div.since-version + div.since-version {
+  clear: right;
+}
+
 div.since-version-number {
   .rounded-box ;
   border-color: @infoBorder transparent @infoBorder @infoBorder ;
