@@ -8,10 +8,7 @@ OCAML_SESSION=$(ROOT)/my-ocaml-session -w -3 -safe-string `echo \`ocamlfind quer
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION)
 MORE_OPTIONS=
 
-EXERCICES=\
-	codes/findpar \
-	codes/findseq
-
+EXERCICES=
 
 PLUGIN=stog_course.cmxs
 
@@ -72,7 +69,8 @@ nocache:
 	ocamlfind ocamlopt -c -package stog -rectypes  $<
 
 installweb: build
-	scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
+	rsync  --checksum -r --delete $(DEST_DIR)/ zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
+	#scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
 
 blog_examples: $(BLOG_EXAMPLES)
 BLOG_EXAMPLES= \
@@ -84,10 +82,4 @@ posts/date_du_jour: posts/date_du_jour.ml
 
 posts/code_morse: posts/code_morse.ml
 	ocamlopt -o $@ $^
-
-codes/findseq: codes/findseq.ml
-	ocamlopt -thread -o $@ unix.cmxa $^
-
-codes/findpar: codes/findpar.ml
-	ocamlfind ocamlopt -o $@ -package lwt.unix -linkpkg $^
 
