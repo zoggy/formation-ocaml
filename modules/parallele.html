@@ -175,10 +175,39 @@ avec deux façons d'ordonner les paramètres. Ainsi, notre code précédent devi
 Lwt_io.read_line Lwt_io.stdin >|= String.uppercase;;
 String.uppercase =|< Lwt_io.read_line Lwt_io.stdin;;
 ]]></oc-eval>
+<since-version v="4.02.0">
 <p>
-Lwt fournit également une extension de syntaxe Camlp4 facilitant
-encore l'écritude de code.
+Lwt fournit également une <doc href="env#preproc">extension ppx</doc> facilitant
+encore l'écritude de code. Pour l'activer, on passera l'option <icode>-ppx ppx_lwt</icode>
+à <icode>ocaml</icode>, <icode>ocamlc</icode>, ...) ou l'option <icode>-package lwt.ppx</icode>
+à <icode>ocamlfind</icode>.
 </p>
+<p>
+La construction
+</p>
+<ocaml><![CDATA[
+let%lwt x = e1
+and y = e2 in
+code]]></ocaml>
+<p>
+peut être utilisée à la place de
+</p>
+<ocaml><![CDATA[
+let t = e1
+and t2 = e2 in
+Lwt.bind t (fun x -> Lwt.bind t2 (fun y -> code)]]></ocaml>
+<p>
+Ainsi les deux constructions suivantes sont équivalentes:
+</p>
+<oc-eval>
+let p =
+  let t = Lwt_io.read_line Lwt_io.stdin in
+  Lwt.bind t (fun s -> Lwt.return (String.uppercase s));;
+let p =
+  let%lwt s = Lwt_io.read_line Lwt_io.stdin in
+  Lwt.return (String.uppercase s);;
+</oc-eval>
+<!--
 <oc-eval toplevel="false" show-stdout="false" show-code="false">#use "topfind";;
 #camlp4o;;
 #require "lwt.syntax";;
@@ -223,11 +252,15 @@ Lwt_main.run
            >>= fun _ -> write stdout "world!\n"
            >>= fun _ -> flush stdout));;
 </oc-eval>
+-->
 <p>
-Il existe également une syntaxe facilitant la gestion des exceptions.
-Pour plus de détails, on consultera
-<ext-a href="http://ocsigen.org/lwt/2.4.3/api/Pa_lwt">la documentation</ext-a>.
+La notation <ml>%lwt</ml> peut être utilisée dans d'autres constructions
+(<ml>match%lwt ... with</ml>, <ml>try%lwt ... with</ml>, ...);
+pour plus de détails, on consultera
+<ext-a href="http://ocsigen.org/lwt/2.5.0/api/Ppx_lwt">la documentation</ext-a>.
 </p>
+</since-version>
+<!--
 <p>
 Pour compiler un programme utilisant l'extension de syntaxe, on utilisera une
 commande de la forme
@@ -241,6 +274,7 @@ suivantes pour la charger:
 #camlp4o;;
 #require "lwt.syntax";;
 </ocaml>
+-->
 </subsection>
 
 <subsection id="lwt-threads" title="Manipulation des threads">

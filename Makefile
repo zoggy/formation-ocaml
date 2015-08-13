@@ -4,7 +4,7 @@ PACKAGES=stog-writing,stog.disqus,stog.multi-doc,stog.dot,stog-rdf
 DEST_DIR=/tmp/form-ocaml
 BASE_URL_OPTION=
 ROOT:=`pwd`
-OCAML_SESSION=$(ROOT)/my-ocaml-session -w -3 -safe-string `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\``
+OCAML_SESSION=$(ROOT)/my-ocaml-session -w -3 -safe-string `echo \`ocamlfind query -i-format inspect kaputt functory parmap lwt\` -ppx ppx_lwt`
 STOG_OPTIONS=--stog-ocaml-session "$(OCAML_SESSION)" --default-lang fr -v -d $(DEST_DIR) $(BASE_URL_OPTION)
 MORE_OPTIONS=
 
