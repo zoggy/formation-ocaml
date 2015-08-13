@@ -71,7 +71,7 @@ let fun_mlmli data env atts subs =
       ]
   in
   let xml =
-    Xtmpl_xhtml.div ~classes: ["module-files"]
+    Xtmpl_xhtml.div ~atts ~classes: ["module-files"]
      [ code "mli" mli ; code "ml" ml ]
   in
   (data, [xml])
