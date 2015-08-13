@@ -2,7 +2,7 @@
 digraph g {
   rankdir="TB";
   node [ shape="box", style="rounded,filled", fillcolor="lightcyan", color="blue", fontsize=10.0 ];
-  <include file="./modcluster.xml"/>
+  <include file="&lt;stog-dir/&gt;/modules/modcluster.xml"/>
 }
 </dot>
 </div>
