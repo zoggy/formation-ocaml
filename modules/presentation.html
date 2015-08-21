@@ -1,12 +1,12 @@
 <module title="Introduction"
 module-name="presentation">
 <p>
-<cmp>Objective Caml est un langage récent qui se place dans
+OCaml est un langage <cmp> qui se place dans
 l'histoire des langages de programmation comme un lointain descendant de
 LISP ayant su tirer les enseignements de ses cousins en incorporant les
 principales caractéristiques des autres langages. Il est développé à l'INRIA
 et s'appuie sur une longue expérience de conception de langages de la famille
-ML. Objective Caml est généraliste pour l'expression d'algorithmes symboliques
+ML.</cmp> OCaml <cmp>est généraliste pour l'expression d'algorithmes symboliques
 ou numériques. Il est orienté objet et possède un système de modules paramétrés.
 Il permet le développement d'applications concurrentes ou distribuées. Il possède
 une excellente sûreté à l'exécution grâce à son typage statique, son mécanisme
@@ -18,7 +18,7 @@ en étant portable. Enfin, il dispose d'un riche environnement de développement
 OCaml est développé et maintenu principalement par des chercheurs et ingénieurs
 de l'INRIA (équipe-projet Gallium, SED de Rocquencourt, Pierre Weis de l'équipe-projet
 Estime), des chercheurs extérieurs comme Jacques Garrigue (Université de Nagoya, au Japon)
-ou encore des entreprises membres du Consortium OCaml (OCamlpro, Lexifi, Jane Street Capital, ...).
+ou encore des entreprises membres du Consortium OCaml (OCamlpro, Lexifi, Jane Street, ...).
 </p>
 
 <section id="description" title="Description du langage">
@@ -72,7 +72,7 @@ via l'appel de fonctions C à partir d'un programme OCaml et réciproquement, pe
 interactif par le biais d'une boucle d'interaction, compilation vers du code-octet interprété par une machine virtuelle, compilation vers du code machine. Le programmeur peut donc choisir entre souplesse de développement, portabilité du code objet sur différentes architectures ou performance sur une architecture donnée.</cmp>
 </li>
 <li> OCaml dispose d'un <em>garbage collector</em> ("GC"), aussi appelé "glaneur de cellules" ou
-"ramasse-miettes", c'est-à-dire qu'il n'y a aucune allocation explicite de mémoire,
+"ramasse-miettes": il n'y a aucune allocation explicite de mémoire,
 le GC s'occupant d'allouer automatiquement l'espace mémoire nécessaire au stockage des
 structures de données manipulées et de le libérer automatiquement lorsque ces données
 ne sont plus accessibles.
@@ -99,9 +99,8 @@ Le toplevel est lancé par la commande <icode>ocaml</icode>. L'utilisateur peut 
 <em>phrases</em> OCaml terminées par "<icode>;;</icode>" qui sont évaluées immédiatement. Le toplevel
 affiche les types et valeurs des expressions évaluées avant de réafficher le prompt:
 </p>
-<oc-eval toplevel="true">"Hello World !" (* code saisi par l'utilisateur *);;
+<oc-eval toplevel="true">"Bonjour le monde !" (* code saisi par l'utilisateur *);;
 42.0;;</oc-eval>
-
 <p>
 Il est possible de charger des modules additionnels compilés
 (cf. chapitre <doc href="modules/modules"/>) soit en donnant ces modules sur la ligne de commande:
@@ -165,15 +164,15 @@ Les principales extensions des fichiers utilisées par les compilateurs OCaml et
 significations sont indiquées dans le tableau de la figure <block href="extensions"/>.
 </p>
 <figure id="extensions"
-   title="Principales extensions des noms de fichiers utilisées par les compilateur OCaml.">
+   title="Principales extensions des noms de fichiers utilisées par les compilateurs OCaml.">
 <table class="table table-stripped table-bordered table-condensed">
 <tr>
 <td><icode>.ml</icode></td>
-<td>Source d'implémentation , équivalent des <icode>.c</icode> en C)</td>
+<td>Source d'implémentation (équivalent des <icode>.c</icode> en C)</td>
 </tr>
 <tr>
 <td><icode>.mli</icode></td>
-<td>Source d'interface (cf. chapitre <doc href="modules/modules"/>),
+<td>Source d'interface (cf. chapitre <doc href="modules/modules"/>,
 sorte d'équivalent des <icode>.h</icode> en C)</td>
 </tr>
 <tr>
@@ -251,7 +250,7 @@ des modules et bibliothèques utilisés).
 C'est l'équivalent de la même option pour la compilation de fichiers C.
 Ces indications sont également appelées <em>includes</em>. Par défaut, les
 répertoires utilisés sont le répertoire courant et le répertoire standard
-des bibliothèques d'OCaml, indiqué par la commande
+des bibliothèques OCaml, indiqué par la commande
 <command-line>ocamlc -where</command-line>
 Les répertoires indiqués par <icode>-I</icode> sont ajoutés en tête de la
 liste des répertoires à examiner, mais dans l'ordre dans lequel ils
@@ -262,7 +261,7 @@ indiquera au compilateur de chercher les fichiers <icode>.cmo</icode>,
 <icode>rep2</icode>, <icode>.</icode> et le répertoire standard des
 bibliothèques OCaml, dans cet ordre.
 La recherche de tels fichiers n'est pas faite récursivement dans les répertoires inclus.
-Ainsi, si le répertoire standard des bibliotèques OCaml est <icode>/opt/ocaml/lib/ocaml</icode>
+Ainsi, si le répertoire standard des bibliothèques OCaml est <icode>/opt/ocaml/lib/ocaml</icode>
 et que l'on souhaite utiliser la bibliothèque <icode>Labltk</icode>, on devra spécifier ce
 répertoire à inclure:
 <command-line>ocamlc -I /opt/ocaml/lib/ocaml/labltk ...</command-line>
@@ -321,11 +320,13 @@ et chaque module de la bibliothèque standard possède sa propre page de manuel.
 Ainsi, on accédera à la page <icode>man</icode> du module <mod>List</mod>
  par la commande <icode>man List</icode>.
 </li>
+<!--
 <li>Pour les utilisateurs de Firefox, la <ext-a href="&lt;urlcamlsidebar/&gt;">Caml Side Bar</ext-a>
 offre un accès rapide aux documentations, au manuel et à la liste des contributions,
 ainsi que des possibilités de recherche dans ces documentations et sur le
 <ext-a href="&lt;urlcamlsite/&gt;">site d'OCaml</ext-a>.
 </li>
+-->
 </ul>
 
 </section>

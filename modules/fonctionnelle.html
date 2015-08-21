@@ -67,6 +67,7 @@ et des exemples de manipulation.
 4 * 0b10101 (* la multiplication, 0b10101 est la notation binaire *) ;;
 10 / 3 (* la division entière *) ;;
 (/) 10 3 (* idem, en utilisant l'opérateur en position préfixe *) ;;
+( * ) 10 3 (* multiplication; espaces nécessaires pour distinguer des commentaires *);;
 15000003 mod 4 (* le modulo, reste de la division entière *) ;;
 15_000_003 mod 4 (* même opération, avec un entier plus lisible *) ;;
 max_int (* le plus grand entier disponible *) ;;
@@ -81,7 +82,7 @@ valeurs.
 <p>
 Il existe beaucoup
 d'<ext-a href="&lt;urldoccoreint/&gt;">autres opérations</ext-a>
-sur les entiers, incluant également la manipulation au niveau bits.
+sur les entiers, incluant également les manipulations au niveau bits.
 </p>
 <p>
 On remarquera que l'interprète a automatiquement déterminé le type des expressions
@@ -106,8 +107,8 @@ mod_float 15_000_003. 4.5 (* même opération, avec un flottant plus lisible *) 
 ceil 3.5 (* arrondi à l'entier supérieur *) ;;
 floor 3.5 (* arrondi à l'entier inférieur *) ;;
 truncate 3.5 (* ne conserve que la partie entière *) ;;
-1. /. 0. (* la division par zéro donne l'infini, ce qui
-            n'est pas un nombre, 'not a number' ou 'NaN' *);;
+1. /. 0. (* la division par zéro donne l'infini *);;
+0. /. 0. (* diviser 0 par 0 ne donne pas un nombre, 'not a number' ou 'NaN' *);;
 ]]></oc-eval>
 <p>
 D'autres opérations sont disponibles sur les flottants; on consultera le
@@ -127,17 +128,17 @@ sur des entiers et des flottants (idem pour les autres opérateurs exposés plus
 <oc-eval id="code-booleans" toplevel="true"><![CDATA[
 true (* la valeur 'vrai' *) ;;
 false (* la valeur 'faux' *) ;;
-true && false (* ET paresseux sequentiel, evalue de gauche a droite *) ;;
-true || false (* OU paresseux sequentiel, evalue de gauche a droite *) ;;
+true && false (* ET paresseux séquentiel, evalué de gauche à droite *) ;;
+true || false (* OU paresseux séquentiel, evalué de gauche à droite *) ;;
 not true (* NON logique *) ;;
 ]]></oc-eval>
 </paragraph>
 
 <paragraph id="chars" title="Les caractères (type char)">
 <oc-eval id="code-chars" toplevel="true"><![CDATA[
-'a' (* le caractere 'a' *) ;;
+'a' (* le caractère 'a' *) ;;
 int_of_char 'a' (* son code ASCII *) ;;
-char_of_int 123 (* le caractere de code ASCII 123 *) ;;
+char_of_int 123 (* le caractère de code ASCII 123 *) ;;
 ]]></oc-eval>
 <p>
 D'autres fonctions sont disponibles dans le module <moduledoc name="Char"/>.
@@ -155,7 +156,7 @@ Le caractère <ml>\</ml> est utilisé pour indiquer des caractères spéciaux:
 <li><ml>\"</ml> permet d'insérer le caractère " au lieu de signaler la
 fin de la chaîne,</li>
 <li><ml>\n</ml> indique une fin de ligne,</li>
-<li><ml>\r</ml> indique un retour charriot,</li>
+<li><ml>\r</ml> indique un retour chariot,</li>
 <li><ml>\t</ml> indique une tabulation.</li>
 </ul>
 <oc-eval toplevel="true"><![CDATA[
@@ -168,8 +169,8 @@ print_endline "\"Entre guillemets\"\nune nouvelle ligne";;
  n'importe quelle suite de lettres en minuscules:
 </p>
 <oc-eval toplevel="true"><![CDATA[
-String.length {|\"|} (* pas d'echappement *);;
-{foo||}|foo} (* utilisation d'un delimiteur *);;
+String.length {|\"|} (* pas d'échappement *);;
+{foo||}|foo} (* utilisation d'un délimiteur *);;
 {xml|<a href="http://....">bla bla bla</a>|xml};;]]>
 </oc-eval>
 </since-version>
@@ -180,14 +181,14 @@ Il est également possible d'utiliser des fonctions créant des chaînes:
 let chaine = String.make 10 'a';;
 string_of_int 42;;
 string_of_float 84.;;
-Printexc.to_string Not_found (* une chaine à partir d'une exception *);;
-"hello " ^ "world!" (* concatenation *);;
+Printexc.to_string Not_found (* une chaîne à partir d'une exception *);;
+"hello " ^ "world!" (* concaténation *);;
 ]]></oc-eval>
 <p id="aopopapop">
 Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="String"/>:
 </p>
 <oc-eval id="code-strings" toplevel="true"><![CDATA[
-String.length "hello world!" (* longueur de chaine *);;
+String.length "hello world!" (* longueur de chaîne *);;
 String.sub "hello world!" 0 5 ;;
 ]]></oc-eval>
 <p>
@@ -196,7 +197,7 @@ la fonction <ml>String.get</ml>, soit en utilisant une syntaxe spéciale,
 <ml>chaine.[indice]</ml>. Les indices de caractères commencent à zéro.
 </p>
 <oc-eval toplevel="true">
-String.get "hello world!" 4 (* acces au 5eme caractere *);;
+String.get "hello world!" 4 (* accès au 5eme caractère *);;
 "hello world!".[4]
 </oc-eval>
 <warning id="noautoconv" title="Pas de conversion automatique">
@@ -204,7 +205,7 @@ String.get "hello world!" 4 (* acces au 5eme caractere *);;
 beaucoup d'autres langages interprétés. Ainsi:
 </p>
 <oc-eval toplevel="true" error-exc="false">
-string_of_int 25 (* construction d'une chaine representant l'entier 25 *) ;;
+string_of_int 25 (* construction d'une chaîne représentant l'entier 25 *) ;;
 3 + "25";;
 </oc-eval>
 </warning>
@@ -252,11 +253,11 @@ de n-uplets:
 </p>
 <oc-eval id="code-tuples" toplevel="true"><![CDATA[
 (1, 2) (* paire d'entiers *) ;;
-(1, "2") (* paire composee d'un entier et d'une chaine *) ;;
-fst (1, 2) (* acces a la premiere composante de la paire *) ;;
-snd (1, 2) (* acces a la seconde composante *);;
-(1, 2, 3) (* n-uplet de 3 elements *) ;;
-(1.0, "hello", "world", '!') (* n-uplet de 4 elements de 3 types differents *) ;;
+(1, "2") (* paire composée d'un entier et d'une chaîne *) ;;
+fst (1, 2) (* accès a la première composante de la paire *) ;;
+snd (1, 2) (* accès a la seconde composante *);;
+(1, 2, 3) (* n-uplet de 3 éléments *) ;;
+(1.0, "hello", "world", '!') (* n-uplet de 4 éléments de 3 types différents *) ;;
 ]]></oc-eval>
 <p>
 On notera que les types des n-uplets inférés sont notés par une '<icode>*</icode>', comme dans
@@ -287,22 +288,22 @@ C'est un type paramétré, <icode>'a</icode> indique le paramètre de type, qui 
 selon le type des éléments de la liste:
 </p>
 <oc-eval id="code-lists" toplevel="true" error-exc="false"><![CDATA[
-[] (* une liste vide, donc sans contrainte sur le type des elements *) ;;
-[ 1 ] (* une liste d'entiers a un element *) ;;
+[] (* une liste vide, donc sans contrainte sur le type des éléments *) ;;
+[ 1 ] (* une liste d'entiers à un élément *) ;;
 [ 1 ; 2 ; 3 ] (* une liste de 3 entiers *) ;;
-[ "hello" ; "world" ; "!" ] (* une liste de chaines *) ;;
-[ 1 ; "2" ; 3 ] (* liste invalide car les elements n'ont pas le meme type *) ;;
+[ "hello" ; "world" ; "!" ] (* une liste de chaînes *) ;;
+[ 1 ; "2" ; 3 ] (* liste invalide car les éléments n'ont pas le même type *) ;;
 ]]></oc-eval>
 <p id="aoppaaaa">
 Voyons quelques exemples de manipulation de listes:
 </p>
 <oc-eval id="code-lists2" toplevel="true"><![CDATA[
-1 :: 2 :: 3 :: [] (* ajout d'element en tete de liste par l'operateur 'cons' :: *) ;;
-[ 1 ; 2 ] @ [ 3 ; 4 ; 5] (* concatenation de deux listes (de meme type) *) ;;
-List.length [ "hello" ; "world" ; "!" ] (* acces a la longeur *) ;;
-List.hd [ 1 ; 2 ; 3 ] (* recuperation de l'element de tete de liste *) ;;
-List.tl [ 1 ; 2 ; 3 ] (* recuperation de la queue de la liste (i.e. sans la tete) *) ;;
-String.concat "-" [ "hello" ; "world" ; "!" ] (* concatenation d'une liste de chaines *) ;;
+1 :: 2 :: 3 :: [] (* ajout d'élément en tête de liste par l'opérateur 'cons' :: *) ;;
+[ 1 ; 2 ] @ [ 3 ; 4 ; 5] (* concaténation de deux listes (de même type) *) ;;
+List.length [ "hello" ; "world" ; "!" ] (* accès à la longueur *) ;;
+List.hd [ 1 ; 2 ; 3 ] (* récupération de l'élément de tête de liste *) ;;
+List.tl [ 1 ; 2 ; 3 ] (* récupération de la queue de liste (i.e. sans la tête) *) ;;
+String.concat "-" [ "bonjour" ; "le" ; "monde" ] (* concaténation d'une liste de chaînes *) ;;
 ]]></oc-eval>
 <p id="apoopapoa">
 Beaucoup d'autres fonctions sont disponibles dans le module <moduledoc name="List"/>.
@@ -322,18 +323,18 @@ des deux arguments doit être le même.
 Voyons ces fonctions:
 </p>
 <oc-eval id="code-comparisons" toplevel="true"><![CDATA[
-1 = 2 (* egalite structurelle sur des entiers *) ;;
-"hello" = "world" (* ... ou sur des chaines *) ;;
+1 = 2 (* égalité structurelle sur des entiers *) ;;
+"bonjour" = "monde" (* ... ou sur des chaînes *) ;;
 (1, 2, 3) = (1, 2, 4) (* ... ou des n-uplets *) ;;
 [ 1 ; 2 ; 3 ] <> [ 1 ; 2 ; 4 ] (* différence structurelle, ici sur des listes *) ;;
 not ([ 1 ; 2 ; 3 ] = [ 1 ; 2 ; 4 ])
-  (* idem que ci-dessus, en utilisant la negation de l'egalite *) ;;
-1 < 2 (* inferiorite (structurelle) stricte *) ;;
-1 <= 2 (* inferieur ou egal *) ;;
-"hello" > "world" (* superieur *) ;;
-[ 1 ; 2 ; 3 ] >= [ 1 ; 2 ] (* superieur ou egal *) ;;
-1 == 2 (* egalite physique *) ;;
-1 != 2 (* difference physique *) ;;
+  (* idem que ci-dessus, en utilisant la négation de l'égalité *) ;;
+1 < 2 (* infériorité (structurelle) stricte *) ;;
+1 <= 2 (* inférieur ou égal *) ;;
+"bonjour" > "monde" (* supérieur *) ;;
+[ 1 ; 2 ; 3 ] >= [ 1 ; 2 ] (* supérieur ou egal *) ;;
+1 == 2 (* égalité physique *) ;;
+1 != 2 (* différence physique *) ;;
 ]]></oc-eval>
 <p>
 <cmp>L'égalité structurelle teste l'égalité de deux valeurs en explorant leur structure,
@@ -448,12 +449,12 @@ La valeur de l'<stxid>expression_1</stxid> est calculée et liée à
 l'<stxid>identifiant</stxid>. Ce dernier n'est visible que dans l'<stxid>expression_2</stxid>. Exemple:
 </p>
 <oc-eval id="code-decllocal" toplevel="true" error-exc="false"><![CDATA[
-let foo = (* declaration globale foo *)
+let foo = (* déclaration globale foo *)
     let bar =
-      let glop = 1 in (* declaration locale de glop *)
+      let glop = 1 in (* déclaration locale de glop *)
         glop + 2
-    in (* declaration locale de bar, glop n'est plus visible *)
-      let gee = bar + 1 in (* declaration locale de gee, utilisant bar *)
+    in (* déclaration locale de bar, glop n'est plus visible *)
+      let gee = bar + 1 in (* déclaration locale de gee, utilisant bar *)
         gee + bar + 2 (* utilisation de gee et bar locales *);;
 let buz = bar + foo (* bar n'est plus visible ici *) ;;
 ]]></oc-eval>
@@ -472,7 +473,7 @@ let foo =
     gee + bar + 2;;
 ]]></oc-eval>
 <p>
-Des conseils sur l'indentation sont <ext-a href="&lt;urldocindentconseils/&gt;">disponibles</ext-a>.
+Des conseils sur l'indentation sont <ext-a href="&lt;urldocindentconseils/&gt;">disponibles ici</ext-a>.
 </p>
 <warning id="warninglocaldecl" title="Déclarations locales et globales">
 <p>
@@ -555,13 +556,13 @@ paramètres:
 Voyons quelques exemples de définition de fonctions:
 </p>
 <oc-eval id="code-funs" toplevel="true"><![CDATA[
-function x -> x * x (* la fonction carre sur les entiers *) ;;
+function x -> x * x (* la fonction carré sur les entiers *) ;;
 function x -> function y -> x +. y (* l'addition sur les flottants *) ;;
 fun x y -> x +. y (* raccourci syntaxique pour l'expression ci-dessus *)
 ]]></oc-eval>
 <p>
 On remarquera le type de ces expressions, inféré automatiquement par l'interprète.
-Les types des valeurs fonctionnelles sont noté avec <ml>-></ml>. Ainsi,
+Les types des valeurs fonctionnelles sont notés avec <ml>-></ml>. Ainsi,
 <ml>int -> int</ml> indique une valeur fonctionnelle prenant en paramètre
 une valeur de type <ml>int</ml> et retournant une valeur de type <ml>int</ml>.
 </p>
@@ -581,12 +582,12 @@ fonctionnelle et un paramètre:
 </p>
 <oc-eval id="code-funs2" toplevel="true"><![CDATA[(function x -> x + 1) 41 ;;
 ((function x -> function y -> x +. y) 1.0) 41.0 ;;
-(function x -> function y -> x +. y) 1.0 41.0 (* suppression des parentheses inutiles *) ;;
+(function x -> function y -> x +. y) 1.0 41.0 (* suppression des parenthèses inutiles *) ;;
 ]]></oc-eval>
 <p>
 Dans la dernière expression ci-dessus, nous supprimons les parenthèses inutiles car
-l'application est associative à gauche, c'est à dire que le premier paramètre
-<ml>1.0</ml> est appliqué à <ml>function x -> ...</ml>, ce qui revient donc à calculer la
+l'application est associative à gauche, c'est-à-dire que le premier paramètre
+<ml>1.0</ml> est appliqué à <ml>function x -> ...</ml>, ce qui revient donc à calculer
 l'expression <ml>(function y -> 1.0 +. y)</ml> (le paramètre <ml>x</ml> est remplacé
 par la valeur <ml>1.0</ml> à laquelle est appliquée la fonction); la valeur obtenue est encore
 une fonction qui est alors appliquée à <ml>41.0</ml> pour finalement calculer
@@ -627,7 +628,7 @@ elles ne sont pas liées à un identifiant. Bien souvent, on nommera les fonctio
 les appliquer plus tard, en effectuant des déclarations globales ou locales:
 </p>
 <oc-eval id="code-funs4" toplevel="true"><![CDATA[
-let square = function x -> x * x (* fonction carre sur les entiers *) ;;
+let square = function x -> x * x (* fonction carré sur les entiers *) ;;
 let add = fun x y -> x + y (* en utilisant le raccourci de syntaxe *) ;;
 let sub = function x -> function y -> x - y ;;
 let sub x y = x - y (* idem en utilisant un autre raccourci de syntaxe *) ;;
@@ -639,9 +640,9 @@ Voyons quelques exemples corrects et incorrects:
 </p>
 <oc-eval id="code-funs5" toplevel="true" error-exc="false"><![CDATA[
 square 24 ;;
-square 24.0 (* erreur: le parametre doit etre un entier *) ;;
-(square 1) 2 (* erreur (square 1) n'est pas une fonction et ne peut etre appliquee *) ;;
-let add1 = add 1 (* application "partielle" de add pour obtenir une fonction d'increment *) ;;
+square 24.0 (* erreur: le paramètre doit être un entier *) ;;
+(square 1) 2 (* erreur (square 1) n'est pas une fonction et ne peut être appliquée *) ;;
+let add1 = add 1 (* application "partielle" de add pour obtenir une fonction d'incrément *) ;;
 add1 41 ;;
 ]]></oc-eval>
 <warning id="parenth" title="Place des parenthèses">
@@ -955,7 +956,7 @@ Les motifs permettent à la fois
 <li>de lier de nouveaux identifiants à des parties de la valeur filtrée.</li>
 </ul>
 <p>
-Voyons maintenant quelques exemples.
+Voyons maintenant quelques exemples:
 </p>
 <oc-eval id="code-pattern-int" toplevel="true"><![CDATA[match 1 + 1 with
   0 -> print_endline "bizarre"
@@ -1083,7 +1084,7 @@ retournant vrai si la liste est un palindrome, faux sinon.
     [], [] -> true
   | h1::q1, h2::q2 ->
     (n > len / 2) || ( (h1 = h2) && iter (n + 1) (q1, q2) )
-  | _ -> assert false (* les listes en parametre ont la meme longueur *)
+  | _ -> assert false (* les listes en paramètre ont la meme longueur *)
   in
   iter 0 (l, List.rev l)
 ;;
@@ -1132,6 +1133,14 @@ and <stxid>identifiant_N</stxid> = <stxid>définition_N</stxid>
 On remarquera qu'il n'y a pas de mot-clé <ml>rec</ml> pour les définitions de type,
 chaque type pouvant être récursif sans syntaxe particulière.
 </p>
+<since-version v="4.02.2">
+<p>Cependant, le mot-clé <ml>nonrec</ml> permet d'avoir une définition explicitement
+non récursive, c'est-à-dire que le type introduit n'est pas connu dans sa définition:
+</p>
+<oc-eval error-exc="false">
+type nonrec my_tree = Node of my_tree list | Value of int
+</oc-eval>
+</since-version>
 <p>
 Les identifiants de types ont la même syntaxe que les identifiants de valeurs, mais
 sont dans un espace de noms différent, ce qui signifie que l'on peut définir une
@@ -1479,7 +1488,7 @@ Ces valeurs fonctionnelles peuvent être nommées dans des motifs de filtrage po
 <oc-eval toplevel="true"><![CDATA[
 let action = Compute (fun () -> print_endline "coucou");;
 match action with
-  Compute f -> f () (* application de la fonction f a () *)
+  Compute f -> f () (* application de la fonction f à () *)
 | Init f -> ignore(f())
 | Terminate f -> f();;
 ]]></oc-eval>
@@ -1575,7 +1584,7 @@ gérer ces situations. Par exemple, la fonction <ml>List.hd</ml> récupérant le
 lui est passée.
 </p>
 <p>
-Une fonction peut être partielle parce qu'elle ne traite pas tous les formes possibles d'un
+Une fonction peut être partielle parce qu'elle ne traite pas toutes les formes possibles d'un
 paramètre:
 </p>
 <oc-eval toplevel="true"><![CDATA[
@@ -1592,7 +1601,7 @@ déclenchera une exception prédéfinie pour ce genre de cas:
 </p>
 <oc-eval toplevel="true" error-exc="false">succ Three;;</oc-eval>
 <p>
-Ce genre d'exception n'est pas très facile à traiter car elle est utilisée pour n'importe quel
+Ce genre d'exception n'est pas très facile à traiter car il est utilisé pour n'importe quel
 <em>pattern-matching</em> non exhaustif. On préférera donc définir et utiliser
 ses propres exceptions afin d'être en mesure de traiter efficacement et précisément chaque erreur.
 </p>
@@ -1625,7 +1634,7 @@ Les exceptions peuvent être vues comme des valeurs d'un type somme
 </p>
 <oc-eval toplevel="true">Mon_erreur "message"</oc-eval>
 <p>
-Remarque: Le type d'une exception ne peut être polymorphe.
+Remarque: le type d'une exception ne peut être polymorphe.
 </p>
 </subsection>
 <subsection id="exc:raise" title="Déclenchement d'une exception">
@@ -1650,8 +1659,8 @@ dans l'exemple suivant:
 </p>
 <oc-eval toplevel="true" error-exc="false"><![CDATA[
 let f x =
-  (* l'affichage, trait imperatif par excellence,
-     n'est la que pour montrer l'ordre d'execution *)
+  (* l'affichage, trait impératif par excellence,
+     n'est là que pour montrer l'ordre d'exécution *)
   print_endline (Printf.sprintf "Appel de f avec x = %d" x);
   if x < 0 then
     raise (Mon_erreur "c'est negatif !")
@@ -1710,18 +1719,18 @@ mais, dans bien des situations, le paramètre effectif ne sera connu qu'à l'ex�
 Par ailleurs, on ne souhaite pas forcément rattraper toutes les exceptions possibles
 à chaque point d'un programme, mais plutôt rattraper seulement certaines,
 que l'on peut traiter, en laissant volontairement remonter celles correspondant
-à des cas plus inattendus dans lequels on ne peut rien faire d'autre qu'interrompre
+à des cas plus inattendus dans lesquels on ne peut rien faire d'autre qu'interrompre
 le traitement en cours.
 </p>
 <p>
-Il est possible de rattraper toutes les exceptions, avec le motif universel '<ml>_</ml>', ou
-bien de lier l'exception rattrapée à un identifiant, comme ci-dessous:
+Il est possible de rattraper toutes les exceptions avec le motif universel '<ml>_</ml>', ou
+bien en liant l'exception rattrapée à un identifiant, comme ci-dessous:
 </p>
 <oc-eval toplevel="true" error-exc="false"><![CDATA[
 try List.hd []
 with
   e ->
-    (* traitement effectue pour n'importe quelle exception *)
+    (* traitement effectué pour n'importe quelle exception *)
     print_endline "An exception was caught!";
     let msg =
       match e with
@@ -1729,13 +1738,13 @@ with
       | _ -> Printexc.to_string e
     in
     print_endline ("Some info about the exception: "^msg);
-    (* relancons l'exception *)
+    (* relançons l'exception *)
     raise e;;
 ]]></oc-eval>
 <since-version v="4.02.0">
 <p id="matchwithexception">La construction <ml>match ... with</ml>
 permet également de rattraper des exceptions
-en utilisant mot-clé <ml>exception</ml> dans les motifs. Si une exception est levée
+en utilisant le mot-clé <ml>exception</ml> dans les motifs. Si une exception est levée
 lors de l'évaluation de l'expression entre le <ml>match</ml> et le
 <ml>with</ml>, alors elle pourra être rattrapée par un motif d'<ml>exception</ml>.
 L'expression associée à un tel motif doit bien sûr être du même type que les
@@ -1745,9 +1754,9 @@ Voyons un exemple:
 <oc-eval toplevel="true">
 match List.assoc "z" [ "x", 1 ; "y", 2 ] with
 | exception Failure msg ->
-    assert false (* cette exception n'est pas cense etre levee par List.assoc *)
+    assert false (* cette exception n'est pas censée etre levée par List.assoc *)
 | exception Not_found ->
-    None (* aucune valeur n'est associee a "z" *)
+    None (* aucune valeur n'est associée à "z" *)
 | n -> Some n;;
 </oc-eval>
 <p>On peut ajouter plusieurs motifs pour rattraper des exceptions, et on peut
@@ -1876,17 +1885,17 @@ effectué la création de la nouvelle liste composée de la nouvelle tête
 </p>
 <p>
 Cette façon de procéder donne une liste en ordre inverse, d'où l'appel
-à <ml>List.rev</ml> pour retourner l'accumulateur (la nouvelle liste) lors
-qu'on tombe sur le cas de la liste vide (fin de la liste à traiter).
+à <ml>List.rev</ml> pour retourner l'accumulateur (la nouvelle liste)
+lorsqu'on tombe sur le cas de la liste vide (fin de la liste à traiter).
 </p>
 <p>
-La fonction <ml>iter</ml> est bien récursive terminale car l'appel récursif
+La fonction <ml>iter</ml> est récursive terminale car l'appel récursif
 à elle-même est bien le dernier calcul effectué dans le cas où la liste
 n'est pas vide.
 </p>
 <p>
 Cependant, c'est l'appel récursif et non la fonction qui est ou non
-terminal. Dans l'exemple suivant
+terminal. Dans l'exemple suivant:
 </p>
 <oc-eval toplevel="true" session="stack"><![CDATA[
 let rec f x =
@@ -1905,12 +1914,12 @@ Les appels récursifs terminaux sont compilés de façon efficace
 (avec des sauts plutôt qu'en utilisant la pile) par
 le compilateur: au lieu de faire augmenter la taille de la pile,
 l'appel récursif est placé au même endroit que l'appel original, ce qui
-donne un gain de temps pour retourner la valeur finale (pas de besoin
+donne un gain de temps pour retourner la valeur finale (pas besoin
 de dépiler des milliers d'appels récursifs) et un gain de place (la pile
 n'augmente pas de taille). Nous avons donc pu appliquer notre fonction
 sur <ml>big_list</ml>.
 </p>
-<warning id="warningrecter" title="Exceptions et récurivité terminale">
+<warning id="warningrecter" title="Exceptions et récursivité terminale">
 <p>
 L'utilisation de constructions <ml>try ... with</ml> pour la gestion des exceptions
 peut faire d'une fonction récursive terminale une fonction récursive non-terminale.
@@ -1935,7 +1944,7 @@ safe_map ((+) 1) big_list;;
 La présence du bloc <ml>try ... with</ml> en vue de rattraper l'exception <ml>Failure</ml>
 ne permet plus au compilateur d'optimiser les appels récursifs sur la pile. En effet,
 l'appel récursif n'est plus forcément le dernier calcul effectué, car s'il lève
-une exception, il faudra la filtrer, dans ce contexte et non dans celui
+une exception, il faudra la filtrer dans ce contexte et non dans celui de
 l'appel récursif.
 On écrira donc plutôt:
 </p>
