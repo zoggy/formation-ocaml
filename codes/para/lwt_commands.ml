@@ -1,43 +1,42 @@
 open Lwt;;
 
 type command =
-  { command : string ; (**  la commande a lancer *)
+  { command : string ; (**  la commande à lancer *)
 
-    deps : command list ; (** les commandes qui doivent etre terminees avant *)
+    deps : command list ; (** les commandes qui doivent être terminées avant *)
 
     mutable thread : unit Lwt.t option ;
       (** le thread Lwt qui traite la commande *)
   }
 
-(** Creation d'une commande, avec au debut aucun thread Lwt
-  en charge de l'attente de son execution. *)
+(** Création d'une commande, avec au début aucun thread Lwt
+  en charge de l'attente de son exécution. *)
 let mk_command command deps = { command ; deps ; thread = None }
 
 let rec run com =
-  (* on execute les dependances; si elles sont deja terminees,
-     par exemple parce qu'elles ont deja ete lancees parce que
-     dans les dependances d'une autre commande, elles ne sont
-     pas relancees, les threads correspondants etant toujours
-     en etat "termine".
+  (* on exécute les dépendances; si elles sont déjà terminées,
+     par exemple parce qu'elles ont déjà été lancées parce que
+     dans les dépendances d'une autre commande, elles ne sont
+     pas relancées, les threads correspondants étant toujours
+     en état "terminé".
   *)
   Lwt_list.iter_p run com.deps >>=
     fun _ ->
       match com.thread with
         Some t ->
-          (* si un thread attend dejà la fin de la commande, le renvoyer *)
+          (* si un thread attend déjà la fin de la commande, le renvoyer *)
           t
       | None ->
-          (* sinon, il faut creer ce thread pour l'execution de la commande *)
+          (* sinon, il faut créer ce thread pour l'exécution de la commande *)
           let t =
             Lwt_process.exec (Lwt_process.shell com.command) >>=
               function
               | Unix.WEXITED 0 -> Lwt.return_unit
               | _ -> Lwt.fail (Failure ("Command failed: "^com.command))
           in
-          (* on met ce thread dans notre structure de donnees, pour qu'en cas
-             de multiples commandes dependant de celle-ci, elle ne soit
-             executee qu'une fois et attendue que par un seul thread *)
+          (* on met ce thread dans notre structure de données, pour qu'en cas
+             de multiples commandes dépendant de celle-ci, elle ne soit
+             exécutée qu'une fois et attendue que par un seul thread *)
           com.thread <- Some t;
           (* finalement, on renvoie ce thread *)
           t
-

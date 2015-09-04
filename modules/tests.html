@@ -27,7 +27,7 @@ après chaque modification du code.
 <p>
 L'environnement de test n'est pas à négliger. Sa facilité d'utilisation
 et l'aisance avec laquelle on peut rapidement ajouter un test sont nécessaires
-pour que l'ajout de tests ne soit pas rebutant. Dans le cas contraire,
+pour que cet ajout ne soit pas rebutant. Dans le cas contraire,
 lorsque l'ajout de tests supplémentaires est pénible, le développeur
 aura tendance à retarder cette activité.
 </p>
@@ -72,7 +72,7 @@ check Gen.int succ [Spec.is_odd_int ==> Spec.is_even_int]; flush stdout;;
 <p>Pour des tests à lancer régulièrement, on préférera mettre leur code
 dans des fichiers <code>.ml</code>. On souhaitera souvent
 définir des tests pour des fonctions d'un module <ml>M</ml>
-qui ne sont pas visibles à l'extérieur du module <ml>M</ml>: Ces
+qui ne sont pas visibles à l'extérieur du module <ml>M</ml>. Ces
 fonctions sont présentes dans le fichier <code>.ml</code> mais pas
 dans le fichier d'interface <code>.mli</code> (cf.
 <doc href="modules/progmod#intfimpl" long="true"/>).
@@ -308,7 +308,7 @@ pas utile de le voir pour la suite).
 <oc-eval>to_roman;; to_roman 142;; to_roman 4999;;</oc-eval>
 <p>
 Nous pouvons bien sûr utiliser des tests d'assertions pour tester
-la réprésentation retournée pour certaines valeurs. Comme il n'est
+la représentation retournée pour certaines valeurs. Comme il n'est
 pas possible de tester la fonction pour toutes les valeurs possibles
 en entrée, nous allons utiliser des tests de spécifications.
 </p>
@@ -340,7 +340,7 @@ en chiffres romains se termine par "IX":
 ]]></oc-eval>
 </li>
 <li>Quand une valeur est un multiple de 5, sa représentation en chiffres romains
-ne peut se termine par 'I' ni avoir 'I' en avant dernière position:
+ne peut se termine par 'I' ni avoir 'I' en avant-dernière position:
 <oc-eval><![CDATA[let mult_of_5 =
   (fun x -> x mod 5 = 0) ==>
   (fun s ->
@@ -404,7 +404,7 @@ des tests de spécifications selon la valeur d'entrée, choix de la source aléa
 réduction des contre-exemples à des valeurs plus petites, ...)
 que nous n'avons pas explorées ici mais qui sont indiquées dans le
 <ext-a href="http://kaputt.x9c.fr/distrib/kaputt.html">manuel de Kaputt</ext-a> et dans
-la <ext-a href="kaputt.x9c.fr/distrib/api/index.html">documentation des modules</ext-a>.
+la <ext-a href="http://kaputt.x9c.fr/distrib/api/index.html">documentation des modules</ext-a>.
 </p>
 <p>
 Kaputt n'est pas le seul cadriciel pour effectuer des tests de code en OCaml.

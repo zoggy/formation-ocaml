@@ -70,7 +70,7 @@ des modules par application de foncteurs de la façon suivante. Ici nous défini
 un module <ml>Ord</ml>, contenant un type <ml>t</ml> et une fonction de comparaison
 <ml>compare</ml>. Nous passons ce module au foncteur <ml>Set.Make</ml>, qui permet d'obtenir
 un module de manipulation d'ensembles d'éléments du type <ml>t</ml> du module passé
-en paramètre, en l'occurence <ml>Ord.t</ml>, donc ici des ensembles d'entiers.
+en paramètre, en l'occurrence <ml>Ord.t</ml>, donc ici des ensembles d'entiers.
 </p>
 <oc-eval>module Ord = struct
   type t = int
@@ -130,7 +130,7 @@ Guichet.create();;
 Nous allons simuler notre guichet en utilisant d'abord une file FIFO. La signature
 demandée pour le module en paramètre est un sous-ensemble de la signature du module
 <moduledoc name="Queue"/>, nous pouvons donc utiliser ce module comme modélisation de
-file d'attente. En appliquant ce module à notre foncteur, nous obtenons un
+la file d'attente. En appliquant ce module à notre foncteur, nous obtenons un
 guichet "premier arrivé, premier servi":
 </p>
 <oc-eval toplevel="true"><![CDATA[
@@ -251,7 +251,7 @@ M2.compare v1 v2 ;;
 Il est possible de créer des foncteurs dits <em>génératifs</em>, c'est-à-dire
 qui créent de nouveaux types lorsqu'ils sont appliqués. Ces foncteurs prennent
 un argument <ml>()</ml> en paramètre. En reprenant l'exemple ci-dessus, nous
-créons un noueau foncteur <ml>F2</ml> prenant aussi <ml>()</ml> en paramètre.
+créons un nouveau foncteur <ml>F2</ml> prenant aussi <ml>()</ml> en paramètre.
 </p>
 <oc-eval error-exc="false">module F2 (P:I) () : I = struct
   type t = P.t

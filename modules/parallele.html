@@ -12,7 +12,7 @@ OCaml permet différentes sortes de parallélisme/concurrence:
 <li>par l'utilisation de threads (ou processus légers),</li>
 <li>via des processus lourds et de la communication inter-processus,</li>
 <li>ou en utilisant des bibliothèques comme <doc href="#async">Async</doc>
-   ou <doc href="#lwt">Lwt</doc> permettant ne pas bloquer le programme
+   ou <doc href="#lwt">Lwt</doc> permettant de ne pas bloquer le programme
   sur des opérations potentiellement bloquantes
   (lectures/écritures de fichiers, entrées/sorties réseau, attente d'événements
    d'interfaces graphiques, ...).</li>
@@ -44,9 +44,9 @@ et  <ext-a href="http://janestreet.github.io/">Async</ext-a>.
 <p>
 Un<note>Un autre problème est
 que pour l'instant certaines parties du runtime ne sont pas réentrantes.</note>
-problème d'OCaml vis-à-vis du parallélisme/de la concurrence est que le
+problème d'OCaml vis-à-vis du parallélisme et de la concurrence est que le
 glaneur de cellules (<em>garbage collector</em>, ou GC) n'est pas concurrent
-et que lorsqu'il entre en action, il bloque tout le processus en cours,
+et que, lorsqu'il entre en action, il bloque tout le processus en cours,
 y compris les éventuels threads (processus légers).
 Des travaux de recherche sont en cours pour fournir un GC concurrent à OCaml.
 </p>
@@ -57,7 +57,7 @@ solutions<note>Il existe également
 ne présenterons pas ici car il s'agit d'une extension d'OCaml.</note>
 pour effectuer des calculs en parallèle et/ou en concurrence, selon les
 trois approches listées plus haut. Chaque fois, nous listerons les
-bibliothèques utilisables mais nous contenterons d'exemples sur seulement
+bibliothèques utilisables mais nous nous contenterons d'exemples sur seulement
 certaines d'entre elles.
 </p>
 </section>
@@ -119,7 +119,7 @@ pour empaqueter une valeur dans un type (le type de la monade).
 <p>Le "parallélisme" vient du fait que Lwt fournit des fonctions non bloquantes pour les
 entrées/sorties, et son moteur s'occupe de créer les threads Lwt représentant les
 attentes correspondant à ces entrées/sorties, et de signaler ces threads comme
-terminés lorque l'attente est terminée<note>En utilisant des sélecteurs sur les
+terminés lorsque l'attente est terminée<note>En utilisant des sélecteurs sur les
 descripteurs de fichiers concernés. Voir la documentation pour plus de détails.</note>.
 Cela signifie que tout ce qui n'est pas en attente d'une entrée/sortie pourra
 s'exécuter, ce qui fournit une forme de parallélisme entre ce qui attend et ce qui
@@ -164,7 +164,7 @@ mise en majuscules:
 Lwt_io.read_line Lwt_io.stdin >>= fun s -> Lwt.return (String.uppercase s);;
 </oc-eval>
 <p>La fonction <ml>Lwt.map</ml> permet de ne pas avoir à utiliser <ml>Lwt.return</ml>,
-qu'elle utilise pour créer un thread Lwt à partir du résulat d'une fonction:
+qu'elle utilise pour créer un thread Lwt à partir du résultat d'une fonction:
 </p>
 <oc-eval>Lwt.map;;</oc-eval>
 <p>
@@ -179,7 +179,7 @@ String.uppercase =|< Lwt_io.read_line Lwt_io.stdin;;
 <p>
 Lwt fournit également une <doc href="env#preproc">extension ppx</doc> facilitant
 encore l'écritude de code. Pour l'activer, on passera l'option <icode>-ppx ppx_lwt</icode>
-à <icode>ocaml</icode>, <icode>ocamlc</icode>, ...) ou l'option <icode>-package lwt.ppx</icode>
+à <icode>ocaml</icode>, <icode>ocamlc</icode>, ..., ou l'option <icode>-package lwt.ppx</icode>
 à <icode>ocamlfind</icode>.
 </p>
 <p>
@@ -315,14 +315,14 @@ thread en attente ne serait débloqué:
 let run () =
   let ic, oc = Lwt_io.pipe () in
   let reader = Lwt_io.read_char ic in
-  (* afficher l'etat et attendre la fin de l'affichage avec >>= *)
+  (* afficher l'état et attendre la fin de l'affichage avec >>= *)
   Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
   >>= fun _ ->
-    (* ecrire dans le canal et ne pas attendre *)
+    (* écrire dans le canal et ne pas attendre *)
     ignore(Lwt_io.write_char oc 'a');
     (* bloquer en attendant la terminaison de la lecture dans le canal *)
     reader >>= fun _ ->
-      (* afficher le nouvel etat du lecteur *)
+      (* afficher le nouvel état du lecteur *)
       Lwt_io.write_line Lwt_io.stdout (state_as_string reader)
 ;;
 Lwt_main.run (run ());;
@@ -367,7 +367,7 @@ de fichiers est vide, l'entrée standard sera utilisée.
 <p>A l'aide des <ext-a href="http://ocsigen.org/lwt/api/Lwt_stream">flux Lwt</ext-a>,
 on lira en parallèle les lignes des fichiers donnés et, pour chaque ligne, si
 elle contient la chaîne recherchée (utilisation du module <moduledoc name="Str"/>,
-par exemple), on affichera la ligne sur la sortie standard.
+par exemple), on l'affichera sur la sortie standard.
 </p>
 <p>Si plusieurs fichiers sont donnés, le nom de chaque fichier suivi de ':' sera
 affiché en tête de chaque ligne conservée.
@@ -416,8 +416,8 @@ Ce module pourra être compilé par les commandes suivantes:
 <x>ocamlfind ocamlopt -c -package lwt.unix lwt_commands.ml</x>
 </run>
 <p>
-On pourra tester le module avec le code suivant. Ce dernier
-crée plusieurs commandes. <ml>clean</ml> permet de s'assurer
+On pourra tester le module avec le code qui suit, ce dernier
+créant plusieurs commandes. <ml>clean</ml> permet de s'assurer
 que les fichiers <code>file1.txt</code>, <code>file2.txt</code> et <code>file3.txt</code>
 sont supprimés. La commande principale lance un <ml>ls -l</ml> sur ces
 fichiers et échouera donc s'ils n'existent pas. Elle dépend donc
@@ -448,7 +448,7 @@ commandes n'est pas protégé, car c'est inutile. En effet, une seule
 structure <ml>command</ml> est gérée à la fois par notre fonction
 <ml>run</ml>, il n'y a pas de parallélisme, donc pas de concurrence,
 car rien n'interrompt notre fonction avant qu'elle ne place le
-thread crée (et en attente de la terminaison de la commande lancée)
+thread créé (et en attente de la terminaison de la commande lancée)
 dans le champ <ml>thread</ml>.
 </p>
 </solution>
@@ -466,9 +466,9 @@ les variables locales à un thread Lwt.
 soumis à des attentes longues<note>Lwt est notamment utilisé par
 <ext-a href="http://ocsigen.org/">Ocsigen</ext-a>, un serveur web en OCaml qui par nature
 passe du temps à attendre et envoyer des messages sur le réseau.</note>, il présente
-un inconvénient: Les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
+un inconvénient: les codes qui utilisent une bibliothèque s'appuyant sur Lwt ont tendance
 à être "contaminés", les résultats fournis par la bibliothèque en question étant
-empaquetés dans les threads Lwt, ce qui a tendance à propager la logique de parallélisation
+empaquetés dans les threads Lwt, ce qui pousse à propager la logique de parallélisation
 des attentes.
 </p>
 <p>Symétriquement, dans un code s'appuyant sur Lwt mais souhaitant interagir avec d'autres
@@ -515,7 +515,7 @@ sont les processus légers. On pourra se référer par exemple
 </p>
 <p>
 Les processus légers sont gérés à l'aide du module
-<moduledoc name="Thread"/>. Ils sont disponibles sur plateformes
+<moduledoc name="Thread"/>. Ils sont disponibles sur les plateformes
 Posix 1003.1c et Win32.
 </p>
 <p>
@@ -524,7 +524,7 @@ l'option <code>-thread</code> aux compilateurs <code>ocamlc</code>
 et <code>ocamlopt</code>, ainsi que de lier avec la bibliothèque
 <code>threads.cma</code> (pour le code-octet) ou <code>threads.cmxa</code>
 (pour le code natif). Comme cette bibliothèque nécessite également
-la biblitothèque Unix, on liera le programme final avec aussi
+la bibliothèque Unix, on liera le programme final avec aussi
 <code>unix.cma</code> ou <code>unix.cmxa</code>.
 </p>
 <warning id="nativethreads" title="Threads natifs ou émulés">
@@ -564,7 +564,7 @@ Différents modules sont également disponibles pour la communication
 entre threads:
 </p>
 <ul>
-<li><moduledoc name="Mutex"/> pour la gestion des section critiques (exclusion mutuelle),</li>
+<li><moduledoc name="Mutex"/> pour la gestion des sections critiques (exclusion mutuelle),</li>
 <li><moduledoc name="Condition"/> pour attendre ou signaler une condition,</li>
 <li><moduledoc name="Event"/> pour une programmation basée sur des événements envoyés
 sur des canaux.</li>

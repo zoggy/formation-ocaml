@@ -118,7 +118,7 @@ On peut alors appeler la méthode sur l'objet <ml>self</ml>:
 </p>
 <oc-eval><![CDATA[let o =
   object(self)
-    (* Ne faîtes pas ça chez vous :-) *)
+    (* Ne faites pas ça chez vous :-) *)
     method fact n =
       if n <= 0
         then 0
@@ -257,7 +257,7 @@ Le système de types fera les inférences et vérifications nécessaires pour
 s'assurer qu'un objet n'est pas passé là où son type ne correspond pas à ce qui
 est attendu. De même, une expression ne pourra renvoyer un objet avec un type
 ne correspondant pas aux contraintes locales (par exemple deux objets
-de types incompabibles en résultat des deux branches d'une conditionnelle).
+de types incompatibles en résultat des deux branches d'une conditionnelle).
 </p>
 <p>Voyons quelques exemples.</p>
 <p>Commençons par définir une fonction qui retournera un objet comportant
@@ -322,7 +322,7 @@ Pour déterminer la compatibilité de deux types objets, la notion de <strong>so
 est utilisée. On pourra utiliser un objet d'un type t en lieu et place d'un
 objet de type t' si t est un sous-type de t'. Un type objet t est sous-type d'un type objet t' si
 toutes les méthodes de t' sont présentes dans t. De plus, pour chacune,
-son type dans t doit être un sous-type du type de la même la méthode dans t'.
+son type dans t doit être un sous-type du type de la même méthode dans t'.
 </p>
 <p>
 Voyons quelques exemples en définissant une fonction dont nous spécifions
@@ -332,16 +332,16 @@ tout en permettant à l'objet passé d'avoir d'autres méthodes (grâce aux <ml>
 <oc-eval><![CDATA[let test (p : < m : int -> int ; .. >) = p#m 1;;]]></oc-eval>
 <p>Voyons maintenant la compatibilité avec différents objets:</p>
 <oc-eval error-exc="false">
-(* objet vide, invalide car la methode m requise est absente *)
+(* objet vide, invalide car la méthode m requise est absente *)
 test (object end);;
-(* objet valide, exactement le meme type *)
+(* objet valide, exactement le même type *)
 test (object method m x = x + 1 end);;
 (* objet invalide: m n'a pas le bon type *)
 test (object method m x = float x end);;
 (* objet valide: 'a -> 'a est un sous-type de int -> int *)
 test (object method m x = x end);;
-(* objet valide: m du bon type et une methode
-   supplementaire ne pose pas de probleme *)
+(* objet valide: m du bon type et une méthode
+   supplémentaire ne pose pas de problème *)
 test (object method m x = x + 1 method m2 = "hello" end)
 </oc-eval>
 <p>Ce dernier cas ne passe que parce que le type exigé pour le paramètre
@@ -369,7 +369,7 @@ let o = object method m = string_of_int end;;
 ]]></oc-eval>
 <p>
 On constate que le <strong>système de types d'OCaml ne confond pas sous-typage et héritage</strong>,
-puisqu'il n'est pas nécessaire à deux objets d'hériter d'un ancètre commun ou de déclarer
+puisqu'il n'est pas nécessaire à deux objets d'hériter d'un ancêtre commun ou de déclarer
 une interface pour pouvoir être utilisés l'un à la place de l'autre lorsque le contexte
 le permet. C'est la différence entre
 <ext-a href="https://fr.wikipedia.org/wiki/Syst%C3%A8me_structural_de_types">typage structurel</ext-a>
@@ -502,18 +502,18 @@ Puisque <ml>c2</ml> accepte des paramètres, nous pouvons appliquer partiellemen
 l'instanciation, en ne fournissant qu'une partie des paramètres:
 </p>
 <oc-eval><![CDATA[
-(* application partielle: aucun parametre n'est donne *)
+(* application partielle: aucun paramètre n'est donné *)
 let mk_c2 = new c2 ;;
-(* on donne un parametre a la fonction retournee *)
+(* on donne un paramètre à la fonction retournée *)
 let mk_c2_10 = mk_c2 10 ;;
-(* on fournit le dernier parametre a la fonction mk_c2_10
+(* on fournit le dernier paramètre à la fonction mk_c2_10
   qui retourne alors un objet de type c2 *)
 let o = mk_c2_10 20 ;;
 o#as_string ;;
 ]]></oc-eval>
 <p>
 Pour bien comprendre ce qui est calculé et à quel moment, définissons
-une classe prenant plusieurs paramètres et insérons entre ces deniers
+une classe prenant plusieurs paramètres et insérons entre ces derniers
 des affichages:
 </p>
 <oc-eval>class c4 =
@@ -536,11 +536,11 @@ partielles successives:
 </p>
 <oc-eval>let o = new c4 (* o est maintenant une fonction *) ;;
 let o2 = o 1 (* x = 1 et en interne z=-1 *);;
-let o3 = o2 10 (* y = 10, tous les parametres sont founis, l'objet est cree *);;
+let o3 = o2 10 (* y = 10, tous les paramètres sont fournis, l'objet est créé *);;
 </oc-eval>
 <p>
 La séquence d'instructions (<ml>;</ml>) est interdite avant la partie <ml>object ... end </ml>,
-ce qui nous oblige à utiliser la constrution <ml>let () = ... in</ml> pour réaliser
+ce qui nous oblige à utiliser la construction <ml>let () = ... in</ml> pour réaliser
 des effets de bord (affichage).
 </p>
 <p>
@@ -561,11 +561,11 @@ il n'y a qu'un seul constructeur, appelé par <ml>new</ml> suivi du nom de la
 classe.
 </p>
 <p>
-Il n'y a pas non plus de de surcharge.
+Il n'y a pas non plus de surcharge.
 Cependant, les paramètres d'une classe peuvent être utilisés pour l'instancier
 avec des valeurs différentes selon le contexte.
 Les <doc href="stdlib#exooptparams">paramètres optionnels</doc>
-sont une façon aisée d'obtenir différentes façons d'instancier une classe:
+sont une façon aisée d'obtenir différentes manières d'instancier une classe:
 </p>
 <oc-eval session="trash">class point ?(x=0) ?(y=0) () =
   object
@@ -634,7 +634,7 @@ Nous implémentons une pile d'entiers car nous verrons le polymorphisme
 </p>
 <solution>
 <oc-eval><![CDATA[
-(* implementation d'une pile d'entiers avec une liste *)
+(* implémentation d'une pile d'entiers avec une liste *)
 class stack =
   object
     val mutable elements = ([] : int list)
@@ -947,10 +947,10 @@ car les attributs de l'objet n'apparaissent pas dans son type:
 <oc-eval error-exc="false">(* as_string est de type 'a, sous-type de string, donc ok *)
 let o = object val mutable foo = 42 method as_string = assert false end;;
 let (o2 : ctype) = o;;
-(* l'absence de l'attribut foo n'est pas un probleme *)
+(* l'absence de l'attribut foo n'est pas un problème *)
 let o3 = object method as_string = "hello" end;;
 let (o4 : ctype) = o3;;
-(* ici, la methode as_string n'est pas du bon type *)
+(* ici, la méthode as_string n'est pas du bon type *)
 let o5 = object method as_string = 42 end;;
 let (o6 : ctype) = o5;;
 </oc-eval>
@@ -1007,8 +1007,8 @@ type des méthodes qui retournent une copie de l'objet.
 <p>Instancions maintenant cette classe:</p>
 <oc-eval>let l = new clist ;;</oc-eval>
 <p>On constate que l'objet <ml>l</ml> a pour type <ml>_'a clist</ml>, ce qui signifie
-qu'il contiendra des éléments d'un type non encore connu, mais que dès que ce type
-sera connu, il ne sera plus possible d'ajouter des éléments d'un autre type
+qu'il contiendra des éléments d'un type non encore connu, mais que, dès qu'il le
+sera, il deviendra impossible d'ajouter des éléments d'un autre type
 à notre liste:
 </p>
 <oc-eval error-exc="false">
@@ -1105,7 +1105,7 @@ polymorphes:
 <oc-eval error-exc="false">class ['a] c = object method f (x:'a) (y:'a) = [x ; y] end;;
 let o = new c;;
 o#f 1 2 ;;
-(* le type de o est completement connu, il n'est plus polymorphe *)
+(* le type de o est complètement connu, il n'est plus polymorphe *)
 o#f "hello" "world";;
 </oc-eval>
 <p>
@@ -1117,9 +1117,9 @@ un quantificateur en explicitant le type de la méthode <ml>f</ml>:
 </p>
 <oc-eval>class c = object
     method f : 'a. 'a -> 'a -> 'a list = fun x y -> [x ; y]
-  end;;
-(* le type de la classe montre maitenant bien une methode polymorphe, avec des
-  variables de type libres *)
+  end
+(* le type de la classe montre maintenant bien une méthode polymorphe, avec des
+  variables de type libres *) ;;
 let o = new c;;
 o#f 1 2 ;;
 o#f "hello" "world";;
@@ -1177,7 +1177,7 @@ du même type (une copie, en l'occurrence):
 <oc-eval>Oo.copy;;</oc-eval>
 <p>
 Pour les attributs, il s'agit d'une copie "peu profonde" (<em>shallow copy</em>,
-tout comme <ml>Array.copy</ml>): Les valeurs des attributs sont partagées, et
+tout comme <ml>Array.copy</ml>): les valeurs des attributs sont partagées, et
 la mise à jour d'un attribut dans un objet ne modifie pas l'attribut dans l'objet
 copié. Par contre, la copie ne descend pas dans les références, donc si un attribut
 contient une référence, modifier la valeur référencée par l'attribut dans un
@@ -1195,10 +1195,10 @@ let o = object
   end;;
 let o2 = Oo.copy o;;
 o#set_x 42 ; o#set_y 1984 ;;
-(* x dans o2 n'a pas ete modifie *)
+(* x dans o2 n'a pas été modifié *)
 o2#x ;;
-(* la valeur pointee par y a change dans les deux objets, mais
-  pas la reference *)
+(* la valeur pointée par y a changé dans les deux objets, mais
+  pas la référence *)
 o2#y ;;
 ]]></oc-eval>
 </p>
@@ -1245,7 +1245,7 @@ dans des méthodes binaires.
 Par ailleurs, les identifiants des objets ne sont pas conservés lors
 de la sérialisation; de nouveaux identifiants sont regénérés lors de
 la re-création des objets. Il conviendra donc de s'appuyer sur ces
-identifiants ave parcimonie.
+identifiants avec parcimonie.
 </p>
 </subsection>
 </section>
@@ -1256,7 +1256,7 @@ Une méthode binaire est une méthode prenant en paramètre un objet du
 même type que celui auquel elle est appliquée.
 </p>
 <p>
-Dans l'exemple ci-dessous, nous définisson une classe <ml>integer</ml>
+Dans l'exemple ci-dessous, nous définissons une classe <ml>integer</ml>
 dont deux méthodes sont binaires, en indiquant que leur paramètre est
 un objet du même type que la classe:
 </p>

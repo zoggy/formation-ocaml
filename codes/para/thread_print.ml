@@ -5,7 +5,7 @@ let run_thread id =
        "Je suis le thread %d et c'est mon affichage %d." id i);
   done;;
 
-(* Creer les threads *)
+(* Créer les threads *)
 let threads = List.map
   (fun id -> Thread.create run_thread id)
   [ 1 ; 2 ; 3];;

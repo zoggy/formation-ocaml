@@ -88,7 +88,7 @@ ou bien définir un type et l'utiliser par la suite dans les annotations de type
 <ocaml><![CDATA[
 type t = int * int;;
 val x : t ;;
-val y : t * t;;"
+val y : t * t;;
 ]]></ocaml>
 <p>
 De façon analogue, il est possible de définir des types de modules, c'est-à-dire
@@ -154,7 +154,7 @@ M2.read (M1.create 42);;
 <p>La notation <ml>Vue1 with type t = Base.t</ml> permet d'indiquer une signature
 correspondant à <ml>Vue1</ml> dans laquelle le type <ml>t</ml>, abstrait
 dans <ml>Vue1</ml>, est égal au type <ml>Base.t</ml>. Cette indication pour
-<ml>M1</ml> et <ml>M2</ml> nous permet d'indiquer que les types
+<ml>M1</ml> et <ml>M2</ml> nous permet de déclarer que les types
 <ml>M1.t</ml> et <ml>M2.t</ml> sont égaux, donc de passer une valeur
 obtenue par <ml>M1.create</ml> à <ml>M2.read</ml>.
 </p>
