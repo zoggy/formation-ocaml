@@ -26,7 +26,7 @@ Un type somme extensible est d'abord défini sans constructeur, en indiquant
 sa nature extensible, de la façon suivante:
 </p>
 <oc-eval toplevel="true">
-type t = ..
+type t = .. ;;
 </oc-eval>
 <p>On ajoute ensuite des constructeurs à l'aide de <ml>+=</ml>:</p>
 <oc-eval toplevel="true">
@@ -45,8 +45,8 @@ type 'a expr += Plus of 'a expr * 'a expr ;;
 Il est possible d'étendre un type qui n'est pas dans le même module, en indiquant
 le chemin du type au lieu du simple identifiant utilisé dans une nouvelle définition:
 </p>
-<oc-eval>module M = struct type 'a expr = ..end ;;
-type 'a M.expr += (* noter le chemin du type etendu *)
+<oc-eval>module M = struct type 'a expr = .. end ;;
+type 'a M.expr += (* noter le chemin du type étendu *)
   | Plus of 'a expr * 'a expr
   | Moins of 'a expr * 'a expr ;;
 </oc-eval>
@@ -67,11 +67,11 @@ module M = struct
 end;;
 module N = struct
   type 'a M.expr +=
-    | Plus = M.Plus (* Redeclaration du constructeur M.Plus *)
+    | Plus = M.Plus (* Redéclaration du constructeur M.Plus *)
     | Moins of 'a M.expr * 'a M.expr
   end
 </oc-eval>
-<warning id="conflitdenom" title="Constructeurs de même noms">
+<warning id="conflitdenom" title="Constructeurs de même nom">
 <p>
 Il est possible d'étendre un type extensible avec deux constructeurs
 portant le même nom:
@@ -98,7 +98,7 @@ module M2 = struct type t += A of string end ;;
 <section id="usage" title="Usage">
 <p>
 La référence aux constructeurs d'un type somme extensible est faite de la même façon
-que pour les types sommes, que cela soit pour la construction ou le filtrage le valeurs.
+que pour les types sommes, que cela soit pour la construction ou le filtrage de valeurs.
 </p>
 <oc-eval toplevel="true">
 let v = M.Val 3;;
@@ -109,7 +109,7 @@ let op3 = N.Moins (v, v);;
 <p>
 Attention, puisque le constructeur <ml>Moins</ml> n'est déclaré que
 dans le module <ml>N</ml>, on ne peut y faire référence en l'appelant
-<ml>M.Moins</ml>, bien que le type <ml>expr</ml> est bien défini dans
+<ml>M.Moins</ml>, bien que le type <ml>expr</ml> soit bien défini dans
 <ml>M</ml>. La portée d'un constructeur dépend de l'endroit où il est
 défini:
 </p>

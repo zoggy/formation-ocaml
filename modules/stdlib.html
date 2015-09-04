@@ -5,9 +5,9 @@ module-name="stdlib"
 Comme beaucoup d'autres distributions de compilateurs/langages, OCaml est accompagné
 de bibliothèques. Chaque bibliothèque peut définir de nouveaux types, nouvelles exceptions,
 nouvelles fonctions, nouvelles classes et nouveaux modules.
-Ces bibliothèques soit évitent au développeur d'avoir à réimplementer des fonctions
+Ces bibliothèques soit évitent au développeur d'avoir à réimplémenter des fonctions
 de base, soit fournissent des opérations non définissables dans le langage comme les
-fonctions d'entrées/sorties à un nombre variable d'arguments (e.g. <ml>printf</ml>).
+fonctions d'entrées/sorties avec un nombre variable d'arguments (e.g. <ml>printf</ml>).
 </p>
 <p>
 Elles se présentent sous forme de modules incluant éventuellement d'autres modules.
@@ -33,7 +33,7 @@ contient plusieurs modules offrant</li>
 <li>l'interfaçage avec le système d'exploitation.</li>
 </ul>
 <li>un autre ensemble de bibliothèques plus spécialisées (comme une bibliothèque
-d'arithématique exacte), dont certaines
+d'arithmétique exacte), dont certaines
 ne sont totalement disponibles que sur certains systèmes d'exploitation
 (telle la bibliothèque Unix) ou bien dépendent de la présence d'autres
 bibliothèques sur ce système (comme l'interface avec Tcl/Tk).</li>
@@ -150,7 +150,7 @@ On trouve les opérations arithmétiques habituelles sur les entiers:
 <tr><td><ml>( * )</ml>, <ml>(/)</ml>, <ml>(mod)</ml></td>
 <td>multiplication, division entière, modulo</td>
 </tr>
-<tr><td><ml>~-</ml> : int -> int}</td>
+<tr><td><ml>~- : int -> int</ml></td>
 <td>négation</td>
 </tr>
 <tr><td><ml>succ</ml>, <ml>pred : int -> int</ml></td>
@@ -195,7 +195,7 @@ pour l'utilisation de masques, gestion de protocoles ou données binaires, ...
 
 <subsection id="libfloat" title="Fonctions sur les flottants">
 <p>
-Il n'y a pas de surchage en OCaml, c'est-à-dire que le même identifiant ne peut pas correspondre
+Il n'y a pas de surcharge en OCaml, c'est-à-dire que le même identifiant ne peut pas correspondre
 à deux fonctions différentes selon le type de ses arguments. Les opérations communes
 aux entiers et aux flottants (addition, ...) se distinguent donc par un '<ml>.</ml>' ajouté
 aux opérateurs flottants:
@@ -245,7 +245,7 @@ ou la sortie d'erreur, tandis que d'autres sont plus générales et agissent sur
 canal (<em>channel</em>) passé en paramètre.
 </p>
 <p>
-A l'aide de la documentation de <moduledoc name="Pervasives"/>, faire les exercices suivants.
+A l'aide de la documentation de <moduledoc name="Pervasives"/>, faire les exercices suivants:
 </p>
 <exercice id="exosumint" title="Somme de deux entiers">
 <p id="iopipoyr">
@@ -325,7 +325,7 @@ et champs mais préfixer tout de même les autres éléments lors de leur utilis
 <p>
 Enfin, il n'y a pas de hiérarchie dans cette bibliothèque, les modules disponibles sont tous
 au même niveau (même si certains modules en contiennent d'autres).
-Nous allons cepandant les introduire par grandes catégories et détailler
+Nous allons cependant les introduire par grandes catégories et détailler
 les possibilités de quelques uns d'entre eux.
 </p>
 
@@ -551,15 +551,15 @@ let robert = { name = "Bidochon" ; firstname = "Robert"};;
 Hashtbl.add users "bidochon" robert;;
 Hashtbl.find users "bidochon";;
 let raymonde = { name = "Bidochon" ; firstname = "Raymonde"};;
-Hashtbl.add users "bidochon" raymonde (* robert est masque *);;
+Hashtbl.add users "bidochon" raymonde (* robert est masqué *);;
 Hashtbl.find users "bidochon";;
-Hashtbl.remove users "bidochon" (* robert est demasque *);;
+Hashtbl.remove users "bidochon" (* robert est démasqué *);;
 Hashtbl.find users "bidochon";;
-Hashtbl.remove users "bidochon" (* robert est supprime *);;
+Hashtbl.remove users "bidochon" (* robert est supprimé *);;
 Hashtbl.find users "bidochon";;
 ]]></oc-eval>
 <p>
-Le type de la table <ml>users</ml> à sa création a le type <ml>('_a, '_b) Hashtbl.t</ml>:
+A sa création, la table <ml>users</ml> a le type <ml>('_a, '_b) Hashtbl.t</ml>:
 <ml>users</ml> est du type <ml>Hashtbl.t</ml> mais les deux paramètres de type ne sont pas
 encore fixés (on a <ml>`_a</ml> au lieu d'un <ml>`a</ml> qui indiquerait le polymorphisme),
 ils le seront dès que la suite du programme mettra des contraintes sur ces types.
@@ -634,7 +634,7 @@ des ensembles de valeurs d'un même type. Il est alors possible d'obtenir le plu
 grand élément, le plus petit, de faire des unions, intersections, ....
 </p>
 <p>
-De même que pour les dictionnaires, on crée un module de gestion d'ensembles
+Comme pour les dictionnaires, on crée un module de gestion d'ensembles
 à l'aide d'un foncteur, <moduledoc name="Set.Make"/>. Le module passé en paramètre
 doit définir le type des éléments et la fonction d'ordre sur ces éléments.
 On utilise dans l'exemple ci-dessous le même module <ml>MyKey</ml> que dans
@@ -723,7 +723,7 @@ des représentations différentes du type <ml>int</ml>:
 
 <subsection id="libinout" title="Entrées-sorties">
 <p>
-Le module <moduledoc name="Printf"/> donne accès aux fonctions équivalentes aux fonctions
+Le module <moduledoc name="Printf"/> donne accès aux fonctions équivalentes des fonctions
 <ml>printf</ml>, <ml>sprintf</ml>, <ml>fprintf</ml>, etc. du langage C. Par exemple:
 </p>
 <oc-eval toplevel="true"><![CDATA[
@@ -734,7 +734,7 @@ Buffer.contents buffer;;
 ]]></oc-eval>
 <p>
 Le type des paramètres des fonctions du module <moduledoc name="Printf"/> est
-spécial, pour permettre le passage d'un nombre variable de paramètres en fonctions
+spécial, pour permettre le passage d'un nombre variable de paramètres en fonction
 de la chaîne de <em>format</em> donnée:
 </p>
 <oc-eval toplevel="true"><![CDATA[
@@ -745,7 +745,7 @@ Comme en C, des fonctions de lecture de valeurs de différents types depuis
 des chaînes sont disponibles, dans le module <moduledoc name="Scanf"/>. Dans l'exemple
 suivant, la fonction en paramètre de <ml>sscanf</ml> prend deux arguments entiers
 car la chaîne de format contient deux <ml>%d</ml>. La cohérence de type
-entre la chaîne de format et la fonction données est réalisée par le compilateur:
+entre la chaîne de format et la fonction est réalisée par le compilateur:
 </p>
 <oc-eval toplevel="true"><![CDATA[
 let str = "1 + 2";;
@@ -871,8 +871,8 @@ les outils <icode>ocamllex</icode> et <icode>ocamlyacc</icode> (cf. <doc href="e
 <li><moduledoc name="Random"/> permet la génération pseudo-aléatoire de nombres:
 <oc-eval toplevel="true"><![CDATA[
 Random.self_init()
- (* initialisation en utilisant une source aleatoire de la machine *);;
-Random.int 10000 (* un nombre aleatoire entre 0 et 10000 *) ;;
+ (* initialisation en utilisant une source aléatoire de la machine *);;
+Random.int 10000 (* un nombre aléatoire entre 0 et 9999 *) ;;
 Random.int 10000 ;;
 Random.float 1000. ;;
 ]]></oc-eval></li>
@@ -903,8 +903,8 @@ substitution, ...),</li>
 <li><moduledoc name="Unix"/> offre l'accès aux fonctions systèmes UNIX.</li>
 </ul>
 <p>
-Lorsqu'on utilise ces bibliothèques dans un programme OCaml, il faut ajouter ces
-bibliothèques sur la ligne de commande de création de l'exécutable, à la façon des
+Lorsqu'on utilise ces bibliothèques dans un programme OCaml, il faut les ajouter
+sur la ligne de commande de création de l'exécutable, à la façon des
 bibliothèques <icode>libXXX.a</icode> en C. Une bibliothèque <icode>B</icode>
 dépendant d'une bibliothèque <icode>A</icode> doit être placée après la bibliothèque dont elle
 dépend:
@@ -917,7 +917,7 @@ pour la compilation code-octet, ou
 <p>
 pour la compilation en code natif.
 </p>
-<exercice id="listtmp" title="Lister les fichers de /tmp">
+<exercice id="listtmp" title="Lister les fichiers de /tmp">
 <p id="eiuteoir">
 Ecrire un programme qui affiche la liste des fichiers du répertoire <icode>/tmp</icode>,
 en utilisant la bibliothèque Unix. On compilera son programme par la commande
@@ -943,7 +943,7 @@ données est affiché. On utilisera la bibliothèque Unix.
 <ocaml defer_="1"><codefile file="printenv.ml"/></ocaml>
 </solution>
 <p>
-On testera le programme avec les commandes suivantes.
+On testera le programme avec les commandes suivantes:
 </p>
 <ul>
 <li>Affichage de tout l'environnement: <sh>$ ./myprintenv</sh></li>

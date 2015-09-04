@@ -1084,7 +1084,7 @@ retournant vrai si la liste est un palindrome, faux sinon.
     [], [] -> true
   | h1::q1, h2::q2 ->
     (n > len / 2) || ( (h1 = h2) && iter (n + 1) (q1, q2) )
-  | _ -> assert false (* les listes en paramètre ont la meme longueur *)
+  | _ -> assert false (* les listes en paramètre ont la même longueur *)
   in
   iter 0 (l, List.rev l)
 ;;
@@ -1754,7 +1754,7 @@ Voyons un exemple:
 <oc-eval toplevel="true">
 match List.assoc "z" [ "x", 1 ; "y", 2 ] with
 | exception Failure msg ->
-    assert false (* cette exception n'est pas censée etre levée par List.assoc *)
+    assert false (* cette exception n'est pas censée être levée par List.assoc *)
 | exception Not_found ->
     None (* aucune valeur n'est associée à "z" *)
 | n -> Some n;;

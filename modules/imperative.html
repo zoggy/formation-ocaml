@@ -76,7 +76,7 @@ Il est également possible d'utiliser des fonctions du module <moduledoc name="A
 pour créer des vecteurs:
 </p>
 <oc-eval toplevel="true"><![CDATA[
-let tab = Array.create 10 0;;
+let tab = Array.make 10 0;;
 let tab = Array.init 10 (fun i -> i * 2);;
 ]]></oc-eval>
 <p>
@@ -282,6 +282,17 @@ x := !x+1 (* affectation *);;
 Remarque: Là encore, pour plus de sûrété, il n'est pas syntaxiquement possible de
 créer une référence sans l'initialiser à une valeur, contrairement au langage C.
 </p>
+<p>
+Pour les références sur les entiers, on dispose en plus de deux fonctions
+<ml>incr</ml> et <ml>decr</ml> permettant d'incrémenter ou décrémenter de 1
+la valeur référencée. <ml>incr x</ml> est donc équivalent à <ml>x := !x + 1</ml>:
+</p>
+<oc-eval toplevel="true">
+incr x (* incrémentation, pour les références sur les entiers uniquement *) ;;
+!x ;;
+decr x (* décrémentation, pour les références sur les entiers uniquement *) ;;
+!x ;;
+</oc-eval>
 </subsection>
 </section>
 
@@ -427,18 +438,18 @@ Attention aux précédences des constructions !
 <oc-eval id="iftrue" toplevel="true"><![CDATA[
 if true then
   print_endline "c'est vrai";
-  print_endline "c'est vrai";;
+  print_endline "c'est vraiment vrai";;
 if false then
   print_endline "c'est vrai";
-  print_endline "c'est vrai";;
+  print_endline "c'est vraiment vrai";;
 ]]></oc-eval>
 <p>
 Que se passe-t-il donc ? En fait, la branche <ml>then</ml> prend fin après le point virgule
-situé derrière le premier <ml>print_endline "c'est vrai"</ml>. C'est donc équivalent à
+situé derrière <ml>print_endline "c'est vrai"</ml>. C'est donc équivalent à
 </p>
 <oc-eval toplevel="true"><![CDATA[
 (if false then print_endline "c'est vrai");
-print_endline "c'est vrai";;
+print_endline "c'est vraiment vrai";;
 ]]></oc-eval>
 <p>
 Il faut donc utiliser les parenthèses <ml>(</ml> et <ml>)</ml> ou bien les mots-clés
@@ -448,12 +459,12 @@ Il faut donc utiliser les parenthèses <ml>(</ml> et <ml>)</ml> ou bien les mots
 if true then
   (
    print_endline "c'est vrai";
-   print_endline "c'est vrai"
+   print_endline "c'est vraiment vrai"
   );;
 if false then
   (
    print_endline "c'est vrai";
-   print_endline "c'est vrai"
+   print_endline "c'est vraiment vrai"
   );;
 ]]></oc-eval>
 </subsection>

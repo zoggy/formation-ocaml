@@ -20,8 +20,8 @@ let words s =
 module Dict = Map.Make
   (struct type t = string let compare = String.compare end);;
 
-(** la fonction suivante incremente le compteur du mot en parametre.
-   si le mot n'est pas dans la table, il est ajoute avec un compteur a 1. *)
+(** La fonction suivante incrémente le compteur du mot en paramètre.
+   Si le mot n'est pas dans la table, il est ajouté avec un compteur à 1. *)
 let add_word dict word =
   try
     let n = Dict.find word dict in
@@ -31,10 +31,10 @@ let add_word dict word =
       Dict.add word 1 dict
 ;;
 
-(** la fonction de comptage des mots d'un fichier en parametre.
-   Pour chaque ligne, on recupere la liste des mots avec la fonction 'words',
-   puis on incremente le compteur de chaque mot avec la fonction 'add_word'
-   definie ci-dessus. On lit jusqu'a la fin du fichier (exception End_of_file)
+(** La fonction de comptage des mots d'un fichier en paramètre.
+   Pour chaque ligne, on récupère la liste des mots avec la fonction 'words',
+   puis on incrémente le compteur de chaque mot avec la fonction 'add_word'
+   définie ci-dessus. On lit jusqu'à la fin du fichier (exception End_of_file)
    et on retourne le dictionnaire. *)
 let count_in_file file =
   let ic = open_in file in
@@ -43,8 +43,8 @@ let count_in_file file =
       try Some (input_line ic)
       with End_of_file -> None
     in
-    (* le rattrapage de l'exception de fin de fichier est confine
-       pour permettre la recursivite terminale *)
+    (* le rattrapage de l'exception de fin de fichier est confiné
+       pour permettre la récursivité terminale *)
     match line_opt with
       None -> dict
     | Some line ->

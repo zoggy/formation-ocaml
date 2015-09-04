@@ -5,7 +5,7 @@ let letters = [| 'M' ; 'D' ; 'C' ; 'L' ; 'X' ; 'V' ; 'I' |];;
 (* Compute values of letters *)
 let values =
   let len = Array.length letters in
-  let t = Array.create len 1 in
+  let t = Array.make len 1 in
   let rec iter i =
     if i >= 0 then
       begin

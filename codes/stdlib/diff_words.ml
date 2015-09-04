@@ -20,9 +20,9 @@ let words s =
 module Words = Set.Make
   (struct type t = string let compare = String.compare end);;
 
-(** la fonction suivante crée l'ensemble des mots du fichier en parametre.
-   Pour chaque ligne, on recupere la liste des mots avec la fonction 'words'
-   et on ajoute chacun de ces mots a l'ensemble en cours de construction.
+(** La fonction suivante crée l'ensemble des mots du fichier en paramètre.
+   Pour chaque ligne, on récupère la liste des mots avec la fonction 'words'
+   et on ajoute chacun de ces mots à l'ensemble en cours de construction.
    A la fin du fichier (exception End_of_file), on retourne l'ensemble construit. *)
 let word_set_of_file file =
   let ic = open_in file in
@@ -31,8 +31,8 @@ let word_set_of_file file =
       try Some (input_line ic)
       with End_of_file -> None
     in
-    (* le rattrapage de l'exception de fin de fichier est confine
-       pour permettre la recursivite terminale *)
+    (* le rattrapage de l'exception de fin de fichier est confiné
+       pour permettre la récursivité terminale *)
     match line_opt with
       None -> set
     | Some line ->
