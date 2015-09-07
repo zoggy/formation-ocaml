@@ -323,7 +323,7 @@ Nous le créons en utilisant la fonction
 <p>
 L'opérateur infixe <ml>(==>)</ml> permet de définir une spécification à partir de deux
 prédicats, l'un sur les valeurs d'entrée de la fonction, l'autre sur
-les valeurs de sorties:
+les valeurs de sortie:
 </p>
 <oc-eval>open Kaputt.Specification;;
 (==>);;
@@ -340,7 +340,7 @@ en chiffres romains se termine par "IX":
 ]]></oc-eval>
 </li>
 <li>Quand une valeur est un multiple de 5, sa représentation en chiffres romains
-ne peut se termine par 'I' ni avoir 'I' en avant-dernière position:
+ne peut se terminer par 'I' ni avoir 'I' en avant-dernière position:
 <oc-eval><![CDATA[let mult_of_5 =
   (fun x -> x mod 5 = 0) ==>
   (fun s ->

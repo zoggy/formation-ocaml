@@ -82,7 +82,7 @@ pourra lire les trois billets d'introduction par Bartosz Milewski:
 <p>
 Au lieu d'utiliser les fonctions d'entrée/sortie habituelles comme <ml>Pervasives.input_line</ml>,
 on utilisera les variantes fournies par Lwt, comme <ml>Lwt_io.read_line</ml>. Regardons leurs
-type respectifs:
+types respectifs:
 </p>
 <oc-eval>Pervasives.input_line;;
 Lwt_io.read_line;;
@@ -178,7 +178,7 @@ String.uppercase =|< Lwt_io.read_line Lwt_io.stdin;;
 <since-version v="4.02.0">
 <p>
 Lwt fournit également une <doc href="env#preproc">extension ppx</doc> facilitant
-encore l'écritude de code. Pour l'activer, on passera l'option <icode>-ppx ppx_lwt</icode>
+encore l'écriture de code. Pour l'activer, on passera l'option <icode>-ppx ppx_lwt</icode>
 à <icode>ocaml</icode>, <icode>ocamlc</icode>, ..., ou l'option <icode>-package lwt.ppx</icode>
 à <icode>ocamlfind</icode>.
 </p>

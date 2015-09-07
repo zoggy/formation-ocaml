@@ -650,7 +650,7 @@ let rec f set i =
     else
       set;;
 let set = f IntSet.empty 1;;
-Printf.printf "Plus petit element tiré: %d, plus grand: %d\n"
+Printf.printf "Plus petit élément tiré: %d, plus grand: %d\n"
   (IntSet.min_elt set) (IntSet.max_elt set);;
 flush stdout;;
 let sum = IntSet.fold (+) set 0;;
@@ -862,7 +862,7 @@ Digest.to_hex md5;;
 <li><moduledoc name="Lazy"/> permet d'utiliser de l'évaluation paresseuse, en
 reportant l'évaluation d'une expression au moment où elle sera nécessaire:
 <oc-eval toplevel="true"><![CDATA[
-let f a b () = print_endline "evaluation!"; a + b ;;
+let f a b () = print_endline "évaluation!"; a + b ;;
 let res = Lazy.from_fun (f 1 2);;
 Lazy.force res;;
 ]]></oc-eval></li>

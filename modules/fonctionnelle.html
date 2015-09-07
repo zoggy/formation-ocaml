@@ -128,8 +128,8 @@ sur des entiers et des flottants (idem pour les autres opérateurs exposés plus
 <oc-eval id="code-booleans" toplevel="true"><![CDATA[
 true (* la valeur 'vrai' *) ;;
 false (* la valeur 'faux' *) ;;
-true && false (* ET paresseux séquentiel, evalué de gauche à droite *) ;;
-true || false (* OU paresseux séquentiel, evalué de gauche à droite *) ;;
+true && false (* ET paresseux séquentiel, évalué de gauche à droite *) ;;
+true || false (* OU paresseux séquentiel, évalué de gauche à droite *) ;;
 not true (* NON logique *) ;;
 ]]></oc-eval>
 </paragraph>
@@ -197,7 +197,7 @@ la fonction <ml>String.get</ml>, soit en utilisant une syntaxe spéciale,
 <ml>chaine.[indice]</ml>. Les indices de caractères commencent à zéro.
 </p>
 <oc-eval toplevel="true">
-String.get "hello world!" 4 (* accès au 5eme caractère *);;
+String.get "hello world!" 4 (* accès au 5ème caractère *);;
 "hello world!".[4]
 </oc-eval>
 <warning id="noautoconv" title="Pas de conversion automatique">
@@ -254,8 +254,8 @@ de n-uplets:
 <oc-eval id="code-tuples" toplevel="true"><![CDATA[
 (1, 2) (* paire d'entiers *) ;;
 (1, "2") (* paire composée d'un entier et d'une chaîne *) ;;
-fst (1, 2) (* accès a la première composante de la paire *) ;;
-snd (1, 2) (* accès a la seconde composante *);;
+fst (1, 2) (* accès à la première composante de la paire *) ;;
+snd (1, 2) (* accès à la seconde composante *);;
 (1, 2, 3) (* n-uplet de 3 éléments *) ;;
 (1.0, "hello", "world", '!') (* n-uplet de 4 éléments de 3 types différents *) ;;
 ]]></oc-eval>
@@ -960,7 +960,7 @@ Voyons maintenant quelques exemples:
 </p>
 <oc-eval id="code-pattern-int" toplevel="true"><![CDATA[match 1 + 1 with
   0 -> print_endline "bizarre"
-| 1 -> print_endline "etrange"
+| 1 -> print_endline "étrange"
 | 2 -> print_endline "ouf!"
 ;;
 ]]></oc-eval>
@@ -1222,8 +1222,9 @@ On peut créer une valeur d'un type enregistrement de deux façons:
 <p>
 L'ordre dans lequel le contenu des champs est défini est sans importance. Cependant, on aura à cœur
 de définir les champs toujours dans le même ordre afin de faciliter la lecture et la maintenance
-du programme. Par ailleurs, l'ordre d'évaluation lors de l'affectation des champs n'étant
-pas spécifié, on ne se reposera pas dessus si celles-ci ont des effets de bord (lors de
+du programme. Par ailleurs, l'ordre d'affectation des champs n'est pas spécifié, ni
+l'ordre dans lequel les expressions correspondantes sont évaluées.
+On ne se reposera donc pas sur cet ordre si ces expressions ont des effets de bord (lors de
 l'utilisation de traits impératifs du langage).
 </p>
 </subsubsection>
@@ -1663,7 +1664,7 @@ let f x =
      n'est là que pour montrer l'ordre d'exécution *)
   print_endline (Printf.sprintf "Appel de f avec x = %d" x);
   if x < 0 then
-    raise (Mon_erreur "c'est negatif !")
+    raise (Mon_erreur "c'est negatif!")
   else
     x + 1;;
 (f (-1)) + (f 1);;
@@ -1845,7 +1846,7 @@ let big_list =
   in
   build 0 [];;
 try map_nt ((+) 1) big_list
-with Stack_overflow -> failwith "Debordement!";;
+with Stack_overflow -> failwith "La pile d'appel est pleine!";;
 ]]></oc-eval>
 <p>
 Que se passe-t-il ? Notre fonction <ml>map_nt</ml> fonctionne par cas sur la structure

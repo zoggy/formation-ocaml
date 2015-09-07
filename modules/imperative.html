@@ -147,9 +147,9 @@ du module <moduledoc name="Array"/>:
 </p>
 <oc-eval toplevel="true"><![CDATA[
 Array.length tab (* longueur *) ;;
-Array.sub tab 3 4 (* extraction d'un sous-vecteur de longueur 4 a partir de l'indice 3 *);;
-Array.to_list tab (* creation d'une liste a partir des elements du vecteur *);;
-Array.map string_of_int tab (* map sur les elements du vecteur *) ;;
+Array.sub tab 3 4 (* extraction d'un sous-vecteur de longueur 4 à partir de l'indice 3 *);;
+Array.to_list tab (* création d'une liste à partir des éléments du vecteur *);;
+Array.map string_of_int tab (* map sur les éléments du vecteur *) ;;
 ]]></oc-eval>
 <p>
 On consultera la documentation du module <moduledoc name="Array"/>.
@@ -170,16 +170,16 @@ d'octets sont de type <ml>char</ml>.
 
 <subsubsection id="bytes:create" title="Création de valeurs">
 <p>
-La création de valeurs du type <ml>byte</ml> se fait par des fonctions
+La création de valeurs de type <ml>bytes</ml> se fait par des fonctions
 du module <moduledoc name="Bytes"/>. Il n'y a pas de syntaxe spécifique
 comme pour les <doc href="fonctionnelle#strings">chaînes de caractères</doc>.
 </p>
 <p>On pourra créer des tableaux d'octets de différentes façons:</p>
 <oc-eval toplevel="true">
-Bytes.make 10 'a' (* n fois le meme caractere *) ;;
+Bytes.make 10 'a' (* n fois le même caractère *) ;;
 Bytes.init 10 (fun i -> Char.chr (0x42 + i))
   (* initialisation via une fonction pour chaque case *) ;;
-let chars = Bytes.of_string "hello!" (* a partir d'une chaine *);;
+let chars = Bytes.of_string "bonjour!" (* à partir d'une chaîne *);;
 </oc-eval>
 </subsubsection>
 
@@ -218,7 +218,7 @@ D'autres opérations sur les tableaux d'octets sont offertes par les fonctions d
 <moduledoc name="Bytes"/>. Par exemple:
 </p>
 <oc-eval toplevel="true"><![CDATA[
-Bytes.length chars (* longeur d'un tableau *);;
+Bytes.length chars (* longueur d'un tableau *);;
 let animaux = List.map Bytes.of_string
   [ "chat"; "chien"; "perroquet"; "lama"; "renard" ];;
 Bytes.to_string (Bytes.concat (Bytes.of_string ", ") animaux) ;;
@@ -260,7 +260,7 @@ Par contre, tenter de modifier le champ <ml>champ1</ml> provoque une erreur:
 <subsection id="refs" title="Références">
 <p><cmp>OCaml fournit un type polymorphe <ml>'a ref</ml> qui peut être vu comme le type des pointeurs sur
 une valeur quelconque; en OCaml, on parlera plutôt de référence sur une valeur. Une valeur
-référencée peut être modifiée. Le type <ml>ref</ml> est définit comme un enregistrement à un
+référencée peut être modifiée. Le type <ml>ref</ml> est défini comme un enregistrement à un
 champ modifiable:</cmp>
 </p>
 <ocaml>type 'a ref = {mutable contents:'a}</ocaml>
@@ -270,16 +270,16 @@ fonction préfixe <ml>(!)</ml>.
 La fonction modifiant le contenu d'une référence est la fonction infixe <ml>(:=)</ml>.</cmp>
 </p>
 <oc-eval toplevel="true"><![CDATA[
-let x = ref 3 (* creation et initialisation *);;
+let x = ref 3 (* création et initialisation *);;
 x ;;
-!x (* dereferencement *);;
+!x (* déréférencement *);;
 x := 4 ;;
 !x ;;
 x := !x+1 (* affectation *);;
 !x ;;
 ]]></oc-eval>
 <p>
-Remarque: Là encore, pour plus de sûrété, il n'est pas syntaxiquement possible de
+Remarque: là encore, pour plus de sûreté, il n'est pas syntaxiquement possible de
 créer une référence sans l'initialiser à une valeur, contrairement au langage C.
 </p>
 <p>
@@ -349,12 +349,12 @@ D'autres fonctions sont disponibles dans la
 <oc-eval toplevel="true"><![CDATA[
 let first_line = input_line ic (* lecture d'une ligne *);;
 let second_line = input_line ic (* lecture d'une ligne *);;
-seek_in ic 0 (* retour au debut du fichier *);;
-let line = input_line ic (* re-lecture de la premiere ligne, suite au deplacement *);;
+seek_in ic 0 (* retour au début du fichier *);;
+let line = input_line ic (* re-lecture de la première ligne, suite au déplacement *);;
 let buffer_size = 40 ;;
 let buffer = Bytes.make buffer_size 'x';;
 let nb_read = input ic buffer 0 buffer_size
- (* lecture de maximum buffer_size caracteres dans ic, a stocker dans buffer a partir
+ (* lecture de maximum buffer_size caractères dans ic, à stocker dans buffer à partir
      de l'indice 0 *);;
 Bytes.sub buffer 0 nb_read;;
 close_in ic;;
@@ -377,9 +377,9 @@ conserver des performances suffisantes lors de multiples petites écritures, san
 que la fonction <ml>flush</ml>.
 </p>
 <oc-eval toplevel="true"><![CDATA[
-output_string oc second_line (* ecriture d'une chaine sur le canal *);;
-flush oc (* forcer l'ecriture du contenu du tampon dans le fichier *);;
-output oc buffer 0 nb_read (* ecriture d'un certain nombre de caracteres depuis une chaine *);;
+output_string oc second_line (* écriture d'une chaîne sur le canal *);;
+flush oc (* forcer l'écriture du contenu du tampon dans le fichier *);;
+output oc buffer 0 nb_read (* écriture d'un certain nombre de caractères depuis une chaîne *);;
 close_out oc;;
 ]]></oc-eval>
 </subsection>
@@ -522,7 +522,7 @@ Comme pour le corps de la boucle <ml>for</ml>, l'<stxid>expression_2</stxid> doi
 let compteur = ref 1;;
 while !compteur <= 10 do
   print_int !compteur; print_string " ";
-  incr compteur (* equivalent à compteur := !compteur + 1 *)
+  incr compteur (* équivalent à compteur := !compteur + 1 *)
 done;;
 flush stdout;;
 ]]></oc-eval>
