@@ -1,4 +1,8 @@
 
+module XR = Xtmpl_rewrite
+module Xml = Xtmpl_xml
+module XH = Xtmpl_xhtml
+
 let make_id =
   let cpt = ref 0 in
   fun () -> incr cpt; Printf.sprintf "__solution__%d" !cpt
@@ -6,72 +10,70 @@ let make_id =
 
 let get_solution_label data env =
   let (data, xmls) = Stog_engine.get_in_env data env ("", "solution-label") in
-  let xmls = match xmls with [] -> [Xtmpl.D "Answer"] | _ -> xmls in
+  let xmls = match xmls with [] -> [XR.cdata "Answer"] | _ -> xmls in
   (data, xmls)
 ;;
 
-let fun_solution data env atts subs =
-  match Xtmpl.get_att atts ("", "id") with
+let fun_solution data env ?loc atts subs =
+  match XR.get_att atts ("", "id") with
     Some s ->
       (* id already present, return same node *)
-      raise Xtmpl.No_change
+      raise XR.No_change
   | None ->
       (* create a unique id *)
       let id = make_id () in
       let (data, xml) = get_solution_label data env in
       let xmls =
-        [ Xtmpl.E (("", "button"),
-           Xtmpl.atts_of_list
-             [ ("", "href"), [Xtmpl.D ("#"^id)] ;
-               ("", "data-toggle"), [Xtmpl.D "collapse"] ;
-               ("", "class"), [Xtmpl.D "btn btn-info solution"]
-             ],
-           xml) ;
-          Xtmpl.E (("", "div"),
-           Xtmpl.atts_of_list
-             [("", "id"), [Xtmpl.D id] ; ("", "class"), [Xtmpl.D "collapse codeblock"]],
-           subs)
+        [ XH.button
+           ~atts:(XR.atts_of_list
+             [ ("", "href"), [XR.cdata ("#"^id)] ;
+               ("", "data-toggle"), [XR.cdata "collapse"] ;
+               ("", "class"), [XR.cdata "btn btn-info solution"]
+             ])
+           xml ;
+          XH.div ~id ~class_:"collapse codeblock" subs
         ]
       in
       (data, xmls)
 ;;
 
-let find_sub_contents loc xmls tag =
+let find_sub_contents ?loc loctag xmls tag =
   let pred = function
-    Xtmpl.D _ -> false
-  | Xtmpl.E (tag2, _, _) -> tag2 = tag
+    XR.D _ | XR.C _ | XR.PI _ -> false
+  | XR.E { XR.name } -> name = tag
   in
   try
     match List.find pred xmls with
-    | Xtmpl.E(_,_,xmls) -> xmls
+    | XR.E { XR.subs } -> subs
     | _ -> assert false
   with Not_found ->
       Stog_plug.error
-        (Printf.sprintf "Missing <%s> tag in %s" (Xtmpl.string_of_name tag) loc);
+        (Xml.loc_sprintf loc
+         "Missing <%s> tag in %s" (Xml.string_of_name tag) loctag);
       []
 
-let fun_mlmli data env atts subs =
-  let file = Xtmpl.opt_att atts ~def: [ Xtmpl.D ""] ("", "file") in
-  let id = Xtmpl.get_att atts ("", "id") in
-  let ml = find_sub_contents "<mlmli>" subs ("","ml") in
-  let mli = find_sub_contents "<mlmli>" subs ("","mli") in
+let fun_mlmli data env ?loc atts subs =
+  let file = XR.opt_att atts ~def: [ XR.cdata ""] ("", "file") in
+  let id = XR.get_att atts ("", "id") in
+  let ml = find_sub_contents ?loc "<mlmli>" subs ("","ml") in
+  let mli = find_sub_contents ?loc "<mlmli>" subs ("","mli") in
   let atts = match id with
-    | None -> Xtmpl.atts_empty
-    | Some id -> Xtmpl.atts_one ("","id") id
+    | None -> XR.atts_empty
+    | Some id -> XR.atts_one ("","id") id
   in
   let code ext contents =
-  Xtmpl_xhtml.div ~classes: [ext]
+  XH.div ~classes: [ext]
       [
-        Xtmpl_xhtml.div ~classes: ["module-file"]
+        XH.div ~classes: ["module-file"]
           (
-           (Xtmpl_xhtml.div ~classes: ["module-filename"]
-            (file @ [Xtmpl.D ("."^ext)])
+           (XH.div ~classes: ["module-filename"]
+            (file @ [XR.cdata ("."^ext)])
            ) :: contents
           )
       ]
   in
   let xml =
-    Xtmpl_xhtml.div ~atts ~classes: ["module-files"]
+    XH.div ~atts ~classes: ["module-files"]
      [ code "mli" mli ; code "ml" ml ]
   in
   (data, [xml])

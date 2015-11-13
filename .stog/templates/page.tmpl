@@ -15,10 +15,10 @@
 <div class="site-desc"><site-description/></div>
 </div>
 <if doc-type="post"><div class="date"><doc-date/></div></if>
-<if previous-path="" next-path=""><main_/>
+<if previous-path="" next-path=""><dummy_/>
   <div class="navbar">
-    <if previous-path=""><main_/><div class="navleft"><doc href="&lt;previous-path/&gt;"/></div></if>
-    <if next-path=""><main_/><div class="navright"><doc href="&lt;next-path/&gt;"/></div></if>
+    <if previous-path=""><dummy_/><div class="navleft"><doc href="&lt;previous-path/&gt;"/></div></if>
+    <if next-path=""><dummy_/><div class="navright"><doc href="&lt;next-path/&gt;"/></div></if>
   </div>
 </if>
 <if doc-type="module"><div class="navbar"><doc href="intro"/></div></if>
@@ -31,9 +31,9 @@
 <rdf subject="&lt;doc-url/&gt;" pred="dc:language">fr</rdf>
 
 
-<div id="doc-body" class="&lt;if draft=&quot;true&quot;&gt;&lt;main_&gt;draft&lt;/main_&gt;&lt;/if&gt;">
+<div id="doc-body" class="&lt;if draft=&quot;true&quot;&gt;&lt;dummy_&gt;draft&lt;/dummy_&gt;&lt;/if&gt;">
 <if doc-type="module">
-  <main_>
+  <dummy_>
     <rdf subject="&lt;site-url/&gt;" pred="dc:hasPart" obj="&lt;doc-url/&gt;"/>
     <if since-ocaml=""><dummy_/><since-version-tag v="&lt;since-ocaml/&gt;"/></if>
     <if before-toc=""><dummy_/><before-toc/></if>
@@ -41,7 +41,7 @@
     <hr width="100%"/>
     <notes/>
     </prepare-notes>
-  </main_>
+  </dummy_>
   <doc-body/>
 </if>
 </div>
