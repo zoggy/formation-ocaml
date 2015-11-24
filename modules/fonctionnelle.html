@@ -1580,7 +1580,7 @@ lesquelles la fonction effectue son calcul.</cmp>
 Que faire quand est passée à une fonction une valeur qu'elle ne sait pas traiter ?
 Retourner une valeur arbitraire n'est pas la bonne solution. Les exceptions sont faites pour
 gérer ces situations. Par exemple, la fonction <ml>List.hd</ml> récupérant le premier
-élément d'une liste lèvera une exception <ml>Invalid_argument</ml> si une liste vide
+élément d'une liste lèvera une exception <ml>Failure "hd"</ml> si une liste vide
 lui est passée.
 </p>
 <p>
