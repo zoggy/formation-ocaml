@@ -195,6 +195,20 @@ Bar.x;;
 les modules construits localement le sont souvent par application de
 <doc href="foncteurs">foncteurs</doc>.
 </p>
+<p>Il est également possible d'ouvrir localement un module avec la construction
+<ml>let open M in</ml>:
+</p>
+<oc-eval error-exc="false">
+length ;;
+let open List in length;;
+length;;
+</oc-eval>
+<p>Enfin, il existe une autre syntaxe pour ouvrir localement un module, consistant
+à mettre le nom du module, suivi d'un point et d'une expression entre parenthèses:
+</p>
+<oc-eval>
+List.( let l = concat [ [ 1 ; 2 ] ; [ 3 ; 4 ] ; [ 5 ; 6 ] ] in length l );;
+</oc-eval>
 </section>
 </contents>
 </module>
