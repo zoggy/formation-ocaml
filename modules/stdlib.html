@@ -323,6 +323,15 @@ d'enregistrements, c'est-à-dire ouvrir un module pour ne pas avoir à préfixer
 et champs mais préfixer tout de même les autres éléments lors de leur utilisation.
 </p>
 <p>
+On pourra également définir un alias de module avec la construction suivante:
+</p>
+<oc-eval>module L = List</oc-eval>
+<p>Dans le code qui suit cette construction, on peut faire référence au module
+<ml>L</ml> à la place du module <ml>List</ml>, ce dernier restant cependant accessible:
+</p>
+<oc-eval>L.length ;;
+List.length ;;</oc-eval>
+<p>
 Enfin, il n'y a pas de hiérarchie dans cette bibliothèque, les modules disponibles sont tous
 au même niveau (même si certains modules en contiennent d'autres).
 Nous allons cependant les introduire par grandes catégories et détailler
