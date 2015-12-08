@@ -1806,15 +1806,29 @@ retournée par <ml>f x</ml>.</li>
 la fonction <ml>try_finalize</ml>.</li>
 </ul>
 <solution>
-<oc-eval toplevel="true" error-exc="false"><![CDATA[
+<tabs>
+<item label="OCaml &amp;lt; 4.02.0">
+<oc-eval toplevel="true"><![CDATA[
 let try_finalize f x g y =
   let v = try f x with exn -> ignore(g y); raise exn in
   ignore(g y);
-  v;;
+  v;;]]></oc-eval>
+</item>
+<item label="≥ 4.02.0">
+<oc-eval toplevel="true"><![CDATA[
+let try_finalize f x g y =
+  match f x with
+  | exception e -> g y; raise e
+  | n -> g y; n
+;;]]></oc-eval>
+</item>
+</tabs>
+</solution>
+<p>Nous pouvons tester notre fonction de la façon suivante:</p>
+<oc-eval toplevel="true" error-exc="false">
 try_finalize (fun x -> x * 2) 21 print_endline "application de g a y";;
 try_finalize (fun x -> 1 / x) 0 print_endline "application de g a y";;
-]]></oc-eval>
-</solution>
+</oc-eval>
 </exercice>
 </subsection>
 </section>

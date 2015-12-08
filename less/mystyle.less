@@ -1,6 +1,7 @@
 @bgcolor: white ;
 @fgcolor: #666666 ;
 @precolor: #f7f9c8; /*rgba(255, 255, 0, 0.15) ;*/
+@tabsBaseColor: @precolor;
 
 @codefont-family: 'Source Code Pro', 'Lucida console', 'Courier';
 @codefont-bold-weight: 600 ;
@@ -608,6 +609,64 @@ div.since-version-number-bottom {
   margin-top: 0 - @baseLineHeight;
 }
 
+/* from http://codepen.io/wallaceerick/pen/ojtal?editors=110 */
+ul.tabs {
+  width: 100%;
+  float: none;
+  list-style: none;
+  position: relative;
+  margin: 0;
+  li {
+    float: left;
+    display: block;
+    margin-left: 0;
+    padding-left: 0;
+  }
+  input[type="radio"] {
+    display: none ;
+    /*position: absolute;
+    top: -9999px;
+    left: -9999px;*/
+  }
+  label {
+    display: block;
+    .rounded-box ;
+    margin-top: 0.4em;
+    margin-left: 0.9em;
+    color: lighten(@textColor,30);
+    border-width: 2px 2px 0 2px;
+    border-style: solid ;
+    border-color: #BBBBBB ;
+    padding-bottom: 0.2em;
+    background: lighten(@tabsBaseColor, 20);
+    cursor: pointer;
+    /*position: relative;*/
+    /*top: 4px;*/
+    &:hover {
+     background: @tabsBaseColor, 10 ;
+    }
+  }
+  .tab-content{
+    z-index: 2;
+    visibility: hidden;
+    /*overflow: hidden;*/
+    position: absolute;
+    top: @baseLineHeight + 0.4em + 0.2em;
+    left: 0;
+    width: 100%;
+    /*background: darken(@tabsBaseColor, 15);*/
+  }
+  //The Magic
+  [id^="__tab"]:checked + label {
+    color: @textColor ;
+    background: @tabsBaseColor;
+  }
+  [id^="__tab"]:checked ~ [id^="tab-content"] {
+    visibility: visible;
+  }
+
+
+}
 
 @media print {
 div.sidebar {

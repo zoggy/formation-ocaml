@@ -78,8 +78,42 @@ let fun_mlmli data env ?loc atts subs =
   in
   (data, [xml])
 
+let mk_tab_item name (n, lis) xml =
+  match xml with
+  | XR.D _ | XR.C _ | XR.PI _ -> (n, xml :: lis)
+  | XR.E { XR.atts ; loc ; subs } ->
+      match XR.get_att atts ("", "label") with
+        None -> Stog_plug.error
+          (Xml.loc_sprintf loc "Missing \"label\" attribute");
+          (n, lis)
+      | Some label ->
+          let id = Printf.sprintf "%s-%d" name n in
+          let li =
+            XH.li ~atts: (XR.atts_one ("",XR.att_protect) [XR.cdata "label"])
+              [
+                XH.input ~type_:"radio" ~name ~id
+                  ~atts: (if n = 1
+                   then XR.atts_one ("","checked") [XR.cdata "checked"]
+                   else XR.atts_empty) [] ;
+                XH.label ~atts: (XR.atts_one ("","for") [XR.cdata id]) label ;
+                XH.div ~class_: "tab-content" ~id: ("tab-content-"^id) subs ;
+              ]
+          in
+          (n+1, li :: lis)
+
+let fun_tabs =
+  let cpt = ref 0 in
+  fun data env ?loc atts subs ->
+    let id = incr cpt; Printf.sprintf "__tab%d" !cpt in
+    let (_,lis) = List.fold_left
+      (mk_tab_item id) (1, []) subs
+    in
+    (data, [XH.ul ~class_:"tabs" (List.rev lis)])
+
 let () = Stog_plug.register_html_base_rule ("", "mlmli") fun_mlmli ;;
 let () = Stog_plug.register_html_base_rule ("", "solution") fun_solution ;;
+let () = Stog_plug.register_html_base_rule ("", "tabs") fun_tabs ;;
+
 
 (*
 This must be added at the end of each page:
