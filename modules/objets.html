@@ -838,6 +838,13 @@ class t4 = object
 print_endline (new t4)#p ;;
 (new t4)#value ;;
 </oc-eval>
+<p>Voyons comment se comporte un héritage "en diamant":</p>
+<oc-eval toplevel="false" id ="diamond" defer_="1"><codefile file="diamond.ml"/></oc-eval>
+<oc-eval defer_="1">let o = new c4 in o#set_c2 2; o#set_c3 3; o#print;;</oc-eval>
+<p>La classe <ml>c1</ml> dont hérite indirectement deux fois la classe <ml>c4</ml>
+n'est donc bien prise en compte qu'une seule fois, l'attribut <ml>v</ml> est
+bien partagé entre les deux classes <ml>c2</ml> et <ml>c3</ml>.
+</p>
 </subsection>
 </section>
 
