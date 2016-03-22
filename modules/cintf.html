@@ -1,0 +1,42 @@
+<module title="Interfaçage avec C"
+with-contents="true"
+module-name="cintf"
+>
+<contents>
+<section id="preambule" title="Préambule">
+<p>
+
+</p>
+</section>
+
+<section id="x" title="X">
+<subsection id="y" title="Y">
+<p>
+Un noœud &lt;oc-eval&gt; permet d'évaluer le code OCaml indiqué:
+</p>
+<oc-eval>let f x = x + 1;;</oc-eval>
+<p>
+Pour évaluer le code qui se trouve dans un fichier, on peut utiliser
+un nœud &lt;codefile file="..."/&gt; qui sera remplacé par le
+contenu du fichier indiqué par l'attribut <code>file</code>.
+Ce fichier est cherché dans le répertoire où se trouvent les
+fichiers de codes du module, ici <code>cintf</code>.
+L'attribut <code>defer_="1"</code> permet de reporter d'un cycle
+l'évaluation de la règle &lt;oc-eval&gt;, pour que le contenu
+du fichier soit inséré et ensuite évalué.
+</p>
+<oc-eval defer_="1"><codefile file="foo.ml"/></oc-eval>
+<p>
+Un nœud &lt;run&gt; permet de lancer une commande et intégrer
+sa sortie dans l'arbre. Pratique pour indiquer les commandes
+de compilation en vérifiant qu'elles fonctionnent quand
+on compile le document de formation. Les commandes sont
+exécutées dans le répertoires où se trouvent les fichiers
+de codes du module, ici <code>cintf</code>.
+</p>
+<run>pwd ; ls</run>
+</subsection>
+</section>
+
+</contents>
+</module>
