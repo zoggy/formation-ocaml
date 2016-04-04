@@ -1,0 +1,24 @@
+Compilation du support de formation
+===================================
+
+Installation des outils:
+
+apt-get install graphviz highlight node-less
+
+Installatin de stog via opam:
+
+opam install stog stog-rdf stog-writing
+
+Installation des bibliothèques utilisées par le support de cours:
+
+opam install parmap kaputt functory
+opam pin add inspect https://github.com/krohrer/caml-inspect.git
+# Commande ci-dessus provisoire
+
+Compilation proprement dite:
+
+make test
+
+Le support de cours est alors visible à l'adresse suivante:
+
+file://localhost/tmp/form-ocaml/index.html
