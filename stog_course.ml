@@ -23,15 +23,31 @@ let fun_solution data env ?loc atts subs =
       (* create a unique id *)
       let id = make_id () in
       let (data, xml) = get_solution_label data env in
+      let js = Printf.sprintf
+        "if (this.value == 'collapsed') {
+           this.value = 'expanded';
+           var n = document.getElementById (%S) ;
+           n.classList.remove('collapsed');
+           n.classList.add('expanded');
+         }
+         else
+         {
+           this.value = 'collapsed';
+           var n = document.getElementById (%S) ;
+           n.classList.remove('expanded');
+           n.classList.add('collapsed');
+         }
+        " id id
+      in
       let xmls =
         [ XH.button
            ~atts:(XR.atts_of_list
-             [ ("", "href"), [XR.cdata ("#"^id)] ;
-               ("", "data-toggle"), [XR.cdata "collapse"] ;
+             [ ("", "onclick"), [XR.cdata js] ;
+               ("", "value"), [XR.cdata "collapsed"] ;
                ("", "class"), [XR.cdata "btn btn-info solution"]
              ])
            xml ;
-          XH.div ~id ~class_:"collapse codeblock" subs
+          XH.div ~id ~class_:"collapsed" subs
         ]
       in
       (data, xmls)
