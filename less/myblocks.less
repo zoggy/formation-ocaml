@@ -33,7 +33,7 @@ div.figure {
   .myblock (lighten(@green, 40));
 }
 
-div.ocaml-toplevel {
+.ocaml-toplevel {
   color: #666666;
   .stdout {
     .rounded-box();
@@ -52,11 +52,11 @@ div.ocaml-toplevel {
   }
 }
 
-div.ocaml-exc {
-  div.toplevel-out {
+.ocaml-exc {
+  .toplevel-out {
     color: @red;
   }
-  div.stderr {
+  .stderr {
     color: @red;
     font-weight: bold;
   }
@@ -75,10 +75,10 @@ div.ocaml-exc {
 }
 
 .command-exec {
-  div.command-output {
+  .command-output {
     color: #666666;
   }
-  div.command-error {
+  .command-error {
     color: @red ;
     font-weight: bold;
   }

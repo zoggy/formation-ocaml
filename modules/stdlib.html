@@ -24,7 +24,7 @@ sur les types de base (entiers, flottants, chaînes, ...), des fonctions d'entr�
 </li>
 <li>la bibliothèque dite "standard" dans le sens où elle est toujours présente
 quelle que soit la plateforme sur laquelle est installé OCaml. Cette bibliothèque
-contient plusieurs modules offrant</li>
+contient plusieurs modules offrant
 <ul>
 <li>l'utilisation de structures de données "de base"
 (listes, vecteurs, tables de hachage, piles, ...),</li>
@@ -32,6 +32,7 @@ contient plusieurs modules offrant</li>
 <li>des possibilités de gestion de la persistance (stockage de données),</li>
 <li>l'interfaçage avec le système d'exploitation.</li>
 </ul>
+</li>
 <li>un autre ensemble de bibliothèques plus spécialisées (comme une bibliothèque
 d'arithmétique exacte), dont certaines
 ne sont totalement disponibles que sur certains systèmes d'exploitation
@@ -44,9 +45,11 @@ bibliothèques sur ce système (comme l'interface avec Tcl/Tk).</li>
 Le module <moduledoc name="Pervasives"/> est la bibliothèque préchargée par OCaml lors de la compilation
 ou l'évaluation de programmes, c'est-à-dire que tout se passe comme si en tête de chaque
 fichier de code figurait une instruction
+</p>
 <oc-eval><![CDATA[
 open Pervasives;;
 ]]></oc-eval>
+<p>
 Les éléments de <moduledoc name="Pervasives"/> sont donc visibles et accessibles sans nécessité
 de les préfixer (on peut faire appel à <ml>compare</ml> au lieu de <ml>Pervasives.compare</ml>).
 La construction <ml>open ...</ml> est présentée dans <doc href="#stdlib"/>.
