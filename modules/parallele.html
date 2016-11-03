@@ -448,7 +448,7 @@ commandes n'est pas protégé, car c'est inutile. En effet, une seule
 structure <ml>command</ml> est gérée à la fois par notre fonction
 <ml>run</ml>, il n'y a pas de parallélisme, donc pas de concurrence,
 car rien n'interrompt notre fonction avant qu'elle ne place le
-thread créé (et en attente de la terminaison de la commande lancée)
+thread créé (et en attente de son réveil par la suite de la fonction)
 dans le champ <ml>thread</ml>.
 </p>
 </solution>
