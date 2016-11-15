@@ -609,6 +609,10 @@ div.since-version-number-bottom {
   margin-top: 0 - @baseLineHeight;
 }
 
+.nodisplay {
+  display: none;
+}
+
 /* from http://codepen.io/wallaceerick/pen/ojtal?editors=110 */
 ul.tabs {
   width: 100%;
@@ -617,55 +621,40 @@ ul.tabs {
   position: relative;
   margin: 0;
   li {
-    float: left;
-    display: block;
+    /*float: left;*/
     margin-left: 0;
     padding-left: 0;
-  }
-  input[type="radio"] {
-    display: none ;
-    /*position: absolute;
-    top: -9999px;
-    left: -9999px;*/
-  }
-  label {
-    display: block;
     .rounded-box ;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    display: inline-block;
     margin-top: 0.4em;
-    margin-left: 0.9em;
+    margin-left: 0.85em;
     color: lighten(@textColor,30);
     border-width: 2px 2px 0 2px;
     border-style: solid ;
-    border-color: #BBBBBB ;
+    border-color: lighten(#BBBBBB, 20) ;
     padding-bottom: 0.2em;
     background: lighten(@tabsBaseColor, 20);
     cursor: pointer;
     /*position: relative;*/
     /*top: 4px;*/
     &:hover {
-     background: @tabsBaseColor, 10 ;
+      background: @tabsBaseColor, 10 ;
     }
   }
-  .tab-content{
-    z-index: 2;
-    visibility: hidden;
-    /*overflow: hidden;*/
-    position: absolute;
-    top: @baseLineHeight + 0.4em + 0.2em;
-    left: 0;
-    width: 100%;
-    /*background: darken(@tabsBaseColor, 15);*/
-  }
-  //The Magic
-  [id^="__tab"]:checked + label {
+  li.selected {
     color: @textColor ;
     background: @tabsBaseColor;
+    border-color: #BBBBBB ;
   }
-  [id^="__tab"]:checked ~ [id^="tab-content"] {
-    visibility: visible;
-  }
-
-
+}
+div.tab-contents {
+  display: flex;
+  pre { border-top-left-radius: 0 ; }
+}
+div.tab-content {
+    width: 100%;
 }
 
 hr { width: 100%; }

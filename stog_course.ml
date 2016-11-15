@@ -94,37 +94,50 @@ let fun_mlmli data env ?loc atts subs =
   in
   (data, [xml])
 
-let mk_tab_item name (n, lis) xml =
+let mk_tab_item tabsid name boxid (n, lis, contents) xml =
   match xml with
-  | XR.D _ | XR.C _ | XR.PI _ -> (n, xml :: lis)
+  | XR.D _ | XR.C _ | XR.PI _ -> (n, xml :: lis, contents)
   | XR.E { XR.atts ; loc ; subs } ->
       match XR.get_att atts ("", "label") with
         None -> Stog_plug.error
           (Xml.loc_sprintf loc "Missing \"label\" attribute");
-          (n, lis)
+          (n, lis, contents)
       | Some label ->
           let id = Printf.sprintf "%s-%d" name n in
+          let content_id = "tab-content-"^id in
           let li =
-            XH.li ~atts: (XR.atts_one ("",XR.att_protect) [XR.cdata "label"])
-              [
-                XH.input ~type_:"radio" ~name ~id
-                  ~atts: (if n = 1
-                   then XR.atts_one ("","checked") [XR.cdata "checked"]
-                   else XR.atts_empty) [] ;
-                XH.label ~atts: (XR.atts_one ("","for") [XR.cdata id]) label ;
-                XH.div ~class_: "tab-content" ~id: ("tab-content-"^id) subs ;
-              ]
+            let atts =
+              XR.atts_of_list
+                [ ("",XR.att_protect), [XR.cdata "label"] ;
+                  ("", "onclick"),
+                  [XR.cdata (Printf.sprintf "showtab('%s','%s','%s','%s')"
+                    boxid content_id tabsid id)] ;
+                ]
+            in
+            let classes =  if n = 1 then ["selected"] else [] in
+            XH.li ~id ~classes ~atts label
           in
-          (n+1, li :: lis)
+          let ct =
+            let classes =
+              "tab-content" ::
+              (if n = 1 then [] else ["nodisplay"])
+            in
+            XH.div ~classes ~id: content_id subs in
+          (n+1, li :: lis, ct :: contents)
 
 let fun_tabs =
   let cpt = ref 0 in
   fun data env ?loc atts subs ->
     let id = incr cpt; Printf.sprintf "__tab%d" !cpt in
-    let (_,lis) = List.fold_left
-      (mk_tab_item id) (1, []) subs
+    let boxid = Printf.sprintf "__boxtab%d" !cpt in
+    let tabsid = Printf.sprintf "__tabs%d" !cpt in
+    let (_,lis, contents) = List.fold_left
+      (mk_tab_item tabsid id boxid) (1, [], []) subs
     in
-    (data, [XH.ul ~class_:"tabs" (List.rev lis)])
+    (data, [
+       XH.ul ~id: tabsid ~class_:"tabs" (List.rev lis) ;
+       XH.div ~id: boxid ~class_:"tab-contents" (List.rev contents) ;
+     ])
 
 let () = Stog_plug.register_html_base_rule ("", "mlmli") fun_mlmli ;;
 let () = Stog_plug.register_html_base_rule ("", "solution") fun_solution ;;

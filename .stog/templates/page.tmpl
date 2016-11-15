@@ -7,6 +7,23 @@
 <include file="fonts.tmpl"/>
 <!--<script src="less.js" type="text/javascript">foo</script>-->
 <link href="/favicon.png" rel="shortcut icon" type="image/png" />
+<script type="text/javascript">
+function showtab(boxid,contentid,tabsid,tabid) {
+  var x = document.querySelectorAll('#'+boxid+' div.tab-content');
+  for (let i of x) {
+    console.log(i);
+    i.classList.add('nodisplay') ;
+  }
+  document.getElementById(contentid).classList.remove('nodisplay');
+
+  var y = document.querySelectorAll('#'+tabsid+' li');
+  for (let i of y) {
+    console.log(i);
+    i.classList.remove('selected') ;
+  }
+  document.getElementById(tabid).classList.add('selected');
+}
+</script>
 </head>
 <body>
 <div id="page">
