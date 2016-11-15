@@ -133,6 +133,8 @@ let rec to_int = function
 | M.Plus (v1, v2) -> (to_int v1) + (to_int v2)
 | N.Moins (v1, v2) -> (to_int v1) - (to_int v2)
 </oc-eval>
+<warning>Un <ext-a href="https://caml.inria.fr/mantis/view.php?id=7330">bug</ext-a>
+dans OCaml 4.03.0 a pour effet de ne pas afficher cet avertissement.</warning>
 <p>
 En effet, si nous étendons notre type avec un constructeur supplémentaire,
 et que nous passons à notre fonction <ml>to_int</ml> une valeur construite avec
