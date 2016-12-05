@@ -70,6 +70,15 @@ l'utilisation de threads en profitant du fait que certaines opérations
 sont bloquantes (les entrées/sorties ou l'attente d'autres événements)
 et qu'en attendant il est possible d'exécuter d'autres parties du code.
 </p>
+<p>Pour utiliser la bibliothèque <ml>Lwt</ml> dans Utop, on utilisera
+dans l'ordre les deux directives suivantes, la première pour charger
+le module <code>topfind</code> qui donne accès à de nouvelles directives,
+dont la seconde qui charge le paquet <code>lwt.simple-top</code> et toutes
+ses dépendances:
+</p>
+<ocaml-eval toplevel="false" show-stdout="false">#use "topfind";;
+#require "lwt.simple-top";;
+</ocaml-eval>
 <subsection id="lwt-principes" title="Principes">
 <p>
 La bibliothèque Lwt utilise une monade<note>Si on ne connaît pas les monades, on
@@ -152,7 +161,7 @@ quelques opérateurs et une extension de syntaxe.
 <p>Plutôt que la fonction <ml>Lwt.bind</ml>, on pourra utiliser deux opérateurs
 infixes prenant les mêmes paramètres dans un sens ou dans l'autre:
 </p>
-<oc-eval><![CDATA[open Lwt;;
+<oc-eval><![CDATA[open Lwt.Infix;;
 (>>=);;
 (=<<);;
 ]]></oc-eval>
