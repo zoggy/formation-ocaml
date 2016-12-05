@@ -85,7 +85,11 @@ pas que le code de test soit présent dans le code du logiciel ou
 de la bibliothèque lorsqu'ils sont compilés pour être installés.
 </p>
 <p>
-Il y a deux possibilités pour résoudre ce problème. La première
+Il y a deux possibilités pour résoudre ce problème.
+</p>
+<subsection id="camlp4oof" title="Utilisation de camlp4oof">
+<p>
+La première possibilité
 consiste en l'utilisation de l'extension de syntaxe Camlp4 <code>camlp4oof</code>,
 utilisée comme préprocesseur. Cette extension autorise la syntaxe suivante:
 </p>
@@ -108,6 +112,21 @@ commande la commande de préprocesseur à utiliser, définissant ou non
 <p>Cette solution permet de mettre le code de test au plus près du code testé.
 Cependant, si les tests sont nombreux, leur présence diminue la lisibilité du code.
 </p>
+</subsection>
+<!--
+FIXME: add this section where ppx_optcomp work
+<subsection id="ppx_optcomp" title="Utilisation du paquet ppx_optcomp">
+<p>Une seconde solution consiste à utiliser l'extension ppx
+<ext-a href="https://github.com/janestreet/ppx_optcomp"><code>ppx_optcomp</code></ext-a>
+permettant elle aussi une compilation conditionnelle, au niveau ppx cette fois
+(c'est-à-dire en transformant l'arbre de syntaxe abstraite).
+</p>
+<ocaml defer_="1"><codefile file="demo_optcomp.ml"/></ocaml>
+<run>ocamlfind ocamlopt -o demo -package ppx_optcomp,ppx_getenv demo_optcomp.ml</run>
+</subsection>
+-->
+
+<subsection id="kaputt_pp" title="Utilisation de &lt;code&gt;kaputt_pp.byte&lt;/code&gt;">
 <p>Kaputt propose une solution alternative, consistant à placer le code
 des tests du module <ml>M</ml> dans le fichier <code>m.mlt</code>. Kaputt
 fournit un préprocesseur, <code>kaputt_pp.byte</code>, permettant, à la
@@ -129,11 +148,11 @@ par <code>off</code>.
 Il est probable que <code>kaputt_pp.byte</code> ne soit pas dans notre <code>PATH</code>.
 Il est par défaut installé dans le même répertoire que les bibliothèques de Kaputt.
 On pourra donc utiliser la commande suivante, s'appuyant sur <code>ocamlfind</code>
-pour obtenir le chemin complet:
+pour appeler <code>kaputt_pp.byte</code> du paquet <code>kaputt</code>:
 </p>
-<cl>ocamlc -c -pp `ocamlfind query kaputt`'/kaputt_pp.byte on camlp4o' foo.ml</cl>
+<cl>ocamlc -c -pp 'ocamlfind kaputt/kaputt_pp.byte on camlp4o' foo.ml</cl>
 </warning>
-
+</subsection>
 </section>
 
 <section id="assertions" title="Tests d'assertions">
@@ -381,7 +400,7 @@ Le nombre de valeurs générées et le nombre d'essais de génération pour
 trouver une spécification dont la pré-condition est vérifiée peuvent être
 passés en paramètre à <kval mod="Test" val="make_random_test"/>:
 </p>
-<oc-eval>
+<oc-eval id="finaltest">
 let test_to_roman = Kaputt.Test.make_random_test
   ~title: "Test de la conversion en chiffres romains"
   ~nb_runs: 1000 ~nb_tries: 2
@@ -412,6 +431,21 @@ Il existe également <ext-a href="http://ounit.forge.ocamlcore.org/index.html">O
 mais ce dernier est moins bien documenté et offre moins de souplesse que Kaputt quant
 aux possibilités d'articuler le code de test et le code testé. Il ne semble pas non plus
 offrir la richesse des facilités de Kaputt pour effectuer des tests de spécifications.
+</p>
+<p>Il existe également
+<ext-a href="https://github.com/janestreet/ppx_inline_test"><code>ppx_inline_test</code></ext-a>,
+offrant une extension de syntaxe pour définir facilement des tests et créer un exécutable
+pour les lancer. Cependant, cet outil n'offre pas le même niveau de fonctionnalités
+que Kaputt: pas de génération de valeurs, pas de tests de spécifications. Le format de
+sortie est cependant analysable grammaticalement en aval.
+</p>
+<p>Enfin,
+<ext-a href="https://github.com/janestreet/ppx_expect"><code>ppx_expect</code></ext-a>
+est une autre extension de syntaxe permettant de spécifier la sortie attendue (une chaîne
+de caractères). Si elle n'est pas fournie, l'outil est capable après une première exécution
+d'ajouter dans le code source les chaînes de résultat attendues, afin de faciliter
+l'écriture de tests. La sortie se présente sous forme de différences (format <code>diff</code>)
+entre la sortie et la sortie attendue.
 </p>
 </section>
 </contents>
