@@ -65,3 +65,32 @@ let to_roman n =
   Buffer.contents b
 ;;
 
+let of_roman str =
+  let len = String.length str in
+  let rec iter acc prev i =
+    if i >= len then
+      acc
+    else
+      begin
+        let c = String.get str i in
+        let acc = match c with
+          | 'I' -> acc + 1
+          | 'V' when prev = 'I' -> acc + 3
+          | 'V' -> acc + 5
+          | 'X' when prev = 'I' -> acc + 8
+          | 'X' -> acc + 10
+          | 'L' when prev = 'X' -> acc + 20
+          | 'L' -> acc + 50
+          | 'C' when prev = 'X' -> acc + 80
+          | 'C' -> acc + 100
+          | 'D' when prev = 'C' -> acc + 300
+          | 'D' -> acc + 500
+          | 'M' when prev = 'C' -> acc + 800
+          | 'M' -> acc + 1000
+          | _ -> failwith (Printf.sprintf "Invalid character %c" c)
+        in
+        iter acc c (i+1)
+      end
+  in
+  iter 0 ' ' 0
+

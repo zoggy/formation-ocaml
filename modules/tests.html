@@ -87,7 +87,7 @@ de la bibliothèque lorsqu'ils sont compilés pour être installés.
 <p>
 Il y a deux possibilités pour résoudre ce problème.
 </p>
-<subsection id="camlp4oof" title="Utilisation de camlp4oof">
+<subsection id="camlp4oof" title="Utilisation de &lt;code&gt;camlp4oof&lt;/code&gt;">
 <p>
 La première possibilité
 consiste en l'utilisation de l'extension de syntaxe Camlp4 <code>camlp4oof</code>,
@@ -409,6 +409,34 @@ let test_to_roman = Kaputt.Test.make_random_test
 Kaputt.Test.run_test test_to_roman;;
 flush stdout ;;
 </oc-eval>
+</section>
+
+<section id="exercice" title="Exercice">
+<p>
+Ecrire une fonction <ml>of_roman : string -> int</ml> prenant une chaîne
+de caractères représentant un nombre romain et retournant ce nombre sous
+forme d'un entier (ou bien utiliser la fonction <ml>of_roman</ml>
+ <a href="../codes/tests/roman_numbers.ml">ici</a> sans regarder le
+code de trop près pour faire un vrai test «boîte noire»).
+</p>
+<oc-eval toplevel="false" show-code="false" show-stdout="false">
+<codefile file="roman_numbers.ml"/>
+</oc-eval>
+<oc-eval>of_roman "IX";; of_roman "XIV";; of_roman "MMCM";;</oc-eval>
+<p>Réaliser des tests d'assertions, à partir de chaînes et comparant
+le résultat à la valeur attendue.</p>
+<p>Réaliser des tests de spécifications.</p>
+<!--
+<oc-eval><![CDATA[
+for i = 1 to 200 do
+  let s = to_roman i in
+  let j = of_roman s in
+  if j <> i then
+    Printf.printf "Error: %d => %S => %d\n" i s j
+done;;
+flush stdout;;
+]]></oc-eval>
+-->
 </section>
 
 <section id="conclusion" title="Conclusion">
