@@ -201,7 +201,13 @@ let set2 = S.add "hello" set1;;
 let set3 = S.add "world" set2;;
 let set4 = S.add "!" set3;;
 </oc-eval>
+<!--
+let set5 = S.add "abc" set4;;
+let set6 = S.add "def" set5;;
+let set7 = S.add "defg" set6;;
+-->
 <ocaml-repr>["set1", set1; "set2", set2; "set3", set3; "set4", set4]</ocaml-repr>
+<!--"set5", set5 ; "set6", set6 ; "set7", set7-->
 <p>Il apparaît qu'à ce moment, <ml>set3</ml> et <ml>set4</ml> partagent notamment un noeud
 de l'arbre utilisé pour représenter un ensemble.
 </p>
