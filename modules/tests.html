@@ -358,6 +358,13 @@ en chiffres romains se termine par "IX":
     String.sub s (len - 2) 2 = "IX");;
 ]]></oc-eval>
 </li>
+<li>Quand une valeur est un multiple de 10, sa représentation en chiffres romains
+ne peut pas comporter les caractères 'I' et 'V':
+<oc-eval><![CDATA[let mult_of_10 =
+  (fun x -> x mod 10 = 0) ==>
+  (Kaputt.Specification.for_all_string (fun c -> c <> 'I' && c <> 'V')) ;;
+]]></oc-eval>
+</li>
 <li>Quand une valeur est un multiple de 5, sa représentation en chiffres romains
 ne peut se terminer par 'I' ni avoir 'I' en avant-dernière position:
 <oc-eval><![CDATA[let mult_of_5 =
@@ -367,13 +374,6 @@ ne peut se terminer par 'I' ni avoir 'I' en avant-dernière position:
     String.get s (len-1) <> 'I' &&
     (len < 2 || String.get s (len - 2) <> 'I')
   );;
-]]></oc-eval>
-</li>
-<li>Quand une valeur est un multiple de 10, sa représentation en chiffres romains
-ne peut pas comporter les caractères 'I' et 'V':
-<oc-eval><![CDATA[let mult_of_10 =
-  (fun x -> x mod 10 = 0) ==>
-  (Kaputt.Specification.for_all_string (fun c -> c <> 'I' && c <> 'V')) ;;
 ]]></oc-eval>
 </li>
 </ul>
@@ -387,7 +387,7 @@ de la liste dont elle vérifie la pré-condition:
 let test_to_roman = Kaputt.Test.make_random_test
   ~title: "Test de la conversion en chiffres romains"
   generator to_roman
-  [ end_by_9 ; mult_of_5 ; mult_of_10 ] ;;
+  [ end_by_9 ; mult_of_10 ; mult_of_5 ] ;;
 </oc-eval>
 <p>
 Finalement, il nous reste à lancer le test
