@@ -69,7 +69,8 @@ nocache:
 	ocamlfind ocamlopt -c -package stog -rectypes  $<
 
 installweb: build
-	rsync  --checksum -r --delete $(DEST_DIR)/ zoggy@ssh.ocamlcore.org:/home/groups/form-ocaml/htdocs/
+	rsync  --checksum -r --delete $(DEST_DIR)/ pi:/var/www-formation-ocaml/
+#	rsync  --checksum -r --delete $(DEST_DIR)/ zoggy@ssh.ocamlcore.org:/home/groups/form-ocaml/htdocs/
 	#scp -r $(DEST_DIR)/* zoggy@ocamlcore.org:/home/groups/form-ocaml/htdocs/
 
 blog_examples: $(BLOG_EXAMPLES)
