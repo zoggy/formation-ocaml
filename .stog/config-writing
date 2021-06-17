@@ -1,7 +1,0 @@
-{
-automatic_ids:
-  {
-    default: true,
-    by_type: { slideshow: false }
-  }
-}

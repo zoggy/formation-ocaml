@@ -1,9 +1,0 @@
-{
-namespaces:
-  [("http://purl.org/dc/terms/", "dc"),
-   ("http://xmlns.com/foaf/0.1/", "foaf")],
-
-graph_file: "graph.rdf",
-
-sources: []
-}
